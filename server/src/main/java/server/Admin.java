@@ -111,6 +111,12 @@ public class Admin{
         return list;
     }
 
+    public List<Event> orderByTitle(){
+        List<Event> list = new List<Event>();
+        //TODO call to server
+        return list;
+    }
+
     /**
      * Gets an event and deletes it from the database of the server
      * @param event to delete
