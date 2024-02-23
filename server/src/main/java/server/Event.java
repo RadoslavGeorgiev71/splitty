@@ -6,15 +6,14 @@ public class Event {
 
     private String title;
     private String inviteCode;
-    private Participant creator;
-    private List<Participant> participants;
+    private Person creator;
+    private List<Person> participants;
     private List<Expense> expenses;
     private String dateTime;
     private int id;
-    private Activity lastActivity;
 
-    public Event(String title, String inviteCode, Participant creator, List<Participant> participants,
-                 List<Expense> expenses, String dateTime, int id, Activity lastActivity) {
+    public Event(String title, String inviteCode, Person creator, List<Person> participants,
+                 List<Expense> expenses, String dateTime, int id) {
         this.title = title;
         this.inviteCode = inviteCode;
         this.creator = creator;
@@ -22,7 +21,6 @@ public class Event {
         this.expenses = expenses;
         this.dateTime = dateTime;
         this.id = id;
-        this.lastActivity = lastActivity;
     }
 
     public int getTotal() {
@@ -41,11 +39,11 @@ public class Event {
         return inviteCode;
     }
 
-    public Participant getCreator() {
+    public Person getCreator() {
         return creator;
     }
 
-    public List<Participant> getParticipants() {
+    public List<Person> getParticipants() {
         return participants;
     }
 
@@ -61,10 +59,6 @@ public class Event {
         return id;
     }
 
-    public Activity getLastActivity() {
-        return lastActivity;
-    }
-
     public void setTitle(String title) {
         this.title = title;
     }
@@ -73,15 +67,15 @@ public class Event {
         this.inviteCode = inviteCode;
     }
 
-    public void setCreator(Participant creator) {
+    public void setCreator(Person creator) {
         this.creator = creator;
     }
 
-    public void setParticipants(List<Participant> participants) {
+    public void setParticipants(List<Person> participants) {
         this.participants = participants;
     }
 
-    public void removeParticipant(Participant participant) {
+    public void removeParticipant(Person participant) {
         for(int i = 0; i < participants.size(); i++) {
             if(participants.get(i).equals(participant)) {
                 participants.remove(i);
@@ -109,19 +103,27 @@ public class Event {
         this.id = id;
     }
 
-    public void setLastActivity(Activity lastActivity) {
-        this.lastActivity = lastActivity;
+    public String getLastActivity() {
+        int lastIndex = expenses.size() - 1;
+        return expenses.get(lastIndex).getActivity();
     }
+
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Event event)) return false;
-        return getId() == event.getId() && Objects.equals(getTitle(), event.getTitle()) && Objects.equals(getInviteCode(), event.getInviteCode()) && Objects.equals(getCreator(), event.getCreator()) && Objects.equals(getParticipants(), event.getParticipants()) && Objects.equals(getExpenses(), event.getExpenses()) && Objects.equals(getDateTime(), event.getDateTime()) && Objects.equals(getLastActivity(), event.getLastActivity());
+        return getId() == event.getId() && Objects.equals(getTitle(), event.getTitle()) &&
+                Objects.equals(getInviteCode(), event.getInviteCode()) &&
+                Objects.equals(getCreator(), event.getCreator()) &&
+                Objects.equals(getParticipants(), event.getParticipants()) &&
+                Objects.equals(getExpenses(), event.getExpenses()) &&
+                Objects.equals(getDateTime(), event.getDateTime());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getTitle(), getInviteCode(), getCreator(), getParticipants(), getExpenses(), getDateTime(), getId(), getLastActivity());
+        return Objects.hash(getTitle(), getInviteCode(), getCreator(), getParticipants(),
+                getExpenses(), getDateTime(), getId());
     }
 }
