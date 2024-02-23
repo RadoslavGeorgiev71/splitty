@@ -1,9 +1,6 @@
 package server;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.net.Socket;
 import java.util.List;
 
@@ -82,6 +79,8 @@ public class Admin{
      * @param host to login
      */
     public void login(String password, String host){
+        socket = new Socket(host, port);
+        //initialize connection
         //TODO connect to the server with the given password and host address
     }
 
@@ -90,6 +89,8 @@ public class Admin{
      * @return List<Event> with all events in the server
      */
     public List<Event> getEvents(){
+        socket = new Socket(host, port);
+        //initialize connection
         //TODO call to server
         List<Event> list = new List<Event>();
         return list;
@@ -100,18 +101,24 @@ public class Admin{
      * @return List<Event> with all events in the server ordered by date
      */
     public List<Event> orderByCDate(){
+        socket = new Socket(host, port);
+        //initialize connection
         List<Event> list = new List<Event>();
         //TODO call to server
         return list;
     }
 
     public List<Event> orderByLastActivity(){
+        socket = new Socket(host, port);
+        //initialize connection
         List<Event> list = new List<Event>();
         //TODO call to server
         return list;
     }
 
     public List<Event> orderByTitle(){
+        socket = new Socket(host, port);
+        //initialize connection
         List<Event> list = new List<Event>();
         //TODO call to server
         return list;
@@ -122,6 +129,8 @@ public class Admin{
      * @param event to delete
      */
     public void deleteEvent(Event event){
+        socket = new Socket(host, port);
+        //initialize connection
         //TODO call to server with event id
         //should delete all related expenses and debts!!!
     }
@@ -133,6 +142,8 @@ public class Admin{
      * @param event to retrieve
      */
     public void ExportEvents(String filepath, Event event){
+        socket = new Socket(host, port);
+        //initialize connection
         //TODO call to server to get all events
         List<Event> list = null; //TODO receive all events
         //TODO translate to JSON -- probably call anothe method
@@ -155,11 +166,22 @@ public class Admin{
      * events, expenses and debts and adds them to the database of the server
      * @param filepath of the JSON file specified by the admin
      */
-    public void importEvents(String filepath){
-        List<Event> list = new List<Event>();
-        List<Expense> list = new List<Expense>();
-        List<Debt> list = new List<Debt>();
-        //TODO use JackSon to retrieve data from file
-        //TODO send them to server to add the events into database.
+    public void importEvents(String filepath) throws IOException {
+        socket = new Socket(host, port);
+        //initialize connection
+        List<Event> events = new List<Event>();
+        List<Expense>  expenses = new List<Expense>();
+        List<Debt> debts = new List<Debt>();
+        BufferedReader reader = null;
+        String output = "";
+        try {
+            reader = new BufferedReader(new FileReader(filepath));
+            output = String.valueOf(reader.read());
+            reader.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        //TODO send JSON to server to add the events into database.
+
     }
 }

@@ -124,7 +124,7 @@ class AdminTest {
     }
 
     @Test
-    void importEvents() {
+    void importEvents() throws IOException {
         Admin admin = new Admin();
         admin.login("password", "host");
         Event event = new Event();
