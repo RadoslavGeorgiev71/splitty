@@ -1,5 +1,7 @@
 package server;
 
+import java.util.Objects;
+
 public class Participant {
     private int id;
     private String name;
@@ -58,5 +60,30 @@ public class Participant {
      */
     public void setName(String name) {
         this.name = name;
+    }
+
+    /**
+     * Equals method for Participant
+     *
+     * @param o - the object we compare with
+     * @return true if the objects are equal,
+     * false otherwise
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Participant that = (Participant) o;
+        return id == that.id && Objects.equals(name, that.name);
+    }
+
+    /**
+     * HashCode method for participant
+     *
+     * @return the hashCode of the Participant
+     */
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name);
     }
 }
