@@ -179,7 +179,7 @@ public class ConfigClient {
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(path))) {
             for (int i = 0; i < keys.length; i++) {
-                writer.write(keys[i] + ":" + configContent[i]);
+                writer.write(keys[i] + ": " + configContent[i]);
                 writer.newLine();
             }
         } catch (IOException e){
