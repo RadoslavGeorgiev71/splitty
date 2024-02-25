@@ -10,19 +10,19 @@ public class Event {
 
     private String title;
     private String inviteCode;
-    private Person creator;
-    private List<Person> participants;
+    private Participant creator;
+    private List<Participant> participants;
     private List<Expense> expenses;
     private String dateTime;
     private int id;
 
 
-    // 1.   Person and Expense Class appearing as an error is because they are placeholders,
+    // 1.   Participant and Expense Class appearing as an error is because they are placeholders,
     //      as I can't access the Person and Expense classes yet.
     // 2.   Not sure how to format the Invite Code yet, but I'm guessing that will be done in the Event class.
     // 3.   Same as above for the ID.
     // 4.   Will later add a correct automatic dateTime update method, which will run when an "edit" method is used.
-    public Event(String title, String inviteCode, Person creator, List<Person> participants,
+    public Event(String title, String inviteCode, Participant creator, List<Participant> participants,
                  List<Expense> expenses, String dateTime, int id) {
         this.title = title;
         this.inviteCode = inviteCode;
@@ -72,7 +72,7 @@ public class Event {
 
     // Might be better to assign a number to every participant when they get added, so it's easier to remove
     // the correct participant.
-    public void removeParticipant(Person participant) {
+    public void removeParticipant(Participant participant) {
         for(int i = 0; i < participants.size(); i++) {
             if(participants.get(i).equals(participant)) {
                 participants.remove(i);
@@ -97,19 +97,19 @@ public class Event {
         this.inviteCode = inviteCode;
     }
 
-    public Person getCreator() {
+    public Participant getCreator() {
         return creator;
     }
 
-    public void setCreator(Person creator) {
+    public void setCreator(Participant creator) {
         this.creator = creator;
     }
 
-    public List<Person> getParticipants() {
+    public List<Participant> getParticipants() {
         return participants;
     }
 
-    public void setParticipants(List<Person> participants) {
+    public void setParticipants(List<Participant> participants) {
         this.participants = participants;
     }
 
