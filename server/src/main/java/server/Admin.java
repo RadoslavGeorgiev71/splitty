@@ -100,7 +100,7 @@ public class Admin{
         }
         //initialize connection
         //TODO call to server
-        List<Event> list = new List<Event>();
+        List<Event> list = new ArrayList<Event>();
         return list;
     }
 
@@ -115,7 +115,7 @@ public class Admin{
             throw new RuntimeException(e);
         }
         //initialize connection
-        List<Event> list = new List<Event>();
+        List<Event> list = new ArrayList<Event>();
         //TODO call to server
         return list;
     }
@@ -127,7 +127,7 @@ public class Admin{
             throw new RuntimeException(e);
         }
         //initialize connection
-        List<Event> list = new List<Event>();
+        List<Event> list = new ArrayList<Event>();
         //TODO call to server
         return list;
     }
@@ -139,7 +139,7 @@ public class Admin{
             throw new RuntimeException(e);
         }
         //initialize connection
-        List<Event> list = new List<Event>();
+        List<Event> list = new ArrayList<Event>();
         //TODO call to server
         return list;
     }
@@ -197,9 +197,9 @@ public class Admin{
     public void importEvents(String filepath) throws IOException {
         socket = new Socket(host, port);
         //initialize connection
-        List<Event> events = new List<Event>();
-        List<Expense>  expenses = new List<Expense>();
-        List<Debt> debts = new List<Debt>();
+        List<Event> events = new ArrayList<Event>();
+        List<Expense>  expenses = new ArrayList<Expense>();
+        List<Debt> debts = new ArrayList<Debt>();
         BufferedReader reader = null;
         String output = "";
         try {
