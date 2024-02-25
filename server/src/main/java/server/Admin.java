@@ -79,7 +79,11 @@ public class Admin{
      * @param host to login
      */
     public void login(String password, String host){
-        socket = new Socket(host, port);
+        try {
+            socket = new Socket(host, port);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         //initialize connection
         //TODO connect to the server with the given password and host address
     }
@@ -89,7 +93,11 @@ public class Admin{
      * @return List<Event> with all events in the server
      */
     public List<Event> getEvents(){
-        socket = new Socket(host, port);
+        try {
+            socket = new Socket(host, port);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         //initialize connection
         //TODO call to server
         List<Event> list = new List<Event>();
@@ -101,7 +109,11 @@ public class Admin{
      * @return List<Event> with all events in the server ordered by date
      */
     public List<Event> orderByCDate(){
-        socket = new Socket(host, port);
+        try {
+            socket = new Socket(host, port);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         //initialize connection
         List<Event> list = new List<Event>();
         //TODO call to server
@@ -109,7 +121,11 @@ public class Admin{
     }
 
     public List<Event> orderByLastActivity(){
-        socket = new Socket(host, port);
+        try {
+            socket = new Socket(host, port);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         //initialize connection
         List<Event> list = new List<Event>();
         //TODO call to server
@@ -117,7 +133,11 @@ public class Admin{
     }
 
     public List<Event> orderByTitle(){
-        socket = new Socket(host, port);
+        try {
+            socket = new Socket(host, port);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         //initialize connection
         List<Event> list = new List<Event>();
         //TODO call to server
@@ -129,7 +149,11 @@ public class Admin{
      * @param event to delete
      */
     public void deleteEvent(Event event){
-        socket = new Socket(host, port);
+        try {
+            socket = new Socket(host, port);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         //initialize connection
         //TODO call to server with event id
         //should delete all related expenses and debts!!!
@@ -142,7 +166,11 @@ public class Admin{
      * @param event to retrieve
      */
     public void ExportEvents(String filepath, Event event){
-        socket = new Socket(host, port);
+        try {
+            socket = new Socket(host, port);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         //initialize connection
         //TODO call to server to get all events
         List<Event> list = null; //TODO receive all events
@@ -150,10 +178,10 @@ public class Admin{
         BufferedWriter writer = null;
         try {
             writer = new BufferedWriter(new FileWriter(filepath));
+            writer.write(String.valueOf(list));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        writer.write(list);
         try {
             writer.close();
         } catch (IOException e) {
@@ -182,6 +210,5 @@ public class Admin{
             throw new RuntimeException(e);
         }
         //TODO send JSON to server to add the events into database.
-
     }
 }
