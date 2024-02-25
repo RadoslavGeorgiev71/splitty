@@ -1,18 +1,19 @@
 package server;
 
+import java.util.List;
 import java.util.Objects;
 
 public class Event {
 
     private String title;
     private String inviteCode;
-    private Person creator;
-    private List<Person> participants;
+    private Participant creator;
+    private List<Participant> participants;
     private List<Expense> expenses;
     private String dateTime;
     private int id;
 
-    public Event(String title, String inviteCode, Person creator, List<Person> participants,
+    public Event(String title, String inviteCode, Participant creator, List<Participant> participants,
                  List<Expense> expenses, String dateTime, int id) {
         this.title = title;
         this.inviteCode = inviteCode;
@@ -39,11 +40,11 @@ public class Event {
         return inviteCode;
     }
 
-    public Person getCreator() {
+    public Participant getCreator() {
         return creator;
     }
 
-    public List<Person> getParticipants() {
+    public List<Participant> getParticipants() {
         return participants;
     }
 
@@ -67,15 +68,15 @@ public class Event {
         this.inviteCode = inviteCode;
     }
 
-    public void setCreator(Person creator) {
+    public void setCreator(Participant creator) {
         this.creator = creator;
     }
 
-    public void setParticipants(List<Person> participants) {
+    public void setParticipants(List<Participant> participants) {
         this.participants = participants;
     }
 
-    public void removeParticipant(Person participant) {
+    public void removeParticipant(Participant participant) {
         for(int i = 0; i < participants.size(); i++) {
             if(participants.get(i).equals(participant)) {
                 participants.remove(i);
