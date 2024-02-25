@@ -1,7 +1,7 @@
 ## Example agenda
 
 This is a template agenda. It gives an overview of what could be in your weekly agenda.
-In the 'Points of action' part you will also find some topics to cover in/after your first meeting. 
+In the 'Points of action' part you will also find some topics to cover in/after your first meeting.
 
 ---
 
@@ -21,8 +21,8 @@ Note taker:     {Maria Burlacu}
 
 - Introduction and check-in(2 min)
 - Discussing progress so far:
-  - Everyone presents the progress on their task from last week and receives feedback(10 min)
-  - Ensuring all tasks of last week are completed and cleaning up remaining branches and merge requests(2 min)
+    - Everyone presents the progress on their task from last week and receives feedback(10 min)
+    - Ensuring all tasks of last week are completed and cleaning up remaining branches and merge requests(2 min)
 - Discussing management of merge requests(5 min)
 - Finishing words on Code of Conduct(5 min)
 - Reviewing Checkstyle rules(5 min)
@@ -30,7 +30,7 @@ Note taker:     {Maria Burlacu}
 
 # Action points for next week (Scrum board)
 *Every week you fill the Scrum board with new action points for that week. See the to do list for the items you should implement.*
-  - (Remainder) Fill the scrum board after division of tasks
+- (Remainder) Fill the scrum board after division of tasks
 
 # Any other business
 *If anybody has something that should be discussed but came up with that after the agenda was finalized (in point 2), he/she should bring that up now so that it can be discussed after all.*
