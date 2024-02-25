@@ -143,7 +143,10 @@ public class Debt {
             return false;
         }
         Debt debt = (Debt) o;
-        return id == debt.id && Double.compare(amount, debt.amount) == 0 && paid == debt.paid && Objects.equals(personPaying, debt.personPaying) && Objects.equals(personOwed, debt.personOwed) && Objects.equals(paidDateTime, debt.paidDateTime);
+        return id == debt.id && Double.compare(amount, debt.amount) == 0
+                && paid == debt.paid && Objects.equals(personPaying, debt.personPaying)
+                && Objects.equals(personOwed, debt.personOwed)
+                && Objects.equals(paidDateTime, debt.paidDateTime);
     }
 
     /**

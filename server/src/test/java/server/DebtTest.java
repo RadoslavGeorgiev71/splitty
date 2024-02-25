@@ -7,13 +7,11 @@ import java.time.LocalDateTime;
 import static org.junit.jupiter.api.Assertions.*;
 
 class DebtTest {
-    Debt d1 = new Debt(123, null, null, 500);
-    Debt d2 = new Debt(123, null, null, 500);
+    Participant p1 = new Participant(1, "a");
+    Participant p2 = new Participant(2, "b");
+    Debt d1 = new Debt(123, p1, p2, 500);
+    Debt d2 = new Debt(123, p1, p2, 500);
 
-    /*
-    Will have to update some tests once Participant class gets added,
-    and will also have to add tests pertaining to Particpant fields
-     */
     @Test
     void testConstructor(){
         assertNotNull(d1);
