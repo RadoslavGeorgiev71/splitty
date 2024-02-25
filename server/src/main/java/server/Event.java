@@ -56,8 +56,8 @@ public class Event {
         return expenses.get(lastIndex).getActivity();
     }
 
-    public int getTotal() {
-        int totalExpenses = 0;
+    public double getTotal() {
+        double totalExpenses = 0;
         for(int i = 0; i < expenses.size(); i++) {
             totalExpenses = totalExpenses + expenses.get(i).getAmount();
         }
