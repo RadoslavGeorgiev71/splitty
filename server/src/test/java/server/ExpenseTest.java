@@ -14,7 +14,7 @@ class ExpenseTest {
     Participant b = new Participant("Are");
     Participant c = new Participant("Mere");
 
-    List<Participant> list = new ArrayList<>();
+    List<Participant> list;
 
     Expense exp1;
     Expense exp2;
@@ -22,12 +22,13 @@ class ExpenseTest {
 
     @BeforeEach
     void first() {
+        list = new ArrayList<>();
         list.add(a);
         list.add(b);
         list.add(c);
         exp1 = new Expense("party", a, 100, list, "2/25/2024");
         exp2 = new Expense("party", a, 100, list, "2/25/2024");
-        exp3 = new Expense("partyy", b, 56, list, "2/25/2024");
+        exp3 = new Expense("partyy", b, 56, list);
     }
 
     @Test
@@ -60,7 +61,7 @@ class ExpenseTest {
     @Test
     void setAmount() {
         exp1.setAmount(150.0d);
-        assertEquals(150.0d, exp1.getTitle());
+        assertEquals(150.0d, exp1.getAmount());
     }
 
     @Test
