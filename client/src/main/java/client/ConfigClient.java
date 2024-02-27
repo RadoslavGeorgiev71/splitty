@@ -18,6 +18,13 @@ public class ConfigClient {
     private String currency;
 
     /**
+     * Default constructor just in case.
+     */
+    public ConfigClient(){
+
+    }
+
+    /**
      * Constructor for ConfigClient class
      * @param serverUrl -> Url of the server
      * @param email -> Email of client
