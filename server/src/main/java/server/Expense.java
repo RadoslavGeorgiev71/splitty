@@ -66,7 +66,7 @@ public class Expense {
     }
 
     public String getActivity() {
-        return this.title + " payed by " + this.payingParticipant;
+        return this.title + " payed by " + this.payingParticipant.getName();
     }
 
     @Override
