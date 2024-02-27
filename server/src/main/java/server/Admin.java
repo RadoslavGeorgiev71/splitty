@@ -6,9 +6,9 @@ import java.util.*;
 
 public class Admin{
 
-    static Socket socket;
+    private static Socket socket;
     private int port;
-    static String host;
+    private static String host;
     /**
      * Default constructor
      */
@@ -120,6 +120,10 @@ public class Admin{
         return list;
     }
 
+    /**
+     * Orders the events by last activity
+     * @return the sorted list with events
+     */
     public List<Event> orderByLastActivity(){
         try {
             socket = new Socket(host, port);
@@ -132,6 +136,10 @@ public class Admin{
         return list;
     }
 
+    /**
+     * Orders events by title
+     * @return the ordered list
+     */
     public List<Event> orderByTitle(){
         try {
             socket = new Socket(host, port);
@@ -165,7 +173,7 @@ public class Admin{
      * @param filepath to store the JSON
      * @param event to retrieve
      */
-    public void ExportEvents(String filepath, Event event){
+    public void exportEvents(String filepath, Event event){
         try {
             socket = new Socket(host, port);
         } catch (IOException e) {
