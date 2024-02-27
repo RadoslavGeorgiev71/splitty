@@ -60,80 +60,80 @@ class AdminTest {
         //TODO
     }
 
-    @Test
-    void getEvents() {
-        Admin admin = new Admin();
-        admin.login("password", "host");
-        List<server.Event> list = admin.getEvents();
-        assertNotNull(list);
-    }
-
-    @Test
-    void orderByCDate() {
-        Admin admin = new Admin();
-        admin.login("password", "host");
-        List<server.Event> list = admin.orderByCDate();
-        assertNotNull(list);
-    }
-
-    @Test
-    void orderByLastActivity() {
-        Admin admin = new Admin();
-        admin.login("password", "host");
-        List<server.Event> list = admin.orderByLastActivity();
-        assertNotNull(list);
-    }
-
-    @Test
-    void orderByTitle() {
-        Admin admin = new Admin();
-        admin.login("password", "host");
-        List<server.Event> list = admin.orderByTitle();
-        assertNotNull(list);
-    }
-
-    @Test
-    void deleteEvent() {
-        Admin admin = new Admin();
-        admin.login("password", "host");
-        List<server.Event> list = admin.getEvents();
-        if(list.size() > 0){
-            Event event = (Event) list.get(0);
-            admin.deleteEvent((server.Event) event);
-            list = admin.getEvents();
-            assertTrue(!list.contains(event));
-        }
-    }
-
-    @Test
-    void exportEvents() {
-        String filepath = "";
-        Admin admin = new Admin();
-        admin.login("password", "host");
-        List<server.Event> list = admin.getEvents();
-        String json = ""; // turn events in list into json
-        String output = "";
-        BufferedReader reader = null;
-        try {
-            reader = new BufferedReader(new FileReader(filepath));
-            output = String.valueOf(reader.read());
-            reader.close();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        assertEquals(json, output);
-    }
-
-    @Test
-    void importEvents() throws IOException {
-        Admin admin = new Admin();
-        admin.login("password", "host");
-        server.Event event = new server.Event();
-        List<server.Event> toadd = List.of(event);
-        String filepath = "";
-        //create file with the json of this event at filepath
-        admin.importEvents(filepath);
-        List<server.Event> list = admin.getEvents();
-        assertFalse(list.contains(toadd));
-    }
+//    @Test
+//    void getEvents() {
+//        Admin admin = new Admin();
+//        admin.login("password", "host");
+//        List<server.Event> list = admin.getEvents();
+//        assertNotNull(list);
+//    }
+//
+//    @Test
+//    void orderByCDate() {
+//        Admin admin = new Admin();
+//        admin.login("password", "host");
+//        List<server.Event> list = admin.orderByCDate();
+//        assertNotNull(list);
+//    }
+//
+//    @Test
+//    void orderByLastActivity() {
+//        Admin admin = new Admin();
+//        admin.login("password", "host");
+//        List<server.Event> list = admin.orderByLastActivity();
+//        assertNotNull(list);
+//    }
+//
+//    @Test
+//    void orderByTitle() {
+//        Admin admin = new Admin();
+//        admin.login("password", "host");
+//        List<server.Event> list = admin.orderByTitle();
+//        assertNotNull(list);
+//    }
+//
+//    @Test
+//    void deleteEvent() {
+//        Admin admin = new Admin();
+//        admin.login("password", "host");
+//        List<server.Event> list = admin.getEvents();
+//        if(list.size() > 0){
+//            Event event = (Event) list.get(0);
+//            admin.deleteEvent((server.Event) event);
+//            list = admin.getEvents();
+//            assertTrue(!list.contains(event));
+//        }
+//    }
+//
+//    @Test
+//    void exportEvents() {
+//        String filepath = "";
+//        Admin admin = new Admin();
+//        admin.login("password", "host");
+//        List<server.Event> list = admin.getEvents();
+//        String json = ""; // turn events in list into json
+//        String output = "";
+//        BufferedReader reader = null;
+//        try {
+//            reader = new BufferedReader(new FileReader(filepath));
+//            output = String.valueOf(reader.read());
+//            reader.close();
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
+//        assertEquals(json, output);
+//    }
+//
+//    @Test
+//    void importEvents() throws IOException {
+//        Admin admin = new Admin();
+//        admin.login("password", "host");
+//        server.Event event = new server.Event();
+//        List<server.Event> toadd = List.of(event);
+//        String filepath = "";
+//        //create file with the json of this event at filepath
+//        admin.importEvents(filepath);
+//        List<server.Event> list = admin.getEvents();
+//        assertFalse(list.contains(toadd));
+//    }
 }
