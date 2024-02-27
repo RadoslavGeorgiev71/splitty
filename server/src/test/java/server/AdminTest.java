@@ -128,12 +128,12 @@ class AdminTest {
     void importEvents() throws IOException {
         Admin admin = new Admin();
         admin.login("password", "host");
-        Event event = new server.Event();
-        List<Event> toadd = List.of(event);
+        server.Event event = new server.Event();
+        List<server.Event> toadd = List.of(event);
         String filepath = "";
         //create file with the json of this event at filepath
         admin.importEvents(filepath);
         List<server.Event> list = admin.getEvents();
-        assertTrue(!list.contains(toadd));
+        assertFalse(list.contains(toadd));
     }
 }

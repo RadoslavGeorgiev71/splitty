@@ -22,6 +22,7 @@ public class Event {
     // 2.   Not sure how to format the Invite Code yet, but I'm guessing that will be done in the Event class.
     // 3.   Same as above for the ID.
     // 4.   Will later add a correct automatic dateTime update method, which will run when an "edit" method is used.
+
     /**
      * Constructor for the Event class
      * @param title Title used to differentiate the different Events
