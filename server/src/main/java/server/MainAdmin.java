@@ -7,7 +7,7 @@ public class MainAdmin {
         //launch();
     }
 
-    public void start(Stage primaryStage) throws IOException {
-
-    }
+//    public void start(Stage primaryStage) throws IOException {
+//
+//    }
 }
