@@ -5,6 +5,7 @@ import org.w3c.dom.events.Event;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -64,7 +65,7 @@ class AdminTest {
     void getEvents() {
         Admin admin = new Admin();
         admin.login("password", "host");
-        List<Event> list = admin.getEvents();
+        List<server.Event> list = admin.getEvents();
         assertNotNull(list);
     }
 
@@ -72,7 +73,7 @@ class AdminTest {
     void orderByCDate() {
         Admin admin = new Admin();
         admin.login("password", "host");
-        List<Event> list = admin.orderByCDate();
+        List<server.Event> list = admin.orderByCDate();
         assertNotNull(list);
     }
 
@@ -80,7 +81,7 @@ class AdminTest {
     void orderByLastActivity() {
         Admin admin = new Admin();
         admin.login("password", "host");
-        List<Event> list = admin.orderByLastActivity();
+        List<server.Event> list = admin.orderByLastActivity();
         assertNotNull(list);
     }
 
@@ -88,7 +89,7 @@ class AdminTest {
     void orderByTitle() {
         Admin admin = new Admin();
         admin.login("password", "host");
-        List<Event> list = admin.orderByTitle();
+        List<server.Event> list = admin.orderByTitle();
         assertNotNull(list);
     }
 
@@ -96,9 +97,9 @@ class AdminTest {
     void deleteEvent() {
         Admin admin = new Admin();
         admin.login("password", "host");
-        List<Event> list = admin.getEvents();
+        List<server.Event> list = admin.getEvents();
         if(list.size() > 0){
-            Event event = list.get(0);
+            server.Event event = list.get(0);
             admin.deleteEvent(event);
             list = admin.getEvents();
             assertTrue(!list.contains(event));
@@ -110,7 +111,7 @@ class AdminTest {
         String filepath = "";
         Admin admin = new Admin();
         admin.login("password", "host");
-        List<Event> list = admin.getEvents();
+        List<server.Event> list = admin.getEvents();
         String json = ""; // turn events in list into json
         String output = "";
         BufferedReader reader = null;
@@ -128,12 +129,14 @@ class AdminTest {
     void importEvents() throws IOException {
         Admin admin = new Admin();
         admin.login("password", "host");
-        Event event = new Event();
-        List<Event> toadd = List.of(event);
+        List<Participant> p = new ArrayList<>();
+        List<Expense> e = new ArrayList<>();
+        server.Event event = new server.Event("title","code", new Participant("npc"), p, e);
+        //List<Event> toadd = List.of(event);
         String filepath = "";
         //create file with the json of this event at filepath
         admin.importEvents(filepath);
-        List<Event> list = admin.getEvents();
-        assertTrue(!list.contains(toadd));
+        List<server.Event> list = admin.getEvents();
+        //assertTrue(!list.contains(toadd));
     }
 }
