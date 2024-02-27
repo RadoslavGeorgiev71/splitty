@@ -22,27 +22,6 @@ public class Event {
     // 2.   Not sure how to format the Invite Code yet, but I'm guessing that will be done in the Event class.
     // 3.   Same as above for the ID.
     // 4.   Will later add a correct automatic dateTime update method, which will run when an "edit" method is used.
-    /**
-     * Constructor for the Event class
-     * @param title Title used to differentiate the different Events
-     * @param inviteCode Unique code used to join an Event
-     * @param creator Participant who created the Event
-     * @param participants Participants who participate in the Event
-     * @param expenses Expenses made during the Event
-     */
-    public Event(String title, String inviteCode, Participant creator, List<Participant> participants,
-                 List<Expense> expenses) {
-        this.title = title;
-        this.inviteCode = inviteCode;
-        this.creator = creator;
-        this.participants = participants;
-        this.expenses = expenses;
-        this.id = 0;
-
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
-        LocalDateTime now = LocalDateTime.now();
-        this.dateTime = dtf.format(now);
-    }
 
     // Not sure if this should be put in the Expense class or in the Event class, as an Expense has to be created with
     // all the supporting fields. I'm guessing this will just call the method to create an Expense.
