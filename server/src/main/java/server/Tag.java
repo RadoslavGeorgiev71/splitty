@@ -56,8 +56,12 @@ public class Tag {
      */
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         Tag tag = (Tag) o;
         return Objects.equals(type, tag.type) && Objects.equals(color, tag.color);
     }
