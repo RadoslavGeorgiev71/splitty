@@ -1,16 +1,17 @@
-package server;
+package commons;
 
+import commons.Tag;
 import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TagTest {
-    Tag t1, t2, t3;
+    commons.Tag t1, t2, t3;
     @BeforeEach
     void testBasis() {
         t1 = new Tag("food", "red");
-        t2 = new Tag("drinks", "blue");
-        t3 = new Tag("drinks", "blue");
+        t2 = new commons.Tag("drinks", "blue");
+        t3 = new commons.Tag("drinks", "blue");
     }
 
     @Test

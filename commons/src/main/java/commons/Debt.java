@@ -1,4 +1,4 @@
-package server;
+package commons;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
