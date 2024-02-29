@@ -17,9 +17,11 @@ package client;
 
 import static com.google.inject.Guice.createInjector;
 
+//import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
+import client.utils.ConfigClient;
 import com.google.inject.Injector;
 
 import client.scenes.AddQuoteCtrl;
@@ -32,6 +34,8 @@ public class Main extends Application {
 
     private static final Injector INJECTOR = createInjector(new MyModule());
     private static final MyFXML FXML = new MyFXML(INJECTOR);
+    private ConfigClient configClient;
+    private final String FILE_PATH = "src/main/resources/config";
 
     /**
      * Launches the app
@@ -53,6 +57,8 @@ public class Main extends Application {
      */
     @Override
     public void start(Stage primaryStage) throws IOException {
+        configClient =  new ConfigClient();
+        configClient.readFromFile(FILE_PATH);
 
         var overview = FXML.load(QuoteOverviewCtrl.class, "client", "scenes", "QuoteOverview.fxml");
         var add = FXML.load(AddQuoteCtrl.class, "client", "scenes", "AddQuote.fxml");

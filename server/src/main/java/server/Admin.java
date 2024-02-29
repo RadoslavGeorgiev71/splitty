@@ -1,5 +1,9 @@
 package server;
 
+import commons.Debt;
+import commons.Event;
+import commons.Expense;
+
 import java.io.*;
 import java.net.Socket;
 import java.util.*;
