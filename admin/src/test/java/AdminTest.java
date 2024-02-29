@@ -1,14 +1,13 @@
-package server;
-
 import org.junit.jupiter.api.Test;
 // import org.w3c.dom.events.Event;
 
 // import java.io.*;
 import java.net.Socket;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 // import java.util.ArrayList;
 // import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
 
 class AdminTest {
 

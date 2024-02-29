@@ -1,5 +1,3 @@
-package server;
-
 import commons.Debt;
 import commons.Event;
 import commons.Expense;
