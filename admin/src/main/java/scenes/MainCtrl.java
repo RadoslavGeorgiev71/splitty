@@ -4,7 +4,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.util.Pair;
-import utils.Admin;
 
 public class MainCtrl {
 
@@ -22,7 +21,8 @@ public class MainCtrl {
      * @param login
      * @param overview
      */
-    public void initialize(Stage primaryStage, Pair<LoginCtrl, Parent> login, Pair<OverviewCtrl, Parent> overview) {
+    public void initialize(Stage primaryStage, Pair<LoginCtrl, Parent> login,
+                           Pair<OverviewCtrl, Parent> overview) {
         this.primaryStage = primaryStage;
         this.loginCtrl = login.getKey();
         this.login = new Scene(login.getValue());

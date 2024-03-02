@@ -22,6 +22,11 @@ public class OverviewCtrl {
     @FXML
     private TableView<?> table;
 
+    /**
+     * Constructor for OverviewCtrl for dependency injection
+     * @param admin
+     * @param mainCtrl
+     */
     @Inject
     public OverviewCtrl(Admin admin, MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;

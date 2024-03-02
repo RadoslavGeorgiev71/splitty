@@ -21,6 +21,11 @@ public class LoginCtrl {
     @FXML
     private PasswordField passwordField;
 
+    /**
+     * Constructor for LoginCtrl for dependency injection
+     * @param admin
+     * @param mainCtrl
+     */
     @Inject
     public LoginCtrl(Admin admin, MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
