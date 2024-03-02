@@ -13,6 +13,7 @@ class DebtTest {
     Participant p2 = new Participant(2, "b");
     Debt d1 = new Debt(123, p1, p2, 500);
     Debt d2 = new Debt(123, p1, p2, 500);
+    Debt d3 = new Debt(321, p2, p2, 511);
 
     @Test
     void testConstructor(){
@@ -69,5 +70,65 @@ class DebtTest {
         LocalDateTime now = LocalDateTime.now();
         d2.setPaidDateTime(now);
         assertEquals(now, d2.getPaidDateTime());
+    }
+
+    @Test
+    void getPersonPaying() {
+        Participant p = d1.getPersonPaying();
+        assertEquals(p1, p);
+    }
+
+    @Test
+    void getPersonOwed() {
+        Participant p = d1.getPersonOwed();
+        assertEquals(p2, p);
+    }
+
+    @Test
+    void setPersonPaying() {
+        Debt d = new Debt(123, p1, p2, 500);
+        Participant p = d.getPersonPaying();
+        d.setPersonPaying(p2);
+        assertNotEquals(p, d.getPersonPaying());
+        assertEquals(p2, d.getPersonPaying());
+    }
+
+    @Test
+    void setPersonOwed() {
+        Debt d = new Debt(123, p1, p2, 500);
+        Participant p = d.getPersonOwed();
+        d.setPersonOwed(p1);
+        assertNotEquals(p, d.getPersonOwed());
+        assertEquals(p1, d.getPersonOwed());
+    }
+
+    @Test
+    void testEqualsEqual() {
+        assertTrue(d1.equals(d2));
+    }
+
+    @Test
+    void testEqualsSameObject() {
+        assertTrue(d1.equals(d1));
+    }
+
+    @Test
+    void testEqualsDifferent() {
+        assertFalse(d1.equals(d3));
+    }
+
+    @Test
+    void testEqualsNull() {
+        assertFalse(d1.equals(null));
+    }
+
+    @Test
+    void testHashCodeSame() {
+        assertEquals(d1.hashCode(), d2.hashCode());
+    }
+
+    @Test
+    void testHashCodeDifferent() {
+        assertNotEquals(d1.hashCode(), d3.hashCode());
     }
 }
