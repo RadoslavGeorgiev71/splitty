@@ -11,6 +11,7 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 import scenes.LoginCtrl;
 import scenes.MainCtrl;
+import scenes.OverviewCtrl;
 
 public class Main extends Application {
 
@@ -37,8 +38,8 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException {
         var login = FXML.load(LoginCtrl.class, "admin", "scenes", "Login.fxml");
-
+        var overview = FXML.load(OverviewCtrl.class, "admin", "scenes", "Overview.fxml");
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
-        mainCtrl.initialize(primaryStage, login);
+        mainCtrl.initialize(primaryStage, login, overview);
     }
 }
