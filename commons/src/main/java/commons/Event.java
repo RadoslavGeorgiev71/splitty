@@ -1,9 +1,10 @@
-package server;
+package commons;
+
 
 import java.util.Objects;
 import java.time.format.DateTimeFormatter;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
+//import java.util.ArrayList;
 import java.util.List;
 
 public class Event {
@@ -19,11 +20,42 @@ public class Event {
 
     // 1.   Participant and Expense Class appearing as an error is because they are placeholders,
     //      as I can't access the Person and Expense classes yet.
-    // 2.   Not sure how to format the Invite Code yet, but I'm guessing that will be done in the Event class.
+    // 2.   Not sure how to format the Invite Code yet,
+    // but I'm guessing that will be done in the Event class.
     // 3.   Same as above for the ID.
-    // 4.   Will later add a correct automatic dateTime update method, which will run when an "edit" method is used.
+    // 4.   Will later add a correct automatic dateTime update method,
+    // which will run when an "edit" method is used.
 
-    // Not sure if this should be put in the Expense class or in the Event class, as an Expense has to be created with
+    /**
+     * Default constructor for the class
+     */
+    public Event() {
+
+    }
+    /**
+     * Constructor for the Event class
+     * @param title Title used to differentiate the different Events
+     * @param inviteCode Unique code used to join an Event
+     * @param creator Participant who created the Event
+     * @param participants Participants who participate in the Event
+     * @param expenses Expenses made during the Event
+     */
+    public Event(String title, String inviteCode, Participant creator,
+                 List<Participant> participants, List<Expense> expenses) {
+        this.title = title;
+        this.inviteCode = inviteCode;
+        this.creator = creator;
+        this.participants = participants;
+        this.expenses = expenses;
+        this.id = 0;
+
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+        LocalDateTime now = LocalDateTime.now();
+        this.dateTime = dtf.format(now);
+    }
+
+    // Not sure if this should be put in the Expense class
+    // or in the Event class, as an Expense has to be created with
     // all the supporting fields. I'm guessing this will just call the method to create an Expense.
 
 
@@ -63,8 +95,8 @@ public class Event {
      * @param expense
      */
     public void removeExpense(Expense expense) {
-        for(int i = 0; i < expenses.size(); i++) {
-            if(expenses.get(i).equals(expense)) {
+        for (int i = 0; i < expenses.size(); i++) {
+            if (expenses.get(i).equals(expense)) {
                 expenses.remove(i);
             }
         }
@@ -85,13 +117,14 @@ public class Event {
      */
     public double getTotal() {
         double totalExpenses = 0;
-        for(int i = 0; i < expenses.size(); i++) {
+        for (int i = 0; i < expenses.size(); i++) {
             totalExpenses = totalExpenses + expenses.get(i).getAmount();
         }
         return totalExpenses;
     }
 
-    // Not sure if this should be put in the Participant class or in the Event class. Same issue as with the addExpense
+    // Not sure if this should be put in the Participant class
+    // or in the Event class. Same issue as with the addExpense
     // method.
 
     /**
@@ -101,7 +134,8 @@ public class Event {
 
     }
 
-    // Might be better to assign a number to every participant when they get added, so it's easier to remove
+    // Might be better to assign a number to every participant
+    // when they get added, so it's easier to remove
     // the correct participant.
 
     /**
@@ -109,8 +143,8 @@ public class Event {
      * @param participant
      */
     public void removeParticipant(Participant participant) {
-        for(int i = 0; i < participants.size(); i++) {
-            if(participants.get(i).equals(participant)) {
+        for (int i = 0; i < participants.size(); i++) {
+            if (participants.get(i).equals(participant)) {
                 participants.remove(i);
             }
         }
@@ -244,8 +278,12 @@ public class Event {
      */
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Event event)) return false;
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Event event)) {
+            return false;
+        }
         return getId() == event.getId() && Objects.equals(getTitle(), event.getTitle()) &&
                 Objects.equals(getInviteCode(), event.getInviteCode()) &&
                 Objects.equals(getCreator(), event.getCreator()) &&

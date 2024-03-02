@@ -22,11 +22,11 @@
             <property name="tokens" value="METHOD_DEF, CTOR_DEF, COMPACT_CTOR_DEF"/>
         </module>
 
-	    <module name="JavadocMethod">
-	        <property name="accessModifiers" value="public"/>
-	        <property name="allowMissingParamTags" value="false"/>
-	        <property name="allowMissingReturnTag" value="false"/>
-	    </module>
+        <module name="JavadocMethod">
+            <property name="accessModifiers" value="public"/>
+            <property name="allowMissingParamTags" value="false"/>
+            <property name="allowMissingReturnTag" value="false"/>
+        </module>
 
         <module name="NoLineWrap">
             <property name="tokens" value="PACKAGE_DEF, IMPORT, STATIC_IMPORT"/>
@@ -35,12 +35,12 @@
         <module name="EmptyBlock">
             <property name="option" value="TEXT"/>
             <property name="tokens"
-               value="LITERAL_TRY, LITERAL_FINALLY, LITERAL_IF, LITERAL_ELSE, LITERAL_SWITCH"/>
+                      value="LITERAL_TRY, LITERAL_FINALLY, LITERAL_IF, LITERAL_ELSE, LITERAL_SWITCH"/>
         </module>
 
         <module name="NeedBraces">
             <property name="tokens"
-               value="LITERAL_DO, LITERAL_ELSE, LITERAL_FOR, LITERAL_IF, LITERAL_WHILE"/>
+                      value="LITERAL_DO, LITERAL_ELSE, LITERAL_FOR, LITERAL_IF, LITERAL_WHILE"/>
         </module>
 
         <module name="MethodLength">
@@ -51,21 +51,21 @@
 
         <module name="LeftCurly">
             <property name="tokens"
-               value="ANNOTATION_DEF, CLASS_DEF, CTOR_DEF, ENUM_CONSTANT_DEF, ENUM_DEF,
+                      value="ANNOTATION_DEF, CLASS_DEF, CTOR_DEF, ENUM_CONSTANT_DEF, ENUM_DEF,
                     INTERFACE_DEF, LAMBDA, LITERAL_CASE, LITERAL_CATCH, LITERAL_DEFAULT,
                     LITERAL_DO, LITERAL_ELSE, LITERAL_FINALLY, LITERAL_FOR, LITERAL_IF,
                     LITERAL_SWITCH, LITERAL_SYNCHRONIZED, LITERAL_TRY, LITERAL_WHILE, METHOD_DEF,
                     OBJBLOCK, STATIC_INIT, RECORD_DEF, COMPACT_CTOR_DEF"/>
         </module>
-        
+
         <module name="WhitespaceAfter">
             <property name="tokens"
-               value="COMMA, SEMI, TYPECAST, LITERAL_IF, LITERAL_ELSE, LITERAL_RETURN,
+                      value="COMMA, SEMI, TYPECAST, LITERAL_IF, LITERAL_ELSE, LITERAL_RETURN,
                     LITERAL_WHILE, LITERAL_DO, LITERAL_FOR, LITERAL_FINALLY, DO_WHILE, ELLIPSIS,
                     LITERAL_SWITCH, LITERAL_SYNCHRONIZED, LITERAL_TRY, LITERAL_CATCH, LAMBDA,
                     LITERAL_YIELD, LITERAL_CASE"/>
         </module>
-        
+
         <module name="OneStatementPerLine"/>
 
         <module name="MultipleVariableDeclarations"/>
@@ -76,20 +76,20 @@
 
         <module name="GenericWhitespace">
             <message key="ws.followed"
-                value="GenericWhitespace ''{0}'' is followed by whitespace."/>
+                     value="GenericWhitespace ''{0}'' is followed by whitespace."/>
             <message key="ws.preceded"
-                value="GenericWhitespace ''{0}'' is preceded with whitespace."/>
+                     value="GenericWhitespace ''{0}'' is preceded with whitespace."/>
             <message key="ws.illegalFollow"
-                value="GenericWhitespace ''{0}'' should followed by whitespace."/>
+                     value="GenericWhitespace ''{0}'' should followed by whitespace."/>
             <message key="ws.notPreceded"
-                value="GenericWhitespace ''{0}'' is not preceded with whitespace."/>
+                     value="GenericWhitespace ''{0}'' is not preceded with whitespace."/>
         </module>
 
         <module name="NoWhitespaceBeforeCaseDefaultColon"/>
 
         <module name="NoWhitespaceBefore">
             <property name="tokens"
-               value="COMMA, SEMI, POST_INC, POST_DEC, DOT,
+                      value="COMMA, SEMI, POST_INC, POST_DEC, DOT,
                     LABELED_STAT, METHOD_REF"/>
             <property name="allowLineBreaks" value="true"/>
         </module>
@@ -112,8 +112,8 @@
         <module name="CyclomaticComplexity">
             <property name="severity" value="warning"/>
             <property name="switchBlockAsSingleDecisionPoint" value="true"/>
-	    <property name="max" value="6"/>
-	    <property name="tokens" value="LITERAL_WHILE, LITERAL_DO, LITERAL_FOR, LITERAL_IF, LITERAL_SWITCH, LITERAL_CASE, QUESTION"/>
+            <property name="max" value="6"/>
+            <property name="tokens" value="LITERAL_WHILE, LITERAL_DO, LITERAL_FOR, LITERAL_IF, LITERAL_SWITCH, LITERAL_CASE, QUESTION"/>
         </module>
 
         <module name="Indentation">
@@ -152,11 +152,11 @@
             <property name="severity" value="warning"/>
         </module>
 
-	<module name="ClassTypeParameterName">
-	   <property name="format" value="(^[A-Z][0-9]?)$|([A-Z][a-zA-Z0-9]*$)"/>
-	   <message key="name.invalidPattern"
-		    value="Class type name ''{0}'' must match pattern ''{1}''."/>
-	</module>
+        <module name="ClassTypeParameterName">
+            <property name="format" value="(^[A-Z][0-9]?)$|([A-Z][a-zA-Z0-9]*$)"/>
+            <message key="name.invalidPattern"
+                     value="Class type name ''{0}'' must match pattern ''{1}''."/>
+        </module>
 
     </module>
 

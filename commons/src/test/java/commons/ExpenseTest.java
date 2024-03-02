@@ -1,5 +1,7 @@
-package server;
+package commons;
 
+import commons.Expense;
+import commons.Participant;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

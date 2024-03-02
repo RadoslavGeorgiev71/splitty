@@ -1,5 +1,7 @@
-package server;
+package commons;
 
+import commons.Debt;
+import commons.Participant;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
