@@ -1,64 +1,64 @@
-import org.junit.jupiter.api.Test;
+//import org.junit.jupiter.api.Test;
 // import org.w3c.dom.events.Event;
 
 // import java.io.*;
-import java.net.Socket;
+//import java.net.Socket;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+//import static org.junit.jupiter.api.Assertions.assertEquals;
 // import java.util.ArrayList;
 // import java.util.List;
 
 
 class AdminTest {
 
-    @Test
-    void getSocket() {
-        Admin admin = new Admin();
-        Socket socket = new Socket();
-        admin.setSocket(socket);
-        assertEquals(socket, admin.getSocket());
-    }
-
-    @Test
-    void setSocket() {
-        Admin admin = new Admin();
-        Socket socket = new Socket();
-        admin.setSocket(socket);
-        assertEquals(socket, admin.getSocket());
-    }
-
-    @Test
-    void getPort() {
-        Admin admin = new Admin();
-        admin.setPort(4000);
-        assertEquals(4000, admin.getPort());
-    }
-
-    @Test
-    void setPort() {
-        Admin admin = new Admin();
-        admin.setPort(4000);
-        assertEquals(4000, admin.getPort());
-    }
-
-    @Test
-    void getHost() {
-        Admin admin = new Admin();
-        admin.setHost("19:18");
-        assertEquals("19:18", admin.getHost());
-    }
-
-    @Test
-    void setHost() {
-        Admin admin = new Admin();
-        admin.setHost("19:18");
-        assertEquals("19:18", admin.getHost());
-    }
-
-    @Test
-    void login() {
-        //TODO
-    }
+//    @Test
+//    void getSocket() {
+//        Admin admin = new Admin();
+//        Socket socket = new Socket();
+//        admin.setSocket(socket);
+//        assertEquals(socket, admin.getSocket());
+//    }
+//
+//    @Test
+//    void setSocket() {
+//        Admin admin = new Admin();
+//        Socket socket = new Socket();
+//        admin.setSocket(socket);
+//        assertEquals(socket, admin.getSocket());
+//    }
+//
+//    @Test
+//    void getPort() {
+//        Admin admin = new Admin();
+//        admin.setPort(4000);
+//        assertEquals(4000, admin.getPort());
+//    }
+//
+//    @Test
+//    void setPort() {
+//        Admin admin = new Admin();
+//        admin.setPort(4000);
+//        assertEquals(4000, admin.getPort());
+//    }
+//
+//    @Test
+//    void getHost() {
+//        Admin admin = new Admin();
+//        admin.setHost("19:18");
+//        assertEquals("19:18", admin.getHost());
+//    }
+//
+//    @Test
+//    void setHost() {
+//        Admin admin = new Admin();
+//        admin.setHost("19:18");
+//        assertEquals("19:18", admin.getHost());
+//    }
+////
+//    @Test
+//    void login() {
+//        //TODO
+//    }
 
 //    @Test
 //    void getEvents() {

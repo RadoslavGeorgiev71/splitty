@@ -30,6 +30,7 @@ import client.scenes.QuoteOverviewCtrl;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
+
 public class Main extends Application {
 
     private static final Injector INJECTOR = createInjector(new MyModule());
