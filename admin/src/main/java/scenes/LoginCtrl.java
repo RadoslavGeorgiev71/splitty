@@ -9,7 +9,7 @@ import javafx.scene.control.PasswordField;
 public class LoginCtrl {
 
     @FXML
-    private Label errorID;
+    private Label errorLabel;
 
     @FXML
     private Button loginButton;
@@ -17,9 +17,17 @@ public class LoginCtrl {
     @FXML
     private PasswordField passwordField;
 
+    /**
+     * Code to be run on scene start-up. Simply hides the error message
+     */
+    public void initialize() {
+        errorLabel.setVisible(false);
+    }
+
     @FXML
     void login(ActionEvent event) {
-
+        String password = passwordField.getText();
+        //cannot implement password verification logic for now
     }
 
 }
