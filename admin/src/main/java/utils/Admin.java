@@ -1,3 +1,4 @@
+package utils;
 
 import commons.Event;
 import jakarta.ws.rs.client.ClientBuilder;
@@ -19,14 +20,14 @@ public class Admin{
 //    /**
 //     * Default constructor
 //     */
-//    public Admin(){
+//    public utils.Admin(){
 //    }
 //
 //    /**
 //     * Constructor with port as parameter
 //     * @param port to connect
 //     */
-//    public Admin(int port){
+//    public utils.Admin(int port){
 //        this.socket = null;
 //        this.port = port;
 //    }
@@ -44,7 +45,7 @@ public class Admin{
 //     * @param socket to use
 //     */
 //    public static void setSocket(Socket socket) {
-//        Admin.socket = socket;
+//        utils.Admin.socket = socket;
 //    }
 //
 //    /**
@@ -76,7 +77,7 @@ public class Admin{
 //     * @param host to use
 //     */
 //    public static void setHost(String host) {
-//        Admin.host = host;
+//        utils.Admin.host = host;
 //    }
 
 

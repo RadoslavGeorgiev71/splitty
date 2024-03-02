@@ -1,13 +1,17 @@
 package scenes;
 
+import com.google.inject.Inject;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
+import utils.Admin;
 
 public class LoginCtrl {
 
+    private final Admin admin;
+    private final MainCtrl mainCtrl;
     @FXML
     private Label errorLabel;
 
@@ -16,6 +20,13 @@ public class LoginCtrl {
 
     @FXML
     private PasswordField passwordField;
+
+    @Inject
+    public LoginCtrl(Admin admin, MainCtrl mainCtrl) {
+        this.mainCtrl = mainCtrl;
+        this.admin = admin;
+
+    }
 
     /**
      * Code to be run on scene start-up. Simply hides the error message
@@ -28,6 +39,9 @@ public class LoginCtrl {
     void login(ActionEvent event) {
         String password = passwordField.getText();
         //cannot implement password verification logic for now
+        if (1<2){ //placeholder for if password is correct
+            mainCtrl.showOverview();
+        }
     }
 
 }
