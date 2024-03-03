@@ -31,6 +31,9 @@ public class MainCtrl {
     private EditParticipantCtrl editParticipantCtrl;
     private Scene editparticipant;
 
+    private AddQuoteCtrl addCtrl;
+    private Scene add;
+
     /**
      * Initializes stage
      * @param primaryStage
@@ -38,6 +41,7 @@ public class MainCtrl {
      * @param editparticipant
      */
     public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> overview,
+                           Pair<AddQuoteCtrl, Parent> add,
             Pair<EditParticipantCtrl, Parent> editparticipant) {
         this.primaryStage = primaryStage;
         this.overviewCtrl = overview.getKey();
@@ -75,5 +79,11 @@ public class MainCtrl {
      */
     public void showOverviewEvent(Event event) {
         //TODO show the overview of an event window
+    }
+
+    public void showAdd() {
+        primaryStage.setTitle("Quotes: Adding Quote");
+        primaryStage.setScene(add);
+        add.setOnKeyPressed(e -> addCtrl.keyPressed(e));
     }
 }
