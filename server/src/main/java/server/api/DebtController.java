@@ -24,7 +24,7 @@ public class DebtController {
      * Get all debts
      * @return all debts
      */
-    @GetMapping("/")
+    @GetMapping(path = {"", "/"})
     public List<Debt> getAll() {
         return repo.findAll();
     }
@@ -35,7 +35,7 @@ public class DebtController {
      * @return response entity with "ok" status message if it is successful,
      * "bad request" message otherwise
      */
-    @PostMapping("/")
+    @PostMapping(path = {"", "/"})
     public ResponseEntity<Debt> add(@RequestBody Debt debt) {
         if (debt.getPersonPaying() == null ||
             debt.getPersonOwed() == null || debt.isPaid()) {
