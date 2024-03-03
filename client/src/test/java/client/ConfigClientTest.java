@@ -42,4 +42,28 @@ class ConfigClientTest {
         assertEquals(expected_config[4], result.getLanguage());
         assertEquals(expected_config[5], result.getCurrency());
     }
+
+    @Test
+    void setterAndGetter() {
+        assertEquals(expected_config[0], configClient.getServerUrl());
+        assertEquals(expected_config[1], configClient.getEmail());
+        assertEquals(expected_config[2], configClient.getIban());
+        assertEquals(expected_config[3], configClient.getBic());
+        assertEquals(expected_config[4], configClient.getLanguage());
+        assertEquals(expected_config[5], configClient.getCurrency());
+
+        configClient.setServerUrl("1");
+        configClient.setEmail("2");
+        configClient.setIban("3");
+        configClient.setBic("4");
+        configClient.setLanguage("5");
+        configClient.setCurrency("6");
+
+        assertEquals("1", configClient.getServerUrl());
+        assertEquals("2", configClient.getEmail());
+        assertEquals("3", configClient.getIban());
+        assertEquals("4", configClient.getBic());
+        assertEquals("5", configClient.getLanguage());
+        assertEquals("6", configClient.getCurrency());
+    }
 }

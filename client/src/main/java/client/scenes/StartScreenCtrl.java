@@ -61,6 +61,9 @@ public class StartScreenCtrl implements Initializable {
      * the root object was not localized.
      */
     public void initialize(URL location, ResourceBundle resources) {
+
+        createEventButton.setOnAction(event -> createEvent());
+        joinEventButton.setOnAction(event -> joinEvent());
         recentlyViewedEventsListView.setCellFactory(param -> new ListCell<String>() {
             @Override
             protected void updateItem(String item, boolean empty) {
