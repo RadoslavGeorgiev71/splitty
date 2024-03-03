@@ -1,15 +1,32 @@
 package commons;
 
+import jakarta.persistence.*;
+
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+@Entity(name = "Debt")
+@Table(name = "Debt")
 public class Debt {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
+
+    @OneToOne(cascade = CascadeType.PERSIST)
     private Participant personPaying;
+    @OneToOne(cascade = CascadeType.PERSIST)
     private Participant personOwed;
     private double amount;
     private boolean paid;
     private LocalDateTime paidDateTime;
+
+    /**
+     * Empty constructor for teh class
+     */
+    public Debt() {
+
+    }
 
     /**
      * Constructor for the Debt class
@@ -26,6 +43,7 @@ public class Debt {
         this.paid = false;
         this.paidDateTime = null;
     }
+
 
     /**
      * Getter for id
