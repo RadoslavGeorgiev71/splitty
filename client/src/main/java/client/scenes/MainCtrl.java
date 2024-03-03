@@ -15,6 +15,7 @@
  */
 package client.scenes;
 
+import commons.Event;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -27,23 +28,23 @@ public class MainCtrl {
     private QuoteOverviewCtrl overviewCtrl;
     private Scene overview;
 
-    private AddQuoteCtrl addCtrl;
-    private Scene add;
+    private EditParticipantCtrl editParticipantCtrl;
+    private Scene editparticipant;
 
     /**
      * Initializes stage
      * @param primaryStage
      * @param overview
-     * @param add
+     * @param editparticipant
      */
     public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> overview,
-            Pair<AddQuoteCtrl, Parent> add) {
+            Pair<EditParticipantCtrl, Parent> editparticipant) {
         this.primaryStage = primaryStage;
         this.overviewCtrl = overview.getKey();
         this.overview = new Scene(overview.getValue());
 
-        this.addCtrl = add.getKey();
-        this.add = new Scene(add.getValue());
+        this.editParticipantCtrl = editparticipant.getKey();
+        this.editparticipant = new Scene(editparticipant.getValue());
 
         showOverview();
         primaryStage.show();
@@ -59,11 +60,20 @@ public class MainCtrl {
     }
 
     /**
-     * Display for adding quotes
+     * Switches the scene to the edit participant window
+     * @param event takes an event as a parameter for which we edit a participant
      */
-    public void showAdd() {
-        primaryStage.setTitle("Quotes: Adding Quote");
-        primaryStage.setScene(add);
-        add.setOnKeyPressed(e -> addCtrl.keyPressed(e));
+    public void showEditParticipant(Event event) {
+        primaryStage.setTitle("Edit Participant");
+        primaryStage.setScene(editparticipant);
+        editParticipantCtrl.setEvent(event);
+    }
+
+    /**
+     * Switches the scene to overview event window
+     * @param event to display
+     */
+    public void showOverviewEvent(Event event) {
+        //TODO show the overview of an event window
     }
 }
