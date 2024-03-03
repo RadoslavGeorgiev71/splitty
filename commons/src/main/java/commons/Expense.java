@@ -1,14 +1,36 @@
 package commons;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+@Entity
 public class Expense {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long id;
     private String title;
-    private Participant payingParticipant;
+    private Participant payingParticipant; // should probably use id of participant instead since we are not using entity for
+                                            // participant yet i will change later
     private double amount;
     private List<Participant> participants;
     private String dateTime;
+
+    /**
+     * Empty new Expense
+     */
+    @SuppressWarnings("unused")
+    public Expense(){
+        this.title = "";
+        //this.payingParticipant = payingParticipant;
+        this.amount = 0.0d;
+        this.participants = new ArrayList<>();
+    }
 
     /**
      * Default constructor, no set Date
