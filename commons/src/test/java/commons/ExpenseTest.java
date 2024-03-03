@@ -1,7 +1,5 @@
 package commons;
 
-import commons.Expense;
-import commons.Participant;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -100,5 +98,20 @@ class ExpenseTest {
     void testEquals() {
         assertEquals(exp1, exp2);
         assertNotEquals(exp1, exp3);
+    }
+
+    @Test
+    void addParticipant() {
+        Participant pepe = new Participant("Pepe");
+        assertFalse(exp1.getParticipants().contains(pepe));
+        exp1.addParticipant(pepe);
+        assertTrue(exp1.getParticipants().contains(pepe));
+    }
+
+    @Test
+    void delParticipant() {
+        assertTrue(exp1.getParticipants().contains(a));
+        exp1.delParticipant(a);
+        assertFalse(exp1.getParticipants().contains(a));
     }
 }
