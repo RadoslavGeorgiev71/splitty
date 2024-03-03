@@ -15,6 +15,8 @@
  */
 package client.scenes;
 
+import commons.Event;
+import commons.Participant;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -27,6 +29,9 @@ public class MainCtrl {
     private QuoteOverviewCtrl overviewCtrl;
     private Scene overview;
 
+    private EditParticipantCtrl editParticipantCtrl;
+    private Scene editparticipant;
+
     private AddQuoteCtrl addCtrl;
     private Scene add;
 
@@ -34,16 +39,18 @@ public class MainCtrl {
      * Initializes stage
      * @param primaryStage
      * @param overview
+     * @param editparticipant
      * @param add
      */
     public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> overview,
-            Pair<AddQuoteCtrl, Parent> add) {
+                           Pair<AddQuoteCtrl, Parent> add,
+            Pair<EditParticipantCtrl, Parent> editparticipant) {
         this.primaryStage = primaryStage;
         this.overviewCtrl = overview.getKey();
         this.overview = new Scene(overview.getValue());
 
-        this.addCtrl = add.getKey();
-        this.add = new Scene(add.getValue());
+        this.editParticipantCtrl = editparticipant.getKey();
+        this.editparticipant = new Scene(editparticipant.getValue());
 
         showOverview();
         primaryStage.show();
@@ -59,8 +66,25 @@ public class MainCtrl {
     }
 
     /**
-     * Display for adding quotes
+     * Switches the scene to the edit participant window
+     * @param event takes an event as a parameter for which we edit a participant
+     * @param participant takes the participant as a parameter to edit
      */
+    public void showEditParticipant(Event event, Participant participant) {
+        primaryStage.setTitle("Edit Participant");
+        primaryStage.setScene(editparticipant);
+        editParticipantCtrl.setEvent(event);
+        editParticipantCtrl.setParticipant(participant);
+    }
+
+    /**
+     * Switches the scene to overview event window
+     * @param event to display
+     */
+    public void showOverviewEvent(Event event) {
+        //TODO show the overview of an event window
+    }
+
     public void showAdd() {
         primaryStage.setTitle("Quotes: Adding Quote");
         primaryStage.setScene(add);
