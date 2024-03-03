@@ -30,6 +30,21 @@ public class Expense {
         //this.payingParticipant = payingParticipant;
         this.amount = 0.0d;
         this.participants = new ArrayList<>();
+        this.dateTime = "";
+    }
+
+
+    /**
+     * New Expense, Participant only
+     * @param payingParticipant
+     */
+    @SuppressWarnings("unused")
+    public Expense(Participant payingParticipant){
+        this.title = "";
+        this.payingParticipant = payingParticipant;
+        this.amount = 0.0d;
+        this.participants = new ArrayList<>();
+        this.dateTime = "";
     }
 
     /**
@@ -44,6 +59,7 @@ public class Expense {
         this.payingParticipant = payingParticipant;
         this.amount = amount;
         this.participants = participants;
+        this.dateTime = "";
     }
 
     /**
@@ -120,6 +136,22 @@ public class Expense {
      */
     public void setParticipants(List<Participant> participants) {
         this.participants = participants;
+    }
+
+    /**
+     * Adding a new Participant to list
+     * @param payingParticipant
+     */
+    public void addParticipant(Participant payingParticipant){
+        participants.add(payingParticipant);
+    }
+
+    /**
+     * Removing a new Participant to list
+     * @param payingParticipant
+     */
+    public void delParticipant(Participant payingParticipant){
+        participants.remove(payingParticipant);
     }
 
     /**
