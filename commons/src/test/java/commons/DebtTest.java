@@ -15,6 +15,12 @@ class DebtTest {
     Debt d2 = new Debt(123, p1, p2, 500);
 
     @Test
+    void testBasicConstructor() {
+        Debt d0 = new Debt();
+        assertNotNull(d0);
+    }
+
+    @Test
     void testConstructor(){
         assertNotNull(d1);
     }
@@ -22,6 +28,16 @@ class DebtTest {
     @Test
     void testGetId() {
         assertEquals(123, d1.getId());
+    }
+
+    @Test
+    void testGetPersonPaying() {
+        assertEquals(p1, d1.getPersonPaying());
+    }
+
+    @Test
+    void testGetPersonOwed() {
+        assertEquals(p2, d1.getPersonOwed());
     }
 
     @Test
@@ -43,6 +59,18 @@ class DebtTest {
     void testSetId() {
         d2.setId(321);
         assertEquals(d2.getId(), 321);
+    }
+
+    @Test
+    void testSetPersonPaying() {
+        d1.setPersonPaying(p2);
+        assertEquals(p2, d1.getPersonPaying());
+    }
+
+    @Test
+    void testPersonOwed() {
+        d1.setPersonOwed(p1);
+        assertEquals(p1, d1.getPersonOwed());
     }
 
     @Test
