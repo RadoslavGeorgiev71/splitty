@@ -24,7 +24,7 @@ Note taker:     {Maria Burlacu}
     - Everyone presents the progress on their task from last week and receives feedback(10 min) ✓
          - Georgiev: OpenAPI specifications (yaml file) + Participant class
          - Martim: Debt Class + Schema design
-         - George: UML diagram + Admin class
+         - George: UML diagram + utils.Admin class
          - Maria: Issues in Gitlab, division of issues + Expense class
          - Alexander: Event class + schema
          - Alexandru: Config class + checkstyle (fails pipeline for now); readFromFile method should be in Client class
@@ -59,8 +59,8 @@ Tasks for next week:
      - SettleDebts - Georgiev
      - OpenDebts - Georgiev
      - EditParticipant - George
-     - Login(Admin) - Martim
-     - ManagementOverview(Admin) - Martim
+     - Login(utils.Admin) - Martim
+     - ManagementOverview(utils.Admin) - Martim
 - start working on Server side - all
 - discuss database on Thursday - all
 - move 1 test for readingFromFile

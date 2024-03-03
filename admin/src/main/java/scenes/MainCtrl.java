@@ -9,7 +9,6 @@ public class MainCtrl {
 
 
     private Stage primaryStage;
-
     private LoginCtrl loginCtrl;
     private OverviewCtrl overviewCtrl;
     private Scene login;
@@ -22,7 +21,8 @@ public class MainCtrl {
      * @param login
      * @param overview
      */
-    public void initialize(Stage primaryStage, Pair<LoginCtrl, Parent> login, Pair<OverviewCtrl, Parent> overview) {
+    public void initialize(Stage primaryStage, Pair<LoginCtrl, Parent> login,
+                           Pair<OverviewCtrl, Parent> overview) {
         this.primaryStage = primaryStage;
         this.loginCtrl = login.getKey();
         this.login = new Scene(login.getValue());

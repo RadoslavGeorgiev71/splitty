@@ -13,7 +13,7 @@ class AdminTest {
 
 //    @Test
 //    void getSocket() {
-//        Admin admin = new Admin();
+//        utils.Admin admin = new utils.Admin();
 //        Socket socket = new Socket();
 //        admin.setSocket(socket);
 //        assertEquals(socket, admin.getSocket());
@@ -21,7 +21,7 @@ class AdminTest {
 //
 //    @Test
 //    void setSocket() {
-//        Admin admin = new Admin();
+//        utils.Admin admin = new utils.Admin();
 //        Socket socket = new Socket();
 //        admin.setSocket(socket);
 //        assertEquals(socket, admin.getSocket());
@@ -29,28 +29,28 @@ class AdminTest {
 //
 //    @Test
 //    void getPort() {
-//        Admin admin = new Admin();
+//        utils.Admin admin = new utils.Admin();
 //        admin.setPort(4000);
 //        assertEquals(4000, admin.getPort());
 //    }
 //
 //    @Test
 //    void setPort() {
-//        Admin admin = new Admin();
+//        utils.Admin admin = new utils.Admin();
 //        admin.setPort(4000);
 //        assertEquals(4000, admin.getPort());
 //    }
 //
 //    @Test
 //    void getHost() {
-//        Admin admin = new Admin();
+//        utils.Admin admin = new utils.Admin();
 //        admin.setHost("19:18");
 //        assertEquals("19:18", admin.getHost());
 //    }
 //
 //    @Test
 //    void setHost() {
-//        Admin admin = new Admin();
+//        utils.Admin admin = new utils.Admin();
 //        admin.setHost("19:18");
 //        assertEquals("19:18", admin.getHost());
 //    }
@@ -62,7 +62,7 @@ class AdminTest {
 
 //    @Test
 //    void getEvents() {
-//        Admin admin = new Admin();
+//        utils.Admin admin = new utils.Admin();
 //        admin.login("password", "host");
 //        List<commons.Event> list = admin.getEvents();
 //        assertNotNull(list);
@@ -70,7 +70,7 @@ class AdminTest {
 //
 //    @Test
 //    void orderByCDate() {
-//        Admin admin = new Admin();
+//        utils.Admin admin = new utils.Admin();
 //        admin.login("password", "host");
 //        List<commons.Event> list = admin.orderByCDate();
 //        assertNotNull(list);
@@ -78,7 +78,7 @@ class AdminTest {
 //
 //    @Test
 //    void orderByLastActivity() {
-//        Admin admin = new Admin();
+//        utils.Admin admin = new utils.Admin();
 //        admin.login("password", "host");
 //        List<commons.Event> list = admin.orderByLastActivity();
 //        assertNotNull(list);
@@ -86,7 +86,7 @@ class AdminTest {
 //
 //    @Test
 //    void orderByTitle() {
-//        Admin admin = new Admin();
+//        utils.Admin admin = new utils.Admin();
 //        admin.login("password", "host");
 //        List<commons.Event> list = admin.orderByTitle();
 //        assertNotNull(list);
@@ -94,7 +94,7 @@ class AdminTest {
 //
 //    @Test
 //    void deleteEvent() {
-//        Admin admin = new Admin();
+//        utils.Admin admin = new utils.Admin();
 //        admin.login("password", "host");
 //        List<commons.Event> list = admin.getEvents();
 //        if(list.size() > 0){
@@ -108,7 +108,7 @@ class AdminTest {
 //    @Test
 //    void exportEvents() {
 //        String filepath = "";
-//        Admin admin = new Admin();
+//        utils.Admin admin = new utils.Admin();
 //        admin.login("password", "host");
 //        List<commons.Event> list = admin.getEvents();
 //        String json = ""; // turn events in list into json
@@ -126,7 +126,7 @@ class AdminTest {
 //
 //    @Test
 //    void importEvents() throws IOException {
-//        Admin admin = new Admin();
+//        utils.Admin admin = new utils.Admin();
 //        admin.login("password", "host");
 //        commons.Event event = new commons.Event();
 //        List<commons.Event> toadd = List.of(event);
