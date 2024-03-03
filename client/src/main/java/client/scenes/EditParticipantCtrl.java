@@ -2,18 +2,23 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import commons.Event;
+import commons.Participant;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 
 import javax.inject.Inject;
+import java.net.URL;
+import java.util.ResourceBundle;
 
-public class EditParticipantCtrl {
+public class EditParticipantCtrl implements Initializable {
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
     private Event event;
+    private Participant participant;
 
     @FXML
     private TextField nameField;
@@ -52,6 +57,7 @@ public class EditParticipantCtrl {
      */
     public void ok(ActionEvent actionEvent) {
         //TODO
+        mainCtrl.showOverviewEvent(event);
     }
 
     /**
@@ -73,6 +79,14 @@ public class EditParticipantCtrl {
     }
 
     /**
+     * Setter for participant
+     * @param participant
+     */
+    public void setParticipant(Participant participant) {
+        this.participant = participant;
+    }
+
+    /**
      * Handles the key event pressed
      * @param e the KeyEvent to handle
      */
@@ -87,5 +101,23 @@ public class EditParticipantCtrl {
             default:
                 break;
         }
+    }
+
+    /**
+     * Initiallizes the fields with the participant's data
+     * @param location
+     * The location used to resolve relative paths for the root object, or
+     * {@code null} if the location is not known.
+     *
+     * @param resources
+     * The resources used to localize the root object, or {@code null} if
+     * the root object was not localized.
+     */
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        nameField.setText(participant.getName());
+        emailField.setText("");
+        ibanField.setText("");
+        bicField.setText("");
     }
 }

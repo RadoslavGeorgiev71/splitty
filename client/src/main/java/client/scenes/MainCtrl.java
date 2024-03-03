@@ -16,6 +16,7 @@
 package client.scenes;
 
 import commons.Event;
+import commons.Participant;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -39,6 +40,7 @@ public class MainCtrl {
      * @param primaryStage
      * @param overview
      * @param editparticipant
+     * @param add
      */
     public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> overview,
                            Pair<AddQuoteCtrl, Parent> add,
@@ -66,11 +68,13 @@ public class MainCtrl {
     /**
      * Switches the scene to the edit participant window
      * @param event takes an event as a parameter for which we edit a participant
+     * @param participant takes the participant as a parameter to edit
      */
-    public void showEditParticipant(Event event) {
+    public void showEditParticipant(Event event, Participant participant) {
         primaryStage.setTitle("Edit Participant");
         primaryStage.setScene(editparticipant);
         editParticipantCtrl.setEvent(event);
+        editParticipantCtrl.setParticipant(participant);
     }
 
     /**
