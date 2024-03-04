@@ -105,6 +105,7 @@ public class EventTest {
 
     @Test
     void setId() {
+        System.out.println(event1.getId());
         event1.setId(1);
         assertEquals(1, event1.getId());
     }

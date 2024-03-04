@@ -32,6 +32,9 @@ public class MainCtrl {
     private EditParticipantCtrl editParticipantCtrl;
     private Scene editparticipant;
 
+    private EventOverviewCtrl eventOverviewCtrl;
+    private Scene eventoverview;
+
     private AddQuoteCtrl addCtrl;
     private Scene add;
 
@@ -44,7 +47,8 @@ public class MainCtrl {
      */
     public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> overview,
                            Pair<AddQuoteCtrl, Parent> add,
-            Pair<EditParticipantCtrl, Parent> editparticipant) {
+                           Pair<EditParticipantCtrl, Parent> editparticipant,
+                           Pair<EventOverviewCtrl, Parent> eventoverview) {
         this.primaryStage = primaryStage;
         this.overviewCtrl = overview.getKey();
         this.overview = new Scene(overview.getValue());
@@ -52,7 +56,10 @@ public class MainCtrl {
         this.editParticipantCtrl = editparticipant.getKey();
         this.editparticipant = new Scene(editparticipant.getValue());
 
-        showOverview();
+        this.eventOverviewCtrl = eventoverview.getKey();
+        this.eventoverview = new Scene(eventoverview.getValue());
+
+        showEventOverview();
         primaryStage.show();
     }
 
@@ -75,6 +82,11 @@ public class MainCtrl {
         primaryStage.setScene(editparticipant);
         editParticipantCtrl.setEvent(event);
         editParticipantCtrl.setParticipant(participant);
+    }
+
+    public void showEventOverview() {
+        primaryStage.setTitle("Event Overview");
+        primaryStage.setScene(eventoverview);
     }
 
     /**

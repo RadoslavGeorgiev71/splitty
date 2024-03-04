@@ -6,6 +6,10 @@ import java.time.format.DateTimeFormatter;
 import java.time.LocalDateTime;
 //import java.util.ArrayList;
 import java.util.List;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 
 public class Event {
 
@@ -15,7 +19,7 @@ public class Event {
     private List<Participant> participants;
     private List<Expense> expenses;
     private String dateTime;
-    private int id;
+    private long id;
 
 
     // 1.   Participant and Expense Class appearing as an error is because they are placeholders,
@@ -236,7 +240,7 @@ public class Event {
      * Getter for the ID
      * @return id
      */
-    public int getId() {
+    public long getId() {
         return id;
     }
 
@@ -244,7 +248,7 @@ public class Event {
      * Setter for the ID
      * @param id - id to be set
      */
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
