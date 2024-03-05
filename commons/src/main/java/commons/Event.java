@@ -22,9 +22,9 @@ public class Event {
     private String inviteCode;
     @ManyToOne
     private Participant creator;
-    @ManyToMany
+    @OneToMany
     private List<Participant> participants;
-    @ManyToMany
+    @OneToMany
     private List<Expense> expenses;
     private String dateTime;
 
