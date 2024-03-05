@@ -115,9 +115,13 @@ public class EditParticipantCtrl implements Initializable {
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        nameField.setText(participant.getName());
+
         emailField.setText("");
         ibanField.setText("");
         bicField.setText("");
+    }
+
+    public void setFields() {
+        nameField.setText(participant.getName());
     }
 }
