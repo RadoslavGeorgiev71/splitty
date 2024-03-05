@@ -61,6 +61,7 @@ public class MainCtrl {
 
         showEventOverview();
         primaryStage.show();
+
     }
 
     /**
@@ -82,6 +83,7 @@ public class MainCtrl {
         primaryStage.setScene(editparticipant);
         editParticipantCtrl.setEvent(event);
         editParticipantCtrl.setParticipant(participant);
+        editParticipantCtrl.setFields();
     }
 
     public void showEventOverview() {
