@@ -9,10 +9,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-//@Entity
+@Entity
 public class Expense {
-    //@Id
-    //@GeneratedValue(strategy = GenerationType.AUTO)
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     private String title;
     private Participant payingParticipant; // should probably use id of participant instead since we are not using entity for
