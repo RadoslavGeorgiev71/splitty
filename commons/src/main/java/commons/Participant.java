@@ -1,8 +1,16 @@
 package commons;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
 import java.util.Objects;
 
+@Entity
 public class Participant {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     private String name;
 
@@ -24,6 +32,13 @@ public class Participant {
     public Participant(int id, String name) {
         this.id = id;
         this.name = name;
+    }
+
+    /**
+     *  Empty contructor
+     */
+    public Participant() {
+        //empty
     }
 
     /**
