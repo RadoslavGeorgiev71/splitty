@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="294.0" prefWidth="547.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.OpenDebtsCtrl">
+   <children>
+      <Label layoutX="50.0" layoutY="36.0" text="Open Debts">
+         <font>
+            <Font size="28.0" />
+         </font>
+      </Label>
+      <GridPane fx:id="gridPane" layoutX="50.0" layoutY="99.0" prefHeight="144.0" prefWidth="451.0">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="307.20005187988284" minWidth="10.0" prefWidth="255.60003662109375" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="307.20005187988284" minWidth="10.0" prefWidth="58.20003662109377" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="177.20001220703125" minWidth="10.0" prefWidth="138.99996337890627" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints maxHeight="60.799993896484374" minHeight="10.0" prefHeight="49.6" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="63.19999389648438" minHeight="6.1035156235789145E-6" prefHeight="36.800000000000004" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="56.80001220703125" minHeight="4.0000061035156165" prefHeight="41.599999999999994" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <TitledPane fx:id="first_debt_1" animated="false" prefHeight="22.0" prefWidth="308.0" text="first debt" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+              </content>
+            </TitledPane>
+            <TitledPane animated="false" text="untitled" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="0.0" prefWidth="306.0" />
+              </content>
+            </TitledPane>
+            <TitledPane animated="false" prefHeight="16.0" prefWidth="308.0" text="untitled" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+              </content>
+            </TitledPane>
+            <Button fx:id="mark_received_1" mnemonicParsing="false" prefHeight="30.0" prefWidth="122.0" text="Mark Received" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+            <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="122.0" text="Mark Received" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+            <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="122.0" text="Mark Received" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+         </children>
+      </GridPane>
+   </children>
+</Pane>
