@@ -37,8 +37,8 @@ public class Main extends Application {
      */
     @Override
     public void start(Stage primaryStage) throws IOException {
-        var login = FXML.load(LoginCtrl.class, "admin", "scenes", "Login.fxml");
-        var overview = FXML.load(OverviewCtrl.class, "admin", "scenes", "Overview.fxml");
+        var login = FXML.load(LoginCtrl.class, "admin", "Login.fxml");
+        var overview = FXML.load(OverviewCtrl.class, "admin", "Overview.fxml");
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
         mainCtrl.initialize(primaryStage, login, overview);
     }
