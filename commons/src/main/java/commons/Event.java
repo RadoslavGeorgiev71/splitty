@@ -1,6 +1,8 @@
 package commons;
 
 
+import jakarta.persistence.*;
+
 import java.util.Objects;
 import java.time.format.DateTimeFormatter;
 import java.time.LocalDateTime;
@@ -11,15 +13,20 @@ import java.util.List;
 //import jakarta.persistence.GenerationType;
 //import jakarta.persistence.Id;
 
+@Entity
 public class Event {
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long id;
     private String title;
     private String inviteCode;
+    @ManyToOne
     private Participant creator;
+    @ManyToMany
     private List<Participant> participants;
+    @ManyToMany
     private List<Expense> expenses;
     private String dateTime;
-    private long id;
 
 
     // 1.   Participant and Expense Class appearing as an error is because they are placeholders,

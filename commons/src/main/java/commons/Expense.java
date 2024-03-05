@@ -1,9 +1,6 @@
 package commons;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,9 +12,11 @@ public class Expense {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     private String title;
+    @ManyToOne
     private Participant payingParticipant; // should probably use id of participant instead since we are not using entity for
-                                            // participant yet i will change later
+    // participant yet i will change later
     private double amount;
+    @ManyToMany
     private List<Participant> participants;
     private String dateTime;
 
