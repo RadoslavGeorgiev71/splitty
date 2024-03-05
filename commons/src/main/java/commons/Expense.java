@@ -1,14 +1,50 @@
 package commons;
 
+import jakarta.persistence.*;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+@Entity
 public class Expense {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long id;
     private String title;
-    private Participant payingParticipant;
+    @ManyToOne
+    private Participant payingParticipant; // should probably use id of participant instead since we are not using entity for
+    // participant yet i will change later
     private double amount;
+    @ManyToMany
     private List<Participant> participants;
     private String dateTime;
+
+    /**
+     * Empty new Expense
+     */
+    @SuppressWarnings("unused")
+    public Expense(){
+        this.title = "";
+        //this.payingParticipant = payingParticipant;
+        this.amount = 0.0d;
+        this.participants = new ArrayList<>();
+        this.dateTime = "";
+    }
+
+
+    /**
+     * New Expense, Participant only
+     * @param payingParticipant payer
+     */
+    @SuppressWarnings("unused")
+    public Expense(Participant payingParticipant){
+        this.title = "";
+        this.payingParticipant = payingParticipant;
+        this.amount = 0.0d;
+        this.participants = new ArrayList<>();
+        this.dateTime = "";
+    }
 
     /**
      * Default constructor, no set Date
@@ -22,6 +58,7 @@ public class Expense {
         this.payingParticipant = payingParticipant;
         this.amount = amount;
         this.participants = participants;
+        this.dateTime = "";
     }
 
     /**
@@ -98,6 +135,22 @@ public class Expense {
      */
     public void setParticipants(List<Participant> participants) {
         this.participants = participants;
+    }
+
+    /**
+     * Adding a new Participant to list
+     * @param participant new Participant added to expense
+     */
+    public void addParticipant(Participant participant){
+        participants.add(participant);
+    }
+
+    /**
+     * Removing a new Participant to list
+     * @param participant Participant removed from expense
+     */
+    public void delParticipant(Participant participant){
+        participants.remove(participant);
     }
 
     /**

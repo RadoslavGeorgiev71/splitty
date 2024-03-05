@@ -20,11 +20,11 @@ public class Event {
     private long id;
     private String title;
     private String inviteCode;
-    @OneToOne
+    @ManyToOne
     private Participant creator;
-    @OneToMany
+    @ManyToMany
     private List<Participant> participants;
-    @OneToMany
+    @ManyToMany
     private List<Expense> expenses;
     private String dateTime;
 
