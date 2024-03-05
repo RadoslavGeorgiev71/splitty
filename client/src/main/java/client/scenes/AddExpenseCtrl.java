@@ -10,7 +10,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.CheckBoxListCell;
 import javafx.scene.input.KeyEvent;
 
-import javax.inject.Inject;
+import com.google.inject.Inject;
 import java.net.URL;
 import java.util.ResourceBundle;
 

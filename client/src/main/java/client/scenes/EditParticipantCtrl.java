@@ -9,7 +9,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 
-import javax.inject.Inject;
+import com.google.inject.Inject;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -115,6 +115,8 @@ public class EditParticipantCtrl implements Initializable {
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        // TODO: FIX!!!
+        participant = new Participant("work");
         nameField.setText(participant.getName());
         emailField.setText("");
         ibanField.setText("");

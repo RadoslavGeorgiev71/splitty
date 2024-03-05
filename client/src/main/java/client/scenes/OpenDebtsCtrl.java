@@ -11,7 +11,7 @@ import javafx.scene.control.TitledPane;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Modality;
 
-import javax.inject.Inject;
+import com.google.inject.Inject;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
