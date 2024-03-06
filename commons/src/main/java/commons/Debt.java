@@ -11,7 +11,7 @@ public class Debt {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    private long id;
 
     @OneToOne(cascade = CascadeType.PERSIST)
     private Participant personPaying;
@@ -35,7 +35,7 @@ public class Debt {
      * @param personOwed The participant who will receive the debt
      * @param amount The amount of debt
      */
-    public Debt(int id, Participant personPaying, Participant personOwed, double amount){
+    public Debt(long id, Participant personPaying, Participant personOwed, double amount){
         this.personPaying = personPaying;
         this.personOwed = personOwed;
         this.amount = amount;
@@ -49,7 +49,7 @@ public class Debt {
      * Getter for id
      * @return id
      */
-    public int getId() {
+    public long getId() {
         return id;
     }
 

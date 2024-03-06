@@ -11,7 +11,7 @@ import java.util.Objects;
 public class Participant {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    private long id;
     private String name;
 
     /**
@@ -29,7 +29,7 @@ public class Participant {
      * @param id   - the id of the Participant
      * @param name - the id of the Participant
      */
-    public Participant(int id, String name) {
+    public Participant(long id, String name) {
         this.id = id;
         this.name = name;
     }
@@ -46,7 +46,7 @@ public class Participant {
      *
      * @return the id of Participant
      */
-    public int getId() {
+    public long getId() {
         return id;
     }
 
