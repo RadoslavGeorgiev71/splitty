@@ -17,6 +17,6 @@ public class AuthService {
         authorizedPasswords.add(password);
     }
     public boolean authenticate(String password) {
-        return "password".equals(password);
+        return authorizedPasswords.contains(password);
     }
 }

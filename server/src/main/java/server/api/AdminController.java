@@ -12,20 +12,26 @@ public class AdminController {
 
     @Autowired
     private AuthService authService;
-    private String previousPassword;
 
+    /**
+     * Generates a password and prints it in the server terminal and
+     * adds the generated password to the list of authorized passwords
+     * in authService.
+     */
     @GetMapping(path = {"", "/"})
     public void generatePassword(){
-        previousPassword = PasswordGenerator.generatePassword();
-        System.out.println(previousPassword);
+        String password = PasswordGenerator.generatePassword();
+        authService.addPassword(password);
+        System.out.println(password);
     }
 
+    /**
+     * Returns boolean on whether login was successful or not
+     * @param password The password to be used in login attempt
+     * @return Boolean value of login success
+     */
     @PostMapping(path = { "", "/" })
     public boolean login(@RequestBody String password) {
-        if(password.equals(previousPassword)){
-            authService.addPassword(password);
-            return true;
-        }
-        return false;
+        return authService.authenticate(password);
     }
 }
