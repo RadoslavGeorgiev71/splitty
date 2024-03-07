@@ -1,6 +1,7 @@
 package server.api;
 
 import org.springframework.web.bind.annotation.*;
+import server.PasswordGenerator;
 
 
 @RestController
@@ -10,7 +11,8 @@ public class AdminController {
 
     @GetMapping(path = {"", "/"})
     public void generatePassword(){
-
+        previousPassword = PasswordGenerator.generatePassword();
+        System.out.println(previousPassword);
     }
 
     @PostMapping(path = { "", "/" })
