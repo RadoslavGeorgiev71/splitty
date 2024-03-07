@@ -14,7 +14,7 @@ public class PasswordGenerator {
     public static String generatePassword() {
         StringBuilder password = new StringBuilder();
         SecureRandom random = new SecureRandom();
-        for (int i = 0; i <= 32; i++) {
+        for (int i = 0; i < 32; i++) {
             int randomIndex = random.nextInt(CHARACTER_SET.length());
             char c = CHARACTER_SET.charAt(randomIndex);
             password.append(c);
