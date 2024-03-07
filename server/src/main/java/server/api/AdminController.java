@@ -17,7 +17,7 @@ public class AdminController {
 
     @PostMapping(path = { "", "/" })
     public boolean authenticatePassword(@RequestBody String password) {
-
+        //logic to be implemented
         return true;
     }
 }
