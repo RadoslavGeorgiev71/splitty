@@ -43,10 +43,13 @@ public class LoginCtrl {
 
     @FXML
     void login(ActionEvent event) {
+        errorLabel.setVisible(false); //in case this login attempt follows an unsuccessful one
         String password = passwordField.getText();
-        //cannot implement password verification logic for now
-        if (1<2){ //placeholder for if password is correct
+        if (admin.login(password)){
             mainCtrl.showOverview();
+        }
+        else{
+            errorLabel.setVisible(true);
         }
     }
 

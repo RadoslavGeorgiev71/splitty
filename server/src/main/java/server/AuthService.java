@@ -9,10 +9,10 @@ import java.util.List;
 public class AuthService {
 
     private List<String> authorizedPasswords;
-
     public AuthService() {
         this.authorizedPasswords = new ArrayList<>();
     }
+
     public void addPassword(String password){
         authorizedPasswords.add(password);
     }

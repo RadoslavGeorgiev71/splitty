@@ -5,6 +5,7 @@ import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
 import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 import org.glassfish.jersey.client.ClientConfig;
 
 import java.io.*;
@@ -117,11 +118,14 @@ public class Admin{
      * This method connects with the sever using the random generated
      * password for the server
      * @param password to login
-     * @param host to login
      */
-    public void login(String password, String host){
-        //initialize connection
-        //TODO connect to the server with the given password and host address
+    public boolean login(String password){
+        Response res = ClientBuilder.newClient(new ClientConfig()) //
+                .target(SERVER).path("api/admin/") //
+                .request(APPLICATION_JSON) //
+                .post(Entity.entity(password, APPLICATION_JSON));
+        boolean isAuthenticated = res.getStatus() == Response.Status.OK.getStatusCode();
+        return isAuthenticated;
     }
 
     /**
