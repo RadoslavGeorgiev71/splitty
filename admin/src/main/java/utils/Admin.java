@@ -115,9 +115,9 @@ public class Admin{
     }
 
     /**
-     * This method connects with the sever using the random generated
-     * password for the server
+     * Sends password to server for admin authentication
      * @param password to login
+     * @return Boolean authenticated
      */
     public boolean login(String password){
         Response res = ClientBuilder.newClient(new ClientConfig()) //
