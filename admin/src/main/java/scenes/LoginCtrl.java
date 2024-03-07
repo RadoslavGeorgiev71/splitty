@@ -17,6 +17,7 @@ public class LoginCtrl {
 
     @FXML
     private Button loginButton;
+    private Button generateButton;
 
     @FXML
     private PasswordField passwordField;
@@ -47,6 +48,11 @@ public class LoginCtrl {
         if (1<2){ //placeholder for if password is correct
             mainCtrl.showOverview();
         }
+    }
+
+    @FXML
+    void generatePassword(ActionEvent event) {
+        admin.generatePassword();
     }
 
 }

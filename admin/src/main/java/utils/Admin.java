@@ -83,6 +83,35 @@ public class Admin{
 
 
     private static final String SERVER = "http://localhost:8080/";
+    private String password = "none set";
+
+    /**
+     * Sets the password for the Admin
+     * @param password The password to be set
+     */
+    public void setPassword(String password){
+        this.password = password;
+    }
+
+    /**
+     * Returns the password the was set for admin
+     * @return String password
+     */
+    public String getPassword(){
+        return password;
+    }
+
+    /**
+     * This method sends a get request to the server which
+     * generates a password and prints it to the server console
+     */
+    public void generatePassword(){
+        ClientBuilder.newClient(new ClientConfig()) //
+                .target(SERVER).path("api/admin/") //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .get();
+    }
 
     /**
      * This method connects with the sever using the random generated

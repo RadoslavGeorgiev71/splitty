@@ -1,12 +1,17 @@
 package server.api;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import server.AuthService;
 import server.PasswordGenerator;
 
 
 @RestController
 @RequestMapping("/api/admin")
 public class AdminController {
+
+    @Autowired
+    private AuthService authService;
     private String previousPassword;
 
     @GetMapping(path = {"", "/"})
@@ -16,8 +21,11 @@ public class AdminController {
     }
 
     @PostMapping(path = { "", "/" })
-    public boolean authenticatePassword(@RequestBody String password) {
-        //logic to be implemented
-        return true;
+    public boolean login(@RequestBody String password) {
+        if(password.equals(previousPassword)){
+            authService.addPassword(password);
+            return true;
+        }
+        return false;
     }
 }
