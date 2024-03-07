@@ -46,6 +46,7 @@ public class LoginCtrl {
         errorLabel.setVisible(false); //in case this login attempt follows an unsuccessful one
         String password = passwordField.getText();
         if (admin.login(password)){
+            admin.setPassword(password);
             mainCtrl.showOverview();
         }
         else{
