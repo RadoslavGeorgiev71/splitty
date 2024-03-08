@@ -7,7 +7,6 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="353.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="scenes.LoginCtrl">
    <children>
       <Text layoutX="96.0" layoutY="119.0" strokeType="OUTSIDE" strokeWidth="0.0" text="utils.Admin Login" textAlignment="CENTER" wrappingWidth="160.83985900878906">
@@ -17,6 +16,7 @@
       </Text>
       <PasswordField fx:id="passwordField" layoutX="87.0" layoutY="236.0" prefHeight="34.0" prefWidth="180.0" promptText="Password" />
       <Button fx:id="loginButton" layoutX="88.0" layoutY="291.0" mnemonicParsing="false" onAction="#login" prefHeight="25.0" prefWidth="180.0" text="Login" />
-      <Label fx:id="errorLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="108.0" layoutY="185.0" prefHeight="43.0" prefWidth="139.0" text="Error! Please try again" textAlignment="CENTER" textFill="RED" />
+      <Label fx:id="errorLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="108.0" layoutY="185.0" prefHeight="43.0" prefWidth="139.0" text="Error! Incorrect password" textAlignment="CENTER" textFill="RED" />
+      <Button fx:id="generateButton" layoutX="88.0" layoutY="325.0" mnemonicParsing="false" onAction="#generatePassword" prefHeight="25.0" prefWidth="180.0" text="Generate Password" />
    </children>
 </AnchorPane>

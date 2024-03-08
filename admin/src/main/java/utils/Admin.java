@@ -5,6 +5,7 @@ import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
 import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 import org.glassfish.jersey.client.ClientConfig;
 
 import java.io.*;
@@ -83,16 +84,48 @@ public class Admin{
 
 
     private static final String SERVER = "http://localhost:8080/";
+    private String password = "none set";
 
     /**
-     * This method connects with the sever using the random generated
-     * password for the server
-     * @param password to login
-     * @param host to login
+     * Sets the password for the Admin
+     * @param password The password to be set
      */
-    public void login(String password, String host){
-        //initialize connection
-        //TODO connect to the server with the given password and host address
+    public void setPassword(String password){
+        this.password = password;
+    }
+
+    /**
+     * Returns the password the was set for admin
+     * @return String password
+     */
+    public String getPassword(){
+        return password;
+    }
+
+    /**
+     * This method sends a get request to the server which
+     * generates a password and prints it to the server console
+     */
+    public void generatePassword(){
+        ClientBuilder.newClient(new ClientConfig()) //
+                .target(SERVER).path("api/admin/") //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .get();
+    }
+
+    /**
+     * Sends password to server for admin authentication
+     * @param password to login
+     * @return Boolean authenticated
+     */
+    public boolean login(String password){
+        Response res = ClientBuilder.newClient(new ClientConfig()) //
+                .target(SERVER).path("api/admin/") //
+                .request(APPLICATION_JSON) //
+                .post(Entity.entity(password, APPLICATION_JSON));
+        boolean isAuthenticated = res.getStatus() == Response.Status.OK.getStatusCode();
+        return isAuthenticated;
     }
 
     /**
