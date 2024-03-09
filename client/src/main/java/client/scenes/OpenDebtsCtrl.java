@@ -9,12 +9,8 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.TitledPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.RowConstraints;
-import javafx.scene.layout.TilePane;
 import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Modality;
 
@@ -74,7 +70,7 @@ public class OpenDebtsCtrl implements Initializable {
             tf.setStyle("-fx-alignment: center-left; -fx-padding: 10");
             gridPane.add(tf, 0, i, 1, 1);
             Button button = new Button("Mark Received");
-            gridPane.add(button, 2, i , 1, 1);
+            gridPane.add(button, 2, i, 1, 1);
         }
     }
 
