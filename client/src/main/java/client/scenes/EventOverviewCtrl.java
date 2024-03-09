@@ -2,6 +2,8 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
+import commons.Event;
+import commons.Participant;
 import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
 
@@ -12,6 +14,8 @@ public class EventOverviewCtrl {
 
     @FXML
     private ChoiceBox participantsMenu;
+
+    private Event event;
 
     /**
      *
@@ -30,6 +34,7 @@ public class EventOverviewCtrl {
 
     @FXML
     public void onEditParticipantsClick() {
+        mainCtrl.showEditParticipant(this.event, (Participant) participantsMenu.getValue());
     }
 
     @FXML
@@ -42,5 +47,15 @@ public class EventOverviewCtrl {
 
     @FXML
     public void onSettleDebtsClick() {
+    }
+
+    public void setEvent(Event event){
+        this.event = event;
+    }
+
+    public void initialize(){
+        if(event != null){
+
+        }
     }
 }
