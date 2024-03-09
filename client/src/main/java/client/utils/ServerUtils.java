@@ -25,6 +25,8 @@ import java.net.URISyntaxException;
 import java.util.List;
 
 import commons.Debt;
+import commons.Event;
+import commons.Participant;
 import org.glassfish.jersey.client.ClientConfig;
 
 import commons.Quote;
@@ -68,5 +70,13 @@ public class ServerUtils {
 			.request(APPLICATION_JSON)
 			.accept(APPLICATION_JSON)
 			.get(new GenericType<List<Debt>>() {});
+	}
+
+    public Event getEvent(long id) {
+		return null;
+    }
+
+	public void persistParticipant(Participant participant) {
+
 	}
 }

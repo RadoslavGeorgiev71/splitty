@@ -7,6 +7,10 @@ import commons.Participant;
 import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
 
+import javafx.util.StringConverter;
+import javafx.collections.FXCollections;
+
+
 public class EventOverviewCtrl {
 
     private final ServerUtils server;
@@ -55,7 +59,22 @@ public class EventOverviewCtrl {
 
     public void initialize(){
         if(event != null){
-
+            participantsMenu.setItems(FXCollections.observableArrayList(event.getParticipants()));
+            participantsMenu.setConverter(new StringConverter<Participant>() {
+                @Override
+                public String toString(Participant participant) {
+                    if(participant != null)
+                        return participant.getName();
+                    else
+                        return "";
+                }
+                @Override
+                public Participant fromString(String string) {
+                    return null;
+                }
+            } );
+            participantsMenu.getSelectionModel().selectFirst();
         }
+
     }
 }

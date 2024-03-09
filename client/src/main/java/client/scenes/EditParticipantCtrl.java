@@ -56,7 +56,13 @@ public class EditParticipantCtrl {
      * @param actionEvent to handle
      */
     public void ok(ActionEvent actionEvent) {
-        //TODO
+        participant.setName(nameField.getText());
+        participant.setIban(ibanField.getText());
+        participant.setEmail(emailField.getText());
+        participant.setBic(bicField.getText());
+        server.persistParticipant(participant);
+        clearFields();
+        //event = server.getEvent(event.getId());
         mainCtrl.showEventOverview(event);
     }
 
