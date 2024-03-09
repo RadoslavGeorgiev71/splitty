@@ -25,6 +25,9 @@ import java.net.URISyntaxException;
 import java.util.List;
 
 import commons.Debt;
+import commons.Event;
+import commons.Participant;
+//import jakarta.ws.rs.core.MediaType;
 import org.glassfish.jersey.client.ClientConfig;
 
 import commons.Quote;
@@ -68,5 +71,28 @@ public class ServerUtils {
 			.request(APPLICATION_JSON)
 			.accept(APPLICATION_JSON)
 			.get(new GenericType<List<Debt>>() {});
+	}
+
+	/**
+	 * This should get an event from the database by the id of the event
+	 * @param id
+	 * @return
+	 */
+	public Event getEvent(long id) {
+		return null;
+    }
+
+	/**
+	 * saves the changes to a participant
+	 * @param participant
+	 * @return
+	 */
+	public Participant persistParticipant(Participant participant) {
+		Entity<Participant> entity = Entity.entity(participant, APPLICATION_JSON);
+			return ClientBuilder.newClient(new ClientConfig())
+					.target(SERVER).path("participants/")
+					.request(APPLICATION_JSON)
+					.accept(APPLICATION_JSON)
+					.put(entity, Participant.class);
 	}
 }
