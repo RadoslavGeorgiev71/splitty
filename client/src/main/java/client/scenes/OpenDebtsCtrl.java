@@ -14,8 +14,6 @@ import javafx.stage.Modality;
 
 import com.google.inject.Inject;
 import java.net.URL;
-import java.time.LocalDateTime;
-import java.time.chrono.ChronoLocalDate;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -57,7 +55,8 @@ public class OpenDebtsCtrl implements Initializable {
         for (int i = 0; i < debts.size(); i++) {
             TitledPane tp = new TitledPane();
             tp.setText(debts.get(i).getPersonPaying().getName() +
-                " gives " + debts.get(i).getAmount() + " to " + debts.get(i).getPersonOwed());
+                " gives " + debts.get(i).getAmount() +
+                " to " + debts.get(i).getPersonOwed().getName());
             gridPane.add(tp, 0, i, 1, 1);
             Button button = new Button("Mark Received");
             gridPane.add(button, 2, i, 1, 1);
@@ -85,6 +84,9 @@ public class OpenDebtsCtrl implements Initializable {
     private void testDebts() {
         Participant bob = new Participant("Bob");
         Participant ana = new Participant("Ana");
+        for (Debt debt : server.getDebts()) {
+            server.deleteDebt(debt);
+        }
         server.addDebt(new Debt(5, bob, ana, 10));
         server.addDebt(new Debt(6, ana, bob, 8));
         server.addDebt(new Debt(7, ana, new Participant("Greg"), 50));

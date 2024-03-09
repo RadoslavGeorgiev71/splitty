@@ -25,6 +25,7 @@ import java.net.URISyntaxException;
 import java.util.List;
 
 import commons.Debt;
+import jakarta.ws.rs.core.Response;
 import org.glassfish.jersey.client.ClientConfig;
 
 import commons.Quote;
@@ -76,5 +77,13 @@ public class ServerUtils {
 			.request(APPLICATION_JSON)
 			.accept(APPLICATION_JSON)
 			.post(Entity.entity(debt, APPLICATION_JSON), Debt.class);
+	}
+
+	public Response deleteDebt(Debt debt) {
+		return ClientBuilder.newClient(new ClientConfig())
+			.target(SERVER).path("api/debts/" + debt.getId())
+			.request(APPLICATION_JSON)
+			.accept(APPLICATION_JSON)
+			.delete();
 	}
 }
