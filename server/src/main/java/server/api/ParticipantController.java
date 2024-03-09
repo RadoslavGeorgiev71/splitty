@@ -2,10 +2,15 @@ package server.api;
 
 import commons.Participant;
 //import org.springframework.http.ResponseEntity;
+import jakarta.servlet.http.Part;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import server.database.ParticipantRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/participants")
@@ -27,6 +32,37 @@ public class ParticipantController {
     @GetMapping(path = {"", "/"})
     public List<Participant> getAll() {
         return repo.findAll();
+    }
+
+    /**
+     * Update a participant
+     * @return all participants
+     */
+    @PutMapping(path = {"", "/"})
+    public ResponseEntity<?> update(@RequestBody Participant updatedParticipant) {
+
+        long participantId = updatedParticipant.getId(); // Assuming Participant has an ID field
+
+        // Retrieve the existing participant from the database based on the ID
+        Optional<Participant> existingParticipant = repo.findById(participantId);
+
+        if (existingParticipant.isPresent()){
+            // Update the existing participant with data from updatedParticipant
+            existingParticipant.get().setName(updatedParticipant.getName());
+            existingParticipant.get().setEmail(updatedParticipant.getEmail());
+            existingParticipant.get().setBic(updatedParticipant.getBic());
+            existingParticipant.get().setIban(updatedParticipant.getIban());
+            // Update other fields as needed
+
+            // Save the updated participant back to the database
+            Participant savedParticipant = repo.save(existingParticipant.get());
+
+            // Return the updated participant
+            return ResponseEntity.ok(savedParticipant);
+        }
+        //Maybe here it should add the participant in the database instead of returning a bad request message
+        //To be discussed
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Participant not found");
     }
 
     /**TODO method that creates a new participant

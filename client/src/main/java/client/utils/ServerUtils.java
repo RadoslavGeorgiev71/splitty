@@ -27,6 +27,7 @@ import java.util.List;
 import commons.Debt;
 import commons.Event;
 import commons.Participant;
+import jakarta.ws.rs.core.MediaType;
 import org.glassfish.jersey.client.ClientConfig;
 
 import commons.Quote;
@@ -76,7 +77,12 @@ public class ServerUtils {
 		return null;
     }
 
-	public void persistParticipant(Participant participant) {
-
+	public Participant persistParticipant(Participant participant) {
+		Entity<Participant> entity = Entity.entity(participant, APPLICATION_JSON);
+			return ClientBuilder.newClient(new ClientConfig())
+					.target(SERVER).path("participants/")
+					.request(APPLICATION_JSON)
+					.accept(APPLICATION_JSON)
+					.put(entity, Participant.class);
 	}
 }
