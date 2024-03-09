@@ -35,6 +35,9 @@ public class MainCtrl {
     private EventOverviewCtrl eventOverviewCtrl;
     private Scene eventoverview;
 
+    private OpenDebtsCtrl openDebtsCtrl;
+    private Scene opendebts;
+
     private AddQuoteCtrl addCtrl;
     private Scene add;
 
@@ -48,8 +51,10 @@ public class MainCtrl {
     public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> overview,
                            Pair<AddQuoteCtrl, Parent> add,
                            Pair<EditParticipantCtrl, Parent> editparticipant,
-                           Pair<EventOverviewCtrl, Parent> eventoverview) {
+                           Pair<EventOverviewCtrl, Parent> eventoverview,
+                           Pair<OpenDebtsCtrl, Parent> opendebts) {
         this.primaryStage = primaryStage;
+
         this.overviewCtrl = overview.getKey();
         this.overview = new Scene(overview.getValue());
 
@@ -58,6 +63,9 @@ public class MainCtrl {
 
         this.eventOverviewCtrl = eventoverview.getKey();
         this.eventoverview = new Scene(eventoverview.getValue());
+
+        this.openDebtsCtrl = opendebts.getKey();
+        this.opendebts = new Scene(opendebts.getValue());
 
         showEventOverview();
         primaryStage.show();
@@ -103,5 +111,10 @@ public class MainCtrl {
         primaryStage.setTitle("Quotes: Adding Quote");
         primaryStage.setScene(add);
         add.setOnKeyPressed(e -> addCtrl.keyPressed(e));
+    }
+
+    public void showOpenDebts() {
+        primaryStage.setTitle("Open Debts");
+        primaryStage.setScene(opendebts);
     }
 }

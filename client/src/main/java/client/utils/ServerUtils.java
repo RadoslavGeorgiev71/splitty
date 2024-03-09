@@ -64,7 +64,7 @@ public class ServerUtils {
 
 	public List<Debt> getDebts() {
 		return ClientBuilder.newClient(new ClientConfig())
-			.target(SERVER).path("debts/")
+			.target(SERVER).path("api/debts")
 			.request(APPLICATION_JSON)
 			.accept(APPLICATION_JSON)
 			.get(new GenericType<List<Debt>>() {});

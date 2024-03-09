@@ -10,7 +10,6 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
 <VBox prefHeight="188.0" prefWidth="455.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.OpenDebtsCtrl">
    <children>
       <Label text="Open Debts">
@@ -30,7 +29,7 @@
           <RowConstraints maxHeight="56.80001220703125" minHeight="4.0000061035156165" prefHeight="41.599999999999994" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <TitledPane fx:id="first_debt_1" animated="false" prefHeight="22.0" prefWidth="308.0" text="first debt" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+            <TitledPane animated="false" prefHeight="22.0" prefWidth="308.0" text="first debt" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
               <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
               </content>
@@ -45,7 +44,7 @@
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
               </content>
             </TitledPane>
-            <Button fx:id="mark_received_1" mnemonicParsing="false" prefHeight="30.0" prefWidth="122.0" text="Mark Received" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+            <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="122.0" text="Mark Received" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
             <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="122.0" text="Mark Received" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
             <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="122.0" text="Mark Received" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
          </children>

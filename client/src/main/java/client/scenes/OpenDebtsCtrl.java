@@ -49,15 +49,15 @@ public class OpenDebtsCtrl implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         // TODO: initialize with appropriate text
-        List<Debt> debts = initialGetDebts();
-        for (int i = 0; i < debts.size(); i++) {
-            TitledPane tp = new TitledPane();
-            tp.setText(debts.get(i).getPersonPaying().getName() +
-                " gives " + debts.get(i).getAmount() + " to " + debts.get(i).getPersonOwed());
-            gridPane.add(tp, 1, i + 1, 1, 1);
-            Button button = new Button("Mark Received");
-            gridPane.add(button, 3, i + 1, 1, 1);
-        }
+          List<Debt> debts = initialGetDebts();
+//        for (int i = 0; i < debts.size(); i++) {
+//            TitledPane tp = new TitledPane();
+//            tp.setText(debts.get(i).getPersonPaying().getName() +
+//                " gives " + debts.get(i).getAmount() + " to " + debts.get(i).getPersonOwed());
+//            gridPane.add(tp, 1, i + 1, 1, 1);
+//            Button button = new Button("Mark Received");
+//            gridPane.add(button, 3, i + 1, 1, 1);
+//        }
     }
 
     /**
