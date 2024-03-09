@@ -2,9 +2,7 @@ package server.api;
 
 import commons.Participant;
 //import org.springframework.http.ResponseEntity;
-import jakarta.servlet.http.Part;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import server.database.ParticipantRepository;

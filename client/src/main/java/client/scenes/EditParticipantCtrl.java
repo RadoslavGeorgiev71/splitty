@@ -5,13 +5,10 @@ import commons.Event;
 import commons.Participant;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 
 import com.google.inject.Inject;
-import java.net.URL;
-import java.util.ResourceBundle;
 
 public class EditParticipantCtrl {
 
