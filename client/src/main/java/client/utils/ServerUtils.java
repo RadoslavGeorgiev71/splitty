@@ -69,4 +69,12 @@ public class ServerUtils {
 			.accept(APPLICATION_JSON)
 			.get(new GenericType<List<Debt>>() {});
 	}
+
+	public Debt addDebt(Debt debt) {
+		return ClientBuilder.newClient(new ClientConfig())
+			.target(SERVER).path("api/debts")
+			.request(APPLICATION_JSON)
+			.accept(APPLICATION_JSON)
+			.post(Entity.entity(debt, APPLICATION_JSON), Debt.class);
+	}
 }

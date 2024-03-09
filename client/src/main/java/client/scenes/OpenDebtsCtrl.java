@@ -2,6 +2,7 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import commons.Debt;
+import commons.Participant;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -13,6 +14,8 @@ import javafx.stage.Modality;
 
 import com.google.inject.Inject;
 import java.net.URL;
+import java.time.LocalDateTime;
+import java.time.chrono.ChronoLocalDate;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -49,22 +52,23 @@ public class OpenDebtsCtrl implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         // TODO: initialize with appropriate text
-          List<Debt> debts = initialGetDebts();
-//        for (int i = 0; i < debts.size(); i++) {
-//            TitledPane tp = new TitledPane();
-//            tp.setText(debts.get(i).getPersonPaying().getName() +
-//                " gives " + debts.get(i).getAmount() + " to " + debts.get(i).getPersonOwed());
-//            gridPane.add(tp, 1, i + 1, 1, 1);
-//            Button button = new Button("Mark Received");
-//            gridPane.add(button, 3, i + 1, 1, 1);
-//        }
+        this.testDebts();
+        List<Debt> debts = getDebts();
+        for (int i = 0; i < debts.size(); i++) {
+            TitledPane tp = new TitledPane();
+            tp.setText(debts.get(i).getPersonPaying().getName() +
+                " gives " + debts.get(i).getAmount() + " to " + debts.get(i).getPersonOwed());
+            gridPane.add(tp, 0, i, 1, 1);
+            Button button = new Button("Mark Received");
+            gridPane.add(button, 2, i, 1, 1);
+        }
     }
 
     /**
      * Retrieve the debts all debts from the server
      * @return the debts from the server
      */
-    public List<Debt> initialGetDebts() {
+    private List<Debt> getDebts() {
         try {
             return server.getDebts();
         }
@@ -77,4 +81,12 @@ public class OpenDebtsCtrl implements Initializable {
         }
     }
 
+    // TODO: only to test the functionality for now, should be removed later
+    private void testDebts() {
+        Participant bob = new Participant("Bob");
+        Participant ana = new Participant("Ana");
+        server.addDebt(new Debt(5, bob, ana, 10));
+        server.addDebt(new Debt(6, ana, bob, 8));
+        server.addDebt(new Debt(7, ana, new Participant("Greg"), 50));
+    }
 }
