@@ -6,10 +6,16 @@ import commons.Participant;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TitledPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.RowConstraints;
+import javafx.scene.layout.TilePane;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
+import javafx.scene.text.TextFlow;
 import javafx.stage.Modality;
 
 import com.google.inject.Inject;
@@ -49,17 +55,26 @@ public class OpenDebtsCtrl implements Initializable {
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        gridPane.setAlignment(Pos.CENTER);
+//        gridPane.setStyle("-fx-grid-lines-visible: true");
         // TODO: initialize with appropriate text
         this.testDebts();
         List<Debt> debts = getDebts();
         for (int i = 0; i < debts.size(); i++) {
-            TitledPane tp = new TitledPane();
-            tp.setText(debts.get(i).getPersonPaying().getName() +
-                " gives " + debts.get(i).getAmount() +
-                " to " + debts.get(i).getPersonOwed().getName());
-            gridPane.add(tp, 0, i, 1, 1);
+            TextFlow tf = new TextFlow();
+            Text payer = new Text(debts.get(i).getPersonPaying().getName());
+            payer.setStyle("-fx-font-weight: bold");
+            Text gives = new Text(" gives ");
+            Text amount = new Text(Double.toString(debts.get(i).getAmount()));
+            amount.setStyle("-fx-font-weight: bold");
+            Text to = new Text(" to ");
+            Text receiver = new Text(debts.get(i).getPersonOwed().getName());
+            receiver.setStyle("-fx-font-weight: bold");
+            tf.getChildren().addAll(payer, gives, amount, to, receiver);
+            tf.setStyle("-fx-alignment: center-left; -fx-padding: 10");
+            gridPane.add(tf, 0, i, 1, 1);
             Button button = new Button("Mark Received");
-            gridPane.add(button, 2, i, 1, 1);
+            gridPane.add(button, 2, i , 1, 1);
         }
     }
 
@@ -89,6 +104,6 @@ public class OpenDebtsCtrl implements Initializable {
         }
         server.addDebt(new Debt(5, bob, ana, 10));
         server.addDebt(new Debt(6, ana, bob, 8));
-        server.addDebt(new Debt(7, ana, new Participant("Greg"), 50));
+        server.addDebt(new Debt(7, ana, new Participant("Greg"), 30));
     }
 }
