@@ -7,6 +7,7 @@ import commons.Participant;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import javafx.util.StringConverter;
@@ -78,17 +79,20 @@ public class EventOverviewCtrl {
     public void tabPaneAllClick() {
         tabPaneAllGridPane.getChildren().clear();
         tabPaneAllGridPane.setVgap(10);
-        tabPaneAllGridPane.setHgap(75);
+        tabPaneAllGridPane.setHgap(10);
         if(event != null) {
             for (int i = 0; i < event.getExpenses().size(); i++) {
                 Label dateLabel = new Label("dateTime");
                 Label nameLabel = new Label("expense creator");
+                nameLabel.setWrapText(true); // Wrap text to prevent truncation
                 Button editButton = new Button("Edit");
-                dateLabel.setWrapText(true);
-                dateLabel.setWrapText(true);
-                dateLabel.setWrapText(true);
 
-                //editButton.setOnAction()
+                // Set fixed column widths
+                dateLabel.setMaxWidth(Double.MAX_VALUE);
+                nameLabel.setMaxWidth(Double.MAX_VALUE);
+
+                GridPane.setFillWidth(dateLabel, true);
+                GridPane.setFillWidth(nameLabel, true);
 
                 tabPaneAllGridPane.add(dateLabel, 0, i);
                 tabPaneAllGridPane.add(nameLabel, 1, i);
