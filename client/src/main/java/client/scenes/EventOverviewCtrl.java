@@ -7,7 +7,6 @@ import commons.Participant;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
-import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import javafx.util.StringConverter;
@@ -62,8 +61,6 @@ public class EventOverviewCtrl {
 
     @FXML
     public void onAddExpenseClick() {
-        // Doesn't work
-        mainCtrl.showAdd();
     }
 
     @FXML
