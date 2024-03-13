@@ -25,6 +25,7 @@ import java.net.URISyntaxException;
 import java.util.List;
 
 import commons.Debt;
+import jakarta.ws.rs.core.Response;
 import commons.Event;
 import commons.Participant;
 //import jakarta.ws.rs.core.MediaType;
@@ -67,12 +68,27 @@ public class ServerUtils {
 
 	public List<Debt> getDebts() {
 		return ClientBuilder.newClient(new ClientConfig())
-			.target(SERVER).path("debts/")
+			.target(SERVER).path("api/debts")
 			.request(APPLICATION_JSON)
 			.accept(APPLICATION_JSON)
 			.get(new GenericType<List<Debt>>() {});
 	}
 
+	public Debt addDebt(Debt debt) {
+		return ClientBuilder.newClient(new ClientConfig())
+			.target(SERVER).path("api/debts")
+			.request(APPLICATION_JSON)
+			.accept(APPLICATION_JSON)
+			.post(Entity.entity(debt, APPLICATION_JSON), Debt.class);
+	}
+
+	public Response deleteDebt(Debt debt) {
+		return ClientBuilder.newClient(new ClientConfig())
+			.target(SERVER).path("api/debts/" + debt.getId())
+			.request(APPLICATION_JSON)
+			.accept(APPLICATION_JSON)
+			.delete();
+	}
 	/**
 	 * This should get an event from the database by the id of the event
 	 * @param id
