@@ -5,15 +5,12 @@ import commons.Event;
 import commons.Participant;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 
 import com.google.inject.Inject;
-import java.net.URL;
-import java.util.ResourceBundle;
 
-public class EditParticipantCtrl implements Initializable {
+public class EditParticipantCtrl {
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
@@ -47,7 +44,7 @@ public class EditParticipantCtrl implements Initializable {
      */
     public void cancel(ActionEvent actionEvent) {
         clearFields();
-        mainCtrl.showOverviewEvent(event);
+        mainCtrl.showEventOverview(event);
     }
 
     /**
@@ -56,8 +53,14 @@ public class EditParticipantCtrl implements Initializable {
      * @param actionEvent to handle
      */
     public void ok(ActionEvent actionEvent) {
-        //TODO
-        mainCtrl.showOverviewEvent(event);
+        participant.setName(nameField.getText());
+        participant.setIban(ibanField.getText());
+        participant.setEmail(emailField.getText());
+        participant.setBic(bicField.getText());
+        participant = server.persistParticipant(participant);
+        clearFields();
+        //event = server.getEvent(event.getId());
+        mainCtrl.showEventOverview(event);
     }
 
     /**
@@ -105,23 +108,16 @@ public class EditParticipantCtrl implements Initializable {
 
     /**
      * Initiallizes the fields with the participant's data
-     * @param location
-     * The location used to resolve relative paths for the root object, or
-     * {@code null} if the location is not known.
-     *
-     * @param resources
-     * The resources used to localize the root object, or {@code null} if
-     * the root object was not localized.
      */
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
+    public void initialize() {
+        if(participant != null){
+            nameField.setText(participant.getName());
+            nameField.positionCaret(participant.getName().length());
+            emailField.setText(participant.getEmail());
+            ibanField.setText(participant.getIban());
+            bicField.setText(participant.getBic());
+        }
 
-        emailField.setText("");
-        ibanField.setText("");
-        bicField.setText("");
     }
 
-    public void setFields() {
-        nameField.setText(participant.getName());
-    }
 }

@@ -64,8 +64,9 @@ public class Main extends Application {
         var add = FXML.load(AddQuoteCtrl.class, "client", "scenes", "AddQuote.fxml");
         var eventoverview = FXML.load(EventOverviewCtrl.class, "client", "scenes", "EventOverview.fxml");
         var opendebts = FXML.load(OpenDebtsCtrl.class, "client", "scenes", "OpenDebts.fxml");
+        var startscreen = FXML.load(StartScreenCtrl.class, "client", "scenes", "StartScreen.fxml");
 
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
-        mainCtrl.initialize(primaryStage, overview, add, editparticipant, eventoverview, opendebts);
+        mainCtrl.initialize(primaryStage, overview, add, editparticipant, eventoverview, opendebts, startscreen);
     }
 }

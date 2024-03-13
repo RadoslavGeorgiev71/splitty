@@ -50,7 +50,7 @@ public class AddExpenseCtrl implements Initializable {
      */
     public void cancel(ActionEvent actionEvent) {
         clearFields();
-        mainCtrl.showOverviewEvent(event);
+        mainCtrl.showEventOverview(event);
     }
 
     /**
@@ -60,7 +60,7 @@ public class AddExpenseCtrl implements Initializable {
      */
     public void ok(ActionEvent actionEvent) {
         //TODO
-        mainCtrl.showOverviewEvent(event);
+        mainCtrl.showEventOverview(event);
     }
 
     /**
