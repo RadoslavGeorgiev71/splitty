@@ -24,6 +24,11 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 
+import commons.Debt;
+import jakarta.ws.rs.core.Response;
+import commons.Event;
+import commons.Participant;
+//import jakarta.ws.rs.core.MediaType;
 import org.glassfish.jersey.client.ClientConfig;
 
 import commons.Quote;
@@ -59,5 +64,51 @@ public class ServerUtils {
 				.request(APPLICATION_JSON) //
 				.accept(APPLICATION_JSON) //
 				.post(Entity.entity(quote, APPLICATION_JSON), Quote.class);
+	}
+
+	public List<Debt> getDebts() {
+		return ClientBuilder.newClient(new ClientConfig())
+			.target(SERVER).path("api/debts")
+			.request(APPLICATION_JSON)
+			.accept(APPLICATION_JSON)
+			.get(new GenericType<List<Debt>>() {});
+	}
+
+	public Debt addDebt(Debt debt) {
+		return ClientBuilder.newClient(new ClientConfig())
+			.target(SERVER).path("api/debts")
+			.request(APPLICATION_JSON)
+			.accept(APPLICATION_JSON)
+			.post(Entity.entity(debt, APPLICATION_JSON), Debt.class);
+	}
+
+	public Response deleteDebt(Debt debt) {
+		return ClientBuilder.newClient(new ClientConfig())
+			.target(SERVER).path("api/debts/" + debt.getId())
+			.request(APPLICATION_JSON)
+			.accept(APPLICATION_JSON)
+			.delete();
+	}
+	/**
+	 * This should get an event from the database by the id of the event
+	 * @param id
+	 * @return
+	 */
+	public Event getEvent(long id) {
+		return null;
+    }
+
+	/**
+	 * saves the changes to a participant
+	 * @param participant
+	 * @return
+	 */
+	public Participant persistParticipant(Participant participant) {
+		Entity<Participant> entity = Entity.entity(participant, APPLICATION_JSON);
+			return ClientBuilder.newClient(new ClientConfig())
+					.target(SERVER).path("participants/")
+					.request(APPLICATION_JSON)
+					.accept(APPLICATION_JSON)
+					.put(entity, Participant.class);
 	}
 }

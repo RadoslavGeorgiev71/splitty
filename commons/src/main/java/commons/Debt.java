@@ -1,15 +1,32 @@
 package commons;
 
+import jakarta.persistence.*;
+
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+@Entity(name = "Debt")
+@Table(name = "Debt")
 public class Debt {
-    private int id;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long id;
+
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private Participant personPaying;
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private Participant personOwed;
     private double amount;
     private boolean paid;
     private LocalDateTime paidDateTime;
+
+    /**
+     * Empty constructor for teh class
+     */
+    public Debt() {
+
+    }
 
     /**
      * Constructor for the Debt class
@@ -18,7 +35,7 @@ public class Debt {
      * @param personOwed The participant who will receive the debt
      * @param amount The amount of debt
      */
-    public Debt(int id, Participant personPaying, Participant personOwed, double amount){
+    public Debt(long id, Participant personPaying, Participant personOwed, double amount){
         this.personPaying = personPaying;
         this.personOwed = personOwed;
         this.amount = amount;
@@ -27,11 +44,12 @@ public class Debt {
         this.paidDateTime = null;
     }
 
+
     /**
      * Getter for id
      * @return id
      */
-    public int getId() {
+    public long getId() {
         return id;
     }
 

@@ -1,21 +1,32 @@
 package commons;
 
 
+import jakarta.persistence.*;
+
 import java.util.Objects;
 import java.time.format.DateTimeFormatter;
 import java.time.LocalDateTime;
 //import java.util.ArrayList;
 import java.util.List;
+//import jakarta.persistence.Entity;
+//import jakarta.persistence.GeneratedValue;
+//import jakarta.persistence.GenerationType;
+//import jakarta.persistence.Id;
 
+@Entity
 public class Event {
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long id;
     private String title;
     private String inviteCode;
+    @ManyToOne
     private Participant creator;
+    @OneToMany
     private List<Participant> participants;
+    @OneToMany
     private List<Expense> expenses;
     private String dateTime;
-    private int id;
 
 
     // 1.   Participant and Expense Class appearing as an error is because they are placeholders,
@@ -24,7 +35,7 @@ public class Event {
     // but I'm guessing that will be done in the Event class.
     // 3.   Same as above for the ID.
     // 4.   Will later add a correct automatic dateTime update method,
-    // which will run when an "edit" method is used.
+    //      which will run when an "edit" method is used.
 
     /**
      * Default constructor for the class
@@ -32,6 +43,7 @@ public class Event {
     public Event() {
 
     }
+
     /**
      * Constructor for the Event class
      * @param title Title used to differentiate the different Events
@@ -47,6 +59,7 @@ public class Event {
         this.creator = creator;
         this.participants = participants;
         this.expenses = expenses;
+        // Placeholder ID
         this.id = 0;
 
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
@@ -67,7 +80,7 @@ public class Event {
 
     /**
      * Method to remove an Expense from the Event
-     * @param expense
+     * @param expense - expense to be removed
      */
     public void removeExpense(Expense expense) {
         for (int i = 0; i < expenses.size(); i++) {
@@ -81,9 +94,9 @@ public class Event {
      * Method to find the Last Activity added to the Event
      * @return the last Activity added to the Event
      */
-    public String getLastActivity() {
+    public Expense getLastActivity() {
         int lastIndex = expenses.size() - 1;
-        return expenses.get(lastIndex).getActivity();
+        return expenses.get(lastIndex);
     }
 
     /**
@@ -115,7 +128,7 @@ public class Event {
 
     /**
      * Method to remove a Participant from the Event
-     * @param participant
+     * @param participant - participant to be removed
      */
     public void removeParticipant(Participant participant) {
         for (int i = 0; i < participants.size(); i++) {
@@ -144,7 +157,7 @@ public class Event {
 
     /**
      * Setter for the Title
-     * @param title
+     * @param title - title to be set
      */
     public void setTitle(String title) {
         this.title = title;
@@ -160,7 +173,7 @@ public class Event {
 
     /**
      * Setter for the Invite Code
-     * @param inviteCode
+     * @param inviteCode - Invite Code to be set
      */
     public void setInviteCode(String inviteCode) {
         this.inviteCode = inviteCode;
@@ -176,7 +189,7 @@ public class Event {
 
     /**
      * Setter for the Creator
-     * @param creator
+     * @param creator - creator to be set
      */
     public void setCreator(Participant creator) {
         this.creator = creator;
@@ -192,7 +205,7 @@ public class Event {
 
     /**
      * Setter for the Participants
-     * @param participants
+     * @param participants - participants to be set
      */
     public void setParticipants(List<Participant> participants) {
         this.participants = participants;
@@ -208,7 +221,7 @@ public class Event {
 
     /**
      * Setter for the Expenses
-     * @param expenses
+     * @param expenses - expenses to be set
      */
     public void setExpenses(List<Expense> expenses) {
         this.expenses = expenses;
@@ -224,7 +237,7 @@ public class Event {
 
     /**
      * Setter for the dateTime
-     * @param dateTime
+     * @param dateTime - dateTime to be set
      */
     public void setDateTime(String dateTime) {
         this.dateTime = dateTime;
@@ -234,21 +247,21 @@ public class Event {
      * Getter for the ID
      * @return id
      */
-    public int getId() {
+    public long getId() {
         return id;
     }
 
     /**
      * Setter for the ID
-     * @param id
+     * @param id - id to be set
      */
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
     /**
      * Equals method for Event
-     * @param o
+     * @param o - object to check equality with
      * @return The boolean equality of this with Object o
      */
     @Override

@@ -1,10 +1,22 @@
 package commons;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
 import java.util.Objects;
 
+@Entity
 public class Participant {
-    private int id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long id;
     private String name;
+
+    private String email;
+    private String bic;
+    private String iban;
 
     /**
      * A constructor for creating Participant object by a name
@@ -19,9 +31,32 @@ public class Participant {
      * A constructor for creating Participant object by id and name
      *
      * @param id   - the id of the Participant
-     * @param name - the id of the Participant
+     * @param name - the name of the Participant
+     * @param email - the email of the Participant
+     * @param iban -  the IBAN of the Participant
+     * @param bic - the BIC of the Participant
      */
-    public Participant(int id, String name) {
+    public Participant(long id, String name, String email, String iban, String bic) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.iban = iban;
+        this.bic = bic;
+    }
+
+    /**
+     *  Empty contructor
+     */
+    public Participant() {
+        //empty
+    }
+
+    /**
+     *  Constructor with id and name
+     * @param id
+     * @param name
+     */
+    public Participant(long id, String name) {
         this.id = id;
         this.name = name;
     }
@@ -31,7 +66,7 @@ public class Participant {
      *
      * @return the id of Participant
      */
-    public int getId() {
+    public long getId() {
         return id;
     }
 
@@ -45,11 +80,38 @@ public class Participant {
     }
 
     /**
+     * Getter for email of the Participant
+     *
+     * @return the email of the Participant
+     */
+    public String getEmail() {
+        return email;
+    }
+
+    /**
+     * Getter for BIC of the Participant
+     *
+     * @return the BIC of the Participant
+     */
+    public String getBic() {
+        return bic;
+    }
+
+    /**
+     * Getter for IBAN of the Participant
+     *
+     * @return the IBAN of the Participant
+     */
+    public String getIban() {
+        return iban;
+    }
+
+    /**
      * Setter for the id of the Participant
      *
      * @param id - the id to be set
      */
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -60,6 +122,31 @@ public class Participant {
      */
     public void setName(String name) {
         this.name = name;
+    }
+
+
+    /**
+     * Setter for the email of the participant
+     * @param email - the email to be set
+     */
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    /**
+     * Setter for the BIC of the participant
+     * @param bic - the BIC to be set
+     */
+    public void setBic(String bic) {
+        this.bic = bic;
+    }
+
+    /**
+     * Setter for the IBAN of the participant
+     * @param iban - the IBAN to be set
+     */
+    public void setIban(String iban) {
+        this.iban = iban;
     }
 
     /**
@@ -78,7 +165,7 @@ public class Participant {
             return false;
         }
         Participant that = (Participant) o;
-        return id == that.id && Objects.equals(name, that.name);
+        return id == that.id && Objects.equals(name, that.name) && Objects.equals(email, that.email) && Objects.equals(bic, that.bic) && Objects.equals(iban, that.iban);
     }
 
     /**
@@ -88,6 +175,6 @@ public class Participant {
      */
     @Override
     public int hashCode() {
-        return Objects.hash(id, name);
+        return Objects.hash(id, name, email, iban, bic);
     }
 }
