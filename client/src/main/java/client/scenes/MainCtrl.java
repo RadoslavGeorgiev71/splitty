@@ -30,6 +30,9 @@ public class MainCtrl {
     private AddQuoteCtrl addCtrl;
     private Scene add;
 
+    private InvitationCtrl invitationCtrl;
+    private Scene invitation
+
     /**
      * Initializes stage
      * @param primaryStage
@@ -37,7 +40,7 @@ public class MainCtrl {
      * @param add
      */
     public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> overview,
-            Pair<AddQuoteCtrl, Parent> add) {
+            Pair<AddQuoteCtrl, Parent> add, Pair<InvitationCtrl, Parent> invitation) {
         this.primaryStage = primaryStage;
         this.overviewCtrl = overview.getKey();
         this.overview = new Scene(overview.getValue());
