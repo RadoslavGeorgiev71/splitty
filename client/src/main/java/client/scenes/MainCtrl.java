@@ -31,13 +31,14 @@ public class MainCtrl {
     private Scene add;
 
     private InvitationCtrl invitationCtrl;
-    private Scene invitation
+    private Scene invitation;
 
     /**
      * Initializes stage
      * @param primaryStage
      * @param overview
      * @param add
+     * @param invitation
      */
     public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> overview,
             Pair<AddQuoteCtrl, Parent> add, Pair<InvitationCtrl, Parent> invitation) {
