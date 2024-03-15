@@ -140,4 +140,9 @@ public class MainCtrl {
         primaryStage.setTitle("Open Debts");
         primaryStage.setScene(opendebts);
     }
+
+    public void showInvitation() {
+        primaryStage.setTitle("Invitation");
+        primaryStage.setScene(invitation);
+    }
 }
