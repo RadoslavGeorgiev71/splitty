@@ -7,8 +7,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.StartScreenCtrl">
    <children>
       <TextField fx:id="newEventText" layoutX="124.0" layoutY="80.0" prefHeight="25.0" prefWidth="235.0" />
       <TextField fx:id="joinEventText" layoutX="124.0" layoutY="175.0" prefHeight="25.0" prefWidth="235.0" />
@@ -22,8 +21,8 @@
             <Font size="20.0" />
          </font>
       </Text>
-      <Button fx:id="createEventButton" layoutX="381.0" layoutY="80.0" mnemonicParsing="false" text="Create" />
-      <Button fx:id="joinEventButton" layoutX="381.0" layoutY="175.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="50.0" text="Join" />
+      <Button fx:id="createEventButton" layoutX="381.0" layoutY="80.0" mnemonicParsing="false" onAction="#createEvent" text="Create" />
+      <Button fx:id="joinEventButton" layoutX="381.0" layoutY="175.0" mnemonicParsing="false" onAction="#joinEvent" prefHeight="25.0" prefWidth="50.0" text="Join" />
       <Text layoutX="122.0" layoutY="241.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Recently viewed events:">
          <font>
             <Font size="15.0" />

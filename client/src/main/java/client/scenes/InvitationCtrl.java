@@ -70,10 +70,20 @@ public class InvitationCtrl implements Initializable {
         emailTextArea.clear();
     }
 
+    @FXML
     /**
      * Should send invites.
      */
     private void sendInvites(){
+
+    }
+    @FXML
+    private void backToStart(){
+
+    }
+
+    @FXML
+    private void goToEvent(){
 
     }
 }

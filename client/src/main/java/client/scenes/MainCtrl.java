@@ -41,6 +41,9 @@ public class MainCtrl {
     private AddQuoteCtrl addCtrl;
     private Scene add;
 
+    private InvitationCtrl invitationCtrl;
+    private Scene invitation;
+
     private StartScreenCtrl startScreenCtrl;
     private Scene startscreen;
 
@@ -48,15 +51,22 @@ public class MainCtrl {
      * Initializes stage
      * @param primaryStage
      * @param overview
-     * @param editparticipant
      * @param add
+     * @param editparticipant
+     * @param eventoverview
+     * @param opendebts
+     * @param startscreen
+     * @param invitation
      */
-    public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> overview,
+    public void initialize(Stage primaryStage,
+                           Pair<QuoteOverviewCtrl, Parent> overview,
                            Pair<AddQuoteCtrl, Parent> add,
                            Pair<EditParticipantCtrl, Parent> editparticipant,
                            Pair<EventOverviewCtrl, Parent> eventoverview,
                            Pair<OpenDebtsCtrl, Parent> opendebts,
-                           Pair<StartScreenCtrl, Parent> startscreen) {
+                           Pair<StartScreenCtrl, Parent> startscreen,
+                           Pair<InvitationCtrl, Parent> invitation) {
+
         this.primaryStage = primaryStage;
 
         this.overviewCtrl = overview.getKey();
@@ -73,6 +83,9 @@ public class MainCtrl {
 
         this.startScreenCtrl = startscreen.getKey();
         this.startscreen = new Scene(startscreen.getValue());
+
+        this.invitationCtrl = invitation.getKey();
+        this.invitation = new Scene(invitation.getValue());
 
         showStartScreen();
         primaryStage.show();

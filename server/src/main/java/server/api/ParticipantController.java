@@ -34,6 +34,7 @@ public class ParticipantController {
 
     /**
      * Update a participant
+     * @param updatedParticipant
      * @return all participants
      */
     @PutMapping(path = {"", "/"})
@@ -63,9 +64,51 @@ public class ParticipantController {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Participant not found");
     }
 
-    /**TODO method that creates a new participant
-     * method that deletes participant
-     * method that updates participant
-     * method that retrieves participant by id
+    /**
+     *
+     * @param newParticipant
+     * @return the new participant
+     */
+    @PostMapping(path = {"", "/"})
+    public ResponseEntity<?> create(@RequestBody Participant newParticipant){
+        Participant savedParticipant = repo.save(newParticipant);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedParticipant);
+    }
+
+    /**
+     *
+     * @param participantId
+     * @return if participant was deleted or not
+     */
+    @DeleteMapping(path = {"", "/{id}"})
+    public ResponseEntity<?> delete(@PathVariable("id") long participantId){
+        if (repo.existsById(participantId)){
+            repo.deleteById(participantId);
+            return ResponseEntity.status(HttpStatus.OK).build();
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Participant not found!");
+        }
+    }
+
+    /**
+     *
+     * @param participantId
+     * @return participant with the id or "No participant by id"
+     */
+    @GetMapping(path = {"/{id}"})
+    public ResponseEntity<?> getById(@PathVariable("id") long participantId){
+        Optional<Participant> participantOptional = repo.findById(participantId);
+
+        if (participantOptional.isPresent()){
+            return ResponseEntity.ok(participantOptional.get());
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No participant by id");
+        }
+    }
+
+    /**TODO  check the method that creates a new participant -> create
+     * check method that deletes participant -> delete
+     * check method that updates participant -> update
+     * check method that retrieves participant by id -> getById
      */
 }
