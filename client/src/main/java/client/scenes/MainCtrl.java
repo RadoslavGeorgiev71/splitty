@@ -66,6 +66,7 @@ public class MainCtrl {
                            Pair<OpenDebtsCtrl, Parent> opendebts,
                            Pair<StartScreenCtrl, Parent> startscreen,
                            Pair<InvitationCtrl, Parent> invitation) {
+
         this.primaryStage = primaryStage;
 
         this.overviewCtrl = overview.getKey();
@@ -82,6 +83,9 @@ public class MainCtrl {
 
         this.startScreenCtrl = startscreen.getKey();
         this.startscreen = new Scene(startscreen.getValue());
+
+        this.invitationCtrl = invitation.getKey();
+        this.invitation = new Scene(invitation.getValue());
 
         showStartScreen();
         primaryStage.show();
