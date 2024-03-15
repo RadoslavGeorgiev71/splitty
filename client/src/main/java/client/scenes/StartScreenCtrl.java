@@ -113,12 +113,14 @@ public class StartScreenCtrl implements Initializable {
         Event event = new Event();
         event.setTitle(title);
         event.createInviteCode();
-        mainCtrl.showInvitation();
+
+        //server.addEvent(event);
+        mainCtrl.showInvitation(event);
     }
     /**
      * Clears text fields.
      */
-    private void clearFields(){
+    public void clearFields(){
         newEventText.clear();
         joinEventText.clear();
     }

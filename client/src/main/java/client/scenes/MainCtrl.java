@@ -95,7 +95,8 @@ public class MainCtrl {
     /**
      * Shows the starting  screen
      */
-    private void showStartScreen() {
+    public void showStartScreen() {
+        startScreenCtrl.clearFields();
         primaryStage.setTitle("Start Screen");
         primaryStage.setScene(startscreen);
     }
@@ -141,8 +142,11 @@ public class MainCtrl {
         primaryStage.setScene(opendebts);
     }
 
-    public void showInvitation() {
+    public void showInvitation(Event event) {
         primaryStage.setTitle("Invitation");
+        invitationCtrl.setEvent(event);
+        invitationCtrl.setInviteCodeText();
+        invitationCtrl.setEventNameText();
         primaryStage.setScene(invitation);
     }
 }

@@ -3,6 +3,7 @@ package commons;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.Objects;
 import java.time.format.DateTimeFormatter;
 import java.time.LocalDateTime;
@@ -42,7 +43,10 @@ public class Event {
      * Default constructor for the class
      */
     public Event() {
-
+        creator = new Participant();
+        participants = new ArrayList<>();
+        expenses = new ArrayList<>();
+        updateDateTime();
     }
 
     /**

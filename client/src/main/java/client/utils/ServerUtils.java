@@ -99,12 +99,19 @@ public class ServerUtils {
 		return null;
     }
 
-	public Event addEvent(Event event){
-		return ClientBuilder.newClient(new ClientConfig())
-				.target(SERVER).path("api/events")
+	public Event addEvent(Event event) {
+
+		Response response = ClientBuilder.newClient(new ClientConfig())
+				.target(SERVER).path("/api/events")
 				.request(APPLICATION_JSON)
 				.accept(APPLICATION_JSON)
-				.post(Entity.entity(event, APPLICATION_JSON), Event.class);
+				.post(Entity.json(event));
+
+		if (response.getStatus() == Response.Status.CREATED.getStatusCode()) {
+			return response.readEntity(Event.class);
+		} else {
+			throw new WebApplicationException("Failed to create event. Status code: " + response.getStatus());
+		}
 	}
 
 	/**

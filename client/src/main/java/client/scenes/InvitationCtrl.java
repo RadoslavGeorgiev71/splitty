@@ -6,6 +6,7 @@ import com.google.inject.Inject;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import commons.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.text.Text;
@@ -27,6 +28,8 @@ public class InvitationCtrl implements Initializable {
 
     @FXML
     private TextArea emailTextArea;
+
+    private Event event;
     /**
      *
      * @param server
@@ -52,7 +55,17 @@ public class InvitationCtrl implements Initializable {
         eventNameText.setText("");
         inviteCodeText.setText("");
 
-        sendInvitesButton.setOnAction(event -> sendInvites());
+    }
+
+    public void setInviteCodeText(){
+        inviteCodeText.setText(this.event.getInviteCode());
+    }
+
+    public void setEventNameText(){
+        eventNameText.setText(this.event.getTitle());
+    }
+    public void setEvent(Event event){
+        this.event = event;
     }
 
     /**
@@ -79,11 +92,11 @@ public class InvitationCtrl implements Initializable {
     }
     @FXML
     private void backToStart(){
-
+        mainCtrl.showStartScreen();
     }
 
     @FXML
     private void goToEvent(){
-
+        mainCtrl.showEventOverview(this.event);
     }
 }
