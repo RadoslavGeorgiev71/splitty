@@ -9,12 +9,15 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Modality;
 
 import com.google.inject.Inject;
+
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -23,6 +26,11 @@ public class OpenDebtsCtrl implements Initializable {
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
+    private List<Debt> debts;
+    private boolean[] expanded;
+    private TextFlow[] textFlows;
+    private Pane[] expandedMenus;
+    private Button[] buttonReceived;
 
     @FXML
     private GridPane gridPane;
@@ -55,23 +63,51 @@ public class OpenDebtsCtrl implements Initializable {
 //        gridPane.setStyle("-fx-grid-lines-visible: true");
         // TODO: initialize with appropriate text
         this.testDebts();
-        List<Debt> debts = getDebts();
+        debts = getDebts();
+        expanded = new boolean[debts.size()];
+        textFlows = new TextFlow[debts.size()];
+        expandedMenus = new Pane[debts.size()];
+        buttonReceived = new Button[debts.size()];
         for (int i = 0; i < debts.size(); i++) {
-            TextFlow tf = new TextFlow();
-            Text payer = new Text(debts.get(i).getPersonPaying().getName());
-            payer.setStyle("-fx-font-weight: bold");
-            Text gives = new Text(" gives ");
-            Text amount = new Text(Double.toString(debts.get(i).getAmount()));
-            amount.setStyle("-fx-font-weight: bold");
-            Text to = new Text(" to ");
-            Text receiver = new Text(debts.get(i).getPersonOwed().getName());
-            receiver.setStyle("-fx-font-weight: bold");
-            tf.getChildren().addAll(payer, gives, amount, to, receiver);
-            tf.setStyle("-fx-alignment: center-left; -fx-padding: 10");
-            gridPane.add(tf, 0, i, 1, 1);
-            Button button = new Button("Mark Received");
-            gridPane.add(button, 2, i, 1, 1);
+            textFlows[i] = generateTextFlow(debts.get(i));
+            expandedMenus[i] = new Pane();
+            int finalI = i;
+            textFlows[i].setOnMouseClicked(event -> {
+                System.out.println("sdgdfgdf");
+//                if (expanded[finalI]) {
+//                    expandedMenus[finalI].getChildren().removeAll();
+//                    expanded[finalI] = false;
+//                }
+//                else {
+//                    expandedMenus[finalI].getChildren().add(new Label("Example"));
+//                    expanded[finalI] = true;
+//                }
+            });
+            gridPane.add(textFlows[i], 0, i, 1, 1);
+            gridPane.add(expandedMenus[i], 0, i, 3, 1);
+            buttonReceived[i] = new Button("Mark Received");
+            gridPane.add(buttonReceived[i], 2, i, 1, 1);
         }
+    }
+
+    /**
+     * Generates the appropriate TextFlow for the debt
+     * @param debt - the debt for which we generate TextFlow
+     * @return the appropriate TextFlow
+     */
+    private TextFlow generateTextFlow(Debt debt) {
+        TextFlow tf = new TextFlow();
+        Text payer = new Text(debt.getPersonPaying().getName());
+        payer.setStyle("-fx-font-weight: bold");
+        Text gives = new Text(" gives ");
+        Text amount = new Text(Double.toString(debt.getAmount()));
+        amount.setStyle("-fx-font-weight: bold");
+        Text to = new Text(" to ");
+        Text receiver = new Text(debt.getPersonOwed().getName());
+        receiver.setStyle("-fx-font-weight: bold");
+        tf.getChildren().addAll(payer, gives, amount, to, receiver);
+        tf.setStyle("-fx-alignment: center-left; -fx-padding: 10");
+        return tf;
     }
 
     /**
