@@ -6,12 +6,10 @@ import commons.Participant;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Modality;
@@ -27,9 +25,8 @@ public class OpenDebtsCtrl implements Initializable {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
     private List<Debt> debts;
-    private boolean[] expanded;
+    private TitledPane[] titledPanes;
     private TextFlow[] textFlows;
-    private Pane[] expandedMenus;
     private Button[] buttonReceived;
 
     @FXML
@@ -38,6 +35,7 @@ public class OpenDebtsCtrl implements Initializable {
     /**
      * Constructor for the controller
      * with injected server and mainCtrl
+     *
      * @param server
      * @param mainCtrl
      */
@@ -49,49 +47,41 @@ public class OpenDebtsCtrl implements Initializable {
 
     /**
      * Initializes the stage and all its required components
-     * @param location
-     * The location used to resolve relative paths for the root object, or
-     * {@code null} if the location is not known.
      *
-     * @param resources
-     * The resources used to localize the root object, or {@code null} if
-     * the root object was not localized.
+     * @param location  The location used to resolve relative paths for the root object, or
+     *                  {@code null} if the location is not known.
+     * @param resources The resources used to localize the root object, or {@code null} if
+     *                  the root object was not localized.
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         gridPane.setAlignment(Pos.CENTER);
 //        gridPane.setStyle("-fx-grid-lines-visible: true");
-        // TODO: initialize with appropriate text
         this.testDebts();
         debts = getDebts();
-        expanded = new boolean[debts.size()];
+        titledPanes = new TitledPane[debts.size()];
         textFlows = new TextFlow[debts.size()];
-        expandedMenus = new Pane[debts.size()];
         buttonReceived = new Button[debts.size()];
         for (int i = 0; i < debts.size(); i++) {
             textFlows[i] = generateTextFlow(debts.get(i));
-            expandedMenus[i] = new Pane();
-            int finalI = i;
-            textFlows[i].setOnMouseClicked(event -> {
-                System.out.println("sdgdfgdf");
-//                if (expanded[finalI]) {
-//                    expandedMenus[finalI].getChildren().removeAll();
-//                    expanded[finalI] = false;
-//                }
-//                else {
-//                    expandedMenus[finalI].getChildren().add(new Label("Example"));
-//                    expanded[finalI] = true;
-//                }
-            });
-            gridPane.add(textFlows[i], 0, i, 1, 1);
-            gridPane.add(expandedMenus[i], 0, i, 3, 1);
+            textFlows[i].setStyle("-fx-max-height: 30");
+            titledPanes[i] = new TitledPane();
+            titledPanes[i].setGraphic(textFlows[i]);
+            titledPanes[i].setAnimated(true);
+            titledPanes[i].setExpanded(false);
+            titledPanes[i].setContent(generateExpandableLabel(debts.get(i)));
+            gridPane.add(titledPanes[i], 0, i, 1, 1);
             buttonReceived[i] = new Button("Mark Received");
+            GridPane.setValignment(buttonReceived[i], javafx.geometry.VPos.TOP); // Align to top
+            GridPane.setHalignment(buttonReceived[i], javafx.geometry.HPos.LEFT);
+            GridPane.setMargin(buttonReceived[i], new Insets(0, 0, 0, 10));
             gridPane.add(buttonReceived[i], 2, i, 1, 1);
         }
     }
 
     /**
      * Generates the appropriate TextFlow for the debt
+     *
      * @param debt - the debt for which we generate TextFlow
      * @return the appropriate TextFlow
      */
@@ -111,14 +101,48 @@ public class OpenDebtsCtrl implements Initializable {
     }
 
     /**
+     * Generates a label for the expandable part of the debt
+     *
+     * @param debt - the debt for which we generate the label
+     * @return the appropriate label
+     */
+    private Label generateExpandableLabel(Debt debt) {
+        String text = "";
+        int size = 0;
+        if (debt.getPersonOwed().getBic() != null
+            && debt.getPersonOwed().getIban() != null) {
+            text += "Bank information available, transfer the money to:\n" +
+                "Account Holder: " + debt.getPersonOwed().getName() + "\n" +
+                "IBAN: " + debt.getPersonOwed().getIban() + "\n" +
+                "BIC: " + debt.getPersonOwed().getBic();
+            size += 80;
+        } else {
+            text += "Bank information not available.";
+            size += 20;
+        }
+        text += "\n\n";
+        size += 20;
+        if (debt.getPersonOwed().getEmail() != null) {
+            text += "Email configured: ";
+            size += 20;
+        } else {
+            text += "Email not configured.";
+            size += 20;
+        }
+        Label label = new Label(text);
+        label.setStyle("-fx-min-height: " + size);
+        return label;
+    }
+
+    /**
      * Retrieve the debts all debts from the server
+     *
      * @return the debts from the server
      */
     private List<Debt> getDebts() {
         try {
             return server.getDebts();
-        }
-        catch (WebApplicationException e) {
+        } catch (WebApplicationException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.initModality(Modality.APPLICATION_MODAL);
             alert.setContentText(e.getMessage());
