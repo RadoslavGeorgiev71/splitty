@@ -143,10 +143,18 @@ public class ServerUtils {
 	 */
 	public Participant persistParticipant(Participant participant) {
 		Entity<Participant> entity = Entity.entity(participant, APPLICATION_JSON);
-			return ClientBuilder.newClient(new ClientConfig())
-					.target(SERVER).path("participants/")
+		return ClientBuilder.newClient(new ClientConfig())
+					.target(SERVER).path("api/participants/")
 					.request(APPLICATION_JSON)
 					.accept(APPLICATION_JSON)
 					.put(entity, Participant.class);
 	}
+
+    public Response deleteParticipant(Participant participant) {
+		return ClientBuilder.newClient(new ClientConfig())
+				.target(SERVER).path("api/participants/" + participant.getId())
+				.request(APPLICATION_JSON)
+				.accept(APPLICATION_JSON)
+				.delete();
+    }
 }

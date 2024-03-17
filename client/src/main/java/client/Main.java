@@ -17,7 +17,6 @@ package client;
 
 import static com.google.inject.Guice.createInjector;
 
-//import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
@@ -34,7 +33,7 @@ public class Main extends Application {
     private static final Injector INJECTOR = createInjector(new MyModule());
     private static final MyFXML FXML = new MyFXML(INJECTOR);
     private ConfigClient configClient;
-    private final String FILE_PATH = "src/main/resources/config";
+    private final String FILE_PATH = "client/src/main/resources/config.txt";
 
     /**
      * Launches the app
@@ -66,8 +65,9 @@ public class Main extends Application {
         var opendebts = FXML.load(OpenDebtsCtrl.class, "client", "scenes", "OpenDebts.fxml");
         var startscreen = FXML.load(StartScreenCtrl.class, "client", "scenes", "StartScreen.fxml");
         var invitation = FXML.load(InvitationCtrl.class, "client", "scenes", "Invitation.fxml");
+        var addexpense = FXML.load(AddExpenseCtrl.class, "client", "scenes", "AddExpense.fxml");
 
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
-        mainCtrl.initialize(primaryStage, overview, add, editparticipant, eventoverview, opendebts, startscreen, invitation);
+        mainCtrl.initialize(primaryStage, overview, add, editparticipant, eventoverview, opendebts, startscreen, invitation, addexpense);
     }
 }

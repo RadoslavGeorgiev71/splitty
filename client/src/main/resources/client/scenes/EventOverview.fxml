@@ -3,6 +3,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Tab?>
@@ -28,8 +29,8 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Text fx:id="EventName" strokeType="OUTSIDE" strokeWidth="0.0" text="Event Name" />
-                  <Button mnemonicParsing="false" onAction="#onEditEventClick" text="Edit Event" GridPane.columnIndex="1" />
+                  <Button mnemonicParsing="false" onAction="#onSendInvites" text="Send Invites" GridPane.columnIndex="1" />
+                  <Label fx:id="eventTitleLabel" text="Label" />
                </children>
             </GridPane>
             <HBox alignment="CENTER_LEFT" prefHeight="28.0" prefWidth="280.0" spacing="10.0">
