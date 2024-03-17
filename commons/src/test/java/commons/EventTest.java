@@ -88,6 +88,19 @@ public class EventTest {
     }
 
     @Test
+    void addParticipant() {
+        Participant participant = new Participant();
+        event1.addParticipant(participant);
+        assertTrue(event1.getParticipants().contains(participant));
+    }
+
+    @Test
+    void removeParticipant() {
+        event1.removeParticipant(p1);
+        assertFalse(event1.getParticipants().contains(p1));
+    }
+
+    @Test
     void getExpenses() {
         assertEquals(expenses1, event1.getExpenses());
     }
@@ -99,20 +112,46 @@ public class EventTest {
     }
 
     @Test
+    void addExpense() {
+        Expense expense = new Expense();
+        event1.addExpense(expense);
+        assertTrue(event1.getExpenses().contains(expense));
+
+    }
+
+    @Test
+    void removeExpense() {
+        event1.removeExpense(e1);
+        assertFalse(event1.getExpenses().contains(e1));
+    }
+
+    @Test
     void getId() {
         assertEquals(0, event1.getId());
     }
 
-    @Test
-    void setId() {
-        System.out.println(event1.getId());
-        event1.setId(1);
-        assertEquals(1, event1.getId());
-    }
 
     @Test
     void checkEquals() {
         assertNotSame(event1, event2);
+    }
+
+    @Test
+    void getTotal() {
+        double amount = event1.getTotal();
+        assertEquals(256, amount);
+    }
+
+    @Test
+    void getLastActivity() {
+        Expense expense = event1.getLastActivity();
+        assertEquals(e3, expense);
+    }
+
+    @Test
+    void setDateTime() {
+        event1.setDateTime("test");
+        assertEquals("test", event1.getDateTime());
     }
 
 }

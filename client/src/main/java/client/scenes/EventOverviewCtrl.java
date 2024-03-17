@@ -28,16 +28,8 @@ public class EventOverviewCtrl {
     private GridPane tabPaneAllGridPane;
 
     @FXML
-    private ListView tabPaneFromPersonListView;
-
-    @FXML
-    private ListView tabPaneIncludingPersonListView;
-
-    @FXML
-    private Text EventName;
-
-    @FXML
     private Text ParticipatingParticipants;
+
     @FXML
     private Label eventTitleLabel;
 
@@ -45,7 +37,13 @@ public class EventOverviewCtrl {
     private Tab tabPaneFromPerson;
 
     @FXML
+    private GridPane tabPaneFromGridPane;
+
+    @FXML
     private Tab tabPaneIncludingPerson;
+
+    @FXML
+    private GridPane tabPaneIncludingGridPane;
 
     private Event event;
 
@@ -130,12 +128,12 @@ public class EventOverviewCtrl {
 
     @FXML
     public void tabPaneFromPersonClick() {
-        tabPaneFromPersonListView.getItems().clear();
-        tabPaneAllGridPane.setVgap(10);
-        tabPaneAllGridPane.setHgap(10);
+        tabPaneFromGridPane.getChildren().clear();
+        tabPaneFromGridPane.setVgap(10);
+        tabPaneFromGridPane.setHgap(10);
         if(event != null) {
             for (int i = 0; i < event.getExpenses().size(); i++) {
-                if(event.getParticipants().get(i) == participantsMenu.getSelectionModel().getSelectedItem()) {
+                if(event.getParticipants().get(i).equals(participantsMenu.getSelectionModel().getSelectedItem())) {
                     Label dateLabel = new Label(event.getExpenses().get(i).getDateTime());
                     Label nameLabel = new Label("expense creator");
                     nameLabel.setWrapText(true); // Wrap text to prevent truncation
@@ -148,9 +146,9 @@ public class EventOverviewCtrl {
                     GridPane.setFillWidth(dateLabel, true);
                     GridPane.setFillWidth(nameLabel, true);
 
-                    tabPaneAllGridPane.add(dateLabel, 0, i);
-                    tabPaneAllGridPane.add(nameLabel, 1, i);
-                    tabPaneAllGridPane.add(editButton, 2, i);
+                    tabPaneFromGridPane.add(dateLabel, 0, i);
+                    tabPaneFromGridPane.add(nameLabel, 1, i);
+                    tabPaneFromGridPane.add(editButton, 2, i);
                 }
             }
         }
@@ -158,7 +156,7 @@ public class EventOverviewCtrl {
 
     @FXML
     public void tabPaneIncludingPersonClick() {
-        tabPaneIncludingPersonListView.getItems().clear();
+        tabPaneIncludingGridPane.getChildren().clear();
     }
 
     /**
@@ -170,7 +168,7 @@ public class EventOverviewCtrl {
     }
 
     public void eventName() {
-        EventName.setText(event.getTitle());
+        eventTitleLabel.setText(event.getTitle());
     }
 
     public void fromPersonTabName() {
