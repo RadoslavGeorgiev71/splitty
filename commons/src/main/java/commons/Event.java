@@ -72,15 +72,11 @@ public class Event {
         this.dateTime = dtf.format(now);
     }
 
-    // Not sure if this should be put in the Expense class
-    // or in the Event class, as an Expense has to be created with
-    // all the supporting fields. I'm guessing this will just call the method to create an Expense.
-
     /**
-     * Method to add an Expense to the Event
+     * Method to add an Empty Expense to the Event
      */
-    public void addExpense() {
-
+    public void addExpense(Expense expense) {
+        expenses.add(expense);
     }
 
     /**
@@ -116,15 +112,11 @@ public class Event {
         return totalExpenses;
     }
 
-    // Not sure if this should be put in the Participant class
-    // or in the Event class. Same issue as with the addExpense
-    // method.
-
     /**
      * Method to add a Participant to the Event
      */
-    public void addParticipant() {
-
+    public void addParticipant(Participant participant) {
+        participants.add(participant);
     }
 
     // Might be better to assign a number to every participant
@@ -271,14 +263,6 @@ public class Event {
      */
     public long getId() {
         return id;
-    }
-
-    /**
-     * Setter for the ID
-     * @param id - id to be set
-     */
-    public void setId(long id) {
-        this.id = id;
     }
 
     /**
