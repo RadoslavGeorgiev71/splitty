@@ -211,7 +211,7 @@ public class OpenDebtsCtrl implements Initializable {
      */
     private List<Debt> getDebts() {
         try {
-            return server.getDebts();
+            return server.getDebtsForEvent(event);
         } catch (WebApplicationException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.initModality(Modality.APPLICATION_MODAL);
@@ -225,7 +225,7 @@ public class OpenDebtsCtrl implements Initializable {
     private void testDebts() {
         Participant bob = new Participant("Bob");
         Participant ana = new Participant("Ana");
-        for (Debt debt : server.getDebts()) {
+        for (Debt debt : server.getDebtsForEvent(event)) {
             server.deleteDebt(debt);
         }
         server.addDebt(new Debt(5, bob, ana, 10));

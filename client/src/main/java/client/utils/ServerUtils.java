@@ -67,9 +67,9 @@ public class ServerUtils {
 				.post(Entity.entity(quote, APPLICATION_JSON), Quote.class);
 	}
 
-	public List<Debt> getDebts() {
+	public List<Debt> getDebtsForEvent(Event event) {
 		return ClientBuilder.newClient(new ClientConfig())
-			.target(SERVER).path("api/debts")
+			.target(SERVER).path("api/debts/") // + event.getId() TODO:
 			.request(APPLICATION_JSON)
 			.accept(APPLICATION_JSON)
 			.get(new GenericType<List<Debt>>() {});
