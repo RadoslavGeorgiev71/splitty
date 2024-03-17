@@ -121,20 +121,15 @@ public class OpenDebtsCtrl implements Initializable {
         alert.setContentText("Are you sure you want to mark this debt as settled?" +
             " This action is irreversible and the debt won't be displayed anymore!");
 
-        ButtonType buttonYes = new ButtonType("Yes");
-        ButtonType buttonNo = new ButtonType("No");
-
-        alert.getButtonTypes().setAll(buttonYes, buttonNo);
-
         //TODO: for now there is also an output on the console which should be removed in teh future
         alert.showAndWait().ifPresent(response -> {
-            if (response == buttonYes) {
-                System.out.println("Yes");
+            if (response == ButtonType.OK) {
+                System.out.println("Ok");
                 server.deleteDebt(debt);
                 mainCtrl.showOpenDebts(event);
             }
-            else if (response == buttonNo) {
-                System.out.println("No");
+            else if (response == ButtonType.CANCEL) {
+                System.out.println("Cancel");
             }
         });
     }
