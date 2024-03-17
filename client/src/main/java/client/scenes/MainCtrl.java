@@ -47,6 +47,9 @@ public class MainCtrl {
     private StartScreenCtrl startScreenCtrl;
     private Scene startscreen;
 
+    private AddExpenseCtrl addExpenseCtrl;
+    private Scene addexpense;
+
     /**
      * Initializes stage
      * @param primaryStage
@@ -65,7 +68,8 @@ public class MainCtrl {
                            Pair<EventOverviewCtrl, Parent> eventoverview,
                            Pair<OpenDebtsCtrl, Parent> opendebts,
                            Pair<StartScreenCtrl, Parent> startscreen,
-                           Pair<InvitationCtrl, Parent> invitation) {
+                           Pair<InvitationCtrl, Parent> invitation,
+                           Pair<AddExpenseCtrl, Parent> addexpense) {
 
         this.primaryStage = primaryStage;
 
@@ -86,6 +90,9 @@ public class MainCtrl {
 
         this.invitationCtrl = invitation.getKey();
         this.invitation = new Scene(invitation.getValue());
+
+        this.addExpenseCtrl = addexpense.getKey();
+        this.addexpense = new Scene(addexpense.getValue());
 
         showStartScreen();
         primaryStage.show();
