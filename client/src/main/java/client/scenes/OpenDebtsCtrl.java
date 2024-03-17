@@ -2,7 +2,9 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import commons.Debt;
+import commons.Event;
 import commons.Participant;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -10,6 +12,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Modality;
@@ -24,9 +27,12 @@ public class OpenDebtsCtrl implements Initializable {
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
+    private Event event;
     private List<Debt> debts;
     private TitledPane[] titledPanes;
     private TextFlow[] textFlows;
+    private FontAwesomeIconView[] envelopeIcons;
+    private FontAwesomeIconView[] bankIcons;
     private Button[] buttonReceived;
 
     @FXML
@@ -61,22 +67,76 @@ public class OpenDebtsCtrl implements Initializable {
         debts = getDebts();
         titledPanes = new TitledPane[debts.size()];
         textFlows = new TextFlow[debts.size()];
+        envelopeIcons = new FontAwesomeIconView[debts.size()];
+        bankIcons = new FontAwesomeIconView[debts.size()];
         buttonReceived = new Button[debts.size()];
         for (int i = 0; i < debts.size(); i++) {
             textFlows[i] = generateTextFlow(debts.get(i));
             textFlows[i].setStyle("-fx-max-height: 30");
+
             titledPanes[i] = new TitledPane();
             titledPanes[i].setGraphic(textFlows[i]);
             titledPanes[i].setAnimated(true);
             titledPanes[i].setExpanded(false);
             titledPanes[i].setContent(generateExpandableLabel(debts.get(i)));
             gridPane.add(titledPanes[i], 0, i, 1, 1);
+
+            envelopeIcons[i] = new FontAwesomeIconView();
+            envelopeIcons[i].setGlyphName("ENVELOPE");
+            envelopeIcons[i].setSize("15");
+            GridPane.setValignment(envelopeIcons[i], javafx.geometry.VPos.TOP);
+            GridPane.setHalignment(envelopeIcons[i], javafx.geometry.HPos.LEFT);
+            GridPane.setMargin(envelopeIcons[i], new Insets(7, 0, 0, 10));
+            gridPane.add(envelopeIcons[i], 1, i, 1, 1);
+
+            bankIcons[i] = new FontAwesomeIconView();
+            bankIcons[i].setGlyphName("BANK");
+            bankIcons[i].setSize("15");
+            GridPane.setValignment(bankIcons[i], javafx.geometry.VPos.TOP);
+            GridPane.setHalignment(bankIcons[i], javafx.geometry.HPos.LEFT);
+            if (debts.get(i).getPersonOwed().getBic() == null ||
+                debts.get(i).getPersonOwed().getIban() == null) {
+                bankIcons[i].setFill(Color.GREY);
+            }
+            GridPane.setMargin(bankIcons[i], new Insets(7, 0, 0, 30));
+            gridPane.add(bankIcons[i], 1, i, 1, 1);
+
             buttonReceived[i] = new Button("Mark Received");
-            GridPane.setValignment(buttonReceived[i], javafx.geometry.VPos.TOP); // Align to top
+            int finalI = i;
+            buttonReceived[i].setOnMouseClicked(e -> removeDebt(debts.get(finalI)));
+            GridPane.setValignment(buttonReceived[i], javafx.geometry.VPos.TOP);
             GridPane.setHalignment(buttonReceived[i], javafx.geometry.HPos.LEFT);
-            GridPane.setMargin(buttonReceived[i], new Insets(0, 0, 0, 10));
+            GridPane.setMargin(buttonReceived[i], new Insets(5, 10, 0, 15));
             gridPane.add(buttonReceived[i], 2, i, 1, 1);
         }
+    }
+
+    /**
+     * Shows an alert message for confirmation of settling(deleting) the debt
+     * @param debt - the debt to be settled(removed)
+     */
+    private void removeDebt(Debt debt) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirmation of debt");
+        alert.setContentText("Are you sure you want to mark this debt as settled?" +
+            " This action is irreversible and the debt won't be displayed anymore!");
+
+        ButtonType buttonYes = new ButtonType("Yes");
+        ButtonType buttonNo = new ButtonType("No");
+
+        alert.getButtonTypes().setAll(buttonYes, buttonNo);
+
+        //TODO: for now there is also an output on the console which should be removed in teh future
+        alert.showAndWait().ifPresent(response -> {
+            if (response == buttonYes) {
+                System.out.println("Yes");
+                server.deleteDebt(debt);
+                mainCtrl.showOpenDebts(event);
+            }
+            else if (response == buttonNo) {
+                System.out.println("No");
+            }
+        });
     }
 
     /**
@@ -135,9 +195,24 @@ public class OpenDebtsCtrl implements Initializable {
     }
 
     /**
-     * Retrieve the debts all debts from the server
-     *
-     * @return the debts from the server
+     * Sets the current event for which we retrieve debts
+     * @param event - the event for which are the debts
+     */
+    public void setEvent(Event event){
+        this.event = event;
+    }
+
+    /**
+     * The method for going to the previous page(Event overview)
+     */
+    @FXML
+    private void backToEvent() {
+        mainCtrl.showEventOverview(event);
+    }
+
+    /**
+     * Retrieves all debts for now TODO:
+     * @return all debts
      */
     private List<Debt> getDebts() {
         try {

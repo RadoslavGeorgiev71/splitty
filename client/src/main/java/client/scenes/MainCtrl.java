@@ -137,8 +137,9 @@ public class MainCtrl {
         add.setOnKeyPressed(e -> addCtrl.keyPressed(e));
     }
 
-    public void showOpenDebts() {
+    public void showOpenDebts(Event event) {
         primaryStage.setTitle("Open Debts");
+        openDebtsCtrl.setEvent(event);
         primaryStage.setScene(opendebts);
     }
 

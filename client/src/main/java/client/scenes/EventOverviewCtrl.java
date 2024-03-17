@@ -65,7 +65,7 @@ public class EventOverviewCtrl {
 
     @FXML
     public void onSettleDebtsClick() {
-        mainCtrl.showOpenDebts();
+        mainCtrl.showOpenDebts(event);
     }
 
     @FXML
