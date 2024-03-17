@@ -18,6 +18,7 @@ package client;
 import static com.google.inject.Guice.createInjector;
 
 //import java.io.File;
+import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
@@ -34,7 +35,7 @@ public class Main extends Application {
     private static final Injector INJECTOR = createInjector(new MyModule());
     private static final MyFXML FXML = new MyFXML(INJECTOR);
     private ConfigClient configClient;
-    private final String FILE_PATH = "src/main/resources/config";
+    private final String FILE_PATH = "client/src/main/resources/config";
 
     /**
      * Launches the app
