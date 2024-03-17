@@ -2,6 +2,9 @@ package client.utils;
 
 import java.io.*;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Scanner;
 
 public class ConfigClient {
@@ -163,9 +166,18 @@ public class ConfigClient {
             return new ConfigClient(newClient[0], newClient[1],
                     newClient[2], newClient[3], newClient[4], newClient[5]);
 
-        } catch (FileNotFoundException e){
-            System.out.println("Error reading from file: " + e.getMessage());
-            return null;
+        } catch (FileNotFoundException e){ // if the file is not found it should
+            try {
+                // Get the absolute path of the resources folder
+                String filepath = "client/src/main/resources/config";
+                Path filePath = Paths.get(filepath);
+                // Create the file
+                Files.createFile(filePath);
+            } catch (IOException ioException) {
+                System.out.println("An error occurred: " + ioException.getMessage());
+                ioException.printStackTrace();
+            }
+            return new ConfigClient();
         }
     }
 
