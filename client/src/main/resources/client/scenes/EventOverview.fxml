@@ -28,7 +28,7 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="New Year Party" />
+                  <Text fx:id="EventName" strokeType="OUTSIDE" strokeWidth="0.0" text="Event Name" />
                   <Button mnemonicParsing="false" onAction="#onEditEventClick" text="Edit Event" GridPane.columnIndex="1" />
                </children>
             </GridPane>
@@ -82,7 +82,7 @@
                            </children></AnchorPane>
                      </content>
                 </Tab>
-                <Tab fx:id="tabPaneFromPerson" onSelectionChanged="#tabPaneFromPersonClick" text="From Person1">
+                <Tab id="FomPersonTab" fx:id="tabPaneFromPerson" onSelectionChanged="#tabPaneFromPersonClick" text="From Person1">
                   <content>
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
@@ -90,7 +90,7 @@
                            </children></AnchorPane>
                   </content>
                 </Tab>
-                  <Tab fx:id="tabPaneIncludingPerson" text="Including Person1">
+                  <Tab id="IncludingPersonTab" fx:id="tabPaneIncludingPerson" text="Including Person1">
                      <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>

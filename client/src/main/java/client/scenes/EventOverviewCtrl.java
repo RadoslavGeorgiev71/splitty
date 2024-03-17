@@ -31,7 +31,16 @@ public class EventOverviewCtrl {
     private ListView tabPaneIncludingPersonListView;
 
     @FXML
+    private Text EventName;
+
+    @FXML
     private Text ParticipatingParticipants;
+
+    @FXML
+    private Tab tabPaneFromPerson;
+
+    @FXML
+    private Tab tabPaneIncludingPerson;
 
     private Event event;
 
@@ -95,12 +104,36 @@ public class EventOverviewCtrl {
                 tabPaneAllGridPane.add(nameLabel, 1, i);
                 tabPaneAllGridPane.add(editButton, 2, i);
             }
+            fromPersonTabName();
         }
     }
 
     @FXML
     public void tabPaneFromPersonClick() {
         tabPaneFromPersonListView.getItems().clear();
+        tabPaneAllGridPane.setVgap(10);
+        tabPaneAllGridPane.setHgap(10);
+        if(event != null) {
+            for (int i = 0; i < event.getExpenses().size(); i++) {
+                if(event.getParticipants().get(i) == participantsMenu.getSelectionModel().getSelectedItem()) {
+                    Label dateLabel = new Label(event.getExpenses().get(i).getDateTime());
+                    Label nameLabel = new Label("expense creator");
+                    nameLabel.setWrapText(true); // Wrap text to prevent truncation
+                    Button editButton = new Button("Edit");
+
+                    // Set fixed column widths
+                    dateLabel.setMaxWidth(Double.MAX_VALUE);
+                    nameLabel.setMaxWidth(Double.MAX_VALUE);
+
+                    GridPane.setFillWidth(dateLabel, true);
+                    GridPane.setFillWidth(nameLabel, true);
+
+                    tabPaneAllGridPane.add(dateLabel, 0, i);
+                    tabPaneAllGridPane.add(nameLabel, 1, i);
+                    tabPaneAllGridPane.add(editButton, 2, i);
+                }
+            }
+        }
     }
 
     @FXML
@@ -114,6 +147,20 @@ public class EventOverviewCtrl {
      */
     public void setEvent(Event event){
         this.event = event;
+    }
+
+    public void eventName() {
+        EventName.setText(event.getTitle());
+    }
+
+    public void fromPersonTabName() {
+        Participant selectedParticipant = (Participant) participantsMenu.getValue();
+        tabPaneFromPerson.setText("From " + selectedParticipant.getName());
+    }
+
+    public void includingPersonTabName() {
+        Participant selectedParticipant = (Participant) participantsMenu.getValue();
+        tabPaneIncludingPerson.setText("Including " + selectedParticipant.getName());
     }
 
     /**
@@ -149,6 +196,14 @@ public class EventOverviewCtrl {
                 }
             } );
             participantsMenu.getSelectionModel().selectFirst();
+            eventName();
+            fromPersonTabName();
+            includingPersonTabName();
+
+            participantsMenu.setOnAction(event -> {
+                fromPersonTabName();
+                includingPersonTabName();
+            });
         }
 
         tabPaneAllClick();
