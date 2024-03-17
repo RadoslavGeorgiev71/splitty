@@ -46,6 +46,7 @@
       <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
          <children>
             <Button mnemonicParsing="false" onAction="#cancel" text="Cancel" />
+            <Button layoutX="387.0" layoutY="25.0" mnemonicParsing="false" onAction="#removeParticipant" text="Remove Participant" />
             <Button mnemonicParsing="false" onAction="#ok" text="Ok" />
          </children>
          <VBox.margin>

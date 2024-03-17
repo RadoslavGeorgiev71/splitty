@@ -5,6 +5,8 @@ import commons.Event;
 import commons.Participant;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 
@@ -120,4 +122,17 @@ public class EditParticipantCtrl {
 
     }
 
+    public void removeParticipant(ActionEvent actionEvent) {
+        if(participant != null){
+            Alert alert =  new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Remove Participant");
+            alert.setHeaderText("You will remove this participant permanently from this event");
+            alert.setContentText("Are you sure you want to remove " + this.participant.getName());
+            if(alert.showAndWait().get() == ButtonType.OK){
+                server.deleteParticipant(participant);
+                mainCtrl.showEventOverview(server.getEvent(event.getId()));
+            }
+        }
+
+    }
 }

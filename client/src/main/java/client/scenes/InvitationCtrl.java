@@ -93,10 +93,14 @@ public class InvitationCtrl implements Initializable {
     @FXML
     private void backToStart(){
         mainCtrl.showStartScreen();
+        resetFields();
+        clearEmail();
     }
 
     @FXML
     private void goToEvent(){
         mainCtrl.showEventOverview(this.event);
+        resetFields();
+        clearEmail();
     }
 }

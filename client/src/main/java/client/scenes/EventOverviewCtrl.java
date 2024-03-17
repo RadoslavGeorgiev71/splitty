@@ -12,6 +12,9 @@ import javafx.scene.text.Text;
 import javafx.util.StringConverter;
 import javafx.collections.FXCollections;
 
+import javafx.event.ActionEvent;
+import org.checkerframework.checker.units.qual.A;
+
 
 public class EventOverviewCtrl {
 
@@ -32,6 +35,8 @@ public class EventOverviewCtrl {
 
     @FXML
     private Text ParticipatingParticipants;
+    @FXML
+    private Label eventTitleLabel;
 
     private Event event;
 
@@ -46,8 +51,14 @@ public class EventOverviewCtrl {
         this.mainCtrl = mainCtrl;
     }
 
+    /**
+     * Method to be executed when send invites button is clicked
+     * goes to invitation window to send invites
+     * @param actionEvent
+     */
     @FXML
-    public void onEditEventClick() {
+    public void onSendInvites(ActionEvent actionEvent) {
+        mainCtrl.showInvitation(this.event);
     }
 
     @FXML
@@ -61,6 +72,7 @@ public class EventOverviewCtrl {
 
     @FXML
     public void onAddExpenseClick() {
+
     }
 
     @FXML
@@ -70,7 +82,14 @@ public class EventOverviewCtrl {
 
     @FXML
     public void onBackClick() {
-        mainCtrl.showOverview();
+        Alert alert =  new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Exit");
+        alert.setHeaderText("You will exit this event and go back to start screen");
+        alert.setContentText("Are you sure you want to exit?");
+        if(alert.showAndWait().get() == ButtonType.OK){
+            mainCtrl.showStartScreen();
+        }
+
     }
 
     @FXML
@@ -149,10 +168,12 @@ public class EventOverviewCtrl {
                     return null;
                 }
             } );
-            participantsMenu.getSelectionModel().selectFirst();
-        }
 
-        tabPaneAllClick();
-        participatingParticipants();
+            participantsMenu.getSelectionModel().selectFirst();
+            eventTitleLabel.setText(event.getTitle());
+            participatingParticipants();
+            tabPaneAllClick();
+        }
     }
+
 }
