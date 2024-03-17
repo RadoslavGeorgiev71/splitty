@@ -1,23 +1,29 @@
 package server.api;
 
 import commons.Debt;
+import commons.Event;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import server.database.DebtRepository;
+import server.database.EventRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/debts")
 public class DebtController {
     private final DebtRepository repo;
+    private final EventRepository eventRepo;
 
     /**
      * Constructor for the controller
      * @param repo - type DebtRepository which extends JpaRepository
+     * @param eventRepo - type EventRepository which extends JpaRepository
      */
-    public DebtController(DebtRepository repo) {
+    public DebtController(DebtRepository repo, EventRepository eventRepo) {
         this.repo = repo;
+        this.eventRepo = eventRepo;
     }
 
     /**
@@ -27,6 +33,19 @@ public class DebtController {
     @GetMapping(path = {"", "/"})
     public List<Debt> getAll() {
         return repo.findAll();
+    }
+
+    /**
+     * Return all debts associated with a specific event
+     * @param eventId - the id of event we retrieve the debts for
+     * @return all debts corresponding to the event
+     */
+    @GetMapping(path = {"/{eventId}"})
+    public ResponseEntity<List<Debt>> getDebtsForEvent(@PathVariable("eventId") long eventId) {
+        Optional<Event> event = eventRepo.findById(eventId);
+        return event.map(value -> ResponseEntity.ok(repo.findAll().stream().
+                filter(x -> value.getParticipants().contains(x.getPersonPaying())).toList()))
+            .orElseGet(() -> ResponseEntity.badRequest().build());
     }
 
     /**

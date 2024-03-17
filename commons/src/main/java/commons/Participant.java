@@ -45,7 +45,7 @@ public class Participant {
     }
 
     /**
-     *  Empty contructor
+     *  Empty constructor
      */
     public Participant() {
         //empty
