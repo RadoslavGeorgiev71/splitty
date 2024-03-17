@@ -35,8 +35,14 @@ public class MainCtrl {
     private EventOverviewCtrl eventOverviewCtrl;
     private Scene eventoverview;
 
+    private OpenDebtsCtrl openDebtsCtrl;
+    private Scene opendebts;
+
     private AddQuoteCtrl addCtrl;
     private Scene add;
+
+    private InvitationCtrl invitationCtrl;
+    private Scene invitation;
 
     private StartScreenCtrl startScreenCtrl;
     private Scene startscreen;
@@ -45,15 +51,24 @@ public class MainCtrl {
      * Initializes stage
      * @param primaryStage
      * @param overview
-     * @param editparticipant
      * @param add
+     * @param editparticipant
+     * @param eventoverview
+     * @param opendebts
+     * @param startscreen
+     * @param invitation
      */
-    public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> overview,
+    public void initialize(Stage primaryStage,
+                           Pair<QuoteOverviewCtrl, Parent> overview,
                            Pair<AddQuoteCtrl, Parent> add,
                            Pair<EditParticipantCtrl, Parent> editparticipant,
                            Pair<EventOverviewCtrl, Parent> eventoverview,
-                           Pair<StartScreenCtrl, Parent> startscreen) {
+                           Pair<OpenDebtsCtrl, Parent> opendebts,
+                           Pair<StartScreenCtrl, Parent> startscreen,
+                           Pair<InvitationCtrl, Parent> invitation) {
+
         this.primaryStage = primaryStage;
+
         this.overviewCtrl = overview.getKey();
         this.overview = new Scene(overview.getValue());
 
@@ -63,8 +78,14 @@ public class MainCtrl {
         this.eventOverviewCtrl = eventoverview.getKey();
         this.eventoverview = new Scene(eventoverview.getValue());
 
+        this.openDebtsCtrl = opendebts.getKey();
+        this.opendebts = new Scene(opendebts.getValue());
+
         this.startScreenCtrl = startscreen.getKey();
         this.startscreen = new Scene(startscreen.getValue());
+
+        this.invitationCtrl = invitation.getKey();
+        this.invitation = new Scene(invitation.getValue());
 
         showStartScreen();
         primaryStage.show();
@@ -74,7 +95,8 @@ public class MainCtrl {
     /**
      * Shows the starting  screen
      */
-    private void showStartScreen() {
+    public void showStartScreen() {
+        startScreenCtrl.clearFields();
         primaryStage.setTitle("Start Screen");
         primaryStage.setScene(startscreen);
     }
@@ -113,5 +135,18 @@ public class MainCtrl {
         primaryStage.setTitle("Quotes: Adding Quote");
         primaryStage.setScene(add);
         add.setOnKeyPressed(e -> addCtrl.keyPressed(e));
+    }
+
+    public void showOpenDebts() {
+        primaryStage.setTitle("Open Debts");
+        primaryStage.setScene(opendebts);
+    }
+
+    public void showInvitation(Event event) {
+        primaryStage.setTitle("Invitation");
+        invitationCtrl.setEvent(event);
+        invitationCtrl.setInviteCodeText();
+        invitationCtrl.setEventNameText();
+        primaryStage.setScene(invitation);
     }
 }

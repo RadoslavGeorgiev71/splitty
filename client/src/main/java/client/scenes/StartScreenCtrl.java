@@ -6,6 +6,7 @@ import java.util.ResourceBundle;
 import com.google.inject.Inject;
 
 import client.utils.ServerUtils;
+import commons.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -61,9 +62,7 @@ public class StartScreenCtrl implements Initializable {
      * the root object was not localized.
      */
     public void initialize(URL location, ResourceBundle resources) {
-
-        createEventButton.setOnAction(event -> createEvent());
-        joinEventButton.setOnAction(event -> joinEvent());
+        
         recentlyViewedEventsListView.setCellFactory(param -> new ListCell<String>() {
             @Override
             protected void updateItem(String item, boolean empty) {
@@ -82,7 +81,7 @@ public class StartScreenCtrl implements Initializable {
                     hbox.getChildren().addAll(text, button1, button2);
 
                     button1.setOnAction(event -> {
-                        joinEvent();
+                        //joinEvent();
                     });
 
                     button2.setOnAction(event -> {
@@ -96,9 +95,13 @@ public class StartScreenCtrl implements Initializable {
     }
 
     /**
-     * No functionality yet, will be for the button that allows you to join events
+     * Should allow joining events.
+     *
      */
     public void joinEvent(){
+        String inviteCode = joinEventText.getText();
+        Event event = server.getEventByCode(inviteCode);
+        mainCtrl.showEventOverview(event);
 
     }
 
@@ -106,12 +109,18 @@ public class StartScreenCtrl implements Initializable {
      * Will be for the button that creates events.
      */
     public void createEvent(){
+        String title = newEventText.getText();
+        Event event = new Event();
+        event.setTitle(title);
+        event.createInviteCode();
 
+        //server.addEvent(event);
+        mainCtrl.showInvitation(event);
     }
     /**
      * Clears text fields.
      */
-    private void clearFields(){
+    public void clearFields(){
         newEventText.clear();
         joinEventText.clear();
     }

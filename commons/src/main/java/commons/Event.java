@@ -3,11 +3,13 @@ package commons;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.Objects;
 import java.time.format.DateTimeFormatter;
 import java.time.LocalDateTime;
 //import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 //import jakarta.persistence.Entity;
 //import jakarta.persistence.GeneratedValue;
 //import jakarta.persistence.GenerationType;
@@ -41,7 +43,10 @@ public class Event {
      * Default constructor for the class
      */
     public Event() {
-
+        creator = new Participant();
+        participants = new ArrayList<>();
+        expenses = new ArrayList<>();
+        updateDateTime();
     }
 
     /**
@@ -145,6 +150,23 @@ public class Event {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
         LocalDateTime now = LocalDateTime.now();
         dateTime = dtf.format(now);
+    }
+
+    /**
+     * Method that creates a random 8-character invite code from the characters in 'characters'
+     * it then sets the inviteCode for the event to be the randomly generated invite code
+     * @return the randomly generated invite code
+     */
+    public String createInviteCode(){
+        String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        StringBuilder stringBuilder = new StringBuilder();
+        Random random = new Random();
+        for (int i = 0; i < 8; i++){
+            int randomIndex = random.nextInt(characters.length());
+            stringBuilder.append(characters.charAt(randomIndex));
+        }
+        this.setInviteCode(stringBuilder.toString());
+        return stringBuilder.toString();
     }
 
     /**

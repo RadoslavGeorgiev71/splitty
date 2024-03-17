@@ -25,6 +25,8 @@ import java.net.URISyntaxException;
 import java.util.List;
 
 import commons.Debt;
+import jakarta.ws.rs.WebApplicationException;
+import jakarta.ws.rs.core.Response;
 import commons.Event;
 import commons.Participant;
 //import jakarta.ws.rs.core.MediaType;
@@ -67,12 +69,27 @@ public class ServerUtils {
 
 	public List<Debt> getDebts() {
 		return ClientBuilder.newClient(new ClientConfig())
-			.target(SERVER).path("debts/")
+			.target(SERVER).path("api/debts")
 			.request(APPLICATION_JSON)
 			.accept(APPLICATION_JSON)
 			.get(new GenericType<List<Debt>>() {});
 	}
 
+	public Debt addDebt(Debt debt) {
+		return ClientBuilder.newClient(new ClientConfig())
+			.target(SERVER).path("api/debts")
+			.request(APPLICATION_JSON)
+			.accept(APPLICATION_JSON)
+			.post(Entity.entity(debt, APPLICATION_JSON), Debt.class);
+	}
+
+	public Response deleteDebt(Debt debt) {
+		return ClientBuilder.newClient(new ClientConfig())
+			.target(SERVER).path("api/debts/" + debt.getId())
+			.request(APPLICATION_JSON)
+			.accept(APPLICATION_JSON)
+			.delete();
+	}
 	/**
 	 * This should get an event from the database by the id of the event
 	 * @param id
@@ -81,6 +98,43 @@ public class ServerUtils {
 	public Event getEvent(long id) {
 		return null;
     }
+
+	public Event addEvent(Event event) {
+
+		Response response = ClientBuilder.newClient(new ClientConfig())
+				.target(SERVER).path("/api/events")
+				.request(APPLICATION_JSON)
+				.accept(APPLICATION_JSON)
+				.post(Entity.json(event));
+
+		if (response.getStatus() == Response.Status.CREATED.getStatusCode()) {
+			return response.readEntity(Event.class);
+		} else {
+			throw new WebApplicationException("Failed to create event. Status code: " + response.getStatus());
+		}
+	}
+
+	/**
+	 * Method to get event by invite code
+	 * It uses a client and executes the api from eventController
+	 * Then if the response is ok it gets the event associated with the response
+	 * Otherwise throws exception
+	 * @param inviteCode of event
+	 * @return event with that inviteCode or an exception
+	 */
+	public Event getEventByCode(String inviteCode){
+		Response response = ClientBuilder.newClient(new ClientConfig())
+				.target(SERVER).path("/api/events/" + inviteCode)
+				.request(APPLICATION_JSON)
+				.accept(APPLICATION_JSON)
+				.get();
+		if (response.getStatus() == Response.Status.OK.getStatusCode()){
+			return response.readEntity(Event.class);
+		} else {
+			throw new WebApplicationException("Event not found" + response.getStatus());
+		}
+
+	}
 
 	/**
 	 * saves the changes to a participant

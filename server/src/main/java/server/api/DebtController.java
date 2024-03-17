@@ -47,13 +47,28 @@ public class DebtController {
     }
 
     /**
+     * Deletes a debt by id if it exists
+     * @param id - the id of the debt we search for
+     * @return "Successful delete" response
+     * if delete was successful, "Bad request" otherwise
+     */
+    @DeleteMapping(path = {"/{id}"})
+    public ResponseEntity<String> delete(@PathVariable("id") long id) {
+        if (!repo.existsById(id)) {
+            return ResponseEntity.badRequest().build();
+        }
+        repo.deleteById(id);
+        return ResponseEntity.ok().body("Successful delete");
+    }
+
+    /**
      * Returns a debt by its id if it exists
      * @param id - the id to be searched with
      * @return response with either "ok" or "bad request"
      * response message
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Debt> getById(@PathVariable("id") int id) {
+    public ResponseEntity<Debt> getById(@PathVariable("id") long id) {
         if (id < 0 || !repo.existsById(id)) {
             return ResponseEntity.badRequest().build();
         }
