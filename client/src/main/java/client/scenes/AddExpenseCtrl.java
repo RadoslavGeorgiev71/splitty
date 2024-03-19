@@ -12,6 +12,7 @@ import javafx.scene.input.KeyEvent;
 
 import com.google.inject.Inject;
 import java.net.URL;
+import java.util.Currency;
 import java.util.ResourceBundle;
 
 public class AddExpenseCtrl implements Initializable {
@@ -22,15 +23,21 @@ public class AddExpenseCtrl implements Initializable {
     private Participant participant;
 
     @FXML
-    private ChoiceBox<Participant> participantChoiceBox;
+    private ChoiceBox<Participant> payerChoiceBox;  //Who paid?
     @FXML
-    private TextField titleField;
+    private TextField titleField;                   //What for?
     @FXML
-    private TextField amountField;
+    private TextField amountField;                  //How much?
     @FXML
-    private DatePicker datePicker;
+    private ChoiceBox<Currency> currChoiceBox;
     @FXML
-    private CheckBoxListCell<Participant> participantCheckBoxListCell;
+    private DatePicker datePicker;                  //When?
+    @FXML
+    private CheckBoxListCell<Participant> participantAll;   //How to split?
+    @FXML
+    private CheckBoxListCell<Participant> participantSome;
+    @FXML
+    private TextField tags;                         //Expense Type
 
     /**
      * Constructor for AddExpenseCtrl
