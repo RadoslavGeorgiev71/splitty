@@ -1,11 +1,14 @@
 package scenes;
 
 import com.google.inject.Inject;
+import commons.Event;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableView;
 import utils.Admin;
+
+import java.util.List;
 
 public class OverviewCtrl {
     private final Admin admin;
@@ -46,6 +49,11 @@ public class OverviewCtrl {
     @FXML
     void importJSON(ActionEvent event) {
 
+    }
+
+    void initialize(){
+        List<Event> events = admin.getEvents();
+        System.out.println(events);
     }
 
 }

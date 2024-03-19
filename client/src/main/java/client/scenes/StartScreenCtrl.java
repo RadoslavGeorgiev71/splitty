@@ -114,7 +114,7 @@ public class StartScreenCtrl implements Initializable {
         event.setTitle(title);
         event.createInviteCode();
 
-        //server.addEvent(event);
+        event = server.addEvent(event);
         mainCtrl.showInvitation(event);
     }
     /**

@@ -1,6 +1,7 @@
 package commons;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -22,8 +23,7 @@ public class Event {
     private long id;
     private String title;
     private String inviteCode;
-    @ManyToOne
-    private Participant creator;
+
     @OneToMany
     private List<Participant> participants;
     @OneToMany
@@ -43,7 +43,6 @@ public class Event {
      * Default constructor for the class
      */
     public Event() {
-        creator = new Participant();
         participants = new ArrayList<>();
         expenses = new ArrayList<>();
         updateDateTime();
@@ -53,15 +52,13 @@ public class Event {
      * Constructor for the Event class
      * @param title Title used to differentiate the different Events
      * @param inviteCode Unique code used to join an Event
-     * @param creator Participant who created the Event
      * @param participants Participants who participate in the Event
      * @param expenses Expenses made during the Event
      */
-    public Event(String title, String inviteCode, Participant creator,
+    public Event(String title, String inviteCode,
                  List<Participant> participants, List<Expense> expenses) {
         this.title = title;
         this.inviteCode = inviteCode;
-        this.creator = creator;
         this.participants = participants;
         this.expenses = expenses;
         // Placeholder ID
@@ -95,15 +92,22 @@ public class Event {
      * Method to find the Last Activity added to the Event
      * @return the last Activity added to the Event
      */
+    @JsonIgnore
     public Expense getLastActivity() {
-        int lastIndex = expenses.size() - 1;
-        return expenses.get(lastIndex);
+        if (expenses.isEmpty()){
+            return null;
+        }
+        else{
+            int lastIndex = expenses.size() - 1;
+            return expenses.get(lastIndex);
+        }
     }
 
     /**
      * Method to calculate the total expenses of the Event
      * @return total sum of Expenses
      */
+    @JsonIgnore
     public double getTotal() {
         double totalExpenses = 0;
         for (int i = 0; i < expenses.size(); i++) {
@@ -193,21 +197,21 @@ public class Event {
         this.inviteCode = inviteCode;
     }
 
-    /**
-     * Getter for the Creator
-     * @return creator
-     */
-    public Participant getCreator() {
-        return creator;
-    }
-
-    /**
-     * Setter for the Creator
-     * @param creator - creator to be set
-     */
-    public void setCreator(Participant creator) {
-        this.creator = creator;
-    }
+//    /**
+//     * Getter for the Creator
+//     * @return creator
+//     */
+//    public Participant getCreator() {
+//        return creator;
+//    }
+//
+//    /**
+//     * Setter for the Creator
+//     * @param creator - creator to be set
+//     */
+//    public void setCreator(Participant creator) {
+//        this.creator = creator;
+//    }
 
     /**
      * Getter for the Participants
@@ -280,7 +284,7 @@ public class Event {
         }
         return getId() == event.getId() && Objects.equals(getTitle(), event.getTitle()) &&
                 Objects.equals(getInviteCode(), event.getInviteCode()) &&
-                Objects.equals(getCreator(), event.getCreator()) &&
+                /*Objects.equals(getCreator(), event.getCreator()) &&*/
                 Objects.equals(getParticipants(), event.getParticipants()) &&
                 Objects.equals(getExpenses(), event.getExpenses()) &&
                 Objects.equals(getDateTime(), event.getDateTime());
@@ -292,7 +296,7 @@ public class Event {
      */
     @Override
     public int hashCode() {
-        return Objects.hash(getTitle(), getInviteCode(), getCreator(), getParticipants(),
+        return Objects.hash(getTitle(), getInviteCode(), /*getCreator(),*/ getParticipants(),
                 getExpenses(), getDateTime(), getId());
     }
 }
