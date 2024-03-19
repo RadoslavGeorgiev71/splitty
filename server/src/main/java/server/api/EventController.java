@@ -64,9 +64,9 @@ public class EventController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> delete(@PathVariable("id") Long id){
-        Optional<Event> existingEvent = this.repo.findById(id);
+        Optional<Event> existingEvent = repo.findById(id);
         if(existingEvent.isPresent()){
-            this.repo.delete(existingEvent.get());
+            repo.delete(existingEvent.get());
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.notFound().build();
