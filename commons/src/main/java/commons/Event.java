@@ -26,7 +26,7 @@ public class Event {
 
     @OneToMany(cascade=CascadeType.ALL)
     private List<Participant> participants;
-    @OneToMany
+    @OneToMany(cascade=CascadeType.ALL)
     private List<Expense> expenses;
     private String dateTime;
 
