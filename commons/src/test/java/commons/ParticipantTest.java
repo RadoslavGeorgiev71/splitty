@@ -8,12 +8,14 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class ParticipantTest {
 
-    Participant p1, p2, p3;
+    private Participant p1;
+    private Participant p2;
+    private Participant p3;
     @BeforeEach
     void testBasis() {
         p1 = new Participant("Bob");
-        p2 = new Participant(5, "Alice", "alice@gmail.com" ,"NHJ201", "12345");
-        p3 = new Participant(5, "Alice", "alice@gmail.com" ,"NHJ201", "12345");
+        p2 = new Participant(5, "Alice", "alice@gmail.com", "NHJ201", "12345");
+        p3 = new Participant(5, "Alice", "alice@gmail.com", "NHJ201", "12345");
     }
 
     @Test

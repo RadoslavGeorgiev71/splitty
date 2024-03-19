@@ -59,7 +59,8 @@ public class ParticipantController {
             // Return the updated participant
             return ResponseEntity.ok(savedParticipant);
         }
-        //Maybe here it should add the participant in the database instead of returning a bad request message
+        //Maybe here it should add the participant in the database
+        //instead of returning a bad request message
         //To be discussed
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Participant not found");
     }

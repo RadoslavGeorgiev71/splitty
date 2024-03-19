@@ -26,8 +26,6 @@ public class MainCtrl {
 
     private Stage primaryStage;
 
-    private QuoteOverviewCtrl overviewCtrl;
-    private Scene overview;
 
     private EditParticipantCtrl editParticipantCtrl;
     private Scene editparticipant;
@@ -41,9 +39,6 @@ public class MainCtrl {
     private OpenDebtsCtrl openDebtsCtrl;
     private Scene opendebts;
 
-    private AddQuoteCtrl addCtrl;
-    private Scene add;
-
     private InvitationCtrl invitationCtrl;
     private Scene invitation;
 
@@ -56,8 +51,6 @@ public class MainCtrl {
     /**
      * Initializes stage
      * @param primaryStage
-     * @param overview
-     * @param add
      * @param editparticipant
      * @param addparticipant
      * @param eventoverview
@@ -66,8 +59,6 @@ public class MainCtrl {
      * @param invitation
      */
     public void initialize(Stage primaryStage,
-                           Pair<QuoteOverviewCtrl, Parent> overview,
-                           Pair<AddQuoteCtrl, Parent> add,
                            Pair<EditParticipantCtrl, Parent> editparticipant,
                            Pair<AddParticipantCtrl, Parent> addparticipant,
                            Pair<EventOverviewCtrl, Parent> eventoverview,
@@ -78,8 +69,6 @@ public class MainCtrl {
 
         this.primaryStage = primaryStage;
 
-        this.overviewCtrl = overview.getKey();
-        this.overview = new Scene(overview.getValue());
 
         this.editParticipantCtrl = editparticipant.getKey();
         this.editparticipant = new Scene(editparticipant.getValue());
@@ -116,14 +105,6 @@ public class MainCtrl {
         primaryStage.setScene(startscreen);
     }
 
-    /**
-     * Shows quote overview
-     */
-    public void showOverview() {
-        primaryStage.setTitle("Quotes: Overview");
-        primaryStage.setScene(overview);
-        overviewCtrl.refresh();
-    }
 
     /**
      * Switches the scene to the edit participant window
@@ -149,6 +130,11 @@ public class MainCtrl {
         addParticipantCtrl.initialize();
     }
 
+    /**
+     * Switches the scene to the event overview window
+     * @param event - takes an event as a parameter for which we show the overview
+     */
+
     public void showEventOverview(Event event) {
         primaryStage.setTitle("Event Overview");
         eventOverviewCtrl.setEvent(event);
@@ -157,18 +143,21 @@ public class MainCtrl {
     }
 
 
-    public void showAdd() {
-        primaryStage.setTitle("Quotes: Adding Quote");
-        primaryStage.setScene(add);
-        add.setOnKeyPressed(e -> addCtrl.keyPressed(e));
-    }
-
+    /**
+     * Switches the scene to the open debts window
+     * @param event - takes an event as a parameter for which we show the open debts
+     */
     public void showOpenDebts(Event event) {
         primaryStage.setTitle("Open Debts");
         openDebtsCtrl.setEvent(event);
         openDebtsCtrl.initialize();
         primaryStage.setScene(opendebts);
     }
+
+    /**
+     * Switches the scene to the invitation window
+     * @param event - the event for which we show the window
+     */
 
     public void showInvitation(Event event) {
         primaryStage.setTitle("Invitation");

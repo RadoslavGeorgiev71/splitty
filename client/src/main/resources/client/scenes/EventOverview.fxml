@@ -40,7 +40,7 @@
                   <Button mnemonicParsing="false" text="Button" />
                </children>
             </HBox>
-            <Text fx:id="ParticipatingParticipants" strokeType="OUTSIDE" strokeWidth="0.0" text="Person1, Person2, Person3, ..." />
+            <Text fx:id="participatingParticipants" strokeType="OUTSIDE" strokeWidth="0.0" text="Person1, Person2, Person3, ..." />
             <GridPane prefHeight="39.0" prefWidth="280.0">
               <columnConstraints>
                 <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />

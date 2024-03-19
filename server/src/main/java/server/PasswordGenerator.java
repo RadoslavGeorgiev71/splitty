@@ -4,7 +4,7 @@ import java.security.SecureRandom;
 
 public class PasswordGenerator {
     private static final String CHARACTER_SET =
-            "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+-=[]{}|;:,.<>?";
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+-=[]{}|;:,.<>?";
 
     /**
      * Generates a secure password of length 32,

@@ -112,7 +112,7 @@ public class EditParticipantCtrl {
      * Initiallizes the fields with the participant's data
      */
     public void initialize() {
-        if(participant != null){
+        if (participant != null){
             nameField.setText(participant.getName());
             nameField.positionCaret(participant.getName().length());
             emailField.setText(participant.getEmail());
@@ -122,13 +122,17 @@ public class EditParticipantCtrl {
 
     }
 
+    /**
+     * Removes the participant from the event
+     * @param actionEvent ...
+     */
     public void removeParticipant(ActionEvent actionEvent) {
-        if(participant != null){
+        if (participant != null){
             Alert alert =  new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Remove Participant");
             alert.setHeaderText("You will remove this participant permanently from this event");
             alert.setContentText("Are you sure you want to remove " + this.participant.getName());
-            if(alert.showAndWait().get() == ButtonType.OK){
+            if (alert.showAndWait().get() == ButtonType.OK){
                 event.removeParticipant(participant);
                 server.persistEvent(event);
                 server.deleteParticipant(participant);

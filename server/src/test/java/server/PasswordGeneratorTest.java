@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class PasswordGeneratorTest {
     private static final String CHARACTER_SET =
-            "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+-=[]{}|;:,.<>?";
+         "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+-=[]{}|;:,.<>?";
 
     @Test
     void testLength(){

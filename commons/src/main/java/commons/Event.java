@@ -71,6 +71,7 @@ public class Event {
 
     /**
      * Method to add an Empty Expense to the Event
+     * @param expense - expense to be added
      */
     public void addExpense(Expense expense) {
         expenses.add(expense);
@@ -97,7 +98,7 @@ public class Event {
         if (expenses.isEmpty()){
             return null;
         }
-        else{
+        else {
             int lastIndex = expenses.size() - 1;
             return expenses.get(lastIndex);
         }
@@ -118,6 +119,7 @@ public class Event {
 
     /**
      * Method to add a Participant to the Event
+     * @param participant - participant to be added
      */
     public void addParticipant(Participant participant) {
         participants.add(participant);

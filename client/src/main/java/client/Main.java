@@ -33,7 +33,7 @@ public class Main extends Application {
     private static final Injector INJECTOR = createInjector(new MyModule());
     private static final MyFXML FXML = new MyFXML(INJECTOR);
     private ConfigClient configClient;
-    private final String FILE_PATH = "client/src/main/resources/config.txt";
+    private final String filePath = "client/src/main/resources/config.txt";
 
     /**
      * Launches the app
@@ -56,18 +56,20 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException {
         configClient =  new ConfigClient();
-        configClient.readFromFile(FILE_PATH);
+        configClient.readFromFile(filePath);
 
-        var overview = FXML.load(QuoteOverviewCtrl.class, "client", "scenes", "QuoteOverview.fxml");
-        var editparticipant = FXML.load(EditParticipantCtrl.class, "client", "scenes", "EditParticipant.fxml");
-        var addparticipant = FXML.load(AddParticipantCtrl.class, "client", "scenes", "AddParticipant.fxml");
-        var add = FXML.load(AddQuoteCtrl.class, "client", "scenes", "AddQuote.fxml");
-        var eventoverview = FXML.load(EventOverviewCtrl.class, "client", "scenes", "EventOverview.fxml");
+        var editparticipant = FXML.load(EditParticipantCtrl.class, "client",
+                "scenes", "EditParticipant.fxml");
+        var addparticipant = FXML.load(AddParticipantCtrl.class, "client",
+                "scenes", "AddParticipant.fxml");
+        var eventoverview = FXML.load(EventOverviewCtrl.class, "client",
+                "scenes", "EventOverview.fxml");
         var opendebts = FXML.load(OpenDebtsCtrl.class, "client", "scenes", "OpenDebts.fxml");
         var startscreen = FXML.load(StartScreenCtrl.class, "client", "scenes", "StartScreen.fxml");
         var invitation = FXML.load(InvitationCtrl.class, "client", "scenes", "Invitation.fxml");
 
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
-        mainCtrl.initialize(primaryStage, overview, add, editparticipant, addparticipant, eventoverview, opendebts, startscreen, invitation);
+        mainCtrl.initialize(primaryStage, editparticipant,
+                addparticipant, eventoverview, opendebts, startscreen, invitation);
     }
 }
