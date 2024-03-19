@@ -5,8 +5,8 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class AuthServiceTest {
-    AuthService as1;
-    AuthService as2;
+    private AuthService as1;
+    private AuthService as2;
     @Test
     void addPasswordAndAuthenticate() {
         as1 = new AuthService();
