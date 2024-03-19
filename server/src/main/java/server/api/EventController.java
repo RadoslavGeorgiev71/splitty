@@ -62,6 +62,16 @@ public class EventController {
         return ResponseEntity.status(HttpStatus.CREATED).body(newEvent);
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> delete(@PathVariable("id") Long id) {
+        Optional<Event> existingEvent = repo.findById(id);
+        if (existingEvent.isPresent()) {
+            repo.delete(existingEvent.get());
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.notFound().build();
+    }
+
     @PutMapping(path = {"", "/"})
     public ResponseEntity<?> update(@RequestBody Event updatedEvent) {
         long eventId = updatedEvent.getId();
