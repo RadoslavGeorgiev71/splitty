@@ -2,10 +2,14 @@ package scenes;
 
 import com.google.inject.Inject;
 import commons.Event;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import utils.Admin;
 
 import java.util.List;
@@ -23,7 +27,19 @@ public class OverviewCtrl {
     private Button importButton;
 
     @FXML
-    private TableView<?> table;
+    private TableView<Event> table;
+
+    @FXML
+    private TableColumn<Event, String> titleColumn;
+
+    @FXML
+    private TableColumn<Event, String> creationDateColumn;
+
+    @FXML
+    private TableColumn<Event, String> lastActivityColumn;
+
+    private  static ObservableList<Event> events = FXCollections.observableArrayList();
+
 
     /**
      * Constructor for OverviewCtrl for dependency injection
@@ -52,8 +68,12 @@ public class OverviewCtrl {
     }
 
     void initialize(){
-        List<Event> events = admin.getEvents();
-        System.out.println(events);
+      events = FXCollections.observableArrayList(admin.getEvents());
+      titleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
+      lastActivityColumn.setCellValueFactory(new PropertyValueFactory<>("LastActivity"));
+      creationDateColumn.setCellValueFactory(new PropertyValueFactory<>("DateTime"));
+      table.setItems(events);
+      table.getSelectionModel().selectFirst();
     }
 
 }

@@ -7,7 +7,6 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane prefHeight="808.0" prefWidth="1052.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="scenes.OverviewCtrl">
    <children>
       <Label layoutX="72.0" layoutY="34.0" prefHeight="101.0" prefWidth="405.0" text="utils.Admin Overview">
@@ -15,11 +14,11 @@
             <Font size="42.0" />
          </font>
       </Label>
-      <TableView fx:id="table" layoutX="72.0" layoutY="140.0" prefHeight="595.0" prefWidth="907.0">
+      <TableView fx:id="table" layoutX="72.0" layoutY="135.0" prefHeight="595.0" prefWidth="907.0">
         <columns>
-          <TableColumn prefWidth="349.3333969116211" text="Title" />
-          <TableColumn minWidth="0.0" prefWidth="262.0000305175781" text="Creation Date" />
-            <TableColumn minWidth="0.0" prefWidth="293.33333333333337" text="Last Activity" />
+          <TableColumn fx:id="titleColumn" prefWidth="349.3333969116211" text="Title" />
+          <TableColumn fx:id="creationDateColumn" minWidth="0.0" prefWidth="262.0000305175781" text="Creation Date" />
+            <TableColumn fx:id="lastActivityColumn" minWidth="0.0" prefWidth="293.33333333333337" text="Last Activity" />
         </columns>
       </TableView>
       <Button fx:id="deleteButton" layoutX="210.0" layoutY="750.0" mnemonicParsing="false" onAction="#delete" prefHeight="43.0" prefWidth="155.0" text="Delete" />
