@@ -72,7 +72,7 @@ public class ServerUtils {
 			.target(SERVER).path("api/debts/event/" + event.getId())
 			.request(APPLICATION_JSON)
 			.accept(APPLICATION_JSON)
-			.get(new GenericType<List<Debt>>() {});
+			.get(new GenericType<>() {});
 	}
 
 	public Debt addDebt(Debt debt) {
@@ -92,8 +92,8 @@ public class ServerUtils {
 	}
 	/**
 	 * This should get an event from the database by the id of the event
-	 * @param id
-	 * @return
+	 * @param id - the id it is looked for
+	 * @return the event with the specified id
 	 */
 	public Event getEvent(long id) {
 		return null;
@@ -143,8 +143,8 @@ public class ServerUtils {
 
 	/**
 	 * saves the changes to a participant
-	 * @param participant
-	 * @return
+	 * @param participant - the participant we persist
+	 * @return the persisted participant
 	 */
 	public Participant persistParticipant(Participant participant) {
 		Entity<Participant> entity = Entity.entity(participant, APPLICATION_JSON);
