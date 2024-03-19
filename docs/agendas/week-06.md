@@ -70,7 +70,7 @@
   - Martim suggested we look into Stonk(dependency in SpringBoot/others team use it)
 - Distributing tasks:
   - Alex - language-switch feature(with Alexander), ExpenceOverview basic functionality, recently viewed events functionality fix, remove old classes/fix checkstyle
-  - Alexander - help with language-switch(with Alex)
+  - Alexander - help with language-switch(with Alex), finishing Event functionality
   - George - email notification non-basic feature, import and export in admin(with Martim), edit event title feature
   - Maria - foreign currency non-basic feature, addExpence basic functionality
   - Radoslav - statistics non-basic feature, OpenDebts non-basic feature finish, Service class example for some endpoint controller
