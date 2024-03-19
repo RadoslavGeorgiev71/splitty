@@ -24,7 +24,7 @@ public class Event {
     private String title;
     private String inviteCode;
 
-    @OneToMany
+    @OneToMany(cascade=CascadeType.ALL)
     private List<Participant> participants;
     @OneToMany
     private List<Expense> expenses;

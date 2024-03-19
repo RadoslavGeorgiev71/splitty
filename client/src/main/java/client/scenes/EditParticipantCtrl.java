@@ -129,6 +129,8 @@ public class EditParticipantCtrl {
             alert.setHeaderText("You will remove this participant permanently from this event");
             alert.setContentText("Are you sure you want to remove " + this.participant.getName());
             if(alert.showAndWait().get() == ButtonType.OK){
+                event.removeParticipant(participant);
+                server.persistEvent(event);
                 server.deleteParticipant(participant);
                 mainCtrl.showEventOverview(server.getEvent(event.getId()));
             }
