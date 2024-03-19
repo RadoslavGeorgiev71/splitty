@@ -55,7 +55,7 @@ public class OverviewCtrl {
     @FXML
     void delete(ActionEvent event) {
         Event selectedEvent = table.getSelectionModel().getSelectedItem();
-        if(selectedEvent != null){
+        if (selectedEvent != null){
             admin.deleteEvent(selectedEvent);
             table.getItems().remove(selectedEvent);
             initialize();
@@ -73,12 +73,12 @@ public class OverviewCtrl {
     }
 
     void initialize(){
-      events = FXCollections.observableArrayList(admin.getEvents());
-      titleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
-      lastActivityColumn.setCellValueFactory(new PropertyValueFactory<>("LastActivity"));
-      creationDateColumn.setCellValueFactory(new PropertyValueFactory<>("DateTime"));
-      table.setItems(events);
-      table.getSelectionModel().selectFirst();
+        events = FXCollections.observableArrayList(admin.getEvents());
+        titleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
+        lastActivityColumn.setCellValueFactory(new PropertyValueFactory<>("LastActivity"));
+        creationDateColumn.setCellValueFactory(new PropertyValueFactory<>("DateTime"));
+        table.setItems(events);
+        table.getSelectionModel().selectFirst();
     }
 
 }

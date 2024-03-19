@@ -28,7 +28,7 @@ public class EventOverviewCtrl {
     private GridPane tabPaneAllGridPane;
 
     @FXML
-    private Text ParticipatingParticipants;
+    private Text participatingParticipants;
 
     @FXML
     private Label eventTitleLabel;
@@ -68,33 +68,54 @@ public class EventOverviewCtrl {
         mainCtrl.showInvitation(this.event);
     }
 
+    /**
+     * Method to be executed when edit participants button is clicked
+     */
+
     @FXML
     public void onEditParticipantsClick() {
-        if(event.getParticipants().isEmpty()) {
+        if (event.getParticipants().isEmpty()) {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Error");
             alert.setHeaderText("There are no available participants to edit");
-            if(alert.showAndWait().get() == ButtonType.OK){
+            if (alert.showAndWait().get() == ButtonType.OK){
                 mainCtrl.showEventOverview(this.event);
             }
         }
-        else { mainCtrl.showEditParticipant(this.event, (Participant) participantsMenu.getValue()); }
+        else {
+            mainCtrl.showEditParticipant(this.event, (Participant) participantsMenu.getValue());
+        }
     }
 
+    /**
+     * Method to be executed when add participant button is clicked
+     */
     @FXML
     public void onAddParticipantClick() {
         mainCtrl.showAddParticipant(this.event);
     }
+
+    /**
+     * Method to be executed when add expense button is clicked
+     */
 
     @FXML
     public void onAddExpenseClick() {
 
     }
 
+    /**
+     * Method to be executed when settle debts button is clicked
+     */
+
     @FXML
     public void onSettleDebtsClick() {
         mainCtrl.showOpenDebts(event);
     }
+
+    /**
+     * Method to be executed when back button is clicked
+     */
 
     @FXML
     public void onBackClick() {
@@ -102,18 +123,22 @@ public class EventOverviewCtrl {
         alert.setTitle("Exit");
         alert.setHeaderText("You will exit this event and go back to start screen");
         alert.setContentText("Are you sure you want to exit?");
-        if(alert.showAndWait().get() == ButtonType.OK){
+        if (alert.showAndWait().get() == ButtonType.OK){
             mainCtrl.showStartScreen();
         }
 
     }
+
+    /**
+     * Method to be executed when delete event button is clicked
+     */
 
     @FXML
     public void tabPaneAllClick() {
         tabPaneAllGridPane.getChildren().clear();
         tabPaneAllGridPane.setVgap(10);
         tabPaneAllGridPane.setHgap(10);
-        if(event != null) {
+        if (event != null) {
             for (int i = 0; i < event.getExpenses().size(); i++) {
                 Label dateLabel = new Label(event.getExpenses().get(i).getDateTime());
                 Label nameLabel = new Label("expense creator");
@@ -135,14 +160,19 @@ public class EventOverviewCtrl {
         }
     }
 
+    /**
+     * Method to be executed when tabPaneFromPerson is clicked
+     */
+
     @FXML
     public void tabPaneFromPersonClick() {
         tabPaneFromGridPane.getChildren().clear();
         tabPaneFromGridPane.setVgap(10);
         tabPaneFromGridPane.setHgap(10);
-        if(event != null) {
+        if (event != null) {
             for (int i = 0; i < event.getExpenses().size(); i++) {
-                if(event.getParticipants().get(i).equals(participantsMenu.getSelectionModel().getSelectedItem())) {
+                if (event.getParticipants().get(i).equals(participantsMenu.
+                        getSelectionModel().getSelectedItem())) {
                     Label dateLabel = new Label(event.getExpenses().get(i).getDateTime());
                     Label nameLabel = new Label("expense creator");
                     nameLabel.setWrapText(true); // Wrap text to prevent truncation
@@ -163,6 +193,10 @@ public class EventOverviewCtrl {
         }
     }
 
+    /**
+     * Method to be executed when tabPaneIncludingPerson is clicked
+     */
+
     @FXML
     public void tabPaneIncludingPersonClick() {
         tabPaneIncludingGridPane.getChildren().clear();
@@ -176,6 +210,10 @@ public class EventOverviewCtrl {
         this.event = event;
     }
 
+    /**
+     * Sets the event name
+     */
+
     public void eventName() {
         eventTitleLabel.setText(event.getTitle());
     }
@@ -184,10 +222,10 @@ public class EventOverviewCtrl {
      * Sets the from tab with the current selected participant
      */
     public void fromPersonTabName() {
-        if(event.getParticipants().isEmpty()){
+        if (event.getParticipants().isEmpty()){
             tabPaneFromPerson.setText("From");
         }
-        else{
+        else {
             Participant selectedParticipant = (Participant) participantsMenu.getValue();
             tabPaneFromPerson.setText("From " + selectedParticipant.getName());
         }
@@ -198,10 +236,10 @@ public class EventOverviewCtrl {
      * Sets the Including tab with the current selected participant name
      */
     public void includingPersonTabName() {
-        if(event.getParticipants().isEmpty()){
+        if (event.getParticipants().isEmpty()){
             tabPaneFromPerson.setText("Including");
         }
-        else{
+        else {
             Participant selectedParticipant = (Participant) participantsMenu.getValue();
             tabPaneIncludingPerson.setText("Including " + selectedParticipant.getName());
         }
@@ -212,27 +250,33 @@ public class EventOverviewCtrl {
      */
     public void participatingParticipants() {
         String participantsText = "";
-        if(event != null) {
+        if (event != null) {
             for (int i = 0; i < event.getParticipants().size(); i++) {
                 participantsText += event.getParticipants().get(i).getName();
-                if(i < event.getParticipants().size() - 1) {
+                if (i < event.getParticipants().size() - 1) {
                     participantsText += ", ";
                 }
             }
         }
-        ParticipatingParticipants.setText(participantsText);
+        participatingParticipants.setText(participantsText);
     }
 
+    /**
+     * Initializes the event overview
+     */
+
     public void initialize(){
-        if(event != null){
+        if (event != null){
             participantsMenu.setItems(FXCollections.observableArrayList(event.getParticipants()));
             participantsMenu.setConverter(new StringConverter<Participant>() {
                 @Override
                 public String toString(Participant participant) {
-                    if(participant != null)
+                    if (participant != null) {
                         return participant.getName();
-                    else
+                    }
+                    else {
                         return "";
+                    }
                 }
                 @Override
                 public Participant fromString(String string) {

@@ -9,11 +9,11 @@ import java.time.LocalDateTime;
 import static org.junit.jupiter.api.Assertions.*;
 
 class DebtTest {
-    Participant p1 = new Participant(1, "a");
-    Participant p2 = new Participant(2, "b");
-    Debt d1 = new Debt(123, p1, p2, 500);
-    Debt d2 = new Debt(123, p1, p2, 500);
-    Debt d3 = new Debt(321, p2, p2, 511);
+    private Participant p1 = new Participant(1, "a");
+    private Participant p2 = new Participant(2, "b");
+    private Debt d1 = new Debt(123, p1, p2, 500);
+    private Debt d2 = new Debt(123, p1, p2, 500);
+    private Debt d3 = new Debt(321, p2, p2, 511);
 
     @Test
     void testBasicConstructor() {

@@ -6,7 +6,9 @@ import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TagTest {
-    commons.Tag t1, t2, t3;
+    private commons.Tag t1;
+    private commons.Tag t2;
+    private commons.Tag t3;
     @BeforeEach
     void testBasis() {
         t1 = new Tag("food", "red");

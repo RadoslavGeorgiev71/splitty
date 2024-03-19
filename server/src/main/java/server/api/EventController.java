@@ -56,12 +56,23 @@ public class EventController {
         }
     }
 
+    /**
+     * Mapping to create an event
+     * @param event the event to add to database
+     * @return Response when event created
+     */
     @PostMapping(path = {""})
     public ResponseEntity<?> createEvent(@RequestBody Event event){
         Event newEvent = repo.save(event);
         return ResponseEntity.status(HttpStatus.CREATED).body(newEvent);
     }
 
+    /**
+     * Method to update an event
+     * @param id of event
+     * @param updatedEvent the changed event
+     * @return response when event updated or not found
+     */
     @PutMapping(path = {"", "/persist/{id}"})
     public ResponseEntity<?> update(@PathVariable("id") long id, @RequestBody Event updatedEvent) {
         long eventId = updatedEvent.getId();

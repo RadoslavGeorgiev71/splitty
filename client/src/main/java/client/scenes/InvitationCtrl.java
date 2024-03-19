@@ -57,13 +57,24 @@ public class InvitationCtrl implements Initializable {
 
     }
 
+    /**
+     * Sets inviteCodeText.
+     */
     public void setInviteCodeText(){
         inviteCodeText.setText(this.event.getInviteCode());
     }
 
+    /**
+     * Sets eventNameText.
+     */
     public void setEventNameText(){
         eventNameText.setText(this.event.getTitle());
     }
+
+    /**
+     * Sets event.
+     * @param event the event for the invitation
+     */
     public void setEvent(Event event){
         this.event = event;
     }

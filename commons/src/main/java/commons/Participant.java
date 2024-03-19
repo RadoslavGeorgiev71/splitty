@@ -165,7 +165,9 @@ public class Participant {
             return false;
         }
         Participant that = (Participant) o;
-        return id == that.id && Objects.equals(name, that.name) && Objects.equals(email, that.email) && Objects.equals(bic, that.bic) && Objects.equals(iban, that.iban);
+        return id == that.id && Objects.equals(name, that.name) &&
+                Objects.equals(email, that.email) &&
+                Objects.equals(bic, that.bic) && Objects.equals(iban, that.iban);
     }
 
     /**

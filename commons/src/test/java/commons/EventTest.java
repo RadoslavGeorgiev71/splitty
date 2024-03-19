@@ -10,13 +10,19 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class EventTest {
 
-    Event event1, event2, event3;
-    Participant p1, p2, p3;
-    Expense e1, e2, e3;
-    List<Participant> participants1;
-    List<Participant> participants2;
-    List<Expense> expenses1;
-    List<Expense> expenses2;
+    private Event event1;
+    private Event event2;
+    private Event event3;
+    private Participant p1;
+    private Participant p2;
+    private Participant p3;
+    private Expense e1;
+    private Expense e2;
+    private Expense e3;
+    private List<Participant> participants1;
+    private List<Participant> participants2;
+    private List<Expense> expenses1;
+    private List<Expense> expenses2;
 
     @BeforeEach
     void first() {

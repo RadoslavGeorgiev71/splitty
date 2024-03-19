@@ -7,50 +7,51 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ConfigClientTest {
 
-    private final String TEST_FILE_PATH = "src/test/resources/test_config";
-    private final String[] expected_config = {"generic","blabla@gmail.com", "1234567890", "BANK123", "en", "EUR"};
+    private final String testFilePath = "src/test/resources/test_config";
+    private final String[] expectedConfig = {"generic","blabla@gmail.com",
+        "1234567890", "BANK123", "en", "EUR"};
     private final String[] keys = {"serverUrl", "email", "iban", "bic", "language", "currency"};
-    private ConfigClient configClient = new ConfigClient(expected_config[0], expected_config[1],
-            expected_config[2], expected_config[3], expected_config[4], expected_config[5]);
+    private ConfigClient configClient = new ConfigClient(expectedConfig[0], expectedConfig[1],
+            expectedConfig[2], expectedConfig[3], expectedConfig[4], expectedConfig[5]);
 
     @Test
     void readFromFile() {
-        ConfigClient result = configClient.readFromFile(TEST_FILE_PATH);
+        ConfigClient result = configClient.readFromFile(testFilePath);
         assertNotNull(result);
-        assertEquals(expected_config[0], result.getServerUrl());
-        assertEquals(expected_config[1], result.getEmail());
-        assertEquals(expected_config[2], result.getIban());
-        assertEquals(expected_config[3], result.getBic());
-        assertEquals(expected_config[4], result.getLanguage());
-        assertEquals(expected_config[5], result.getCurrency());
+        assertEquals(expectedConfig[0], result.getServerUrl());
+        assertEquals(expectedConfig[1], result.getEmail());
+        assertEquals(expectedConfig[2], result.getIban());
+        assertEquals(expectedConfig[3], result.getBic());
+        assertEquals(expectedConfig[4], result.getLanguage());
+        assertEquals(expectedConfig[5], result.getCurrency());
     }
 
     @Test
     void writeToFile() {
-        configClient.writeToFile(TEST_FILE_PATH, expected_config, keys);
+        configClient.writeToFile(testFilePath, expectedConfig, keys);
 
-        ConfigClient result = configClient.readFromFile(TEST_FILE_PATH);
+        ConfigClient result = configClient.readFromFile(testFilePath);
 
 
         assertNotNull(result);
 
 
-        assertEquals(expected_config[0], result.getServerUrl());
-        assertEquals(expected_config[1], result.getEmail());
-        assertEquals(expected_config[2], result.getIban());
-        assertEquals(expected_config[3], result.getBic());
-        assertEquals(expected_config[4], result.getLanguage());
-        assertEquals(expected_config[5], result.getCurrency());
+        assertEquals(expectedConfig[0], result.getServerUrl());
+        assertEquals(expectedConfig[1], result.getEmail());
+        assertEquals(expectedConfig[2], result.getIban());
+        assertEquals(expectedConfig[3], result.getBic());
+        assertEquals(expectedConfig[4], result.getLanguage());
+        assertEquals(expectedConfig[5], result.getCurrency());
     }
 
     @Test
     void setterAndGetter() {
-        assertEquals(expected_config[0], configClient.getServerUrl());
-        assertEquals(expected_config[1], configClient.getEmail());
-        assertEquals(expected_config[2], configClient.getIban());
-        assertEquals(expected_config[3], configClient.getBic());
-        assertEquals(expected_config[4], configClient.getLanguage());
-        assertEquals(expected_config[5], configClient.getCurrency());
+        assertEquals(expectedConfig[0], configClient.getServerUrl());
+        assertEquals(expectedConfig[1], configClient.getEmail());
+        assertEquals(expectedConfig[2], configClient.getIban());
+        assertEquals(expectedConfig[3], configClient.getBic());
+        assertEquals(expectedConfig[4], configClient.getLanguage());
+        assertEquals(expectedConfig[5], configClient.getCurrency());
 
         configClient.setServerUrl("1");
         configClient.setEmail("2");

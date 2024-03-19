@@ -10,15 +10,15 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ExpenseTest {
 
-    Participant a = new Participant("Ana");
-    Participant b = new Participant("Are");
-    Participant c = new Participant("Mere");
+    private Participant a = new Participant("Ana");
+    private Participant b = new Participant("Are");
+    private Participant c = new Participant("Mere");
 
-    List<Participant> list;
+    private List<Participant> list;
 
-    Expense exp1;
-    Expense exp2;
-    Expense exp3;
+    private Expense exp1;
+    private Expense exp2;
+    private Expense exp3;
 
     @BeforeEach
     void first() {
