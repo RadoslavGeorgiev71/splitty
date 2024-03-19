@@ -15,74 +15,6 @@ import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
 public class Admin{
 
-//    private static Socket socket;
-//    private int port;
-//    private static String host;
-//    /**
-//     * Default constructor
-//     */
-//    public utils.Admin(){
-//    }
-//
-//    /**
-//     * Constructor with port as parameter
-//     * @param port to connect
-//     */
-//    public utils.Admin(int port){
-//        this.socket = null;
-//        this.port = port;
-//    }
-//
-//    /**
-//     * getter for socket
-//     * @return the socket that is being used
-//     */
-//    public static Socket getSocket() {
-//        return socket;
-//    }
-//
-//    /**
-//     * Setter for socket
-//     * @param socket to use
-//     */
-//    public static void setSocket(Socket socket) {
-//        utils.Admin.socket = socket;
-//    }
-//
-//    /**
-//     * Getter for port
-//     * @return the port
-//     */
-//    public int getPort() {
-//        return port;
-//    }
-//
-//    /**
-//     * Setter for port
-//     * @param port to use
-//     */
-//    public void setPort(int port) {
-//        this.port = port;
-//    }
-//
-//    /**
-//     * Getter for the host address
-//     * @return the host address of the server
-//     */
-//    public static String getHost() {
-//        return host;
-//    }
-//
-//    /**
-//     * Setter for host
-//     * @param host to use
-//     */
-//    public static void setHost(String host) {
-//        utils.Admin.host = host;
-//    }
-
-
-
     private static final String SERVER = "http://localhost:8080/";
     private String password = "none set";
 
@@ -140,41 +72,6 @@ public class Admin{
                 .get(new GenericType<List<Event>>() {});
     }
 
-    /**
-     * Requests all the events in the server, ordered by date
-     * @return List<Event> with all events in the server ordered by date
-     */
-    public List<Event> orderByCDate(){
-        return ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/events?orderBy=cdate") //
-                .request(APPLICATION_JSON) //
-                .accept(APPLICATION_JSON) //
-                .get(new GenericType<List<Event>>() {});
-    }
-
-    /**
-     * Orders the events by last activity
-     * @return the sorted list with events
-     */
-    public List<Event> orderByLastActivity(){
-        return ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/events?orderBy=lastactivity") //
-                .request(APPLICATION_JSON) //
-                .accept(APPLICATION_JSON) //
-                .get(new GenericType<List<Event>>() {});
-    }
-
-    /**
-     * Orders events by title
-     * @return the ordered list
-     */
-    public List<Event> orderByTitle(){
-        return ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/events?orderBy=title") //
-                .request(APPLICATION_JSON) //
-                .accept(APPLICATION_JSON) //
-                .get(new GenericType<List<Event>>() {});
-    }
 
     /**
      * Gets an event and deletes it from the database of the server

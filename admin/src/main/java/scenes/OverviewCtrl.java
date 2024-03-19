@@ -55,6 +55,8 @@ public class OverviewCtrl {
     @FXML
     void delete(ActionEvent event) {
 
+        admin.deleteEvent(table.getSelectionModel().getSelectedItem());
+        initialize();
     }
 
     @FXML
