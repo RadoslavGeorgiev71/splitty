@@ -147,6 +147,7 @@ public class MainCtrl {
     public void showOpenDebts(Event event) {
         primaryStage.setTitle("Open Debts");
         openDebtsCtrl.setEvent(event);
+        openDebtsCtrl.initialize();
         primaryStage.setScene(opendebts);
     }
 

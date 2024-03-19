@@ -40,7 +40,7 @@ public class DebtController {
      * @param eventId - the id of event we retrieve the debts for
      * @return all debts corresponding to the event
      */
-    @GetMapping(path = {"/{eventId}"})
+    @GetMapping(path = {"event/{eventId}"})
     public ResponseEntity<List<Debt>> getDebtsForEvent(@PathVariable("eventId") long eventId) {
         Optional<Event> event = eventRepo.findById(eventId);
         return event.map(value -> ResponseEntity.ok(repo.findAll().stream().
