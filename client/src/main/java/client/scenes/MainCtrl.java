@@ -32,6 +32,9 @@ public class MainCtrl {
     private EditParticipantCtrl editParticipantCtrl;
     private Scene editparticipant;
 
+    private AddParticipantCtrl addParticipantCtrl;
+    private Scene addparticipant;
+
     private EventOverviewCtrl eventOverviewCtrl;
     private Scene eventoverview;
 
@@ -56,6 +59,7 @@ public class MainCtrl {
      * @param overview
      * @param add
      * @param editparticipant
+     * @param addparticipant
      * @param eventoverview
      * @param opendebts
      * @param startscreen
@@ -65,6 +69,7 @@ public class MainCtrl {
                            Pair<QuoteOverviewCtrl, Parent> overview,
                            Pair<AddQuoteCtrl, Parent> add,
                            Pair<EditParticipantCtrl, Parent> editparticipant,
+                           Pair<AddParticipantCtrl, Parent> addparticipant,
                            Pair<EventOverviewCtrl, Parent> eventoverview,
                            Pair<OpenDebtsCtrl, Parent> opendebts,
                            Pair<StartScreenCtrl, Parent> startscreen,
@@ -78,6 +83,9 @@ public class MainCtrl {
 
         this.editParticipantCtrl = editparticipant.getKey();
         this.editparticipant = new Scene(editparticipant.getValue());
+
+        this.addParticipantCtrl = addparticipant.getKey();
+        this.addparticipant = new Scene(addparticipant.getValue());
 
         this.eventOverviewCtrl = eventoverview.getKey();
         this.eventoverview = new Scene(eventoverview.getValue());
@@ -128,6 +136,17 @@ public class MainCtrl {
         editParticipantCtrl.setEvent(event);
         editParticipantCtrl.setParticipant(participant);
         editParticipantCtrl.initialize();
+    }
+
+    /**
+     * Switches the scene to the add participant window
+     * @param event - takes an event as a parameter for which we add a participant
+     */
+    public void showAddParticipant(Event event) {
+        primaryStage.setTitle("Add Participant");
+        primaryStage.setScene(addparticipant);
+        addParticipantCtrl.setEvent(event);
+        addParticipantCtrl.initialize();
     }
 
     public void showEventOverview(Event event) {
