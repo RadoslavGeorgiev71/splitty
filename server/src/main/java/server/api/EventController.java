@@ -61,4 +61,14 @@ public class EventController {
         Event newEvent = repo.save(event);
         return ResponseEntity.status(HttpStatus.CREATED).body(newEvent);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> delete(@PathVariable("id") Long id){
+        Optional<Event> existingEvent = this.repo.findById(id);
+        if(existingEvent.isPresent()){
+            this.repo.delete(existingEvent.get());
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.notFound().build();
+    }
 }
