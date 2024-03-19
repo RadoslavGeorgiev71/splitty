@@ -34,7 +34,7 @@ public class AdminController {
      */
     @PostMapping(path = { "", "/" })
     public String login(@RequestBody String password, HttpServletResponse response) {
-        if(authService.authenticate(password)){
+        if (authService.authenticate(password)){
             response.setStatus(HttpServletResponse.SC_OK);
             return "Admin authenticated";
         }

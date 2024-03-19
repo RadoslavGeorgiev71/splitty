@@ -49,7 +49,7 @@ public class LoginCtrl {
             admin.setPassword(password);
             mainCtrl.showOverview();
         }
-        else{
+        else {
             errorLabel.setVisible(true);
         }
     }

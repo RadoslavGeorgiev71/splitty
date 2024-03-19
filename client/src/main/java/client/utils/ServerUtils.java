@@ -32,71 +32,78 @@ import commons.Participant;
 //import jakarta.ws.rs.core.MediaType;
 import org.glassfish.jersey.client.ClientConfig;
 
-import commons.Quote;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
 
 public class ServerUtils {
 
-	private static final String SERVER = "http://localhost:8080/";
+    private static final String SERVER = "http://localhost:8080/";
 
-	public void getQuotesTheHardWay() throws IOException, URISyntaxException {
-		var url = new URI("http://localhost:8080/api/quotes").toURL();
-		var is = url.openConnection().getInputStream();
-		var br = new BufferedReader(new InputStreamReader(is));
-		String line;
-		while ((line = br.readLine()) != null) {
-			System.out.println(line);
-		}
-	}
+	/**
+	 * Gets all quotes forcibly
+	 * @throws IOException - if the input stream is not found
+	 * @throws URISyntaxException - if the URI is not found
+	 */
 
-	public List<Quote> getQuotes() {
-		return ClientBuilder.newClient(new ClientConfig()) //
-				.target(SERVER).path("api/quotes") //
-				.request(APPLICATION_JSON) //
-				.accept(APPLICATION_JSON) //
-                .get(new GenericType<List<Quote>>() {});
-	}
+    public void getQuotesTheHardWay() throws IOException, URISyntaxException {
+        var url = new URI("http://localhost:8080/api/quotes").toURL();
+        var is = url.openConnection().getInputStream();
+        var br = new BufferedReader(new InputStreamReader(is));
+        String line;
+        while ((line = br.readLine()) != null) {
+            System.out.println(line);
+        }
+    }
 
-	public Quote addQuote(Quote quote) {
-		return ClientBuilder.newClient(new ClientConfig()) //
-				.target(SERVER).path("api/quotes") //
-				.request(APPLICATION_JSON) //
-				.accept(APPLICATION_JSON) //
-				.post(Entity.entity(quote, APPLICATION_JSON), Quote.class);
-	}
-
-	public List<Debt> getDebtsForEvent(Event event) {
-		return ClientBuilder.newClient(new ClientConfig())
+	/**
+	 * Get debts for an event
+	 * @param event the event
+	 * @return a list of debts
+	 */
+    public List<Debt> getDebtsForEvent(Event event) {
+        return ClientBuilder.newClient(new ClientConfig())
 			.target(SERVER).path("api/debts/event/" + event.getId())
 			.request(APPLICATION_JSON)
 			.accept(APPLICATION_JSON)
 			.get(new GenericType<>() {});
-	}
+    }
 
-	public Debt addDebt(Debt debt) {
-		return ClientBuilder.newClient(new ClientConfig())
+	/**
+	 * Adds debt to the database
+	 * @param debt the debt to add
+	 * @return the debt added
+	 */
+
+    public Debt addDebt(Debt debt) {
+        return ClientBuilder.newClient(new ClientConfig())
 			.target(SERVER).path("api/debts")
 			.request(APPLICATION_JSON)
 			.accept(APPLICATION_JSON)
 			.post(Entity.entity(debt, APPLICATION_JSON), Debt.class);
-	}
+    }
 
-	public Response deleteDebt(Debt debt) {
-		return ClientBuilder.newClient(new ClientConfig())
+	/**
+	 * Deletes a debt from the database
+	 * @param debt the debt to delete
+	 * @return the response from the server
+	 */
+
+    public Response deleteDebt(Debt debt) {
+        return ClientBuilder.newClient(new ClientConfig())
 			.target(SERVER).path("api/debts/" + debt.getId())
 			.request(APPLICATION_JSON)
 			.accept(APPLICATION_JSON)
 			.delete();
-	}
+    }
 	/**
 	 * This should get an event from the database by the id of the event
 	 * @param id - the id it is looked for
 	 * @return the event with the specified id
 	 */
-	public Event getEvent(long id) {
-		return null;
+    public Event getEvent(long id) {
+
+        return null;
     }
 
 	/**
@@ -104,20 +111,21 @@ public class ServerUtils {
 	 * @param event to be saved
 	 * @return the saved event by the server
 	 */
-	public Event addEvent(Event event) {
+    public Event addEvent(Event event) {
 
-		Response response = ClientBuilder.newClient(new ClientConfig())
+        Response response = ClientBuilder.newClient(new ClientConfig())
 				.target(SERVER).path("/api/events")
 				.request(APPLICATION_JSON)
 				.accept(APPLICATION_JSON)
 				.post(Entity.json(event));
 
-		if (response.getStatus() == Response.Status.CREATED.getStatusCode()) {
-			return response.readEntity(Event.class);
-		} else {
-			throw new WebApplicationException("Failed to create event. Status code: " + response.getStatus());
-		}
-	}
+        if (response.getStatus() == Response.Status.CREATED.getStatusCode()) {
+            return response.readEntity(Event.class);
+        } else {
+            throw new WebApplicationException("Failed to create event. Status code: "
+					+ response.getStatus());
+        }
+    }
 
 	/**
 	 * Method to get event by invite code
@@ -127,57 +135,75 @@ public class ServerUtils {
 	 * @param inviteCode of event
 	 * @return event with that inviteCode or an exception
 	 */
-	public Event getEventByCode(String inviteCode){
-		Response response = ClientBuilder.newClient(new ClientConfig())
+    public Event getEventByCode(String inviteCode){
+        Response response = ClientBuilder.newClient(new ClientConfig())
 				.target(SERVER).path("/api/events/" + inviteCode)
 				.request(APPLICATION_JSON)
 				.accept(APPLICATION_JSON)
 				.get();
-		if (response.getStatus() == Response.Status.OK.getStatusCode()){
-			return response.readEntity(Event.class);
-		} else {
-			throw new WebApplicationException("Event not found" + response.getStatus());
-		}
+        if (response.getStatus() == Response.Status.OK.getStatusCode()){
+            return response.readEntity(Event.class);
+        } else {
+            throw new WebApplicationException("Event not found" + response.getStatus());
+        }
 
-	}
+    }
 
 	/**
 	 * saves the changes to a participant
 	 * @param participant - the participant we persist
 	 * @return the persisted participant
 	 */
-	public Participant persistParticipant(Participant participant) {
-		Entity<Participant> entity = Entity.entity(participant, APPLICATION_JSON);
-		return ClientBuilder.newClient(new ClientConfig())
+    public Participant persistParticipant(Participant participant) {
+        Entity<Participant> entity = Entity.entity(participant, APPLICATION_JSON);
+        return ClientBuilder.newClient(new ClientConfig())
 					.target(SERVER).path("api/participants/")
 					.request(APPLICATION_JSON)
 					.accept(APPLICATION_JSON)
 					.put(entity, Participant.class);
-	}
+    }
+
+	/**
+	 * Deletes a participant from the server
+	 * @param participant - the participant to delete
+	 * @return the response from the server
+	 */
 
     public Response deleteParticipant(Participant participant) {
-		return ClientBuilder.newClient(new ClientConfig())
+        return ClientBuilder.newClient(new ClientConfig())
 				.target(SERVER).path("api/participants/" + participant.getId())
 				.request(APPLICATION_JSON)
 				.accept(APPLICATION_JSON)
 				.delete();
     }
 
-	public Response addParticipant(Participant participant){
-		return ClientBuilder.newClient(new ClientConfig())
+	/**
+	 * Adds a participant to the server
+	 * @param participant - the participant to add
+	 * @return the response from the server
+	 */
+
+    public Response addParticipant(Participant participant){
+        return ClientBuilder.newClient(new ClientConfig())
 				.target(SERVER).path("api/participants/")
 				.request(APPLICATION_JSON)
 				.accept(APPLICATION_JSON)
 				.post(Entity.json(participant));
-	}
+    }
+
+	/**
+	 * Persists an event
+	 * @param event - the event to persist
+	 * @return the persisted event
+	 */
 
 
-	public Event persistEvent(Event event) {
-		Entity<Event> entity = Entity.entity(event, APPLICATION_JSON);
-		return ClientBuilder.newClient(new ClientConfig())
+    public Event persistEvent(Event event) {
+        Entity<Event> entity = Entity.entity(event, APPLICATION_JSON);
+        return ClientBuilder.newClient(new ClientConfig())
 				.target(SERVER).path("api/events/persist/" + event.getId())
 				.request(APPLICATION_JSON)
 				.accept(APPLICATION_JSON)
 				.put(entity, Event.class);
-	}
+    }
 }

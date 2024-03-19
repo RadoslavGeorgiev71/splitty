@@ -13,8 +13,8 @@ public class Expense {
     private long id;
     private String title;
     @ManyToOne
-    private Participant payingParticipant; // should probably use id of participant instead since we are not using entity for
-    // participant yet i will change later
+    private Participant payingParticipant; // should probably use id of
+    // participant instead since we are not using entity for participant yet i will change later
     private double amount;
     @ManyToMany
     private List<Participant> participants;
@@ -53,7 +53,8 @@ public class Expense {
      * @param amount of Expense
      * @param participants of Expense
      */
-    public Expense(String title, Participant payingParticipant, double amount, List<Participant> participants) {
+    public Expense(String title, Participant payingParticipant,
+                   double amount, List<Participant> participants) {
         this.title = title;
         this.payingParticipant = payingParticipant;
         this.amount = amount;
@@ -69,7 +70,8 @@ public class Expense {
      * @param participants of Expense
      * @param dateTime of Expense
      */
-    public Expense(String title, Participant payingParticipant, double amount, List<Participant> participants, String dateTime) {
+    public Expense(String title, Participant payingParticipant,
+                   double amount, List<Participant> participants, String dateTime) {
         this.title = title;
         this.payingParticipant = payingParticipant;
         this.amount = amount;
@@ -182,11 +184,16 @@ public class Expense {
      */
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         Expense expense = (Expense) o;
         return Double.compare(expense.amount, amount) == 0 && title.equals(expense.title)
-                && payingParticipant.equals(expense.payingParticipant) && participants.equals(expense.participants)
+                && payingParticipant.equals(expense.payingParticipant) &&
+                participants.equals(expense.participants)
                 && Objects.equals(dateTime, expense.dateTime);
     }
 
