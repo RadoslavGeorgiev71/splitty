@@ -45,7 +45,7 @@ public class EventController {
      * @param inviteCode code to join event
      * @return Either the event + ok or not found
      */
-    @GetMapping(path = {"", "/{invite}"})
+    @GetMapping(path = {"/{invite}"})
     public ResponseEntity<?> getByCode(@PathVariable("invite") String inviteCode){
         Optional<Event> eventOptional = repo.findByInviteCode(inviteCode);
 

@@ -37,6 +37,7 @@ public class MainCtrl {
      */
     public void showOverview() {
         primaryStage.setTitle("Overview");
+        overviewCtrl.initialize();
         primaryStage.setScene(overview);
     }
 

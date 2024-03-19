@@ -38,9 +38,9 @@ public class EventTest {
         expenses1.add(e2);
         expenses1.add(e3);
 
-        event1 = new Event("BBQ", "inviteCode1", p1, participants1, expenses1);
-        event2 = new Event("Paintball", "inviteCode1", p2, participants1, expenses2);
-        event3 = new Event("Swimming", "inviteCode2", p2, participants2, expenses1);
+        event1 = new Event("BBQ", "inviteCode1", participants1, expenses1);
+        event2 = new Event("Paintball", "inviteCode1", participants1, expenses2);
+        event3 = new Event("Swimming", "inviteCode2", participants2, expenses1);
     }
 
     @Test
@@ -63,17 +63,6 @@ public class EventTest {
     void setInviteCode() {
         event1.setInviteCode("inviteCode2");
         assertEquals("inviteCode2", event1.getInviteCode());
-    }
-
-    @Test
-    void getCreator() {
-        assertEquals(p1, event1.getCreator());
-    }
-
-    @Test
-    void setCreator() {
-        event1.setCreator(p2);
-        assertEquals(p2, event1.getCreator());
     }
 
     @Test

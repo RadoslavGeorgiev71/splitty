@@ -171,14 +171,31 @@ public class EventOverviewCtrl {
         eventTitleLabel.setText(event.getTitle());
     }
 
+    /**
+     * Sets the from tab with the current selected participant
+     */
     public void fromPersonTabName() {
-        Participant selectedParticipant = (Participant) participantsMenu.getValue();
-        tabPaneFromPerson.setText("From " + selectedParticipant.getName());
+        if(event.getParticipants().isEmpty()){
+            tabPaneFromPerson.setText("From");
+        }
+        else{
+            Participant selectedParticipant = (Participant) participantsMenu.getValue();
+            tabPaneFromPerson.setText("From " + selectedParticipant.getName());
+        }
+
     }
 
+    /**
+     * Sets the Including tab with the current selected participant name
+     */
     public void includingPersonTabName() {
-        Participant selectedParticipant = (Participant) participantsMenu.getValue();
-        tabPaneIncludingPerson.setText("Including " + selectedParticipant.getName());
+        if(event.getParticipants().isEmpty()){
+            tabPaneFromPerson.setText("Including");
+        }
+        else{
+            Participant selectedParticipant = (Participant) participantsMenu.getValue();
+            tabPaneIncludingPerson.setText("Including " + selectedParticipant.getName());
+        }
     }
 
     /**
@@ -227,5 +244,6 @@ public class EventOverviewCtrl {
             tabPaneAllClick();
         }
     }
+
 
 }

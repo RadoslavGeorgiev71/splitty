@@ -99,6 +99,11 @@ public class ServerUtils {
 		return null;
     }
 
+	/**
+	 * Method to send an event to the server to be saved
+	 * @param event to be saved
+	 * @return the saved event by the server
+	 */
 	public Event addEvent(Event event) {
 
 		Response response = ClientBuilder.newClient(new ClientConfig())
