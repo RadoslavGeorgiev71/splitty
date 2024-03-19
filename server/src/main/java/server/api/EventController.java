@@ -62,8 +62,8 @@ public class EventController {
         return ResponseEntity.status(HttpStatus.CREATED).body(newEvent);
     }
 
-    @PutMapping(path = {"", "/"})
-    public ResponseEntity<?> update(@RequestBody Event updatedEvent) {
+    @PutMapping(path = {"", "/persist/{id}"})
+    public ResponseEntity<?> update(@PathVariable("id") long id, @RequestBody Event updatedEvent) {
         long eventId = updatedEvent.getId();
 
         Optional<Event> existingEvent = repo.findById(eventId);

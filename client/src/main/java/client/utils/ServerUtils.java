@@ -163,10 +163,19 @@ public class ServerUtils {
 				.delete();
     }
 
+	public Response addParticipant(Participant participant){
+		return ClientBuilder.newClient(new ClientConfig())
+				.target(SERVER).path("api/participants/")
+				.request(APPLICATION_JSON)
+				.accept(APPLICATION_JSON)
+				.post(Entity.json(participant));
+	}
+
+
 	public Event persistEvent(Event event) {
 		Entity<Event> entity = Entity.entity(event, APPLICATION_JSON);
 		return ClientBuilder.newClient(new ClientConfig())
-				.target(SERVER).path("api/events/")
+				.target(SERVER).path("api/events/persist/" + event.getId())
 				.request(APPLICATION_JSON)
 				.accept(APPLICATION_JSON)
 				.put(entity, Event.class);
