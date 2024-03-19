@@ -31,10 +31,10 @@ public class EventController {
         return repo.findAll();
     }
 
-    /**TODO a method that returns a specific event by id(or more useful by invitecode)
-     * method that creates a new event and returns the invite code
-     * method that adds participants to an event
-     * method that removes participants from an event
+    /**TODO CHECK a method that returns a specific event by id(or more useful by invitecode)
+     * CHECK method that creates a new event and returns the invite code
+     * CHECK method that adds participants to an event
+     * CHECK method that removes participants from an event
      * method that adds an expense
      * method that removes an expense
      * method that deletes an event
@@ -60,5 +60,36 @@ public class EventController {
     public ResponseEntity<?> createEvent(@RequestBody Event event){
         Event newEvent = repo.save(event);
         return ResponseEntity.status(HttpStatus.CREATED).body(newEvent);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> delete(@PathVariable("id") Long id) {
+        Optional<Event> existingEvent = repo.findById(id);
+        if (existingEvent.isPresent()) {
+            repo.delete(existingEvent.get());
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    @PutMapping(path = {"", "/"})
+    public ResponseEntity<?> update(@RequestBody Event updatedEvent) {
+        long eventId = updatedEvent.getId();
+
+        Optional<Event> existingEvent = repo.findById(eventId);
+
+        if (existingEvent.isPresent()) {
+            existingEvent.get().setTitle(updatedEvent.getTitle());
+            existingEvent.get().setInviteCode(updatedEvent.getInviteCode());
+            existingEvent.get().setParticipants(updatedEvent.getParticipants());
+            existingEvent.get().setExpenses(updatedEvent.getExpenses());
+
+
+            Event savedEvent = repo.save(existingEvent.get());
+
+
+            return ResponseEntity.ok(savedEvent);
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Event not found");
     }
 }

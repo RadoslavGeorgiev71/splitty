@@ -70,11 +70,20 @@ public class EventOverviewCtrl {
 
     @FXML
     public void onEditParticipantsClick() {
-        mainCtrl.showEditParticipant(this.event, (Participant) participantsMenu.getValue());
+        if(event.getParticipants().isEmpty()) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Error");
+            alert.setHeaderText("There are no available participants to edit");
+            if(alert.showAndWait().get() == ButtonType.OK){
+                mainCtrl.showEventOverview(this.event);
+            }
+        }
+        else { mainCtrl.showEditParticipant(this.event, (Participant) participantsMenu.getValue()); }
     }
 
     @FXML
     public void onAddParticipantClick() {
+        mainCtrl.showAddParticipant(this.event);
     }
 
     @FXML
