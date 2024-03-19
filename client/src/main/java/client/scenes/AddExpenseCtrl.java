@@ -38,6 +38,10 @@ public class AddExpenseCtrl implements Initializable {
     private CheckBoxListCell<Participant> participantSome;
     @FXML
     private TextField tags;                         //Expense Type
+    @FXML
+    private Button add;
+    @FXML
+    private Button abort;
 
     /**
      * Constructor for AddExpenseCtrl
