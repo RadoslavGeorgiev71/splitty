@@ -162,4 +162,13 @@ public class ServerUtils {
 				.accept(APPLICATION_JSON)
 				.delete();
     }
+
+	public Event persistEvent(Event event) {
+		Entity<Event> entity = Entity.entity(event, APPLICATION_JSON);
+		return ClientBuilder.newClient(new ClientConfig())
+				.target(SERVER).path("api/events/")
+				.request(APPLICATION_JSON)
+				.accept(APPLICATION_JSON)
+				.put(entity, Event.class);
+	}
 }
