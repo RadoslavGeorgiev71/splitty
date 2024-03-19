@@ -69,7 +69,7 @@ public class ServerUtils {
 
 	public List<Debt> getDebtsForEvent(Event event) {
 		return ClientBuilder.newClient(new ClientConfig())
-			.target(SERVER).path("api/debts/event/" + event.getId()) // + event.getId() TODO:
+			.target(SERVER).path("api/debts/event/" + event.getId())
 			.request(APPLICATION_JSON)
 			.accept(APPLICATION_JSON)
 			.get(new GenericType<List<Debt>>() {});
