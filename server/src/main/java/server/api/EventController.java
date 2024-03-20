@@ -1,5 +1,6 @@
 package server.api;
 
+import commons.Debt;
 import commons.Event;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -92,5 +93,19 @@ public class EventController {
             return ResponseEntity.ok(savedEvent);
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Event not found");
+    }
+
+    /**
+     * Returns an event by its id if it exists
+     * @param id - the id to be searched with
+     * @return response with either "ok" or "bad request"
+     * response message
+     */
+    @GetMapping("/id/{id}")
+    public ResponseEntity<Event> getById(@PathVariable("id") long id) {
+        if (id < 0 || !repo.existsById(id)) {
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok(repo.findById(id).get());
     }
 }
