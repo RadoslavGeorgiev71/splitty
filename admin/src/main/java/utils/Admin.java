@@ -1,6 +1,7 @@
 package utils;
 
 import commons.Event;
+import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
@@ -115,6 +116,43 @@ public class Admin{
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    /**
+     * Retrieves json object of an event
+     * into a JSON file in the specified filepath
+     * @param eventID the id of the event to be dumped
+     * @return boolean success
+     */
+    public boolean jsonDump(long eventID){
+        Client client = ClientBuilder.newClient();
+        Response response = client.target(SERVER)
+                .path("/id/" + eventID)
+                .request(MediaType.APPLICATION_JSON)
+                .get();
+        //response obtained
+        if (response.getStatus() == Response.Status.OK.getStatusCode()) {
+            try {
+                File file = new File("event" + eventID + ".json");
+                FileOutputStream outputStream = new FileOutputStream(file);
+                // Read response entity as InputStream
+                InputStream inputStream = response.readEntity(InputStream.class);
+                byte[] buffer = new byte[1024];
+                int bytesRead;
+                while ((bytesRead = inputStream.read(buffer)) != -1) {
+                    outputStream.write(buffer, 0, bytesRead);
+                }
+                inputStream.close();
+                outputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            return false; //let the Overview controller deal with error message
+        }
+        response.close();
+        client.close();
+        return true; //let the overview controller deal with success message
     }
 
     /**
