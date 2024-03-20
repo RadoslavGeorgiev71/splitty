@@ -104,20 +104,28 @@ public class OverviewCtrl {
         File selectedFile = fileChooser.showOpenDialog(filestage);
         if (selectedFile != null) {
             try {
-                List<Event> events = readEvents(new Scanner(new File( selectedFile.getAbsolutePath())));
+                List<Event> events = readEvents(
+                        new Scanner(new File( selectedFile.getAbsolutePath())));
                 admin.importEvents(events);
             } catch (FileNotFoundException e) {
                 throw new RuntimeException(e);
             }
         }
+        initialize();
     }
 
-     public List<Event> readEvents(Scanner scanner){
+    /**
+     * Takes a scanner and parses the JSON to Events
+     * Every line should be a different event
+      * @param scanner to use
+     * @return a list of events read
+     */
+    public List<Event> readEvents(Scanner scanner){
         List<Event> events = new ArrayList<>();
         ObjectMapper objectMapper = new ObjectMapper();
         try {
-        while(scanner.hasNextLine()){
-             String json = scanner.nextLine();
+            while(scanner.hasNextLine()){
+                String json = scanner.nextLine();
                 Event event = objectMapper.readValue(json, Event.class);
                 events.add(event);
             }

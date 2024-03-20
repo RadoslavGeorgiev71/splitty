@@ -217,7 +217,7 @@ public class Event {
     public void setInviteCode(String inviteCode) {
         this.inviteCode = inviteCode;
     }
-    
+
 
     /**
      * Getter for the Participants

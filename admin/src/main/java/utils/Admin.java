@@ -7,6 +7,7 @@ import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import javafx.scene.control.Alert;
 import org.glassfish.jersey.client.ClientConfig;
 
 import java.io.*;
@@ -125,10 +126,32 @@ public class Admin{
     }
 
     /**
-     *
+     * Takes a list of events to import in the database
+     * If one of the events is already in the database (The id or the invitecode exists)
+     * Then the process fails with a warning
      * @param events events to add to the database
      */
     public void importEvents(List<Event> events) {
-
+        for(Event event : events){
+            List<Event> currentEvents = getEvents();
+            for(Event cevent : currentEvents){
+                if(cevent.getId() == event.getId() ||
+                        cevent.getInviteCode().equals(event.getInviteCode())) {
+                    Alert alert = new Alert(Alert.AlertType.WARNING);
+                    alert.setTitle("JSON Import");
+                    alert.setHeaderText("Error");
+                    alert.setContentText("Event with id:  " + event.getId() +
+                            " could not be imported because there is already in the database");
+                    alert.showAndWait();
+                    return;
+                }
+            }
+            Entity<Event> entity = Entity.entity(event, APPLICATION_JSON);
+            ClientBuilder.newClient(new ClientConfig())
+                    .target(SERVER).path("api/events/persist/" + event.getId())
+                    .request(APPLICATION_JSON)
+                    .accept(APPLICATION_JSON)
+                    .put(entity, Event.class);
+        }
     }
 }
