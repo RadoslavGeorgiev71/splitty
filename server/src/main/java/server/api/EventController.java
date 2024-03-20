@@ -84,11 +84,7 @@ public class EventController {
             existingEvent.get().setInviteCode(updatedEvent.getInviteCode());
             existingEvent.get().setParticipants(updatedEvent.getParticipants());
             existingEvent.get().setExpenses(updatedEvent.getExpenses());
-
-
             Event savedEvent = repo.save(existingEvent.get());
-
-
             return ResponseEntity.ok(savedEvent);
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Event not found");

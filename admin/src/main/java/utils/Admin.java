@@ -1,12 +1,14 @@
 package utils;
 
 import commons.Event;
+
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import javafx.scene.control.Alert;
 import org.glassfish.jersey.client.ClientConfig;
 
 import java.io.*;
@@ -125,24 +127,44 @@ public class Admin{
     }
 
     /**
-     * Gets a filepath to a JSON file from which it reads
-     * events, expenses and debts and adds them to the database of the server
-     * @param filepath of the JSON file specified by the admin
+     * Takes a list of events to import in the database
+     * If one of the events is already in the database (The id or the invitecode exists)
+     * Then the process fails with a warning
+     * @param events events to add to the database
      */
-    public void importEvents(String filepath) throws IOException {
-        //initialize connection
-        BufferedReader reader = null;
-        String output = "";
-        try {
-            reader = new BufferedReader(new FileReader(filepath));
-            output = String.valueOf(reader.read());
-            reader.close();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+    public void importEvents(List<Event> events) {
+        for(Event event : events){
+            List<Event> currentEvents = getEvents();
+            for(Event cevent : currentEvents){
+                if(cevent.getId() == event.getId() ||
+                        cevent.getInviteCode().equals(event.getInviteCode())) {
+                    showalert(event);
+                    return;
+                }
+            }
+            Response response = ClientBuilder.newClient(new ClientConfig())
+                    .target(SERVER).path("/api/events")
+                    .request(APPLICATION_JSON)
+                    .accept(APPLICATION_JSON)
+                    .post(Entity.json(event));
+
+            if (response.getStatus() != Response.Status.CREATED.getStatusCode()) {
+                showalert(event);
+            }
         }
-        var response = ClientBuilder.newClient ()
-                .target("http://localhost:8080/api/import")
-                .request(MediaType.APPLICATION_JSON)
-                .post(Entity.entity(output, MediaType.APPLICATION_JSON));
+    }
+
+    /**
+     * Method that shows a warning to the user everytime
+     * they try to import an event that is already in the database
+     * @param event that causes the problem
+     */
+    public void showalert(Event event){
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("JSON Import");
+        alert.setHeaderText("Error");
+        alert.setContentText("Event with id:  " + event.getId() +
+                " could not be imported because there is already in the database");
+        alert.showAndWait();
     }
 }
