@@ -64,7 +64,11 @@ public class OverviewCtrl {
 
     @FXML
     void dumpJSON(ActionEvent event) {
-
+        Event selectedEvent = table.getSelectionModel().getSelectedItem();
+        if (selectedEvent != null){
+            long eventID = selectedEvent.getId();
+            Boolean success = admin.jsonDump(eventID);
+        }
     }
 
     @FXML
