@@ -68,6 +68,7 @@ public class OverviewCtrl {
         if (selectedEvent != null){
             long eventID = selectedEvent.getId();
             Boolean success = admin.jsonDump(eventID);
+            System.out.println(success);
         }
     }
 

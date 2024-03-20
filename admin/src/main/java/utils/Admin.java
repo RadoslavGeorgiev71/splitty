@@ -127,7 +127,7 @@ public class Admin{
     public boolean jsonDump(long eventID){
         Client client = ClientBuilder.newClient();
         Response response = client.target(SERVER)
-                .path("/id/" + eventID)
+                .path("api/events/id/" + eventID) //
                 .request(MediaType.APPLICATION_JSON)
                 .get();
         //response obtained
