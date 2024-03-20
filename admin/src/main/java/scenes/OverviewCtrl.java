@@ -6,9 +6,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import utils.Admin;
 
@@ -68,7 +66,21 @@ public class OverviewCtrl {
         if (selectedEvent != null){
             long eventID = selectedEvent.getId();
             Boolean success = admin.jsonDump(eventID);
-            System.out.println(success);
+            if(success){
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("JSON dump");
+                alert.setHeaderText("Success");
+                alert.setContentText("Event " + eventID + " has been dumped succesfully and " +
+                        "can be found in the root directory");
+                alert.showAndWait();
+            }
+            else{
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("JSON dump");
+                alert.setHeaderText("Error");
+                alert.setContentText("Event " + eventID + " could not be dumped due to an error");
+                alert.showAndWait();
+            }
         }
     }
 
