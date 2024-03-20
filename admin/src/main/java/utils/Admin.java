@@ -1,7 +1,7 @@
 package utils;
 
 import commons.Event;
-import jakarta.ws.rs.WebApplicationException;
+
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
@@ -149,11 +149,16 @@ public class Admin{
                     .post(Entity.json(event));
 
             if (response.getStatus() != Response.Status.CREATED.getStatusCode()) {
-               showalert(event);
+                showalert(event);
             }
         }
     }
 
+    /**
+     * Method that shows a warning to the user everytime
+     * they try to import an event that is already in the database
+     * @param event that causes the problem
+     */
     public void showalert(Event event){
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle("JSON Import");
