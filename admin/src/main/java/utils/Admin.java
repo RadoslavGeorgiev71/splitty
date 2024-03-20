@@ -88,37 +88,6 @@ public class Admin{
     }
 
     /**
-     * Retreives all related information of an event and stores it
-     * into a JSON file in the specified filepath
-     * @param filepath to store the JSON
-     * @param event to export
-     */
-    public void exportEvent(String filepath, Event event){ //TODO needs work!!!!
-        ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/events?eventId={eventId}") //
-                .resolveTemplate("eventId", event.getId()) // Resolve the template with the event ID
-                .request(APPLICATION_JSON) //
-                .accept(APPLICATION_JSON) //
-                .get();
-        //initialize connection
-        //TODO call to server to get all events
-        List<Event> list = null; //TODO receive all events
-        //TODO translate to JSON -- probably call another method
-        BufferedWriter writer = null;
-        try {
-            writer = new BufferedWriter(new FileWriter(filepath));
-            writer.write(String.valueOf(list));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        try {
-            writer.close();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    /**
      * Retrieves json object of an event
      * into a JSON file in the specified filepath
      * @param eventID the id of the event to be dumped
