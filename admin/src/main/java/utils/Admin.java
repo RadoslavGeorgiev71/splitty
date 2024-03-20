@@ -125,24 +125,10 @@ public class Admin{
     }
 
     /**
-     * Gets a filepath to a JSON file from which it reads
-     * events, expenses and debts and adds them to the database of the server
-     * @param filepath of the JSON file specified by the admin
+     *
+     * @param events events to add to the database
      */
-    public void importEvents(String filepath) throws IOException {
-        //initialize connection
-        BufferedReader reader = null;
-        String output = "";
-        try {
-            reader = new BufferedReader(new FileReader(filepath));
-            output = String.valueOf(reader.read());
-            reader.close();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        var response = ClientBuilder.newClient ()
-                .target("http://localhost:8080/api/import")
-                .request(MediaType.APPLICATION_JSON)
-                .post(Entity.entity(output, MediaType.APPLICATION_JSON));
+    public void importEvents(List<Event> events) {
+
     }
 }

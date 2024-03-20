@@ -70,6 +70,25 @@ public class Event {
     }
 
     /**
+     * Constructor for the Event class
+     * @param id id of the event
+     * @param title Title used to differentiate the different Events
+     * @param inviteCode Unique code used to join an Event
+     * @param participants Participants who participate in the Event
+     * @param expenses Expenses made during the Event
+     * @param dateTime datetime of the event
+     */
+    public Event(long id, String title, String inviteCode,
+                 List<Participant> participants, List<Expense> expenses, String dateTime) {
+        this.id = id;
+        this.title = title;
+        this.inviteCode = inviteCode;
+        this.participants = participants;
+        this.expenses = expenses;
+        this.dateTime = dateTime;
+    }
+
+    /**
      * Method to add an Empty Expense to the Event
      * @param expense - expense to be added
      */
@@ -198,22 +217,7 @@ public class Event {
     public void setInviteCode(String inviteCode) {
         this.inviteCode = inviteCode;
     }
-
-//    /**
-//     * Getter for the Creator
-//     * @return creator
-//     */
-//    public Participant getCreator() {
-//        return creator;
-//    }
-//
-//    /**
-//     * Setter for the Creator
-//     * @param creator - creator to be set
-//     */
-//    public void setCreator(Participant creator) {
-//        this.creator = creator;
-//    }
+    
 
     /**
      * Getter for the Participants
@@ -286,7 +290,6 @@ public class Event {
         }
         return getId() == event.getId() && Objects.equals(getTitle(), event.getTitle()) &&
                 Objects.equals(getInviteCode(), event.getInviteCode()) &&
-                /*Objects.equals(getCreator(), event.getCreator()) &&*/
                 Objects.equals(getParticipants(), event.getParticipants()) &&
                 Objects.equals(getExpenses(), event.getExpenses()) &&
                 Objects.equals(getDateTime(), event.getDateTime());
