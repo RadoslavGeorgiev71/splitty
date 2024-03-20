@@ -1,6 +1,7 @@
 package utils;
 
 import commons.Event;
+import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
@@ -137,21 +138,28 @@ public class Admin{
             for(Event cevent : currentEvents){
                 if(cevent.getId() == event.getId() ||
                         cevent.getInviteCode().equals(event.getInviteCode())) {
-                    Alert alert = new Alert(Alert.AlertType.WARNING);
-                    alert.setTitle("JSON Import");
-                    alert.setHeaderText("Error");
-                    alert.setContentText("Event with id:  " + event.getId() +
-                            " could not be imported because there is already in the database");
-                    alert.showAndWait();
+                    showalert(event);
                     return;
                 }
             }
-            Entity<Event> entity = Entity.entity(event, APPLICATION_JSON);
-            ClientBuilder.newClient(new ClientConfig())
-                    .target(SERVER).path("api/events/persist/" + event.getId())
+            Response response = ClientBuilder.newClient(new ClientConfig())
+                    .target(SERVER).path("/api/events")
                     .request(APPLICATION_JSON)
                     .accept(APPLICATION_JSON)
-                    .put(entity, Event.class);
+                    .post(Entity.json(event));
+
+            if (response.getStatus() != Response.Status.CREATED.getStatusCode()) {
+               showalert(event);
+            }
         }
+    }
+
+    public void showalert(Event event){
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("JSON Import");
+        alert.setHeaderText("Error");
+        alert.setContentText("Event with id:  " + event.getId() +
+                " could not be imported because there is already in the database");
+        alert.showAndWait();
     }
 }

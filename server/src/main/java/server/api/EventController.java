@@ -87,13 +87,7 @@ public class EventController {
             Event savedEvent = repo.save(existingEvent.get());
             return ResponseEntity.ok(savedEvent);
         }
-        //--
-        else{
-            Event newEvent = repo.save(updatedEvent);
-            return ResponseEntity.status(HttpStatus.CREATED).body(newEvent);
-        }
-        //--
-        //return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Event not found");
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Event not found");
     }
 
     /**
