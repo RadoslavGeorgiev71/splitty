@@ -14,6 +14,7 @@ import javafx.scene.text.Text;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 
+
 public class InvitationCtrl implements Initializable {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
@@ -100,7 +101,6 @@ public class InvitationCtrl implements Initializable {
      * Should send invites.
      */
     private void sendInvites(){
-
     }
     @FXML
     private void backToStart(){
