@@ -101,6 +101,7 @@ public class MainCtrl {
      */
     public void showStartScreen() {
         startScreenCtrl.clearFields();
+        startScreenCtrl.initialize();
         primaryStage.setTitle("Start Screen");
         primaryStage.setScene(startscreen);
     }
