@@ -1,8 +1,0 @@
-serverUrl: generic
-email: blabla@gmail.com
-iban: 1234567890
-bic: BANK123
-language: en
-currency: EUR
-name: Alex
-recentEvents: MAnMfUXG, bWW1D1XO
