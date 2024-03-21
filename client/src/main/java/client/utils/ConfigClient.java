@@ -20,6 +20,8 @@ public class ConfigClient {
 
     private String currency;
 
+    private String recentEvents;
+
     /**
      * Default constructor just in case.
      */
@@ -35,15 +37,17 @@ public class ConfigClient {
      * @param bic -> bic of client
      * @param language -> currently preferred language of client
      * @param currency -> currently preferred currency of client
+     * @param recentEvents
      */
     public ConfigClient(String serverUrl, String email, String iban,
-                        String bic, String language, String currency){
+                        String bic, String language, String currency, String recentEvents){
         this.serverUrl = serverUrl;
         this.email = email;
         this.iban = iban;
         this.bic = bic;
         this.language = language;
         this.currency = currency;
+        this.recentEvents = recentEvents;
     }
 
     /**

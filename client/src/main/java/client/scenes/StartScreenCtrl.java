@@ -1,14 +1,16 @@
 package client.scenes;
 
-import java.net.URL;
-import java.util.ResourceBundle;
+//import java.net.URL;
+//import java.util.ResourceBundle;
 
+import client.utils.ConfigClient;
 import com.google.inject.Inject;
 
 import client.utils.ServerUtils;
 import commons.Event;
+import commons.Participant;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
+//import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ListView;
@@ -16,7 +18,15 @@ import javafx.scene.control.ListCell;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 
-public class StartScreenCtrl implements Initializable {
+import java.util.ArrayList;
+import java.util.HashMap;
+
+public class StartScreenCtrl {
+
+    private ConfigClient config = new ConfigClient();
+
+    private String[] keys = {"serverUrl", "email", "iban", "bic", "language",
+        "currency", "name", "recentEvents"};
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
 
@@ -53,18 +63,19 @@ public class StartScreenCtrl implements Initializable {
      * button1: button that takes you to event
      * button2: delete from recently viewed.
      * Functionality not yet there though.
-     * @param location
-     * The location used to resolve relative paths for the root object, or
-     * {@code null} if the location is not known.
-     *
-     * @param resources
-     * The resources used to localize the root object, or {@code null} if
-     * the root object was not localized.
      */
-    public void initialize(URL location, ResourceBundle resources) {
-        
+    public void initialize() {
+
+        config = config.readFromFile("client/src/main/resources/config.txt");
+
+        HashMap<String, String> eventMap = new HashMap<>();
+        String[] recentEvents = config.getRecentEvents().split(", ");
+        for (String invite : recentEvents) {
+            Event event = server.getEventByCode(invite);
+            recentlyViewedEventsListView.getItems().add(event.getTitle());
+            eventMap.put(event.getTitle(), invite);
+        }
         recentlyViewedEventsListView.setCellFactory(param -> new ListCell<String>() {
-            @Override
             protected void updateItem(String item, boolean empty) {
                 super.updateItem(item, empty);
 
@@ -72,20 +83,23 @@ public class StartScreenCtrl implements Initializable {
                     setText(null);
                     setGraphic(null);
                 } else {
+
                     HBox hbox = new HBox(10);
 
                     Text text = new Text(item);
-                    Button button1 = new Button("Button 1");
-                    Button button2 = new Button("Button 2");
+                    Button button1 = new Button("Go to event");
+                    Button button2 = new Button("Remove");
 
                     hbox.getChildren().addAll(text, button1, button2);
 
                     button1.setOnAction(event -> {
-                        //joinEvent();
+                        mainCtrl.showEventOverview(server.getEventByCode(eventMap.get(item)));
                     });
 
                     button2.setOnAction(event -> {
+                        String inviteCode = eventMap.get(item);
                         getListView().getItems().remove(getItem());
+                        deleteEventFromConfig(inviteCode);
                     });
 
                     setGraphic(hbox);
@@ -101,6 +115,9 @@ public class StartScreenCtrl implements Initializable {
     public void joinEvent(){
         String inviteCode = joinEventText.getText();
         Event event = server.getEventByCode(inviteCode);
+
+        writeEventToConfig(event);
+
         mainCtrl.showEventOverview(event);
 
     }
@@ -115,6 +132,9 @@ public class StartScreenCtrl implements Initializable {
         event.createInviteCode();
 
         event = server.addEvent(event);
+
+        writeEventToConfig(event);
+
         mainCtrl.showInvitation(event);
     }
     /**
@@ -123,5 +143,45 @@ public class StartScreenCtrl implements Initializable {
     public void clearFields(){
         newEventText.clear();
         joinEventText.clear();
+        recentlyViewedEventsListView.getItems().clear();
+    }
+
+    /**
+     * Writes an event to recently viewed in config.
+     * @param event the event
+     */
+    public void writeEventToConfig(Event event){
+        if(config.getRecentEvents().equals("")){
+            config.setRecentEvents(event.getInviteCode());
+        } else {
+            config.setRecentEvents(config.getRecentEvents() + ", " + event.getInviteCode());
+        }
+        String[] contents = {config.getServerUrl(), config.getEmail(),
+                config.getIban(), config.getBic(),
+                config.getLanguage(), config.getCurrency(),
+                config.getName(), config.getRecentEvents()};
+        config.writeToFile("client/src/main/resources/config.txt", contents, keys);
+    }
+
+    /**
+     * Deletes an event from recently viewed in config
+     * @param invite - the invite code of the event
+     */
+    public void deleteEventFromConfig(String invite){
+        String[] recentEvents = config.getRecentEvents().split(", ");
+        ArrayList<String> newRecentEvents = new ArrayList<>();
+        for(String event : recentEvents){
+            if(!event.equals(invite)){
+                newRecentEvents.add(event);
+            }
+        }
+        String newRecentEventsString = String.join(", ", newRecentEvents);
+        config.setRecentEvents(newRecentEventsString);
+        String[] contents = {config.getServerUrl(), config.getEmail(),
+                config.getIban(), config.getBic(),
+                config.getLanguage(), config.getCurrency(),
+                config.getName(), config.getRecentEvents()};
+        config.writeToFile("client/src/main/resources/config.txt", contents, keys);
+
     }
 }
