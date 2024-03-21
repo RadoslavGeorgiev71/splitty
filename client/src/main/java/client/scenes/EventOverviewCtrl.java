@@ -266,6 +266,13 @@ public class EventOverviewCtrl {
         participatingParticipants.setText(participantsText);
     }
 
+    /**
+     * This method is called when the user tries to edit the
+     * title of an event.
+     * After the user presses enter it persists the event with the new title
+     * It does not allow the user to give an emptry title
+     * @param mouseEvent
+     */
     public void editTitle(MouseEvent mouseEvent) {
         titleTextField = new TextField();
         titleTextField.setText(eventTitleLabel.getText());
@@ -294,6 +301,10 @@ public class EventOverviewCtrl {
         });
     }
 
+    /**
+     * It takes the newtitle from titleTextField and updates
+     * the event's title
+     */
     private void saveTitle() {
         String newTitle = titleTextField.getText();
         event.setTitle(newTitle);
