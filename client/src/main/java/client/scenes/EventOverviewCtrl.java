@@ -232,7 +232,9 @@ public class EventOverviewCtrl {
         }
         else {
             Participant selectedParticipant = (Participant) participantsMenu.getValue();
-            tabPaneFromPerson.setText("From " + selectedParticipant.getName());
+            if(selectedParticipant != null){
+                tabPaneFromPerson.setText("From " + selectedParticipant.getName());
+            }
         }
 
     }
@@ -246,7 +248,9 @@ public class EventOverviewCtrl {
         }
         else {
             Participant selectedParticipant = (Participant) participantsMenu.getValue();
-            tabPaneIncludingPerson.setText("Including " + selectedParticipant.getName());
+            if(selectedParticipant != null){
+                tabPaneIncludingPerson.setText("Including " + selectedParticipant.getName());
+            }
         }
     }
 
