@@ -9,10 +9,11 @@ class ConfigClientTest {
 
     private final String testFilePath = "src/test/resources/test_config";
     private final String[] expectedConfig = {"generic","blabla@gmail.com",
-        "1234567890", "BANK123", "en", "EUR"};
+        "1234567890", "BANK123", "en", "EUR", "alex", "1bA43fD"};
     private final String[] keys = {"serverUrl", "email", "iban", "bic", "language", "currency"};
     private ConfigClient configClient = new ConfigClient(expectedConfig[0], expectedConfig[1],
-            expectedConfig[2], expectedConfig[3], expectedConfig[4], expectedConfig[5]);
+            expectedConfig[2], expectedConfig[3], expectedConfig[4], expectedConfig[5],
+            expectedConfig[6], expectedConfig[7]);
 
     @Test
     void readFromFile() {
