@@ -141,6 +141,10 @@ public class OverviewCtrl {
         return events;
     }
 
+    /**
+     * refreshes the table
+     * @param event button clicked
+     */
     public void refresh(ActionEvent event){
         initialize();
     }
