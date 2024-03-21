@@ -62,7 +62,9 @@ public class StartScreenCtrl {
     public void initialize() {
 
         config = config.readFromFile("client/src/main/resources/config.txt");
-
+        if(config.getRecentEvents() == null){
+            return;
+        }
         HashMap<String, String> eventMap = new HashMap<>();
         String[] recentEvents = config.getRecentEvents().split(", ");
         for (String invite : recentEvents) {
@@ -147,7 +149,10 @@ public class StartScreenCtrl {
      * @param event the event
      */
     public void writeEventToConfig(Event event){
-        if(config.getRecentEvents().equals("")){
+        if(config.getRecentEvents() == null){
+            config.setRecentEvents(event.getInviteCode());
+        }
+        else if(config.getRecentEvents().equals("")){
             config.setRecentEvents(event.getInviteCode());
         } else {
             config.setRecentEvents(config.getRecentEvents() + ", " + event.getInviteCode());

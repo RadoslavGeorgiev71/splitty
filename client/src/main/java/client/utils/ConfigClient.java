@@ -215,7 +215,7 @@ public class ConfigClient {
         } catch (FileNotFoundException e){ // if the file is not found it should
             try {
                 // Get the absolute path of the resources folder
-                String filepath = "client/src/main/resources/config";
+                String filepath = "client/src/main/resources/config.txt";
                 Path filePath = Paths.get(filepath);
                 // Create the file
                 Files.createFile(filePath);
