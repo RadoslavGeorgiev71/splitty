@@ -7,7 +7,10 @@ import commons.Participant;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.util.StringConverter;
 import javafx.collections.FXCollections;
@@ -44,6 +47,8 @@ public class EventOverviewCtrl {
 
     @FXML
     private GridPane tabPaneIncludingGridPane;
+
+    private TextField titleTextField;
 
     private Event event;
 
@@ -261,6 +266,44 @@ public class EventOverviewCtrl {
         participatingParticipants.setText(participantsText);
     }
 
+    public void editTitle(MouseEvent mouseEvent) {
+        titleTextField = new TextField();
+        titleTextField.setText(eventTitleLabel.getText());
+        titleTextField.setPrefWidth(eventTitleLabel.getWidth());
+        titleTextField.setPrefHeight(eventTitleLabel.getHeight());
+
+        Pane parent = (Pane) eventTitleLabel.getParent();
+        parent.getChildren().remove(eventTitleLabel);
+        parent.getChildren().add(titleTextField);
+        titleTextField.requestFocus();
+
+
+        titleTextField.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                if(titleTextField.getText().isEmpty()){
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Error");
+                    alert.setHeaderText("Event title is missing");
+                    alert.setContentText("Event title cannot be empty");
+                    alert.showAndWait();
+                }
+                else {
+                    saveTitle();
+                }
+            }
+        });
+    }
+
+    private void saveTitle() {
+        String newTitle = titleTextField.getText();
+        event.setTitle(newTitle);
+        server.persistEvent(event);
+        eventTitleLabel.setText(newTitle);
+        Pane parent = (Pane) titleTextField.getParent();
+        parent.getChildren().remove(titleTextField);
+        parent.getChildren().add(eventTitleLabel);
+    }
+
     /**
      * Initializes the event overview
      */
@@ -297,6 +340,4 @@ public class EventOverviewCtrl {
             tabPaneAllClick();
         }
     }
-
-
 }

@@ -164,7 +164,8 @@ public class Admin{
         alert.setTitle("JSON Import");
         alert.setHeaderText("Error");
         alert.setContentText("Event with id:  " + event.getId() +
-                " could not be imported because there is already in the database");
+                " could not be imported because there " +
+                "is already an event with this id or invite code in the database");
         alert.showAndWait();
     }
 }
