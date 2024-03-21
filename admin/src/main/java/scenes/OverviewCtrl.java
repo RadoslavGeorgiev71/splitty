@@ -131,9 +131,18 @@ public class OverviewCtrl {
             }
         }
         catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("JSON dump");
+            alert.setHeaderText("Error reading JSON file");
+            alert.setContentText("Seems that the JSON file is corrupted or not well formatted. \n" +
+                    "Ensure that there is one event per line");
+            alert.showAndWait();
         }
         return events;
+    }
+
+    public void refresh(ActionEvent event){
+        initialize();
     }
 
     void initialize(){
