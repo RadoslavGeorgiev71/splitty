@@ -199,7 +199,6 @@ public class ConfigClient {
             int counter = 0;
             while (configParse.hasNextLine()){
                 String[] data = configParse.nextLine().split(": ");
-                System.out.println(data[1]);
                 if(data.length < 2){
                     newClient[counter] = "";
                     counter++;

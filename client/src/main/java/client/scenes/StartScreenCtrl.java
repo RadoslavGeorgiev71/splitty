@@ -1,16 +1,11 @@
 package client.scenes;
 
-//import java.net.URL;
-//import java.util.ResourceBundle;
-
 import client.utils.ConfigClient;
 import com.google.inject.Inject;
 
 import client.utils.ServerUtils;
 import commons.Event;
-import commons.Participant;
 import javafx.fxml.FXML;
-//import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ListView;
@@ -93,6 +88,7 @@ public class StartScreenCtrl {
                     hbox.getChildren().addAll(text, button1, button2);
 
                     button1.setOnAction(event -> {
+                        clearFields();
                         mainCtrl.showEventOverview(server.getEventByCode(eventMap.get(item)));
                     });
 
