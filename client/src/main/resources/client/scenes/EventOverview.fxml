@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
@@ -29,7 +30,10 @@
               </rowConstraints>
                <children>
                   <Button mnemonicParsing="false" onAction="#onSendInvites" text="Send Invites" GridPane.columnIndex="1" />
-                  <Label fx:id="eventTitleLabel" onMouseClicked="#editTitle" text="Label" />
+                  <Label fx:id="eventTitleLabel" onMouseClicked="#editTitle" text="Label">
+                     <cursor>
+                        <Cursor fx:constant="TEXT" />
+                     </cursor></Label>
                </children>
             </GridPane>
             <HBox alignment="CENTER_LEFT" prefHeight="28.0" prefWidth="280.0" spacing="10.0">
