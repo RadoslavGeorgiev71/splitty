@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="808.0" prefWidth="1052.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="scenes.OverviewCtrl">
+<AnchorPane prefHeight="808.0" prefWidth="1016.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="scenes.OverviewCtrl">
    <children>
       <Label layoutX="72.0" layoutY="34.0" prefHeight="101.0" prefWidth="405.0" text="utils.Admin Overview">
          <font>
@@ -24,5 +24,6 @@
       <Button fx:id="deleteButton" layoutX="210.0" layoutY="750.0" mnemonicParsing="false" onAction="#delete" prefHeight="43.0" prefWidth="155.0" text="Delete" />
       <Button fx:id="dumpButton" layoutX="448.0" layoutY="750.0" mnemonicParsing="false" onAction="#dumpJSON" prefHeight="43.0" prefWidth="155.0" text="JSON Dump" />
       <Button fx:id="importButton" layoutX="695.0" layoutY="750.0" mnemonicParsing="false" onAction="#importJSON" prefHeight="43.0" prefWidth="155.0" text="JSON Import" />
+      <Button fx:id="refreshButton" layoutX="873.0" layoutY="63.0" mnemonicParsing="false" onAction="#refresh" prefHeight="43.0" prefWidth="106.0" text="Refresh" />
    </children>
 </AnchorPane>
