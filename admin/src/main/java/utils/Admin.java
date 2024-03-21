@@ -1,11 +1,14 @@
 package utils;
 
 import commons.Event;
+
+import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import javafx.scene.control.Alert;
 import org.glassfish.jersey.client.ClientConfig;
 
 import java.io.*;
@@ -87,55 +90,82 @@ public class Admin{
     }
 
     /**
-     * Retreives all related information of an event and stores it
+     * Retrieves json object of an event
      * into a JSON file in the specified filepath
-     * @param filepath to store the JSON
-     * @param event to export
+     * @param eventID the id of the event to be dumped
+     * @return boolean success
      */
-    public void exportEvent(String filepath, Event event){ //TODO needs work!!!!
-        ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/events?eventId={eventId}") //
-                .resolveTemplate("eventId", event.getId()) // Resolve the template with the event ID
-                .request(APPLICATION_JSON) //
-                .accept(APPLICATION_JSON) //
+    public boolean jsonDump(long eventID){
+        Client client = ClientBuilder.newClient();
+        Response response = client.target(SERVER)
+                .path("api/events/id/" + eventID) //
+                .request(MediaType.APPLICATION_JSON)
                 .get();
-        //initialize connection
-        //TODO call to server to get all events
-        List<Event> list = null; //TODO receive all events
-        //TODO translate to JSON -- probably call another method
-        BufferedWriter writer = null;
-        try {
-            writer = new BufferedWriter(new FileWriter(filepath));
-            writer.write(String.valueOf(list));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        //response obtained
+        if (response.getStatus() == Response.Status.OK.getStatusCode()) {
+            try {
+                File file = new File("event" + eventID + ".json");
+                FileOutputStream outputStream = new FileOutputStream(file);
+                // Read response entity as InputStream
+                InputStream inputStream = response.readEntity(InputStream.class);
+                byte[] buffer = new byte[1024];
+                int bytesRead;
+                while ((bytesRead = inputStream.read(buffer)) != -1) {
+                    outputStream.write(buffer, 0, bytesRead);
+                }
+                inputStream.close();
+                outputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            return false; //let the Overview controller deal with error message
         }
-        try {
-            writer.close();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        response.close();
+        client.close();
+        return true; //let the overview controller deal with success message
+    }
+
+    /**
+     * Takes a list of events to import in the database
+     * If one of the events is already in the database (The id or the invitecode exists)
+     * Then the process fails with a warning
+     * @param events events to add to the database
+     */
+    public void importEvents(List<Event> events) {
+        for(Event event : events){
+            List<Event> currentEvents = getEvents();
+            for(Event cevent : currentEvents){
+                if(cevent.getId() == event.getId() ||
+                        cevent.getInviteCode().equals(event.getInviteCode())) {
+                    showalert(event);
+                    return;
+                }
+            }
+            Response response = ClientBuilder.newClient(new ClientConfig())
+                    .target(SERVER).path("/api/events")
+                    .request(APPLICATION_JSON)
+                    .accept(APPLICATION_JSON)
+                    .post(Entity.json(event));
+
+            if (response.getStatus() != Response.Status.CREATED.getStatusCode()) {
+                showalert(event);
+            }
         }
     }
 
     /**
-     * Gets a filepath to a JSON file from which it reads
-     * events, expenses and debts and adds them to the database of the server
-     * @param filepath of the JSON file specified by the admin
+     * Method that shows a warning to the user everytime
+     * they try to import an event that is already in the database
+     * @param event that causes the problem
      */
-    public void importEvents(String filepath) throws IOException {
-        //initialize connection
-        BufferedReader reader = null;
-        String output = "";
-        try {
-            reader = new BufferedReader(new FileReader(filepath));
-            output = String.valueOf(reader.read());
-            reader.close();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        var response = ClientBuilder.newClient ()
-                .target("http://localhost:8080/api/import")
-                .request(MediaType.APPLICATION_JSON)
-                .post(Entity.entity(output, MediaType.APPLICATION_JSON));
+    public void showalert(Event event){
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("JSON Import");
+        alert.setHeaderText("Error");
+        alert.setContentText("Event with id:  " + event.getId() +
+                " could not be imported because there " +
+                "is already an event with this id or invite code in the database");
+        alert.showAndWait();
     }
 }

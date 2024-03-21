@@ -84,13 +84,23 @@ public class EventController {
             existingEvent.get().setInviteCode(updatedEvent.getInviteCode());
             existingEvent.get().setParticipants(updatedEvent.getParticipants());
             existingEvent.get().setExpenses(updatedEvent.getExpenses());
-
-
             Event savedEvent = repo.save(existingEvent.get());
-
-
             return ResponseEntity.ok(savedEvent);
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Event not found");
+    }
+
+    /**
+     * Returns an event by its id if it exists
+     * @param id - the id to be searched with
+     * @return response with either "ok" or "bad request"
+     * response message
+     */
+    @GetMapping("/id/{id}")
+    public ResponseEntity<Event> getById(@PathVariable("id") long id) {
+        if (id < 0 || !repo.existsById(id)) {
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok(repo.findById(id).get());
     }
 }

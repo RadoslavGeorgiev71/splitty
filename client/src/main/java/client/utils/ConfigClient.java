@@ -20,6 +20,10 @@ public class ConfigClient {
 
     private String currency;
 
+    private String name;
+
+    private String recentEvents;
+
     /**
      * Default constructor just in case.
      */
@@ -35,15 +39,20 @@ public class ConfigClient {
      * @param bic -> bic of client
      * @param language -> currently preferred language of client
      * @param currency -> currently preferred currency of client
+     * @param name -> name of client
+     * @param recentEvents -> recently viewed events of client
      */
     public ConfigClient(String serverUrl, String email, String iban,
-                        String bic, String language, String currency){
+                        String bic, String language, String currency,
+                        String name, String recentEvents){
         this.serverUrl = serverUrl;
         this.email = email;
         this.iban = iban;
         this.bic = bic;
         this.language = language;
         this.currency = currency;
+        this.name = name;
+        this.recentEvents = recentEvents;
     }
 
     /**
@@ -143,11 +152,42 @@ public class ConfigClient {
     }
 
     /**
+     * Getter for the name of the client
+     * @return name of the client
+     */
+
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * Setter for the name of the client
+     * @param name name to set
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    /**
+     * Getter for the recent events of the client
+     * @return recent events of the client
+     */
+
+    public String getRecentEvents() {
+        return recentEvents;
+    }
+
+    /**
+     * Setter for the recent events of the client
+     * @param recentEvents recent events to set
+     */
+
+    public void setRecentEvents(String recentEvents) {
+        this.recentEvents = recentEvents;
+    }
+
+    /**
      * method that reads a file and creates a new ConfigClient in accordance to it.
-     * In my opinion this should not be placed in the ConfigClient class though,
-     * it should be part of the Client class itself.
-     * For now, I'll leave it here until we fully decide what
-     * to do with it as a team.
      * @param path path to the file being read
      * @return null if file not found, new ConfigClient according to specifications if found
      */
@@ -155,21 +195,27 @@ public class ConfigClient {
         try {
             File config = new File(path);
             Scanner configParse = new Scanner(config);
-            String[] newClient = new String[6];
+            String[] newClient = new String[8];
             int counter = 0;
             while (configParse.hasNextLine()){
                 String[] data = configParse.nextLine().split(": ");
-                newClient[counter] = data[1];
-                counter++;
+                if(data.length < 2){
+                    newClient[counter] = "";
+                    counter++;
+                } else {
+                    newClient[counter] = data[1];
+                    counter++;
+                }
             }
             configParse.close();
             return new ConfigClient(newClient[0], newClient[1],
-                    newClient[2], newClient[3], newClient[4], newClient[5]);
+                    newClient[2], newClient[3], newClient[4], newClient[5],
+                    newClient[6], newClient[7]);
 
         } catch (FileNotFoundException e){ // if the file is not found it should
             try {
                 // Get the absolute path of the resources folder
-                String filepath = "client/src/main/resources/config";
+                String filepath = "client/src/main/resources/config.txt";
                 Path filePath = Paths.get(filepath);
                 // Create the file
                 Files.createFile(filePath);
