@@ -9,6 +9,7 @@ import java.util.ResourceBundle;
 import commons.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
@@ -21,7 +22,7 @@ public class InvitationCtrl implements Initializable {
     private Text eventNameText;
 
     @FXML
-    private Text inviteCodeText;
+    private TextField inviteCodeText;
 
     @FXML
     private Button sendInvitesButton;
