@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="808.0" prefWidth="1016.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="scenes.OverviewCtrl">
+<AnchorPane onKeyPressed="#keyPressed" prefHeight="808.0" prefWidth="1016.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="scenes.OverviewCtrl">
    <children>
       <Label layoutX="72.0" layoutY="34.0" prefHeight="101.0" prefWidth="405.0" text="utils.Admin Overview">
          <font>

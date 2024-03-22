@@ -10,6 +10,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import utils.Admin;
@@ -156,6 +158,17 @@ public class OverviewCtrl {
     @FXML
     void back(ActionEvent event) {
         mainCtrl.showLogin();
+    }
+
+    /**
+     * When the user presses a key, it triggers the
+     * refresh method
+     * @param e
+     */
+    public void keyPressed(KeyEvent e) {
+        if(e.isControlDown() && e.getCode() == KeyCode.R){
+            refresh(null);
+        }
     }
 
     void initialize(){
