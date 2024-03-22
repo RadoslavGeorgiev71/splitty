@@ -6,10 +6,8 @@ import com.google.inject.Inject;
 import client.utils.ServerUtils;
 import commons.Event;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
-import javafx.scene.control.ListView;
-import javafx.scene.control.ListCell;
+import javafx.geometry.Side;
+import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 
@@ -40,6 +38,9 @@ public class StartScreenCtrl {
     @FXML
     private ListView<String> recentlyViewedEventsListView;
 
+    @FXML
+    private MenuButton languageButton;
+
     /**
      *
      * @param server
@@ -60,6 +61,7 @@ public class StartScreenCtrl {
      * Functionality not yet there though.
      */
     public void initialize() {
+        languageButton.setPopupSide(Side.TOP);
 
         config = config.readFromFile("client/src/main/resources/config.txt");
         if(config.getRecentEvents() == null){
