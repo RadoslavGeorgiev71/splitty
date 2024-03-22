@@ -149,6 +149,15 @@ public class OverviewCtrl {
         initialize();
     }
 
+    /**
+     * goes back to the login page
+     * @param event
+     */
+    @FXML
+    void back(ActionEvent event) {
+        mainCtrl.showLogin();
+    }
+
     void initialize(){
         events = FXCollections.observableArrayList(admin.getEvents());
         titleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
