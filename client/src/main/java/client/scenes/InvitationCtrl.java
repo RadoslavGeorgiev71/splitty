@@ -1,9 +1,11 @@
 package client.scenes;
 
+import client.utils.LanguageResourceBundle;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 
 import java.net.URL;
+import java.util.Locale;
 import java.util.ResourceBundle;
 
 import commons.Event;
@@ -18,14 +20,28 @@ public class InvitationCtrl implements Initializable {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
 
+    private LanguageResourceBundle languageResourceBundle;
+
     @FXML
     private Text eventNameText;
+
+    @FXML
+    private Text invitationSendPeopleText;
+
+    @FXML
+    private Text invitationPeopleByEmailText;
 
     @FXML
     private TextField inviteCodeText;
 
     @FXML
     private Button sendInvitesButton;
+
+    @FXML
+    private Button goEventButton;
+
+    @FXML
+    private Button goBackButton;
 
     @FXML
     private TextArea emailTextArea;
@@ -53,9 +69,26 @@ public class InvitationCtrl implements Initializable {
      * the root object was not localized.
      */
     public void initialize(URL location, ResourceBundle resources){
+        languageResourceBundle = LanguageResourceBundle.getInstance("");
         eventNameText.setText("");
         inviteCodeText.setText("");
 
+    }
+
+    public void initialize(){
+        switchTextLanguage();
+        setInviteCodeText();
+        setEventNameText();
+    }
+
+    public void switchTextLanguage(){
+
+        ResourceBundle bundle = languageResourceBundle.getResourceBundle();
+        sendInvitesButton.setText(bundle.getString("sendInvitesButton"));
+        goEventButton.setText(bundle.getString("goEventButton"));
+        goBackButton.setText(bundle.getString("backButton"));
+        invitationPeopleByEmailText.setText(bundle.getString("invitationPeopleByEmailText"));
+        invitationSendPeopleText.setText(bundle.getString("invitationSendPeopleText"));
     }
 
     /**

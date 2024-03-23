@@ -1,6 +1,7 @@
 package client.scenes;
 
 import client.utils.ConfigClient;
+import client.utils.LanguageResourceBundle;
 import com.google.inject.Inject;
 
 import client.utils.ServerUtils;
@@ -13,6 +14,8 @@ import javafx.scene.text.Text;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 public class StartScreenCtrl {
 
@@ -23,11 +26,22 @@ public class StartScreenCtrl {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
 
+    private LanguageResourceBundle languageResourceBundle;
+
     @FXML
     private TextField newEventText;
 
     @FXML
     private TextField joinEventText;
+
+    @FXML
+    private Text newEventStaticText;
+
+    @FXML
+    private Text joinEventStaticText;
+
+    @FXML
+    private Text recentEventsText;
 
     @FXML
     private Button createEventButton;
@@ -63,7 +77,13 @@ public class StartScreenCtrl {
     public void initialize() {
         languageButton.setPopupSide(Side.TOP);
 
+
+
         config = config.readFromFile("client/src/main/resources/config.txt");
+        String language = config.getLanguage();
+        languageResourceBundle = LanguageResourceBundle.getInstance(language);
+        switchTextLanguage();
+
         if(config.getRecentEvents() == null){
             return;
         }
@@ -86,8 +106,10 @@ public class StartScreenCtrl {
                     HBox hbox = new HBox(10);
 
                     Text text = new Text(item);
-                    Button button1 = new Button("Go to event");
-                    Button button2 = new Button("Remove");
+                    Button button1 = new Button(languageResourceBundle
+                            .getResourceBundle().getString("goToEventText"));
+                    Button button2 = new Button(languageResourceBundle
+                            .getResourceBundle().getString("removeFromRecentText"));
 
                     hbox.getChildren().addAll(text, button1, button2);
 
@@ -106,6 +128,16 @@ public class StartScreenCtrl {
                 }
             }
         });
+    }
+
+    public void switchTextLanguage(){
+
+        ResourceBundle bundle = languageResourceBundle.getResourceBundle();
+        newEventStaticText.setText(bundle.getString("newEventStaticText"));
+        joinEventStaticText.setText(bundle.getString("joinEventStaticText"));
+        recentEventsText.setText(bundle.getString("recentEventsText"));
+        createEventButton.setText(bundle.getString("createEventButton"));
+        joinEventButton.setText(bundle.getString("joinEventButton"));
     }
 
     /**
