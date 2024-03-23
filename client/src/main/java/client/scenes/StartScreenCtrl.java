@@ -10,6 +10,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ListCell;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 
@@ -112,12 +114,11 @@ public class StartScreenCtrl {
      */
     public void joinEvent(){
         String inviteCode = joinEventText.getText();
-        Event event = server.getEventByCode(inviteCode);
-
-        writeEventToConfig(event);
-
-        mainCtrl.showEventOverview(event);
-
+        if(!inviteCode.isEmpty()){
+            Event event = server.getEventByCode(inviteCode);
+            writeEventToConfig(event);
+            mainCtrl.showEventOverview(event);
+        }
     }
 
     /**
@@ -125,15 +126,14 @@ public class StartScreenCtrl {
      */
     public void createEvent(){
         String title = newEventText.getText();
-        Event event = new Event();
-        event.setTitle(title);
-        event.createInviteCode();
-
-        event = server.addEvent(event);
-
-        writeEventToConfig(event);
-
-        mainCtrl.showInvitation(event);
+        if(!title.isEmpty()){
+            Event event = new Event();
+            event.setTitle(title);
+            event.createInviteCode();
+            event = server.addEvent(event);
+            writeEventToConfig(event);
+            mainCtrl.showInvitation(event);
+        }
     }
     /**
      * Clears text fields.
@@ -142,6 +142,22 @@ public class StartScreenCtrl {
         newEventText.clear();
         joinEventText.clear();
         recentlyViewedEventsListView.getItems().clear();
+    }
+
+    /**
+     * When the user presses enter, it triggers the
+     * create or join button
+     * @param e
+     */
+    public void keyPressed(KeyEvent e) {
+        if(e.getCode() == KeyCode.ENTER){
+            if(e.getSource().equals(newEventText)){
+                createEvent();
+            }
+            if(e.getSource().equals(joinEventText)){
+                joinEvent();
+            }
+        }
     }
 
     /**
