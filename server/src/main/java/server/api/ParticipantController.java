@@ -111,7 +111,7 @@ public class ParticipantController {
      * PURELY FOR TESTING PURPOSES! Wipes all participants on DB
      * @return message
      */
-    @GetMapping(path = {"", "/wipe"})
+    @DeleteMapping(path = {"", "/wipe"})
     public ResponseEntity<String> deleteAll(){
         repo.deleteAll();
         return ResponseEntity.ok("All particpants removed");
