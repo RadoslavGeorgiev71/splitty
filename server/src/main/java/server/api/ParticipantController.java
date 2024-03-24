@@ -107,6 +107,16 @@ public class ParticipantController {
         }
     }
 
+    /**
+     * PURELY FOR TESTING PURPOSES! Wipes all participants on DB
+     * @return message
+     */
+    @GetMapping(path = {"", "/wipe"})
+    public ResponseEntity<String> deleteAll(){
+        repo.deleteAll();
+        return ResponseEntity.ok("All particpants removed");
+    }
+
     /**TODO  check the method that creates a new participant -> create
      * check method that deletes participant -> delete
      * check method that updates participant -> update
