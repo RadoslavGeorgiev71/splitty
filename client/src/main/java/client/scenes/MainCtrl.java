@@ -61,6 +61,7 @@ public class MainCtrl {
      * @param opendebts
      * @param startscreen
      * @param invitation
+     * @param usersettings
      */
     public void initialize(Stage primaryStage,
                            Pair<EditParticipantCtrl, Parent> editparticipant,
