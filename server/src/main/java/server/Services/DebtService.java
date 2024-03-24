@@ -127,7 +127,7 @@ public class DebtService {
      */
     public Debt add(Debt debt) {
         if (debt.getPersonPaying() == null ||
-            debt.getPersonOwed() == null || debt.isPaid()) {
+            debt.getPersonOwed() == null) {
             return null;
         }
         return debtRepo.save(debt);
@@ -145,7 +145,6 @@ public class DebtService {
         }
         Debt debt = debtRepo.findById(id).get();
         debtRepo.deleteById(id);
-        debtRepo.flush();
         return debt;
     }
 

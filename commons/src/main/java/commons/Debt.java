@@ -30,6 +30,20 @@ public class Debt {
 
     /**
      * Constructor for the Debt class
+     * @param personPaying The participant who has to pay the debt
+     * @param personOwed The participant who will receive the debt
+     * @param amount The amount of debt
+     */
+    public Debt(Participant personPaying, Participant personOwed, double amount){
+        this.personPaying = personPaying;
+        this.personOwed = personOwed;
+        this.amount = amount;
+        this.paid = false;
+        this.paidDateTime = null;
+    }
+
+    /**
+     * Constructor for the Debt class
      * @param id Unique identifier for the Debt instance
      * @param personPaying The participant who has to pay the debt
      * @param personOwed The participant who will receive the debt
