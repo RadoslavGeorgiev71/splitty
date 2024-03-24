@@ -55,7 +55,7 @@ public class OpenDebtsCtrl {
         if (event != null) {
             gridPane.setAlignment(Pos.CENTER);
             this.testDebts();
-            debts = getDebts();
+            debts = getPaymentInstuctions();
             titledPanes = new TitledPane[debts.size()];
             textFlows = new TextFlow[debts.size()];
             envelopeIcons = new FontAwesomeIconView[debts.size()];
@@ -205,13 +205,15 @@ public class OpenDebtsCtrl {
         mainCtrl.showEventOverview(event);
     }
 
+
+
     /**
-     * Retrieves all debts for now TODO:
-     * @return all debts
+     * Retrieves all debts associated with a certain event
+     * @return all debts associated with a given event
      */
-    private List<Debt> getDebts() {
+    private List<Debt> getPaymentInstuctions() {
         try {
-            return server.getDebtsForEvent(event);
+            return server.getPaymentInstructions(event);
         } catch (WebApplicationException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.initModality(Modality.APPLICATION_MODAL);
@@ -225,7 +227,7 @@ public class OpenDebtsCtrl {
     private void testDebts() {
         Participant bob = new Participant("Bob");
         Participant ana = new Participant("Ana");
-        for (Debt debt : server.getDebtsForEvent(event)) {
+        for (Debt debt : server.getPaymentInstructions(event)) {
             server.deleteDebt(debt);
         }
         server.addDebt(new Debt(5, bob, ana, 10));

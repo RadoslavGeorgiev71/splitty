@@ -1,4 +1,4 @@
-package server;
+package server.Services;
 
 import commons.Participant;
 import org.springframework.stereotype.Service;

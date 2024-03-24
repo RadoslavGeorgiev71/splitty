@@ -22,7 +22,7 @@ public class Debt {
     private LocalDateTime paidDateTime;
 
     /**
-     * Empty constructor for teh class
+     * Empty constructor for the class
      */
     public Debt() {
 

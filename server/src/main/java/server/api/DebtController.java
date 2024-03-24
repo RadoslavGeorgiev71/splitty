@@ -3,7 +3,7 @@ package server.api;
 import commons.Debt;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import server.DebtService;
+import server.Services.DebtService;
 
 import java.util.List;
 
@@ -36,8 +36,8 @@ public class DebtController {
      * bad request response otherwise
      */
     @GetMapping(path = {"event/{eventId}"})
-    public ResponseEntity<List<Debt>> getDebtsForEvent(@PathVariable("eventId") long eventId) {
-        List<Debt> debts = debtService.getDebtsForEvent(eventId);
+    public ResponseEntity<List<Debt>> getPaymentInstructions(@PathVariable("eventId") long eventId) {
+        List<Debt> debts = debtService.getPaymentInstructions(eventId);
         if(debts == null) {
             return ResponseEntity.badRequest().build();
         }
