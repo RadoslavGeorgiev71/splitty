@@ -1,26 +1,24 @@
 package server.api;
 
 import commons.Participant;
-//import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import server.database.ParticipantRepository;
-
+import server.ParticipantService;
 import java.util.List;
 import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/participants")
 public class ParticipantController {
-    private final ParticipantRepository repo;
+    private ParticipantService participantService;
 
     /**
      * Constructor for the controller
-     * @param repo - type ParticipantRepository which extends JpaRepository
+     * @param participantService - the participant service for the participant repository
      */
-    public ParticipantController(ParticipantRepository repo) {
-        this.repo = repo;
+    public ParticipantController(ParticipantService participantService) {
+        this.participantService = participantService;
     }
 
     /**
@@ -29,7 +27,7 @@ public class ParticipantController {
      */
     @GetMapping(path = {"", "/"})
     public List<Participant> getAll() {
-        return repo.findAll();
+        return participantService.getAll();
     }
 
     /**
@@ -39,29 +37,11 @@ public class ParticipantController {
      */
     @PutMapping(path = {"", "/"})
     public ResponseEntity<?> update(@RequestBody Participant updatedParticipant) {
-
         long participantId = updatedParticipant.getId(); // Assuming Participant has an ID field
-
-        // Retrieve the existing participant from the database based on the ID
-        Optional<Participant> existingParticipant = repo.findById(participantId);
-
-        if (existingParticipant.isPresent()){
-            // Update the existing participant with data from updatedParticipant
-            existingParticipant.get().setName(updatedParticipant.getName());
-            existingParticipant.get().setEmail(updatedParticipant.getEmail());
-            existingParticipant.get().setBic(updatedParticipant.getBic());
-            existingParticipant.get().setIban(updatedParticipant.getIban());
-            // Update other fields as needed
-
-            // Save the updated participant back to the database
-            Participant savedParticipant = repo.save(existingParticipant.get());
-
-            // Return the updated participant
+        Participant savedParticipant = participantService.update(participantId, updatedParticipant);
+        if (savedParticipant != null){
             return ResponseEntity.ok(savedParticipant);
         }
-        //Maybe here it should add the participant in the database
-        //instead of returning a bad request message
-        //To be discussed
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Participant not found");
     }
 
@@ -72,7 +52,7 @@ public class ParticipantController {
      */
     @PostMapping(path = {"", "/"})
     public ResponseEntity<?> create(@RequestBody Participant newParticipant){
-        Participant savedParticipant = repo.save(newParticipant);
+        Participant savedParticipant = participantService.create(newParticipant);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedParticipant);
     }
 
@@ -83,8 +63,8 @@ public class ParticipantController {
      */
     @DeleteMapping(path = {"", "/{id}"})
     public ResponseEntity<?> delete(@PathVariable("id") long participantId){
-        if (repo.existsById(participantId)){
-            repo.deleteById(participantId);
+        boolean success = participantService.delete(participantId);
+        if (success){
             return ResponseEntity.status(HttpStatus.OK).build();
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Participant not found!");
@@ -98,28 +78,11 @@ public class ParticipantController {
      */
     @GetMapping(path = {"/{id}"})
     public ResponseEntity<?> getById(@PathVariable("id") long participantId){
-        Optional<Participant> participantOptional = repo.findById(participantId);
-
+        Optional<Participant> participantOptional = participantService.getById(participantId);
         if (participantOptional.isPresent()){
             return ResponseEntity.ok(participantOptional.get());
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No participant by id");
         }
     }
-
-    /**
-     * PURELY FOR TESTING PURPOSES! Wipes all participants on DB
-     * @return message
-     */
-    @DeleteMapping(path = {"", "/wipe"})
-    public ResponseEntity<String> deleteAll(){
-        repo.deleteAll();
-        return ResponseEntity.ok("All particpants removed");
-    }
-
-    /**TODO  check the method that creates a new participant -> create
-     * check method that deletes participant -> delete
-     * check method that updates participant -> update
-     * check method that retrieves participant by id -> getById
-     */
 }
