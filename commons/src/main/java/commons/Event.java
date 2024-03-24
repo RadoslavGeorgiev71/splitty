@@ -163,10 +163,11 @@ public class Event {
     /**
      * Method to manually update the time when the Event was last updated
      */
-    public void updateDateTime() {
+    public String updateDateTime() {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
         LocalDateTime now = LocalDateTime.now();
         dateTime = dtf.format(now);
+        return dateTime;
     }
 
     /**

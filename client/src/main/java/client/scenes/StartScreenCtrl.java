@@ -135,6 +135,11 @@ public class StartScreenCtrl {
             mainCtrl.showInvitation(event);
         }
     }
+
+    public void onSettingsClick() {
+        mainCtrl.showUserSettings(config);
+    }
+
     /**
      * Clears text fields.
      */

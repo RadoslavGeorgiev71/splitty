@@ -15,6 +15,7 @@
  */
 package client.scenes;
 
+import client.utils.ConfigClient;
 import commons.Event;
 import commons.Participant;
 import javafx.scene.Parent;
@@ -48,6 +49,9 @@ public class MainCtrl {
     private AddExpenseCtrl addExpenseCtrl;
     private Scene addexpense;
 
+    private UserSettingsCtrl userSettingsCtrl;
+    private Scene usersettings;
+
     /**
      * Initializes stage
      * @param primaryStage
@@ -64,7 +68,8 @@ public class MainCtrl {
                            Pair<EventOverviewCtrl, Parent> eventoverview,
                            Pair<OpenDebtsCtrl, Parent> opendebts,
                            Pair<StartScreenCtrl, Parent> startscreen,
-                           Pair<InvitationCtrl, Parent> invitation
+                           Pair<InvitationCtrl, Parent> invitation,
+                           Pair<UserSettingsCtrl, Parent> usersettings
                            ) {
 
         this.primaryStage = primaryStage;
@@ -90,6 +95,9 @@ public class MainCtrl {
 
 //        this.addExpenseCtrl = addexpense.getKey();
 //        this.addexpense = new Scene(addexpense.getValue());
+
+        this.userSettingsCtrl = usersettings.getKey();
+        this.usersettings = new Scene(usersettings.getValue());
 
         showStartScreen();
         primaryStage.show();
@@ -166,5 +174,11 @@ public class MainCtrl {
         invitationCtrl.setInviteCodeText();
         invitationCtrl.setEventNameText();
         primaryStage.setScene(invitation);
+    }
+
+    public void showUserSettings(ConfigClient configClient) {
+        primaryStage.setTitle("User Settings");
+        userSettingsCtrl.initialize(configClient);
+        primaryStage.setScene(usersettings);
     }
 }

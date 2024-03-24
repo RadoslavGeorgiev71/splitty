@@ -144,9 +144,21 @@ public class EventTest {
     }
 
     @Test
+    void getDateTime() {
+        String dateTime = event1.updateDateTime();
+        assertEquals(dateTime, event1.getDateTime());
+    }
+
+    @Test
     void setDateTime() {
         event1.setDateTime("test");
         assertEquals("test", event1.getDateTime());
+    }
+
+    @Test
+    void createInviteCode() {
+        String inviteCode = event1.createInviteCode();
+        assertEquals(inviteCode, event1.getInviteCode());
     }
 
 }
