@@ -57,6 +57,7 @@ public class EventOverviewCtrl {
      * @param server
      * @param mainCtrl
      */
+
     @Inject
     public EventOverviewCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.server = server;
@@ -68,6 +69,7 @@ public class EventOverviewCtrl {
      * goes to invitation window to send invites
      * @param actionEvent
      */
+
     @FXML
     public void onSendInvites(ActionEvent actionEvent) {
         mainCtrl.showInvitation(this.event);
@@ -95,6 +97,7 @@ public class EventOverviewCtrl {
     /**
      * Method to be executed when add participant button is clicked
      */
+
     @FXML
     public void onAddParticipantClick() {
         mainCtrl.showAddParticipant(this.event);

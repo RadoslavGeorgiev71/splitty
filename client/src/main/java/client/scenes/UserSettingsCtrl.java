@@ -45,12 +45,18 @@ public class UserSettingsCtrl {
         this.mainCtrl = mainCtrl;
     }
 
+    /**
+     * Cancels the changes
+     */
     @FXML
     public void onCancelClick() {
         clearFields();
         mainCtrl.showStartScreen();
     }
 
+    /**
+     * Changes the User Config according to the inputs from the fields
+     */
     @FXML
     public void onConfirmClick() {
         configClient.setName(nameField.getText());
@@ -61,6 +67,9 @@ public class UserSettingsCtrl {
         mainCtrl.showStartScreen();
     }
 
+    /**
+     * Clears all the fields
+     */
     private void clearFields() {
         nameField.clear();
         emailField.clear();
@@ -68,6 +77,10 @@ public class UserSettingsCtrl {
         bicField.clear();
     }
 
+    /**
+     * Initializes the fields with the correct values (if available)
+     * @param configClient
+     */
     public void initialize(ConfigClient configClient) {
         if(configClient.getName() != null) {
             nameField.setText(configClient.getName());
