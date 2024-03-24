@@ -1,4 +1,4 @@
-package server;
+package server.Services;
 
 import commons.Expense;
 import org.springframework.stereotype.Service;

@@ -1,4 +1,4 @@
-package server;
+package server.Services;
 
 
 import org.springframework.mail.SimpleMailMessage;
