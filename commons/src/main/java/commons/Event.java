@@ -162,6 +162,7 @@ public class Event {
 
     /**
      * Method to manually update the time when the Event was last updated
+     * @return the Date and Time in string format
      */
     public String updateDateTime() {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
