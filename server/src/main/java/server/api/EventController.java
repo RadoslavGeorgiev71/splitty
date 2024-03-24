@@ -1,6 +1,5 @@
 package server.api;
 
-import commons.Debt;
 import commons.Event;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
