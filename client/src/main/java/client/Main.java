@@ -67,7 +67,8 @@ public class Main extends Application {
         var opendebts = FXML.load(OpenDebtsCtrl.class, "client", "scenes", "OpenDebts.fxml");
         var startscreen = FXML.load(StartScreenCtrl.class, "client", "scenes", "StartScreen.fxml");
         var invitation = FXML.load(InvitationCtrl.class, "client", "scenes", "Invitation.fxml");
-        var usersettings = FXML.load(UserSettingsCtrl.class, "client", "scenes", "UserSettings.fxml");
+        var usersettings = FXML.load(
+                UserSettingsCtrl.class, "client", "scenes", "UserSettings.fxml");
 
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
         mainCtrl.initialize(primaryStage, editparticipant,

@@ -85,12 +85,15 @@ public class UserSettingsCtrl {
         if(configClient.getName() != null) {
             nameField.setText(configClient.getName());
         }
+
         if(configClient.getEmail() != null) {
             emailField.setText(configClient.getEmail());
         }
+
         if(configClient.getIban() != null) {
             ibanField.setText(configClient.getIban());
         }
+
         if(configClient.getBic() != null) {
             bicField.setText(configClient.getBic());
         }

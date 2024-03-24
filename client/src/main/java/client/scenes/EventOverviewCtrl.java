@@ -17,8 +17,7 @@ import javafx.collections.FXCollections;
 
 import javafx.event.ActionEvent;
 
-
-
+@SuppressWarnings("unchecked")
 public class EventOverviewCtrl {
 
     private final ServerUtils server;
@@ -277,7 +276,7 @@ public class EventOverviewCtrl {
      * This method is called when the user tries to edit the
      * title of an event.
      * After the user presses enter it persists the event with the new title
-     * It does not allow the user to give an emptry title
+     * It does not allow the user to give an empty title
      * @param mouseEvent
      */
     public void editTitle(MouseEvent mouseEvent) {

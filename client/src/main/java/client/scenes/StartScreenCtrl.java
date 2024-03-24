@@ -136,6 +136,9 @@ public class StartScreenCtrl {
         }
     }
 
+    /**
+     * Switches to the User Settings scene
+     */
     public void onSettingsClick() {
         mainCtrl.showUserSettings(config);
     }

@@ -176,6 +176,10 @@ public class MainCtrl {
         primaryStage.setScene(invitation);
     }
 
+    /**
+     * Switches the scene to the User Settings
+     * @param configClient - the client whose settings will be changed
+     */
     public void showUserSettings(ConfigClient configClient) {
         primaryStage.setTitle("User Settings");
         userSettingsCtrl.initialize(configClient);
