@@ -36,7 +36,8 @@ public class DebtController {
      * bad request response otherwise
      */
     @GetMapping(path = {"event/{eventId}"})
-    public ResponseEntity<List<Debt>> getPaymentInstructions(@PathVariable("eventId") long eventId) {
+    public ResponseEntity<List<Debt>> getPaymentInstructions(
+        @PathVariable("eventId") long eventId) {
         List<Debt> debts = debtService.getPaymentInstructions(eventId);
         if(debts == null) {
             return ResponseEntity.badRequest().build();
