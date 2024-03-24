@@ -55,7 +55,7 @@ public class OpenDebtsCtrl {
         if (event != null) {
             gridPane.setAlignment(Pos.CENTER);
             this.testDebts();
-            debts = getPaymentInstuctions();
+            debts = getPaymentInstructions();
             titledPanes = new TitledPane[debts.size()];
             textFlows = new TextFlow[debts.size()];
             envelopeIcons = new FontAwesomeIconView[debts.size()];
@@ -103,8 +103,7 @@ public class OpenDebtsCtrl {
         gridPane.add(bankIcons[i], 1, i, 1, 1);
 
         buttonReceived[i] = new Button("Mark Received");
-        int finalI = i;
-        buttonReceived[i].setOnMouseClicked(e -> removeDebt(debts.get(finalI)));
+        buttonReceived[i].setOnMouseClicked(e -> removeDebt(debts.get(i)));
         GridPane.setValignment(buttonReceived[i], javafx.geometry.VPos.TOP);
         GridPane.setHalignment(buttonReceived[i], javafx.geometry.HPos.LEFT);
         GridPane.setMargin(buttonReceived[i], new Insets(5, 10, 0, 15));
@@ -121,7 +120,7 @@ public class OpenDebtsCtrl {
         alert.setContentText("Are you sure you want to mark this debt as settled?" +
             " This action is irreversible and the debt won't be displayed anymore!");
 
-        //TODO: for now there is also an output on the console which should be removed in teh future
+        //TODO: for now there is also an output on the console which should be removed in the future
         alert.showAndWait().ifPresent(response -> {
             if (response == ButtonType.OK) {
                 System.out.println("Ok");
@@ -211,7 +210,7 @@ public class OpenDebtsCtrl {
      * Retrieves all debts associated with a certain event
      * @return all debts associated with a given event
      */
-    private List<Debt> getPaymentInstuctions() {
+    private List<Debt> getPaymentInstructions() {
         try {
             return server.getPaymentInstructions(event);
         } catch (WebApplicationException e) {

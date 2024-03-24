@@ -33,9 +33,10 @@ public class DebtService {
     }
 
     /**
-     * Return all debts associated with a specific event
+     * Return payment instructions (in the form of debts)
+     * associated with a specific event
      * @param eventId - the id of event we retrieve the debts for
-     * @return all debts corresponding to the event
+     * @return all payment instructions corresponding to the event
      */
     public List<Debt> getPaymentInstructions(long eventId) {
         Optional<Event> event = eventRepo.findById(eventId);
