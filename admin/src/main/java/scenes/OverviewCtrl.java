@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Scanner;
 
 
@@ -65,9 +66,15 @@ public class OverviewCtrl {
     void delete(ActionEvent event) {
         Event selectedEvent = table.getSelectionModel().getSelectedItem();
         if (selectedEvent != null){
-            admin.deleteEvent(selectedEvent);
-            table.getItems().remove(selectedEvent);
-            initialize();
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Confirm event deletion");
+            alert.setContentText("Are you sure you want to delete this event?");
+            Optional<ButtonType> result = alert.showAndWait();
+            if(result.get() == ButtonType.OK){
+                admin.deleteEvent(selectedEvent);
+                table.getItems().remove(selectedEvent);
+                initialize();
+            }
         }
     }
 

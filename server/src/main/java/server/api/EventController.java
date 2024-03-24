@@ -103,4 +103,21 @@ public class EventController {
         }
         return ResponseEntity.ok(repo.findById(id).get());
     }
+
+    /**
+     * Deletes an event by id if it exists
+     * @param id - the id of the event we search for
+     * @return "Successful delete" response
+     * if delete was successful, "Bad request" otherwise
+     */
+    @DeleteMapping(path = {"/{id}"})
+    public ResponseEntity<String> delete(@PathVariable("id") long id) {
+        if (!repo.existsById(id)) {
+            return ResponseEntity.badRequest().build();
+        }
+        Event event = repo.findById(id).get();
+        repo.deleteById(id);
+        repo.flush();
+        return ResponseEntity.ok().body("Successful delete");
+    }
 }
