@@ -17,8 +17,7 @@ import javafx.collections.FXCollections;
 
 import javafx.event.ActionEvent;
 
-
-
+@SuppressWarnings("unchecked")
 public class EventOverviewCtrl {
 
     private final ServerUtils server;
@@ -57,6 +56,7 @@ public class EventOverviewCtrl {
      * @param server
      * @param mainCtrl
      */
+
     @Inject
     public EventOverviewCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.server = server;
@@ -68,6 +68,7 @@ public class EventOverviewCtrl {
      * goes to invitation window to send invites
      * @param actionEvent
      */
+
     @FXML
     public void onSendInvites(ActionEvent actionEvent) {
         mainCtrl.showInvitation(this.event);
@@ -95,6 +96,7 @@ public class EventOverviewCtrl {
     /**
      * Method to be executed when add participant button is clicked
      */
+
     @FXML
     public void onAddParticipantClick() {
         mainCtrl.showAddParticipant(this.event);
@@ -274,7 +276,7 @@ public class EventOverviewCtrl {
      * This method is called when the user tries to edit the
      * title of an event.
      * After the user presses enter it persists the event with the new title
-     * It does not allow the user to give an emptry title
+     * It does not allow the user to give an empty title
      * @param mouseEvent
      */
     public void editTitle(MouseEvent mouseEvent) {
