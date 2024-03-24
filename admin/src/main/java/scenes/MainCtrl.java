@@ -46,6 +46,7 @@ public class MainCtrl {
      */
     public void showLogin() {
         primaryStage.setTitle("Login");
+        loginCtrl.initialize();
         primaryStage.setScene(login);
     }
 

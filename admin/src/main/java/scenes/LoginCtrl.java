@@ -6,6 +6,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import utils.Admin;
 
 public class LoginCtrl {
@@ -31,13 +33,13 @@ public class LoginCtrl {
     public LoginCtrl(Admin admin, MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
         this.admin = admin;
-
     }
 
     /**
      * Code to be run on scene start-up. Simply hides the error message
      */
     public void initialize() {
+        passwordField.clear();
         errorLabel.setVisible(false);
     }
 
@@ -51,6 +53,17 @@ public class LoginCtrl {
         }
         else {
             errorLabel.setVisible(true);
+        }
+    }
+
+    /**
+     * When the user presses enter, it triggers the
+     * create or join button
+     * @param e
+     */
+    public void keyPressed(KeyEvent e) {
+        if(e.getCode() == KeyCode.ENTER){
+            login(null);
         }
     }
 
