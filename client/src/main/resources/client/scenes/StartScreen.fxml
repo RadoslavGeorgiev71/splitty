@@ -37,22 +37,10 @@
          </font>
       </Text>
       <ListView fx:id="recentlyViewedEventsListView" layoutX="122.0" layoutY="256.0" prefHeight="130.0" prefWidth="310.0" />
-      <MenuButton fx:id="languageButton" layoutX="482.0" layoutY="345.0" mnemonicParsing="false" styleClass="language-menu-button">
-        <items>
-          <MenuItem mnemonicParsing="false" text="New" />
-          <MenuItem mnemonicParsing="false" text="NL" >
-            <graphic>
-                <ImageView style="-fx-border-width: 0;">
-                    <Image url="@/client/images/nl.jpg" />
-                </ImageView>
-            </graphic>
-          </MenuItem>
-        </items>
-          <graphic>
-              <ImageView style="-fx-border-width: 0;">
-                  <Image url="@/client/images/en.png" />
-              </ImageView>
-          </graphic>
-      </MenuButton>
+       <MenuButton fx:id="languageButton" layoutX="482.0" layoutY="345.0" mnemonicParsing="false" styleClass="language-menu-button">
+           <graphic>
+               <ImageView fx:id="languageButtonImageView" style="-fx-border-width: 0;" />
+           </graphic>
+       </MenuButton>
    </children>
 </AnchorPane>

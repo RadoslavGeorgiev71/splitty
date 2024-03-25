@@ -1,17 +1,24 @@
 package client.scenes;
 
 import client.utils.ConfigClient;
+import client.utils.LanguageButtonUtils;
 import client.utils.LanguageResourceBundle;
 import com.google.inject.Inject;
 
 import client.utils.ServerUtils;
 import commons.Event;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.geometry.Side;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 
+import java.io.File;
+import java.io.FilenameFilter;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
@@ -75,13 +82,23 @@ public class StartScreenCtrl {
      * Functionality not yet there though.
      */
     public void initialize() {
-        languageButton.setPopupSide(Side.TOP);
+        recentlyViewedEventsListView.getItems().clear();
 
-
+        languageButton.getItems().clear();
 
         config = config.readFromFile("client/src/main/resources/config.txt");
+
         String language = config.getLanguage();
+
         languageResourceBundle = LanguageResourceBundle.getInstance(language);
+
+        LanguageButtonUtils.updateLanguageMenuButton(languageButton, config);
+
+        LanguageButtonUtils.languageMenu(languageButton, config,
+                languageResourceBundle, this, keys);
+
+        languageButton.setPopupSide(Side.TOP);
+
         switchTextLanguage();
 
         if(config.getRecentEvents() == null){
