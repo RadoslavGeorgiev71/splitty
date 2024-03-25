@@ -20,7 +20,7 @@
    <children>
       <VBox layoutY="1.0" prefHeight="389.0" prefWidth="280.0" spacing="10.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="1.0">
          <children>
-            <GridPane prefHeight="30.0" prefWidth="297.0">
+            <GridPane prefHeight="30.0" prefWidth="297.0" VBox.vgrow="ALWAYS">
               <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                 <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -43,8 +43,8 @@
                   <Button mnemonicParsing="false" onAction="#onAddParticipantClick" text="Add(guy+)" />
                </children>
             </HBox>
-            <Text fx:id="participatingParticipants" strokeType="OUTSIDE" strokeWidth="0.0" text="Person1, Person2, Person3, ..." />
-            <GridPane prefHeight="39.0" prefWidth="280.0">
+            <Text fx:id="participatingParticipants" strokeType="OUTSIDE" strokeWidth="0.0" text="Participants list" wrappingWidth="294.787109375" VBox.vgrow="ALWAYS" />
+            <GridPane prefHeight="39.0" prefWidth="280.0" VBox.vgrow="ALWAYS">
               <columnConstraints>
                 <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                 <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -57,18 +57,18 @@
                   <Button mnemonicParsing="false" onAction="#onAddExpenseClick" text="Add Expense" GridPane.columnIndex="1" />
                </children>
             </GridPane>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Expenses" />
-            <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Expenses" VBox.vgrow="ALWAYS" />
+            <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
               <tabs>
                 <Tab fx:id="tabPaneAll" onSelectionChanged="#tabPaneAllClick" text="All">
                      <content>
-                        <AnchorPane prefHeight="146.0" prefWidth="260.0">
+                        <AnchorPane prefHeight="150.0" prefWidth="260.0">
                            <children>
-                              <ScrollPane prefHeight="150.0" prefWidth="301.0">
+                              <ScrollPane prefHeight="187.0" prefWidth="301.0">
                                 <content>
-                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="149.0" prefWidth="285.0">
+                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="174.0" prefWidth="296.0">
                                        <children>
-                                          <GridPane fx:id="tabPaneAllGridPane" layoutX="4.0" layoutY="14.0" prefHeight="25.0" prefWidth="238.0">
+                                          <GridPane fx:id="tabPaneAllGridPane" layoutX="4.0" layoutY="14.0" prefHeight="25.0" prefWidth="289.0">
                                             <rowConstraints>
                                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                             </rowConstraints>
@@ -85,15 +85,15 @@
                            </children></AnchorPane>
                      </content>
                 </Tab>
-                <Tab id="FomPersonTab" fx:id="tabPaneFromPerson" onSelectionChanged="#tabPaneFromPersonClick" text="From Person1">
+                <Tab id="FomPersonTab" fx:id="tabPaneFromPerson" onSelectionChanged="#tabPaneFromPersonClick" text="From Person">
                   <content>
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
-                              <ScrollPane prefHeight="150.0" prefWidth="260.0">
+                              <ScrollPane prefHeight="187.0" prefWidth="301.0">
                                  <content>
-                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="245.0">
+                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="174.0" prefWidth="296.0">
                                        <children>
-                                          <GridPane fx:id="tabPaneFromGridPane" layoutX="4.0" layoutY="14.0" prefHeight="25.0" prefWidth="238.0">
+                                          <GridPane fx:id="tabPaneFromGridPane" layoutX="4.0" layoutY="14.0" prefHeight="25.0" prefWidth="296.0">
                                              <rowConstraints>
                                                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                              </rowConstraints>
@@ -110,15 +110,15 @@
                            </children></AnchorPane>
                   </content>
                 </Tab>
-                  <Tab id="IncludingPersonTab" fx:id="tabPaneIncludingPerson" onSelectionChanged="#tabPaneIncludingPersonClick" text="Including Person1">
+                  <Tab id="IncludingPersonTab" fx:id="tabPaneIncludingPerson" onSelectionChanged="#tabPaneIncludingPersonClick" text="Including Person">
                      <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
-                              <ScrollPane prefHeight="150.0" prefWidth="260.0">
+                              <ScrollPane prefHeight="187.0" prefWidth="301.0">
                                  <content>
-                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="245.0">
+                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="174.0" prefWidth="296.0">
                                        <children>
-                                          <GridPane fx:id="tabPaneIncludingGridPane" layoutX="4.0" layoutY="14.0" prefHeight="25.0" prefWidth="238.0">
+                                          <GridPane fx:id="tabPaneIncludingGridPane" layoutX="4.0" layoutY="14.0" prefHeight="25.0" prefWidth="296.0">
                                              <rowConstraints>
                                                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                              </rowConstraints>
@@ -137,7 +137,7 @@
                   </Tab>
               </tabs>
             </TabPane>
-            <GridPane>
+            <GridPane VBox.vgrow="ALWAYS">
               <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                 <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
