@@ -118,8 +118,9 @@ public class TestDebtRepository implements DebtRepository {
     @Override
     public Optional<Debt> findById(Long id) {
         calledMethods.add("findById");
-        Debt debt =  debts.stream().filter(x -> x.getId() == id).toList().getFirst();
-        return Optional.of(debt);
+        List<Debt> rightDebts =  debts.stream().filter(x -> x.getId() == id).toList();
+        if (rightDebts.isEmpty()) return Optional.empty();
+        return Optional.of(rightDebts.getFirst());
     }
 
     @Override

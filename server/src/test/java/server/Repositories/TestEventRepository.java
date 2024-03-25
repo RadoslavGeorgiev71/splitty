@@ -1,5 +1,6 @@
 package server.Repositories;
 
+import commons.Debt;
 import commons.Event;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
@@ -8,11 +9,19 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.query.FluentQuery;
 import server.database.EventRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
 public class TestEventRepository implements EventRepository {
+
+    public List<Event> events = new ArrayList<>();
+    public final List<String> calledMethods = new ArrayList<>();
+    private void call(String name) {
+        calledMethods.add(name);
+    }
+
     @Override
     public Optional<Event> findByInviteCode(String inviteCode) {
         return Optional.empty();
@@ -101,7 +110,9 @@ public class TestEventRepository implements EventRepository {
 
     @Override
     public <S extends Event> S save(S entity) {
-        return null;
+        calledMethods.add("save");
+        events.add(entity);
+        return entity;
     }
 
     @Override
@@ -111,7 +122,10 @@ public class TestEventRepository implements EventRepository {
 
     @Override
     public Optional<Event> findById(Long aLong) {
-        return Optional.empty();
+        calledMethods.add("findById");
+        List<Event> rightEvents =  events.stream().filter(x -> x.getId() == aLong).toList();
+        if (rightEvents.isEmpty()) return Optional.empty();
+        return Optional.of(rightEvents.getFirst());
     }
 
     @Override
