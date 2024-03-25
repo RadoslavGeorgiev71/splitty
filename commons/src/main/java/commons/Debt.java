@@ -24,9 +24,7 @@ public class Debt {
     /**
      * Empty constructor for the class
      */
-    public Debt() {
-
-    }
+    public Debt() {}
 
     /**
      * Constructor for the Debt class
