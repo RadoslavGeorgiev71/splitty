@@ -19,10 +19,9 @@
 
 ## Tasks Completion and Team Updates
 - Presentation of the current app to TA (10 min)
-- Ensure all team member have completed their assigned tasks and are up-to-date with the project
+- Ensure all team member have started their assigned tasks and are up-to-date with the project
 
 ## Discussion Points (25 min)
-
 
 1. Did we manage to create services/web-sockets? long-polling?
 2. Discuss connecting to different servers
