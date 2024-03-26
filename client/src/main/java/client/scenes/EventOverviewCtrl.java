@@ -1,5 +1,6 @@
 package client.scenes;
 
+import client.utils.LanguageResourceBundle;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Event;
@@ -17,11 +18,41 @@ import javafx.collections.FXCollections;
 
 import javafx.event.ActionEvent;
 
-@SuppressWarnings("unchecked")
+import java.util.ResourceBundle;
+
 public class EventOverviewCtrl {
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
+
+    private LanguageResourceBundle languageResourceBundle;
+
+    @FXML
+    private Text overviewParticipantsText;
+
+    @FXML
+    private Button overviewEditParticipantButton;
+
+    @FXML
+    private Button overviewAddParticipantButton;
+
+    @FXML
+    private Button overviewRemoveParticipantButton;
+
+    @FXML
+    private Button overviewAddExpenseButton;
+
+    @FXML
+    private Button sendInvitesButton;
+
+    @FXML
+    private Button backButton;
+
+    @FXML
+    private Button overviewSettleDebtsButton;
+
+    @FXML
+    private Tab tabPaneAll;
 
     @FXML
     private ChoiceBox participantsMenu;
@@ -127,9 +158,10 @@ public class EventOverviewCtrl {
     @FXML
     public void onBackClick() {
         Alert alert =  new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Exit");
-        alert.setHeaderText("You will exit this event and go back to start screen");
-        alert.setContentText("Are you sure you want to exit?");
+        ResourceBundle bundle = languageResourceBundle.getResourceBundle();
+        alert.setTitle(bundle.getString("exitEventAlertTitleText"));
+        alert.setHeaderText(bundle.getString("exitEventAlertHeaderText"));
+        alert.setContentText(bundle.getString("exitEventAlertContentText"));
         if (alert.showAndWait().get() == ButtonType.OK){
             mainCtrl.showStartScreen();
         }
@@ -230,12 +262,15 @@ public class EventOverviewCtrl {
      */
     public void fromPersonTabName() {
         if (event.getParticipants().isEmpty()){
-            tabPaneFromPerson.setText("From");
+            tabPaneFromPerson.setText(languageResourceBundle.
+                    getResourceBundle().getString("tabPaneFrom"));
         }
         else {
             Participant selectedParticipant = (Participant) participantsMenu.getValue();
-            if(selectedParticipant != null){
-                tabPaneFromPerson.setText("From " + selectedParticipant.getName());
+            if(selectedParticipant != null) {
+                tabPaneFromPerson.setText(languageResourceBundle.
+                        getResourceBundle().getString("tabPaneFrom")
+                        + " " + selectedParticipant.getName());
             }
         }
 
@@ -246,12 +281,15 @@ public class EventOverviewCtrl {
      */
     public void includingPersonTabName() {
         if (event.getParticipants().isEmpty()){
-            tabPaneFromPerson.setText("Including");
+            tabPaneFromPerson.setText(languageResourceBundle.
+                    getResourceBundle().getString("tabPaneIncluding"));
         }
         else {
             Participant selectedParticipant = (Participant) participantsMenu.getValue();
-            if(selectedParticipant != null){
-                tabPaneIncludingPerson.setText("Including " + selectedParticipant.getName());
+            if(selectedParticipant != null) {
+                tabPaneIncludingPerson.setText(languageResourceBundle.
+                        getResourceBundle().getString("tabPaneIncluding")
+                        + " " + selectedParticipant.getName());
             }
         }
     }
@@ -327,6 +365,9 @@ public class EventOverviewCtrl {
 
     public void initialize(){
         if (event != null){
+            languageResourceBundle = LanguageResourceBundle.getInstance();
+            switchLanguage();
+
             participantsMenu.setItems(FXCollections.observableArrayList(event.getParticipants()));
             participantsMenu.setConverter(new StringConverter<Participant>() {
                 @Override
@@ -356,5 +397,25 @@ public class EventOverviewCtrl {
             });
             tabPaneAllClick();
         }
+    }
+
+    /**
+     * Method that always updates language on initialize.
+     */
+
+    public void switchLanguage(){
+        ResourceBundle bundle = languageResourceBundle.getResourceBundle();
+
+        overviewParticipantsText.setText(bundle.getString("overviewParticipantsText"));
+        overviewEditParticipantButton.setText(bundle.getString("overviewEditParticipantButton"));
+        overviewAddParticipantButton.setText(bundle.getString("overviewAddParticipantButton"));
+        overviewRemoveParticipantButton.setText(bundle.
+                getString("overviewRemoveParticipantButton"));
+        overviewAddExpenseButton.setText(bundle.getString("overviewAddExpenseButton"));
+        sendInvitesButton.setText(bundle.getString("sendInvitesButton"));
+        backButton.setText(bundle.getString("backButton"));
+        overviewSettleDebtsButton.setText(bundle.getString("overviewSettleDebtsButton"));
+        tabPaneAll.setText(bundle.getString("tabPaneAll"));
+
     }
 }

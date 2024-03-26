@@ -29,8 +29,8 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Button mnemonicParsing="false" onAction="#onSendInvites" text="Send Invites" GridPane.columnIndex="1" />
-                  <Label fx:id="eventTitleLabel" onMouseClicked="#editTitle" text="Label">
+                  <Button fx:id = "sendInvitesButton" mnemonicParsing="false" onAction="#onSendInvites" text="Send Invites" GridPane.columnIndex="1" />
+                  <Label fx:id="eventTitleLabel" text="Label" >
                      <cursor>
                         <Cursor fx:constant="TEXT" />
                      </cursor></Label>
@@ -38,9 +38,10 @@
             </GridPane>
             <HBox alignment="CENTER_LEFT" prefHeight="28.0" prefWidth="280.0" spacing="10.0">
                <children>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Participants" />
-                  <Button mnemonicParsing="false" onAction="#onEditParticipantsClick" text="Edit(pen)" />
-                  <Button mnemonicParsing="false" onAction="#onAddParticipantClick" text="Add(guy+)" />
+                  <Text fx:id="overviewParticipantsText" strokeType="OUTSIDE" strokeWidth="0.0" text="Participants" />
+                  <Button fx:id="overviewEditParticipantButton" mnemonicParsing="false" onAction="#onEditParticipantsClick" text="Edit(pen)" />
+                  <Button fx:id="overviewAddParticipantButton" mnemonicParsing="false" onAction="#onAddParticipantClick" text="Add(guy+)" />
+                  <Button fx:id="overviewRemoveParticipantButton" mnemonicParsing="false" text="Button" />
                </children>
             </HBox>
             <Text fx:id="participatingParticipants" strokeType="OUTSIDE" strokeWidth="0.0" text="Participants list" wrappingWidth="294.787109375" VBox.vgrow="ALWAYS" />
@@ -54,7 +55,7 @@
               </rowConstraints>
                <children>
                   <ChoiceBox fx:id="participantsMenu" prefWidth="150.0" />
-                  <Button mnemonicParsing="false" onAction="#onAddExpenseClick" text="Add Expense" GridPane.columnIndex="1" />
+                  <Button fx:id="overviewAddExpenseButton" mnemonicParsing="false" onAction="#onAddExpenseClick" text="Add Expense" GridPane.columnIndex="1" />
                </children>
             </GridPane>
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Expenses" VBox.vgrow="ALWAYS" />
@@ -147,8 +148,8 @@
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Button mnemonicParsing="false" onAction="#onBackClick" text="Back" GridPane.rowIndex="1" />
-                  <Button mnemonicParsing="false" onAction="#onSettleDebtsClick" text="Settle Debts" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <Button fx:id="backButton" mnemonicParsing="false" onAction="#onBackClick" text="Back" GridPane.rowIndex="1" />
+                  <Button fx:id="overviewSettleDebtsButton" mnemonicParsing="false" onAction="#onSettleDebtsClick" text="Settle Debts" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                </children>
             </GridPane>
          </children>

@@ -1,24 +1,35 @@
 package client.scenes;
 
+import client.utils.LanguageResourceBundle;
 import client.utils.ServerUtils;
 import commons.Event;
 import commons.Participant;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
 
 import com.google.inject.Inject;
+
+import java.util.ResourceBundle;
 
 public class EditParticipantCtrl {
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
+    private LanguageResourceBundle languageResourceBundle;
     private Event event;
     private Participant participant;
-
+    @FXML
+    private Label editParticipantLabel;
+    @FXML
+    private Label nameLabel;
+    @FXML
+    private Button removeParticipantButton;
+    @FXML
+    private Button participantCancelButton;
+    @FXML
+    private Button participantOkButton;
     @FXML
     private TextField nameField;
     @FXML
@@ -113,12 +124,28 @@ public class EditParticipantCtrl {
      */
     public void initialize() {
         if (participant != null){
+            languageResourceBundle = LanguageResourceBundle.getInstance();
+            switchTextLanguage();
             nameField.setText(participant.getName());
             nameField.positionCaret(participant.getName().length());
             emailField.setText(participant.getEmail());
             ibanField.setText(participant.getIban());
             bicField.setText(participant.getBic());
         }
+
+    }
+
+    /**
+     * Switches the text language.
+     */
+    public void switchTextLanguage(){
+        ResourceBundle bundle = languageResourceBundle.getResourceBundle();
+
+        editParticipantLabel.setText(bundle.getString("editParticipantLabel"));
+        nameLabel.setText(bundle.getString("nameLabel"));
+        removeParticipantButton.setText(bundle.getString("removeParticipantButton"));
+        participantCancelButton.setText(bundle.getString("participantCancelButton"));
+        participantOkButton.setText(bundle.getString("participantOkButton"));
 
     }
 

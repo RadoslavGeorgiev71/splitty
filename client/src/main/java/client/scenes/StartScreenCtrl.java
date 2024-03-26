@@ -1,15 +1,15 @@
 package client.scenes;
 
 import client.utils.ConfigClient;
+import client.utils.LanguageButtonUtils;
+import client.utils.LanguageResourceBundle;
 import com.google.inject.Inject;
 
 import client.utils.ServerUtils;
 import commons.Event;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
-import javafx.scene.control.ListView;
-import javafx.scene.control.ListCell;
+import javafx.geometry.Side;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
@@ -17,6 +17,7 @@ import javafx.scene.text.Text;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.ResourceBundle;
 
 public class StartScreenCtrl {
 
@@ -27,11 +28,22 @@ public class StartScreenCtrl {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
 
+    private LanguageResourceBundle languageResourceBundle;
+
     @FXML
     private TextField newEventText;
 
     @FXML
     private TextField joinEventText;
+
+    @FXML
+    private Text newEventStaticText;
+
+    @FXML
+    private Text joinEventStaticText;
+
+    @FXML
+    private Text recentEventsText;
 
     @FXML
     private Button createEventButton;
@@ -41,6 +53,9 @@ public class StartScreenCtrl {
 
     @FXML
     private ListView<String> recentlyViewedEventsListView;
+
+    @FXML
+    private MenuButton languageButton;
 
     /**
      *
@@ -62,11 +77,35 @@ public class StartScreenCtrl {
      * Functionality not yet there though.
      */
     public void initialize() {
+        recentlyViewedEventsListView.getItems().clear();
+
+        languageButton.getItems().clear();
 
         config = config.readFromFile("client/src/main/resources/config.txt");
+
+        String language = config.getLanguage();
+
+        languageResourceBundle = LanguageResourceBundle.getInstance();
+
+        languageResourceBundle.switchLanguage(language);
+
+        LanguageButtonUtils.updateLanguageMenuButton(languageButton, config);
+
+        LanguageButtonUtils.languageMenu(languageButton, config,
+                languageResourceBundle, this, keys);
+
+        languageButton.setPopupSide(Side.TOP);
+
+        switchTextLanguage();
+
         if(config.getRecentEvents() == null){
             return;
         }
+
+        setupRecentlyViewedEvents();
+    }
+
+    private void setupRecentlyViewedEvents() {
         HashMap<String, String> eventMap = new HashMap<>();
         String[] recentEvents = config.getRecentEvents().split(", ");
         for (String invite : recentEvents) {
@@ -86,8 +125,10 @@ public class StartScreenCtrl {
                     HBox hbox = new HBox(10);
 
                     Text text = new Text(item);
-                    Button button1 = new Button("Go to event");
-                    Button button2 = new Button("Remove");
+                    Button button1 = new Button(languageResourceBundle
+                            .getResourceBundle().getString("goToEventText"));
+                    Button button2 = new Button(languageResourceBundle
+                            .getResourceBundle().getString("removeFromRecentText"));
 
                     hbox.getChildren().addAll(text, button1, button2);
 
@@ -106,6 +147,20 @@ public class StartScreenCtrl {
                 }
             }
         });
+    }
+
+
+    /**
+     * Switches the text language.
+     */
+    public void switchTextLanguage(){
+
+        ResourceBundle bundle = languageResourceBundle.getResourceBundle();
+        newEventStaticText.setText(bundle.getString("newEventStaticText"));
+        joinEventStaticText.setText(bundle.getString("joinEventStaticText"));
+        recentEventsText.setText(bundle.getString("recentEventsText"));
+        createEventButton.setText(bundle.getString("createEventButton"));
+        joinEventButton.setText(bundle.getString("joinEventButton"));
     }
 
     /**
