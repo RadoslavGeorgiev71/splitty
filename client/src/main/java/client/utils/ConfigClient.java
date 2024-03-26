@@ -224,6 +224,7 @@ public class ConfigClient {
                         "language: en\n" +
                         "currency: null\n" +
                         "name: null\n" );
+                writer.close();
             } catch (IOException ioException) {
                 System.out.println("An error occurred: " + ioException.getMessage());
                 ioException.printStackTrace();
