@@ -58,6 +58,7 @@ public class MainCtrl {
      * @param editparticipant
      * @param addparticipant
      * @param eventoverview
+     * @param addexpense
      * @param opendebts
      * @param startscreen
      * @param invitation
