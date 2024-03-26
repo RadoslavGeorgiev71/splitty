@@ -210,7 +210,7 @@ public class Admin{
      * @param consumer asd
      */
     public void registerForEvents(String dest, Consumer<Event> consumer) {
-        session.subscribe(SERVER, new StompFrameHandler() {
+        session.subscribe(dest, new StompFrameHandler() {
             @Override
             public Type getPayloadType(StompHeaders headers) {
                 return Event.class;
