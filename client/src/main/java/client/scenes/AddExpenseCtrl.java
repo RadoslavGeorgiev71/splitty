@@ -15,7 +15,6 @@ import com.google.inject.Inject;
 import javafx.util.StringConverter;
 
 import java.net.URL;
-import java.util.Currency;
 import java.util.ResourceBundle;
 
 public class AddExpenseCtrl implements Initializable {
@@ -24,7 +23,6 @@ public class AddExpenseCtrl implements Initializable {
     private final MainCtrl mainCtrl;
     private Event event;
     private Expense expense;
-    private Participant participant;
 
     @FXML
     private ChoiceBox payerChoiceBox;               //Who paid?
@@ -110,14 +108,6 @@ public class AddExpenseCtrl implements Initializable {
      */
     public void setEvent(Event event) {
         this.event = event;
-    }
-
-    /**
-     * Setter for paying participant
-     * @param participant
-     */
-    public void setParticipant(Participant participant) {
-        this.participant = participant;
     }
 
     /**
