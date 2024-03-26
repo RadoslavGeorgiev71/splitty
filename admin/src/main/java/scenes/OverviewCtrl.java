@@ -71,7 +71,7 @@ public class OverviewCtrl {
             if(result.get() == ButtonType.OK){
                 admin.deleteEvent(selectedEvent);
                 table.getItems().remove(selectedEvent);
-                initialize();
+                refresh();
             }
         }
     }
@@ -118,7 +118,7 @@ public class OverviewCtrl {
                 throw new RuntimeException(e);
             }
         }
-        initialize();
+        refresh();
     }
 
     /**
@@ -152,7 +152,16 @@ public class OverviewCtrl {
      * @param event button clicked
      */
     public void refresh(ActionEvent event){
-        initialize();
+        refresh();
+    }
+
+    /**
+     * Refreshes the events in the table
+     */
+    public void refresh() {
+        var eventss = admin.getEvents();
+        events = FXCollections.observableList(eventss);
+        table.setItems(events);
     }
 
     /**
