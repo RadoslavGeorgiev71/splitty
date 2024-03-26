@@ -12,7 +12,7 @@
    <children>
       <ScrollPane layoutX="142.0" layoutY="219.0" prefHeight="60.0" prefWidth="328.0">
          <content>
-            <TextArea fx:id="emailTextArea" prefHeight="61.0" prefWidth="312.0" />
+            <TextArea fx:id="emailTextArea" prefHeight="61.0" prefWidth="312.0" promptText="Enter the email addresses of people you want to invite (One email address per line)" />
          </content>
       </ScrollPane>
       <Button fx:id="sendInvitesButton" layoutX="360.0" layoutY="289.0" mnemonicParsing="false" onAction="#sendInvites" prefHeight="25.0" prefWidth="110.0" text="Send invites" />
