@@ -84,7 +84,6 @@ public class StartScreenCtrl {
         config = config.readFromFile("client/src/main/resources/config.txt");
 
         String language = config.getLanguage();
-        System.out.println(language);
 
         languageResourceBundle = LanguageResourceBundle.getInstance();
 
