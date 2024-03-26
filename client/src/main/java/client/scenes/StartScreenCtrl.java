@@ -85,6 +85,8 @@ public class StartScreenCtrl {
 
         languageResourceBundle = LanguageResourceBundle.getInstance();
 
+        languageResourceBundle.switchLanguage(language);
+
         LanguageButtonUtils.updateLanguageMenuButton(languageButton, config);
 
         LanguageButtonUtils.languageMenu(languageButton, config,

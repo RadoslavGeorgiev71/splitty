@@ -139,9 +139,9 @@ public class OpenDebtsCtrl {
      */
     private void removeDebt(Debt debt) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Confirmation of debt");
-        alert.setContentText("Are you sure you want to mark this debt as settled?" +
-            " This action is irreversible and the debt won't be displayed anymore!");
+        ResourceBundle bundle = languageResourceBundle.getResourceBundle();
+        alert.setTitle(bundle.getString("removeDebtAlertTitleText"));
+        alert.setContentText(bundle.getString("removeDebtAlertContentText"));
 
         //TODO: for now there is also an output on the console which should be removed in teh future
         alert.showAndWait().ifPresent(response -> {

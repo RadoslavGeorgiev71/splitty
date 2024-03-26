@@ -151,9 +151,10 @@ public class EventOverviewCtrl {
     @FXML
     public void onBackClick() {
         Alert alert =  new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Exit");
-        alert.setHeaderText("You will exit this event and go back to start screen");
-        alert.setContentText("Are you sure you want to exit?");
+        ResourceBundle bundle = languageResourceBundle.getResourceBundle();
+        alert.setTitle(bundle.getString("exitEventAlertTitleText"));
+        alert.setHeaderText(bundle.getString("exitEventAlertHeaderText"));
+        alert.setContentText(bundle.getString("exitEventAlertContentText"));
         if (alert.showAndWait().get() == ButtonType.OK){
             mainCtrl.showStartScreen();
         }
