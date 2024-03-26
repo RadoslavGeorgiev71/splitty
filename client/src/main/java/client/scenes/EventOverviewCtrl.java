@@ -139,7 +139,7 @@ public class EventOverviewCtrl {
 
     @FXML
     public void onAddExpenseClick() {
-
+        mainCtrl.showAddExpense(this.event);
     }
 
     /**

@@ -232,11 +232,13 @@ public class ServerUtils {
      *
      * @param emails list of emails to sent
      * @param event  of which the invite code it sends
+     * @param creatorname the persons who send the emails
      * @return true if the emails were sent successfully
      */
-    public boolean sendInvites(List<String> emails, Event event) {
+    public boolean sendInvites(List<String> emails, Event event, String creatorname) {
         Response response = ClientBuilder.newClient(new ClientConfig())
                 .target(SERVER).path("/api/email/" + event.getInviteCode())
+                .queryParam("creatorName", creatorname)
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
                 .post(Entity.json(emails));
