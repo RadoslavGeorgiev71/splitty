@@ -215,6 +215,16 @@ public class ConfigClient {
                 Path filePath = Paths.get(filepath);
                 // Create the file
                 Files.createFile(filePath);
+
+                BufferedWriter writer = new BufferedWriter(new FileWriter(filepath));
+                writer.write("serverUrl: null\n" +
+                        "email: null\n" +
+                        "iban: null\n" +
+                        "bic: null\n" +
+                        "language: en\n" +
+                        "currency: null\n" +
+                        "name: null\n" );
+                writer.close();
             } catch (IOException ioException) {
                 System.out.println("An error occurred: " + ioException.getMessage());
                 ioException.printStackTrace();

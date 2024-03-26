@@ -1,5 +1,6 @@
 package client.scenes;
 
+import client.utils.ConfigClient;
 import client.utils.LanguageResourceBundle;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
@@ -145,11 +146,13 @@ public class InvitationCtrl implements Initializable {
      */
     private void sendInvites(){
         List<String> emails = new ArrayList<>();
+        String name = new ConfigClient().readFromFile("client/src/main/resources/config.txt")
+                .getName();
         Scanner scanner = new Scanner(emailTextArea.getText());
         while(scanner.hasNextLine()){
             emails.add(scanner.nextLine());
         }
-        if(server.sendInvites(emails, event)){
+        if(server.sendInvites(emails, event, name)){
             Alert alert =  new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Success");
             alert.setHeaderText("Invitation emails were sent successfully");
