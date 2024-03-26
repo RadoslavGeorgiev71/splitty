@@ -21,16 +21,15 @@ import static org.junit.jupiter.api.Assertions.*;
          List<Event> events = List.of(new Event(1, "test", "Queze2TK",
                  participants, expenses, "2024/03/20 21:00:12"));
          OverviewCtrl controller = new OverviewCtrl(new Admin(), new MainCtrl());
-         List<Event> result = controller.readEvents(new Scanner("{\"id\":1,\"title\":\"test\",\"inviteCode\":\"Queze2TK\"," +
+         Event result = controller.readEvent(new Scanner("{\"id\":1,\"title\":\"test\",\"inviteCode\":\"Queze2TK\"," +
                  "\"participants\":[]," + "\"expenses\":[],\"dateTime\":\"2024/03/20 21:00:12\"}"));
-         assertTrue(events.get(0).equals(result.get(0)));
+         assertTrue(events.get(0).equals(result));
      }
 
      @Test
      void readFromFileNull() {
-         List<Event> events = List.of(new Event());
          OverviewCtrl controller = new OverviewCtrl(new Admin(), new MainCtrl());
-         List<Event> result = controller.readEvents(new Scanner(""));
-         assertEquals(0, result.size());
+         Event result = controller.readEvent(new Scanner(""));
+         assertNull(result);
      }
 }

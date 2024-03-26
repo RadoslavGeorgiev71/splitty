@@ -133,8 +133,10 @@ public class OverviewCtrl {
         ObjectMapper objectMapper = new ObjectMapper();
         Event event = null;
         try {
+            if(scanner.hasNextLine()){
                 String json = scanner.nextLine();
                 event = objectMapper.readValue(json, Event.class);
+            }
         }
         catch (JsonProcessingException e) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
