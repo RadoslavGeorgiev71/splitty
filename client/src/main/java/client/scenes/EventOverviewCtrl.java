@@ -20,8 +20,6 @@ import javafx.event.ActionEvent;
 
 import java.util.ResourceBundle;
 
-@SuppressWarnings("unchecked")
->>>>>>> client/src/main/java/client/scenes/EventOverviewCtrl.java
 public class EventOverviewCtrl {
 
     private final ServerUtils server;
@@ -269,15 +267,11 @@ public class EventOverviewCtrl {
         }
         else {
             Participant selectedParticipant = (Participant) participantsMenu.getValue();
-<<<<<<< client/src/main/java/client/scenes/EventOverviewCtrl.java
-            tabPaneFromPerson.setText(languageResourceBundle.
-                    getResourceBundle().getString("tabPaneFrom")
-                    + " " + selectedParticipant.getName());
-=======
-            if(selectedParticipant != null){
-                tabPaneFromPerson.setText("From " + selectedParticipant.getName());
+            if(selectedParticipant != null) {
+                tabPaneFromPerson.setText(languageResourceBundle.
+                        getResourceBundle().getString("tabPaneFrom")
+                        + " " + selectedParticipant.getName());
             }
->>>>>>> client/src/main/java/client/scenes/EventOverviewCtrl.java
         }
 
     }
@@ -292,15 +286,11 @@ public class EventOverviewCtrl {
         }
         else {
             Participant selectedParticipant = (Participant) participantsMenu.getValue();
-<<<<<<< client/src/main/java/client/scenes/EventOverviewCtrl.java
-            tabPaneIncludingPerson.setText(languageResourceBundle.
-                    getResourceBundle().getString("tabPaneIncluding")
-                    + " " + selectedParticipant.getName());
-=======
-            if(selectedParticipant != null){
-                tabPaneIncludingPerson.setText("Including " + selectedParticipant.getName());
+            if(selectedParticipant != null) {
+                tabPaneIncludingPerson.setText(languageResourceBundle.
+                        getResourceBundle().getString("tabPaneIncluding")
+                        + " " + selectedParticipant.getName());
             }
->>>>>>> client/src/main/java/client/scenes/EventOverviewCtrl.java
         }
     }
 
@@ -408,7 +398,6 @@ public class EventOverviewCtrl {
             tabPaneAllClick();
         }
     }
-<<<<<<< client/src/main/java/client/scenes/EventOverviewCtrl.java
 
     /**
      * Method that always updates language on initialize.
@@ -429,8 +418,4 @@ public class EventOverviewCtrl {
         tabPaneAll.setText(bundle.getString("tabPaneAll"));
 
     }
-
-
-=======
->>>>>>> client/src/main/java/client/scenes/EventOverviewCtrl.java
 }

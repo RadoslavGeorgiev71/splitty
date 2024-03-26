@@ -30,7 +30,7 @@
               </rowConstraints>
                <children>
                   <Button fx:id = "sendInvitesButton" mnemonicParsing="false" onAction="#onSendInvites" text="Send Invites" GridPane.columnIndex="1" />
-                  <Label fx:id="eventTitleLabel" text="Label" />
+                  <Label fx:id="eventTitleLabel" text="Label" >
                      <cursor>
                         <Cursor fx:constant="TEXT" />
                      </cursor></Label>
