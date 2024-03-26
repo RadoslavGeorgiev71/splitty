@@ -151,6 +151,7 @@ public class Admin{
                 return;
             }
         }
+        /*
         Response response = ClientBuilder.newClient(new ClientConfig())
                 .target(SERVER).path("/api/events")
                 .request(APPLICATION_JSON)
@@ -159,6 +160,9 @@ public class Admin{
         if (response.getStatus() != Response.Status.CREATED.getStatusCode()) {
             showalert(event);
         }
+
+         */
+        send("/app/events", event);
 
     }
 
