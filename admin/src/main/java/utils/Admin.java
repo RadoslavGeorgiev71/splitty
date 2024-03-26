@@ -143,22 +143,22 @@ public class Admin{
      * @param event events to add to the database
      */
     public void importEvent(Event event) {
-            List<Event> currentEvents = getEvents();
-            for(Event cevent : currentEvents){
-                if(cevent.getId() == event.getId() ||
-                        cevent.getInviteCode().equals(event.getInviteCode())) {
-                    showalert(event);
-                    return;
-                }
-            }
-            Response response = ClientBuilder.newClient(new ClientConfig())
-                    .target(SERVER).path("/api/events")
-                    .request(APPLICATION_JSON)
-                    .accept(APPLICATION_JSON)
-                    .post(Entity.json(event));
-            if (response.getStatus() != Response.Status.CREATED.getStatusCode()) {
+        List<Event> currentEvents = getEvents();
+        for(Event cevent : currentEvents){
+            if(cevent.getId() == event.getId() ||
+                    cevent.getInviteCode().equals(event.getInviteCode())) {
                 showalert(event);
+                return;
             }
+        }
+        Response response = ClientBuilder.newClient(new ClientConfig())
+                .target(SERVER).path("/api/events")
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .post(Entity.json(event));
+        if (response.getStatus() != Response.Status.CREATED.getStatusCode()) {
+            showalert(event);
+        }
 
     }
 

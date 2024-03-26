@@ -118,9 +118,9 @@ public class EventController {
     }
 
     /**
-     * Stuff
+     * asd
      * @param e asd
-     * @return
+     * @return event
      */
     @MessageMapping("/events")
     @SendTo("/topic/events")
