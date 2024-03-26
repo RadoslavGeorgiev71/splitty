@@ -32,5 +32,5 @@ dependencies {
 	implementation 'org.openjfx:javafx-controls:21.0.2'
 	implementation 'org.openjfx:javafx-fxml:21.0.2'
 	implementation 'de.jensd:fontawesomefx-fontawesome:4.7.0-9.1.2'
-	
+	implementation 'org.springframework.boot:spring-boot-starter-websocket:3.2.0'
 }
