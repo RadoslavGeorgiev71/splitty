@@ -13,7 +13,7 @@
 
 <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#keyPressed" prefHeight="300.0" prefWidth="500.0" spacing="10.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.EditParticipantCtrl">
    <children>
-      <Label alignment="CENTER" contentDisplay="CENTER" maxWidth="1.7976931348623157E308" prefHeight="17.0" text="Edit Participant" textAlignment="CENTER">
+      <Label fx:id="editParticipantLabel" alignment="CENTER" contentDisplay="CENTER" maxWidth="1.7976931348623157E308" prefHeight="17.0" text="Edit Participant" textAlignment="CENTER">
          <font>
             <Font size="24.0" />
          </font>
@@ -32,8 +32,8 @@
          <children>
             <Label fx:id="nameLabel" alignment="CENTER" contentDisplay="CENTER" maxWidth="1.7976931348623157E308" prefHeight="17.0" prefWidth="283.0" text="Name" textAlignment="RIGHT" />
             <Label fx:id="emailLabel" alignment="CENTER" maxWidth="1.7976931348623157E308" text="Email" textAlignment="RIGHT" GridPane.rowIndex="1" />
-            <Label fx:id="iabnLabel" alignment="CENTER" maxWidth="1.7976931348623157E308" text="IBAN" textAlignment="RIGHT" GridPane.rowIndex="2" />
-            <Label fx:id="bicLable" alignment="CENTER" maxWidth="1.7976931348623157E308" text="BIC" textAlignment="RIGHT" GridPane.rowIndex="3" />
+            <Label fx:id="ibanLabel" alignment="CENTER" maxWidth="1.7976931348623157E308" text="IBAN" textAlignment="RIGHT" GridPane.rowIndex="2" />
+            <Label fx:id="bicLabel" alignment="CENTER" maxWidth="1.7976931348623157E308" text="BIC" textAlignment="RIGHT" GridPane.rowIndex="3" />
             <TextField fx:id="nameField" minWidth="-Infinity" prefHeight="25.0" prefWidth="166.0" GridPane.columnIndex="1" />
             <TextField fx:id="emailField" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <TextField fx:id="ibanField" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowIndex="2" />
@@ -45,9 +45,9 @@
       </GridPane>
       <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
          <children>
-            <Button mnemonicParsing="false" onAction="#cancel" text="Cancel" />
-            <Button layoutX="387.0" layoutY="25.0" mnemonicParsing="false" onAction="#removeParticipant" text="Remove Participant" />
-            <Button mnemonicParsing="false" onAction="#ok" text="Ok" />
+            <Button fx:id="participantCancelButton" mnemonicParsing="false" onAction="#cancel" text="Cancel" />
+            <Button fx:id="removeParticipantButton" layoutX="387.0" layoutY="25.0" mnemonicParsing="false" onAction="#removeParticipant" text="Remove Participant" />
+            <Button fx:id="participantOkButton" mnemonicParsing="false" onAction="#ok" text="Ok" />
          </children>
          <VBox.margin>
             <Insets />

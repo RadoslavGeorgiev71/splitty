@@ -1,5 +1,6 @@
 package client.scenes;
 
+import client.utils.LanguageResourceBundle;
 import client.utils.ServerUtils;
 import commons.Debt;
 import commons.Event;
@@ -19,11 +20,13 @@ import javafx.stage.Modality;
 import com.google.inject.Inject;
 
 import java.util.List;
+import java.util.ResourceBundle;
 
 public class OpenDebtsCtrl {
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
+    private LanguageResourceBundle languageResourceBundle;
     private Event event;
     private List<Debt> debts;
     private TitledPane[] titledPanes;
@@ -31,6 +34,12 @@ public class OpenDebtsCtrl {
     private FontAwesomeIconView[] envelopeIcons;
     private FontAwesomeIconView[] bankIcons;
     private Button[] buttonReceived;
+
+    @FXML
+    private Label openDebtsLabel;
+
+    @FXML
+    private Button backButton;
 
     @FXML
     private GridPane gridPane;
@@ -53,6 +62,8 @@ public class OpenDebtsCtrl {
     */
     public void initialize() {
         if (event != null) {
+            languageResourceBundle = LanguageResourceBundle.getInstance();
+            switchTextLanguage();
             gridPane.setAlignment(Pos.CENTER);
             this.testDebts();
             debts = getDebts();
@@ -65,6 +76,17 @@ public class OpenDebtsCtrl {
                 visualizeDebt(i);
             }
         }
+    }
+
+    /**
+     * Switches the language of the text.
+     */
+
+    public void switchTextLanguage(){
+        ResourceBundle bundle = languageResourceBundle.getResourceBundle();
+
+        openDebtsLabel.setText(bundle.getString("openDebtsLabel"));
+        backButton.setText(bundle.getString("backButton"));
     }
 
     /**

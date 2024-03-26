@@ -1,22 +1,37 @@
 package client.scenes;
 
+import client.utils.LanguageResourceBundle;
 import client.utils.ServerUtils;
 import commons.Event;
 import commons.Participant;
+import jakarta.annotation.Resource;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 
 import com.google.inject.Inject;
 
+import java.util.ResourceBundle;
+
 public class AddParticipantCtrl {
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
+    private LanguageResourceBundle languageResourceBundle;
     private Event event;
     private Participant participant;
 
+    @FXML
+    private Label nameLabel;
+    @FXML
+    private Label participantAddLabel;
+    @FXML
+    private Button participantCancelButton;
+    @FXML
+    private Button participantOkButton;
     @FXML
     private TextField nameField;
     @FXML
@@ -105,5 +120,17 @@ public class AddParticipantCtrl {
      * Initiallizes the fields with the participant's data
      */
     public void initialize() {
+        languageResourceBundle = LanguageResourceBundle.getInstance();
+        switchTextLanguage();
+    }
+
+    public void switchTextLanguage(){
+        ResourceBundle bundle = languageResourceBundle.getResourceBundle();
+
+        nameLabel.setText(bundle.getString("nameLabel"));
+        participantAddLabel.setText(bundle.getString("participantAddLabel"));
+        participantCancelButton.setText(bundle.getString("participantCancelButton"));
+        participantOkButton.setText(bundle.getString("participantOkButton"));
+
     }
 }
