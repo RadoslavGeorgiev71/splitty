@@ -1,6 +1,5 @@
 package server.Repositories;
 
-import commons.Debt;
 import commons.Event;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
@@ -14,100 +13,191 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
+/**
+ * A test implementation of the EventRepository interface.
+ */
 public class TestEventRepository implements EventRepository {
 
-    public List<Event> events = new ArrayList<>();
-    public final List<String> calledMethods = new ArrayList<>();
+    private List<Event> events = new ArrayList<>();
+    private final List<String> calledMethods = new ArrayList<>();
+
+    /**
+     * Adds the name of the called method to the list of called methods.
+     *
+     * @param name The name of the called method.
+     */
     private void call(String name) {
         calledMethods.add(name);
     }
 
+    /**
+     * Returns the list of events.
+     *
+     * @return The list of events.
+     */
+    public List<Event> getEvents() {
+        return events;
+    }
+
+    /**
+     * Sets the list of events.
+     *
+     * @param events The list of events to set.
+     */
+    public void setEvents(List<Event> events) {
+        this.events = events;
+    }
+
+    /**
+     * Returns the list of called methods.
+     *
+     * @return The list of called methods.
+     */
+    public List<String> getCalledMethods() {
+        return calledMethods;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Optional<Event> findByInviteCode(String inviteCode) {
         return Optional.empty();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void flush() {
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public <S extends Event> S saveAndFlush(S entity) {
         return null;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public <S extends Event> List<S> saveAllAndFlush(Iterable<S> entities) {
         return null;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void deleteAllInBatch(Iterable<Event> entities) {
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void deleteAllByIdInBatch(Iterable<Long> longs) {
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void deleteAllInBatch() {
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Event getOne(Long aLong) {
         return null;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Event getById(Long aLong) {
         return null;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Event getReferenceById(Long aLong) {
         return null;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public <S extends Event> Optional<S> findOne(Example<S> example) {
         return Optional.empty();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public <S extends Event> List<S> findAll(Example<S> example) {
         return null;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public <S extends Event> List<S> findAll(Example<S> example, Sort sort) {
         return null;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public <S extends Event> Page<S> findAll(Example<S> example, Pageable pageable) {
         return null;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public <S extends Event> long count(Example<S> example) {
         return 0;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public <S extends Event> boolean exists(Example<S> example) {
         return false;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public <S extends Event, R> R findBy(Example<S> example,
-                                         Function<FluentQuery.FetchableFluentQuery<S>, R> queryFunction) {
+                                         Function<FluentQuery
+                                             .FetchableFluentQuery<S>, R> queryFunction) {
         return null;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public <S extends Event> S save(S entity) {
         calledMethods.add("save");
@@ -115,69 +205,110 @@ public class TestEventRepository implements EventRepository {
         return entity;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public <S extends Event> List<S> saveAll(Iterable<S> entities) {
         return null;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Optional<Event> findById(Long aLong) {
         calledMethods.add("findById");
         List<Event> rightEvents =  events.stream().filter(x -> x.getId() == aLong).toList();
-        if (rightEvents.isEmpty()) return Optional.empty();
+        if (rightEvents.isEmpty())  {
+            return Optional.empty();
+        }
         return Optional.of(rightEvents.getFirst());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean existsById(Long aLong) {
         return false;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Event> findAll() {
         return null;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Event> findAllById(Iterable<Long> longs) {
         return null;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public long count() {
         return 0;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void deleteById(Long aLong) {
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void delete(Event entity) {
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void deleteAllById(Iterable<? extends Long> longs) {
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void deleteAll(Iterable<? extends Event> entities) {
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void deleteAll() {
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Event> findAll(Sort sort) {
         return null;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Page<Event> findAll(Pageable pageable) {
         return null;
