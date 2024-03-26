@@ -4,7 +4,7 @@ package server.api;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import server.EmailService;
+import server.Services.EmailService;
 
 import java.util.List;
 

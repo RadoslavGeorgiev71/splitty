@@ -172,8 +172,7 @@ public class MainCtrl {
     public void showInvitation(Event event) {
         primaryStage.setTitle("Invitation");
         invitationCtrl.setEvent(event);
-        invitationCtrl.setInviteCodeText();
-        invitationCtrl.setEventNameText();
+        invitationCtrl.initialize();
         primaryStage.setScene(invitation);
     }
 

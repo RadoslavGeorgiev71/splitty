@@ -62,7 +62,7 @@ public class ServerUtils {
      * @param event the event
      * @return a list of debts
      */
-    public List<Debt> getDebtsForEvent(Event event) {
+    public List<Debt> getPaymentInstructions(Event event) {
         return ClientBuilder.newClient(new ClientConfig())
                 .target(SERVER).path("api/debts/event/" + event.getId())
                 .request(APPLICATION_JSON)

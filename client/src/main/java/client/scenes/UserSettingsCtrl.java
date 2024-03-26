@@ -99,11 +99,11 @@ public class UserSettingsCtrl {
         }
 
         // Placeholder for now, there's probably a better way to do this
-        List<String> currencys = new ArrayList<>();
-        currencys.add("EUR");
-        currencys.add("USD");
-        currencys.add("AUD");
-        currencyMenu.setItems(FXCollections.observableArrayList(currencys));
+        List<String> currencies = new ArrayList<>();
+        currencies.add("EUR");
+        currencies.add("USD");
+        currencies.add("AUD");
+        currencyMenu.setItems(FXCollections.observableArrayList(currencies));
         currencyMenu.getSelectionModel().selectFirst();
     }
 

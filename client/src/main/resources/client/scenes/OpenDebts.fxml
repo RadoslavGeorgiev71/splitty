@@ -16,7 +16,7 @@
    <children>
       <Pane prefHeight="70.0" prefWidth="454.0">
          <children>
-            <Label layoutY="2.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="52.0" prefWidth="158.0" text="Open Debts">
+            <Label fx:id="openDebtsLabel" layoutY="2.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="52.0" prefWidth="158.0" text="Open Debts">
                <font>
                   <Font size="28.0" />
                </font>
@@ -24,7 +24,7 @@
                   <Insets left="10.0" top="10.0" />
                </padding>
             </Label>
-            <Button layoutX="344.0" layoutY="21.0" minWidth="53.0" mnemonicParsing="false" onAction="#backToEvent" prefHeight="28.0" prefWidth="67.0" text="Back" />
+            <Button fx:id="backButton" layoutX="344.0" layoutY="21.0" minWidth="53.0" mnemonicParsing="false" onAction="#backToEvent" prefHeight="28.0" prefWidth="67.0" text="Back" />
          </children>
       </Pane>
       <ScrollPane fx:id="scrollPane" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="304.0" prefWidth="402.0" style="-fx-pannable: true; -fx-vbar-policy: AS_NEEDED;">

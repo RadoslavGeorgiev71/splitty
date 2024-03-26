@@ -4,7 +4,7 @@ import commons.Participant;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import server.ParticipantService;
+import server.Services.ParticipantService;
 import java.util.List;
 import java.util.Optional;
 

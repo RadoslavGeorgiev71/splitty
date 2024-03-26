@@ -3,7 +3,7 @@ package server.api;
 
 import commons.Expense;
 import org.springframework.web.bind.annotation.*;
-import server.ExpenseService;
+import server.Services.ExpenseService;
 
 import java.util.List;
 
