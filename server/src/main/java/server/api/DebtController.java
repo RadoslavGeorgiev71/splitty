@@ -1,29 +1,23 @@
 package server.api;
 
 import commons.Debt;
-import commons.Event;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import server.database.DebtRepository;
-import server.database.EventRepository;
+import server.Services.DebtService;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/debts")
 public class DebtController {
-    private final DebtRepository repo;
-    private final EventRepository eventRepo;
+    private DebtService debtService;
 
     /**
-     * Constructor for the controller
-     * @param repo - type DebtRepository which extends JpaRepository
-     * @param eventRepo - type EventRepository which extends JpaRepository
+     * Constructor for the debt controller
+     * @param debtService - the debt service for the debt repository
      */
-    public DebtController(DebtRepository repo, EventRepository eventRepo) {
-        this.repo = repo;
-        this.eventRepo = eventRepo;
+    public DebtController(DebtService debtService) {
+        this.debtService = debtService;
     }
 
     /**
@@ -32,20 +26,25 @@ public class DebtController {
      */
     @GetMapping(path = {"", "/"})
     public List<Debt> getAll() {
-        return repo.findAll();
+        return debtService.getAll();
     }
 
     /**
      * Return all debts associated with a specific event
      * @param eventId - the id of event we retrieve the debts for
-     * @return all debts corresponding to the event
+     * @return a response entity with the correct debts,
+     * bad request response otherwise
      */
     @GetMapping(path = {"event/{eventId}"})
-    public ResponseEntity<List<Debt>> getDebtsForEvent(@PathVariable("eventId") long eventId) {
-        Optional<Event> event = eventRepo.findById(eventId);
-        return event.map(value -> ResponseEntity.ok(repo.findAll().stream().
-                filter(x -> value.getParticipants().contains(x.getPersonPaying())).toList()))
-            .orElseGet(() -> ResponseEntity.badRequest().build());
+    public ResponseEntity<List<Debt>> getPaymentInstructions(
+        @PathVariable("eventId") long eventId) {
+        List<Debt> debts = debtService.getPaymentInstructions(eventId);
+        if(debts == null) {
+            return ResponseEntity.badRequest().build();
+        }
+        else {
+            return ResponseEntity.ok(debts);
+        }
     }
 
     /**
@@ -56,13 +55,13 @@ public class DebtController {
      */
     @PostMapping(path = {"", "/"})
     public ResponseEntity<Debt> add(@RequestBody Debt debt) {
-        if (debt.getPersonPaying() == null ||
-            debt.getPersonOwed() == null || debt.isPaid()) {
+        Debt debtSaved = debtService.add(debt);
+        if(debtSaved == null) {
             return ResponseEntity.badRequest().build();
         }
-
-        Debt saved = repo.save(debt);
-        return ResponseEntity.ok(saved);
+        else {
+            return ResponseEntity.ok(debtSaved);
+        }
     }
 
     /**
@@ -73,11 +72,13 @@ public class DebtController {
      */
     @DeleteMapping(path = {"/{id}"})
     public ResponseEntity<String> delete(@PathVariable("id") long id) {
-        if (!repo.existsById(id)) {
+        Debt deletedDebt = debtService.delete(id);
+        if (deletedDebt == null) {
             return ResponseEntity.badRequest().build();
         }
-        repo.deleteById(id);
-        return ResponseEntity.ok().body("Successful delete");
+        else {
+            return ResponseEntity.ok().body("Successful delete");
+        }
     }
 
     /**
@@ -88,9 +89,12 @@ public class DebtController {
      */
     @GetMapping("/{id}")
     public ResponseEntity<Debt> getById(@PathVariable("id") long id) {
-        if (id < 0 || !repo.existsById(id)) {
+        Debt debt = debtService.getById(id);
+        if (debt == null) {
             return ResponseEntity.badRequest().build();
         }
-        return ResponseEntity.ok(repo.findById(id).get());
+        else {
+            return ResponseEntity.ok(debt);
+        }
     }
 }

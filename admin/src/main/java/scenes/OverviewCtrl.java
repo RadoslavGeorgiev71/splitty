@@ -10,6 +10,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import utils.Admin;
@@ -18,6 +20,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Scanner;
 
 
@@ -63,9 +66,15 @@ public class OverviewCtrl {
     void delete(ActionEvent event) {
         Event selectedEvent = table.getSelectionModel().getSelectedItem();
         if (selectedEvent != null){
-            admin.deleteEvent(selectedEvent);
-            table.getItems().remove(selectedEvent);
-            initialize();
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Confirm event deletion");
+            alert.setContentText("Are you sure you want to delete this event?");
+            Optional<ButtonType> result = alert.showAndWait();
+            if(result.get() == ButtonType.OK){
+                admin.deleteEvent(selectedEvent);
+                table.getItems().remove(selectedEvent);
+                initialize();
+            }
         }
     }
 
@@ -131,9 +140,42 @@ public class OverviewCtrl {
             }
         }
         catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("JSON dump");
+            alert.setHeaderText("Error reading JSON file");
+            alert.setContentText("Seems that the JSON file is corrupted or not well formatted. \n" +
+                    "Ensure that there is one event per line");
+            alert.showAndWait();
         }
         return events;
+    }
+
+    /**
+     * refreshes the table
+     * @param event button clicked
+     */
+    public void refresh(ActionEvent event){
+        initialize();
+    }
+
+    /**
+     * goes back to the login page
+     * @param event
+     */
+    @FXML
+    void back(ActionEvent event) {
+        mainCtrl.showLogin();
+    }
+
+    /**
+     * When the user presses a key, it triggers the
+     * refresh method
+     * @param e
+     */
+    public void keyPressed(KeyEvent e) {
+        if(e.isControlDown() && e.getCode() == KeyCode.R){
+            refresh(null);
+        }
     }
 
     void initialize(){

@@ -5,15 +5,20 @@ import client.utils.ServerUtils;
 import com.google.inject.Inject;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
+import java.util.Scanner;
 
 import commons.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
+
 
 public class InvitationCtrl implements Initializable {
     private final ServerUtils server;
@@ -139,8 +144,21 @@ public class InvitationCtrl implements Initializable {
      * Should send invites.
      */
     private void sendInvites(){
+        List<String> emails = new ArrayList<>();
+        Scanner scanner = new Scanner(emailTextArea.getText());
+        while(scanner.hasNextLine()){
+            emails.add(scanner.nextLine());
+        }
+        if(server.sendInvites(emails, event)){
+            Alert alert =  new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Success");
+            alert.setHeaderText("Invitation emails were sent successfully");
+            alert.showAndWait();
+            clearEmail();
+        }
 
     }
+
     @FXML
     private void backToStart(){
         mainCtrl.showStartScreen();

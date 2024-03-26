@@ -167,12 +167,11 @@ public class StartScreenCtrl {
      */
     public void joinEvent(){
         String inviteCode = joinEventText.getText();
-        Event event = server.getEventByCode(inviteCode);
-
-        writeEventToConfig(event);
-
-        mainCtrl.showEventOverview(event);
-
+        if(!inviteCode.isEmpty()){
+            Event event = server.getEventByCode(inviteCode);
+            writeEventToConfig(event);
+            mainCtrl.showEventOverview(event);
+        }
     }
 
     /**
@@ -180,16 +179,23 @@ public class StartScreenCtrl {
      */
     public void createEvent(){
         String title = newEventText.getText();
-        Event event = new Event();
-        event.setTitle(title);
-        event.createInviteCode();
-
-        event = server.addEvent(event);
-
-        writeEventToConfig(event);
-
-        mainCtrl.showInvitation(event);
+        if(!title.isEmpty()){
+            Event event = new Event();
+            event.setTitle(title);
+            event.createInviteCode();
+            event = server.addEvent(event);
+            writeEventToConfig(event);
+            mainCtrl.showInvitation(event);
+        }
     }
+
+    /**
+     * Switches to the User Settings scene
+     */
+    public void onSettingsClick() {
+        mainCtrl.showUserSettings(config);
+    }
+
     /**
      * Clears text fields.
      */
@@ -197,6 +203,22 @@ public class StartScreenCtrl {
         newEventText.clear();
         joinEventText.clear();
         recentlyViewedEventsListView.getItems().clear();
+    }
+
+    /**
+     * When the user presses enter, it triggers the
+     * create or join button
+     * @param e
+     */
+    public void keyPressed(KeyEvent e) {
+        if(e.getCode() == KeyCode.ENTER){
+            if(e.getSource().equals(newEventText)){
+                createEvent();
+            }
+            if(e.getSource().equals(joinEventText)){
+                joinEvent();
+            }
+        }
     }
 
     /**

@@ -66,7 +66,7 @@ public class OpenDebtsCtrl {
             switchTextLanguage();
             gridPane.setAlignment(Pos.CENTER);
             this.testDebts();
-            debts = getDebts();
+            debts = getPaymentInstructions();
             titledPanes = new TitledPane[debts.size()];
             textFlows = new TextFlow[debts.size()];
             envelopeIcons = new FontAwesomeIconView[debts.size()];
@@ -125,8 +125,7 @@ public class OpenDebtsCtrl {
         gridPane.add(bankIcons[i], 1, i, 1, 1);
 
         buttonReceived[i] = new Button("Mark Received");
-        int finalI = i;
-        buttonReceived[i].setOnMouseClicked(e -> removeDebt(debts.get(finalI)));
+        buttonReceived[i].setOnMouseClicked(e -> removeDebt(debts.get(i)));
         GridPane.setValignment(buttonReceived[i], javafx.geometry.VPos.TOP);
         GridPane.setHalignment(buttonReceived[i], javafx.geometry.HPos.LEFT);
         GridPane.setMargin(buttonReceived[i], new Insets(5, 10, 0, 15));
@@ -143,7 +142,7 @@ public class OpenDebtsCtrl {
         alert.setTitle(bundle.getString("removeDebtAlertTitleText"));
         alert.setContentText(bundle.getString("removeDebtAlertContentText"));
 
-        //TODO: for now there is also an output on the console which should be removed in teh future
+        //TODO: for now there is also an output on the console which should be removed in the future
         alert.showAndWait().ifPresent(response -> {
             if (response == ButtonType.OK) {
                 System.out.println("Ok");
@@ -227,13 +226,15 @@ public class OpenDebtsCtrl {
         mainCtrl.showEventOverview(event);
     }
 
+
+
     /**
-     * Retrieves all debts for now TODO:
-     * @return all debts
+     * Retrieves all debts associated with a certain event
+     * @return all debts associated with a given event
      */
-    private List<Debt> getDebts() {
+    private List<Debt> getPaymentInstructions() {
         try {
-            return server.getDebtsForEvent(event);
+            return server.getPaymentInstructions(event);
         } catch (WebApplicationException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.initModality(Modality.APPLICATION_MODAL);
@@ -247,7 +248,7 @@ public class OpenDebtsCtrl {
     private void testDebts() {
         Participant bob = new Participant("Bob");
         Participant ana = new Participant("Ana");
-        for (Debt debt : server.getDebtsForEvent(event)) {
+        for (Debt debt : server.getPaymentInstructions(event)) {
             server.deleteDebt(debt);
         }
         server.addDebt(new Debt(5, bob, ana, 10));

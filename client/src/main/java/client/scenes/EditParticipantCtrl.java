@@ -70,9 +70,9 @@ public class EditParticipantCtrl {
         participant.setIban(ibanField.getText());
         participant.setEmail(emailField.getText());
         participant.setBic(bicField.getText());
-        participant = server.persistParticipant(participant);
+//        participant = server.persistParticipant(participant);
         clearFields();
-        //event = server.getEvent(event.getId());
+        server.persistEvent(event);
         mainCtrl.showEventOverview(event);
     }
 

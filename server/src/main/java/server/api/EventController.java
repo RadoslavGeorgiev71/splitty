@@ -4,7 +4,7 @@ import commons.Event;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import server.database.EventRepository;
+import server.Services.EventService;
 
 import java.util.List;
 import java.util.Optional;
@@ -12,14 +12,14 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/events")
 public class EventController {
-    private final EventRepository repo;
+    private EventService eventService;
 
     /**
      * Constructor for the controller
-     * @param repo - type EventRepository which extends JpaRepository
+     * @param eventService - the service for handling events
      */
-    public EventController(EventRepository repo) {
-        this.repo = repo;
+    public EventController(EventService eventService) {
+        this.eventService = eventService;
     }
 
     /**
@@ -28,7 +28,7 @@ public class EventController {
      */
     @GetMapping(path = {"", "/"})
     public List<Event> getAll() {
-        return repo.findAll();
+        return eventService.findAll();
     }
 
     /**TODO CHECK a method that returns a specific event by id(or more useful by invitecode)
@@ -47,7 +47,7 @@ public class EventController {
      */
     @GetMapping(path = {"/{invite}"})
     public ResponseEntity<?> getByCode(@PathVariable("invite") String inviteCode){
-        Optional<Event> eventOptional = repo.findByInviteCode(inviteCode);
+        Optional<Event> eventOptional = eventService.findByInviteCode(inviteCode);
 
         if (eventOptional.isPresent()){
             return ResponseEntity.ok(eventOptional.get());
@@ -63,8 +63,8 @@ public class EventController {
      */
     @PostMapping(path = {""})
     public ResponseEntity<?> createEvent(@RequestBody Event event){
-        Event newEvent = repo.save(event);
-        return ResponseEntity.status(HttpStatus.CREATED).body(newEvent);
+        Event savedEvent = eventService.create(event);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedEvent);
     }
 
     /**
@@ -77,15 +77,9 @@ public class EventController {
     public ResponseEntity<?> update(@PathVariable("id") long id, @RequestBody Event updatedEvent) {
         long eventId = updatedEvent.getId();
 
-        Optional<Event> existingEvent = repo.findById(eventId);
-
-        if (existingEvent.isPresent()) {
-            existingEvent.get().setTitle(updatedEvent.getTitle());
-            existingEvent.get().setInviteCode(updatedEvent.getInviteCode());
-            existingEvent.get().setParticipants(updatedEvent.getParticipants());
-            existingEvent.get().setExpenses(updatedEvent.getExpenses());
-            Event savedEvent = repo.save(existingEvent.get());
-            return ResponseEntity.ok(savedEvent);
+        Event existingEvent = eventService.update(eventId, updatedEvent);
+        if (existingEvent != null) {
+            return ResponseEntity.ok(existingEvent);
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Event not found");
     }
@@ -98,9 +92,26 @@ public class EventController {
      */
     @GetMapping("/id/{id}")
     public ResponseEntity<Event> getById(@PathVariable("id") long id) {
-        if (id < 0 || !repo.existsById(id)) {
+        if (id < 0 || !eventService.existsById(id)){
             return ResponseEntity.badRequest().build();
         }
-        return ResponseEntity.ok(repo.findById(id).get());
+        return ResponseEntity.ok(eventService.findById(id).get());
+    }
+
+    /**
+     * Deletes an event by id if it exists
+     * @param id - the id of the event we search for
+     * @return "Successful delete" response
+     * if delete was successful, "Bad request" otherwise
+     */
+    @DeleteMapping(path = {"/{id}"})
+    public ResponseEntity<String> delete(@PathVariable("id") long id) {
+        if (!eventService.existsById(id)) {
+            return ResponseEntity.badRequest().build();
+        }
+        Event event = eventService.findById(id).get();
+        eventService.deleteById(id);
+        eventService.flush();
+        return ResponseEntity.ok().body("Successful delete");
     }
 }

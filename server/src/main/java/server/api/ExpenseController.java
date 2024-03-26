@@ -2,23 +2,22 @@ package server.api;
 
 
 import commons.Expense;
-//import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import server.database.ExpenseRepository;
+import server.Services.ExpenseService;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/expenses")
 public class ExpenseController {
-    private final ExpenseRepository repo;
+    private ExpenseService expenseService;
 
     /**
      * Constructor for the controller
-     * @param repo - type ExpenseRepository which extends JpaRepository
+     * @param expenseService - the expense service for the expense repository
      */
-    public ExpenseController(ExpenseRepository repo) {
-        this.repo = repo;
+    public ExpenseController(ExpenseService expenseService) {
+        this.expenseService = expenseService;
     }
 
     /**
@@ -27,7 +26,7 @@ public class ExpenseController {
      */
     @GetMapping(path = {"", "/"})
     public List<Expense> getAll() {
-        return repo.findAll();
+        return expenseService.getAll();
     }
 
 

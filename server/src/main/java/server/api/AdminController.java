@@ -3,7 +3,7 @@ package server.api;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import server.AuthService;
+import server.Services.AuthService;
 import server.PasswordGenerator;
 
 
