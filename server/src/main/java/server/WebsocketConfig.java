@@ -12,7 +12,7 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 public class WebsocketConfig implements WebSocketMessageBrokerConfigurer {
 
     /**
-     * asd
+     * For upgrading the connection from http to websocket
      * @param registry asd
      */
     @Override

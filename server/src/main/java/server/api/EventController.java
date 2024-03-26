@@ -3,6 +3,8 @@ package server.api;
 import commons.Event;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.*;
 import server.Services.EventService;
 
@@ -113,5 +115,17 @@ public class EventController {
         eventService.deleteById(id);
         eventService.flush();
         return ResponseEntity.ok().body("Successful delete");
+    }
+
+    /**
+     * Stuff
+     * @param e asd
+     * @return
+     */
+    @MessageMapping("/events")
+    @SendTo("/topic/events")
+    public Event addEvent(Event e){
+        createEvent(e);
+        return e;
     }
 }

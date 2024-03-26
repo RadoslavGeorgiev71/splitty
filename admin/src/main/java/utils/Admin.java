@@ -10,9 +10,19 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import javafx.scene.control.Alert;
 import org.glassfish.jersey.client.ClientConfig;
+import org.springframework.messaging.converter.MappingJackson2MessageConverter;
+import org.springframework.messaging.simp.stomp.StompFrameHandler;
+import org.springframework.messaging.simp.stomp.StompHeaders;
+import org.springframework.messaging.simp.stomp.StompSession;
+import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
+import org.springframework.web.socket.client.standard.StandardWebSocketClient;
+import org.springframework.web.socket.messaging.WebSocketStompClient;
 
 import java.io.*;
+import java.lang.reflect.Type;
 import java.util.*;
+import java.util.concurrent.ExecutionException;
+import java.util.function.Consumer;
 
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
@@ -167,5 +177,54 @@ public class Admin{
                 " could not be imported because there " +
                 "is already an event with this id or invite code in the database");
         alert.showAndWait();
+    }
+
+    private StompSession session = connect("ws://localhost:8080/websocket");
+
+    /**
+     * asd
+     * @param url asd
+     * @return asd
+     */
+    private StompSession connect(String url) {
+        var client = new StandardWebSocketClient();
+        var stomp = new WebSocketStompClient(client);
+        stomp.setMessageConverter(new MappingJackson2MessageConverter());
+        try{
+            return stomp.connect(url, new StompSessionHandlerAdapter() {}).get();
+        } catch(InterruptedException e) {
+            Thread.currentThread().interrupt();
+        } catch(ExecutionException e){
+            throw new RuntimeException(e);
+        }
+        throw new IllegalStateException();
+    }
+
+    /**
+     * asd
+     * @param dest asd
+     * @param consumer asd
+     */
+    public void registerForEvents(String dest, Consumer<Event> consumer) {
+        session.subscribe(SERVER, new StompFrameHandler() {
+            @Override
+            public Type getPayloadType(StompHeaders headers) {
+                return Event.class;
+            }
+
+            @Override
+            public void handleFrame(StompHeaders headers, Object payload) {
+                consumer.accept((Event) payload);
+            }
+        });
+    }
+
+    /**
+     * asd
+     * @param dest asd
+     * @param o asd
+     */
+    public void send(String dest, Object o) {
+        session.send(dest, o);
     }
 }
