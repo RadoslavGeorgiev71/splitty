@@ -67,6 +67,7 @@ public class MainCtrl {
                            Pair<EditParticipantCtrl, Parent> editparticipant,
                            Pair<AddParticipantCtrl, Parent> addparticipant,
                            Pair<EventOverviewCtrl, Parent> eventoverview,
+                           Pair<AddExpenseCtrl, Parent> addexpense,
                            Pair<OpenDebtsCtrl, Parent> opendebts,
                            Pair<StartScreenCtrl, Parent> startscreen,
                            Pair<InvitationCtrl, Parent> invitation,
@@ -85,6 +86,9 @@ public class MainCtrl {
         this.eventOverviewCtrl = eventoverview.getKey();
         this.eventoverview = new Scene(eventoverview.getValue());
 
+        this.addExpenseCtrl = addexpense.getKey();
+        this.addexpense = new Scene(addexpense.getValue());
+
         this.openDebtsCtrl = opendebts.getKey();
         this.opendebts = new Scene(opendebts.getValue());
 
@@ -93,9 +97,6 @@ public class MainCtrl {
 
         this.invitationCtrl = invitation.getKey();
         this.invitation = new Scene(invitation.getValue());
-
-//        this.addExpenseCtrl = addexpense.getKey();
-//        this.addexpense = new Scene(addexpense.getValue());
 
         this.userSettingsCtrl = usersettings.getKey();
         this.usersettings = new Scene(usersettings.getValue());
@@ -150,6 +151,17 @@ public class MainCtrl {
         eventOverviewCtrl.setEvent(event);
         eventOverviewCtrl.initialize();
         primaryStage.setScene(eventoverview);
+    }
+
+    /**
+     * Switches the scene to the add expense window
+     * @param event - takes an event as a parameter for which we add a participant
+     */
+    public void showAddExpense(Event event) {
+        primaryStage.setTitle("Add Expense");
+        primaryStage.setScene(addexpense);
+        addExpenseCtrl.setEvent(event);
+        addExpenseCtrl.initialize();
     }
 
 
