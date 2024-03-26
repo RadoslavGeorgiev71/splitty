@@ -254,11 +254,14 @@ public class EventOverviewCtrl {
      */
     public void fromPersonTabName() {
         if (event.getParticipants().isEmpty()){
-            tabPaneFromPerson.setText("From");
+            tabPaneFromPerson.setText(languageResourceBundle.
+                    getResourceBundle().getString("tabPaneFrom"));
         }
         else {
             Participant selectedParticipant = (Participant) participantsMenu.getValue();
-            tabPaneFromPerson.setText("From " + selectedParticipant.getName());
+            tabPaneFromPerson.setText(languageResourceBundle.
+                    getResourceBundle().getString("tabPaneFrom")
+                    + " " + selectedParticipant.getName());
         }
 
     }
@@ -275,7 +278,7 @@ public class EventOverviewCtrl {
             Participant selectedParticipant = (Participant) participantsMenu.getValue();
             tabPaneIncludingPerson.setText(languageResourceBundle.
                     getResourceBundle().getString("tabPaneIncluding")
-                    + selectedParticipant.getName());
+                    + " " + selectedParticipant.getName());
         }
     }
 
