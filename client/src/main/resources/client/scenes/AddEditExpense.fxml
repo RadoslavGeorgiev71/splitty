@@ -88,8 +88,8 @@
                         <RowConstraints />
                     </rowConstraints>
                     <children>
-                        <Button fx:id="add" mnemonicParsing="false" onAction="#ok" text="Add" />
-                        <Button fx:id="abort" mnemonicParsing="false" onAction="#cancel" text="Abort" GridPane.columnIndex="1" />
+                        <Button fx:id="add" mnemonicParsing="false" onAction="#onAddClick" text="Add" />
+                        <Button fx:id="abort" mnemonicParsing="false" onAction="#onAbortClick" text="Abort" GridPane.columnIndex="1" />
                     </children>
                 </GridPane>
             </children>

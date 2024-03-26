@@ -57,11 +57,11 @@ public class AddExpenseCtrl implements Initializable {
     }
 
     /**
-     * Controller method for cancel button
+     * Controller method for abort button
      * Sends back to overviewEvent window
      * @param actionEvent to handle
      */
-    public void cancel(ActionEvent actionEvent) {
+    public void onAbortClick(ActionEvent actionEvent) {
         clearFields();
         mainCtrl.showEventOverview(event);
     }
@@ -71,7 +71,7 @@ public class AddExpenseCtrl implements Initializable {
      * Sends back to Overview Event window back with the participant altered
      * @param actionEvent to handle
      */
-    public void ok(ActionEvent actionEvent) {
+    public void onAddClick(ActionEvent actionEvent) {
         Expense expense = new Expense();
         expense.setTitle(titleField.getText());
 //        int index = 0;
@@ -111,16 +111,24 @@ public class AddExpenseCtrl implements Initializable {
     }
 
     /**
+     * Setter for expense
+     * @param expense to set
+     */
+    public void setEvent(Expense expense) {
+        this.expense = expense;
+    }
+
+    /**
      * Handles the key event pressed
      * @param e the KeyEvent to handle
      */
     public void keyPressed(KeyEvent e) {
         switch (e.getCode()) {
             case ENTER:
-                ok(null);
+                onAddClick(null);
                 break;
             case ESCAPE:
-                cancel(null);
+                onAbortClick(null);
                 break;
             default:
                 break;
