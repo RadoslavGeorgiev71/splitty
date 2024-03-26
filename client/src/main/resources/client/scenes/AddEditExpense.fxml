@@ -14,11 +14,11 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="400.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.EventOverviewCtrl">
+<AnchorPane prefHeight="400.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.AddExpenseCtrl">
     <children>
         <VBox layoutY="1.0" prefHeight="389.0" prefWidth="280.0" spacing="10.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="1.0">
             <children>
-                <Text fx:id="Expense" strokeType="OUTSIDE" strokeWidth="0.0" text="Add/Edit Expense" />
+                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Add/Edit Expense" />
                 <GridPane>
                     <columnConstraints>
                         <ColumnConstraints hgrow="SOMETIMES" maxWidth="124.40001678466797" minWidth="10.0" prefWidth="90.79997253417969" />
@@ -28,8 +28,8 @@
                         <RowConstraints />
                     </rowConstraints>
                     <children>
-                        <ChoiceBox prefWidth="150.0" GridPane.columnIndex="1" />
-                        <Label fx:id="eventTitleLabel2" text="Who paid?" />
+                        <ChoiceBox fx:id="payerChoiceBox" prefWidth="150.0" GridPane.columnIndex="1" />
+                        <Label text="Who paid?" />
                     </children>
                 </GridPane>
                 <GridPane>
@@ -41,8 +41,8 @@
                         <RowConstraints />
                     </rowConstraints>
                     <children>
-                        <Label fx:id="eventTitleLabel21" text="What for?" />
-                        <TextField prefHeight="26.0" prefWidth="185.0" GridPane.columnIndex="1" />
+                        <Label text="What for?" />
+                        <TextField fx:id="titleField" prefHeight="26.0" prefWidth="185.0" GridPane.columnIndex="1" />
                     </children>
                 </GridPane>
                 <GridPane>
@@ -56,9 +56,9 @@
                         <RowConstraints />
                     </rowConstraints>
                     <children>
-                        <TextField GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                        <ChoiceBox prefWidth="150.0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                        <Label fx:id="eventTitleLabel1" text="How much?" GridPane.rowIndex="1" />
+                        <TextField fx:id="amountField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <ChoiceBox fx:id="currChoiceBox" prefWidth="150.0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                        <Label text="How much?" GridPane.rowIndex="1" />
                     </children>
                 </GridPane>
                 <GridPane>
@@ -70,15 +70,15 @@
                         <RowConstraints />
                     </rowConstraints>
                     <children>
-                        <Label fx:id="eventTitleLabel3" text="When?" />
-                        <DatePicker GridPane.columnIndex="1" />
+                        <Label text="When?" />
+                        <DatePicker fx:id="datePicker" GridPane.columnIndex="1" />
                     </children>
                 </GridPane>
                 <Label text="How to split?" />
-                <CheckBox mnemonicParsing="false" text="Equally" />
-                <CheckBox mnemonicParsing="false" text="Only Some people" />
-                <Text fx:id="ParticipatingParticipants211" strokeType="OUTSIDE" strokeWidth="0.0" text="Expense Type" />
-                <TextField />
+                <CheckBox fx:id="equally" mnemonicParsing="false" text="Equally" />
+                <CheckBox fx:id="onlySome" mnemonicParsing="false" text="Only Some people" />
+                <Label text="Expense Type" />
+                <TextField fx:id="tags" />
                 <GridPane>
                     <columnConstraints>
                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -88,8 +88,8 @@
                         <RowConstraints />
                     </rowConstraints>
                     <children>
-                        <Button mnemonicParsing="false" onAction="#onBackClick" text="Add" />
-                        <Button mnemonicParsing="false" onAction="#onBackClick" text="Abort" GridPane.columnIndex="1" />
+                        <Button fx:id="add" mnemonicParsing="false" onAction="#ok" text="Add" />
+                        <Button fx:id="abort" mnemonicParsing="false" onAction="#cancel" text="Abort" GridPane.columnIndex="1" />
                     </children>
                 </GridPane>
             </children>

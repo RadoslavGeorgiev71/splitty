@@ -2,15 +2,18 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import commons.Event;
+import commons.Expense;
 import commons.Participant;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.CheckBoxListCell;
 import javafx.scene.input.KeyEvent;
 
 import com.google.inject.Inject;
+import javafx.util.StringConverter;
+
 import java.net.URL;
 import java.util.Currency;
 import java.util.ResourceBundle;
@@ -20,22 +23,23 @@ public class AddExpenseCtrl implements Initializable {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
     private Event event;
+    private Expense expense;
     private Participant participant;
 
     @FXML
-    private ChoiceBox<Participant> payerChoiceBox;  //Who paid?
+    private ChoiceBox payerChoiceBox;               //Who paid?
     @FXML
     private TextField titleField;                   //What for?
     @FXML
     private TextField amountField;                  //How much?
     @FXML
-    private ChoiceBox<Currency> currChoiceBox;
+    private ChoiceBox currChoiceBox;
     @FXML
     private DatePicker datePicker;                  //When?
     @FXML
-    private CheckBoxListCell<Participant> participantAll;   //How to split?
+    private CheckBox equally;                       //How to split?
     @FXML
-    private CheckBoxListCell<Participant> participantSome;
+    private CheckBox onlySome;
     @FXML
     private TextField tags;                         //Expense Type
     @FXML
@@ -70,7 +74,19 @@ public class AddExpenseCtrl implements Initializable {
      * @param actionEvent to handle
      */
     public void ok(ActionEvent actionEvent) {
-        //TODO
+        Expense expense = new Expense();
+        expense.setTitle(titleField.getText());
+//        int index = 0;
+//        while(event.getParticipants().get(index).getName() != payerChoiceBox.getValue())
+        expense.setPayingParticipant((Participant) payerChoiceBox.getValue());
+        expense.setAmount(Double.parseDouble(amountField.getText()));
+        expense.setParticipants(event.getParticipants());
+        expense.setDateTime(datePicker.getValue().toString());
+        //server.addExpense(expense);
+        event.addExpense(expense);
+        server.persistEvent(event);
+        clearFields();
+        //event = server.getEvent(event.getId());
         mainCtrl.showEventOverview(event);
     }
 
@@ -78,8 +94,14 @@ public class AddExpenseCtrl implements Initializable {
      * Clear all fields for the next use
      */
     private void clearFields() {
+        payerChoiceBox.getSelectionModel().selectFirst();
         titleField.clear();
         amountField.clear();
+        currChoiceBox.getSelectionModel().selectFirst();
+        //datePicker.setConverter(event.getDateTime());
+        equally.setSelected(true);
+        onlySome.setSelected(false);
+        tags.clear();
     }
 
     /**
@@ -127,6 +149,29 @@ public class AddExpenseCtrl implements Initializable {
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        //To do
+        if (event != null){
+            payerChoiceBox.setItems(FXCollections.observableArrayList(event.getParticipants()));
+            payerChoiceBox.setConverter(new StringConverter<Participant>() {
+                @Override
+                public String toString(Participant participant) {
+                    if (participant != null) {
+                        return participant.getName();
+                    }
+                    else {
+                        return "";
+                    }
+                }
+                @Override
+                public Participant fromString(String string) {
+                    return null;
+                }
+            } );
+
+            payerChoiceBox.getSelectionModel().selectFirst();
+            equally.setAllowIndeterminate(false);
+            equally.setSelected(true);
+            onlySome.setAllowIndeterminate(false);
+            onlySome.setSelected(false);
+        }
     }
 }
