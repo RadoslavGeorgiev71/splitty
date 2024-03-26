@@ -140,10 +140,9 @@ public class Admin{
      * Takes a list of events to import in the database
      * If one of the events is already in the database (The id or the invitecode exists)
      * Then the process fails with a warning
-     * @param events events to add to the database
+     * @param event events to add to the database
      */
-    public void importEvents(List<Event> events) {
-        for(Event event : events){
+    public void importEvent(Event event) {
             List<Event> currentEvents = getEvents();
             for(Event cevent : currentEvents){
                 if(cevent.getId() == event.getId() ||
@@ -157,11 +156,10 @@ public class Admin{
                     .request(APPLICATION_JSON)
                     .accept(APPLICATION_JSON)
                     .post(Entity.json(event));
-
             if (response.getStatus() != Response.Status.CREATED.getStatusCode()) {
                 showalert(event);
             }
-        }
+
     }
 
     /**
