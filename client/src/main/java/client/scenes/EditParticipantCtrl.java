@@ -135,6 +135,9 @@ public class EditParticipantCtrl {
 
     }
 
+    /**
+     * Switches the text language.
+     */
     public void switchTextLanguage(){
         ResourceBundle bundle = languageResourceBundle.getResourceBundle();
 

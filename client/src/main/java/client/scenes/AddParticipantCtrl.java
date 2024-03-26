@@ -4,7 +4,6 @@ import client.utils.LanguageResourceBundle;
 import client.utils.ServerUtils;
 import commons.Event;
 import commons.Participant;
-import jakarta.annotation.Resource;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -124,6 +123,9 @@ public class AddParticipantCtrl {
         switchTextLanguage();
     }
 
+    /**
+     * Switches the text language.
+     */
     public void switchTextLanguage(){
         ResourceBundle bundle = languageResourceBundle.getResourceBundle();
 
