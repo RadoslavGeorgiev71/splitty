@@ -11,16 +11,28 @@ import java.nio.file.Paths;
 
 public class LanguageButtonUtils {
 
+    /**
+     * Updates the language menu button with the current language and flags
+     * @param languageButton the language menu button
+     * @param config the config client
+     */
+
     public static void updateLanguageMenuButton(MenuButton languageButton, ConfigClient config) {
-        // Set the properties of the MenuButton
+
         languageButton.setLayoutX(482.0);
         languageButton.setLayoutY(345.0);
         languageButton.setMnemonicParsing(false);
         languageButton.getStyleClass().add("language-menu-button");
 
-        // Create the MenuItems
+
         createMenuItems(languageButton, config);
     }
+
+    /**
+     * Creates the menu items for the language menu button
+     * @param languageButton the language menu button
+     * @param config the config client
+     */
 
     private static void createMenuItems(MenuButton languageButton, ConfigClient config) {
         MenuItem questionItem = new MenuItem();
@@ -30,11 +42,13 @@ public class LanguageButtonUtils {
         String imagesFolderPath = "client/src/main/resources/client/images/flags/";
 
         File imagesFolder = new File(imagesFolderPath);
-        File[] imageFiles = imagesFolder.listFiles((dir, name) -> name.toLowerCase().endsWith(".png") || name.toLowerCase().endsWith(".jpg"));
+        File[] imageFiles = imagesFolder.listFiles((dir, name)
+                -> name.toLowerCase().endsWith(".png") || name.toLowerCase().endsWith(".jpg"));
 
         for (File imageFile : imageFiles) {
             if(imageFile.getName().equals(config.getLanguage() + ".png")){
-                Image image = new Image(Paths.get(imagesFolderPath, imageFile.getName()).toUri().toString());
+                Image image = new Image(Paths.get(imagesFolderPath,
+                        imageFile.getName()).toUri().toString());
                 ImageView imageView = new ImageView(image);
                 languageButton.setGraphic(imageView);
 
@@ -45,7 +59,8 @@ public class LanguageButtonUtils {
             }
             MenuItem menuItem = new MenuItem();
 
-            Image image = new Image(Paths.get(imagesFolderPath, imageFile.getName()).toUri().toString());
+            Image image = new Image(Paths.get(imagesFolderPath,
+                    imageFile.getName()).toUri().toString());
             ImageView imageView = new ImageView(image);
             menuItem.setGraphic(imageView);
 
@@ -57,6 +72,15 @@ public class LanguageButtonUtils {
         }
     }
 
+    /**
+     * Changes the language of the application + the language in config.
+     * @param languageButton the language menu button
+     * @param config the config client
+     * @param languageResourceBundle the language resource bundle
+     * @param controller the start screen controller
+     * @param keys the keys for the config file
+     */
+
     public static void languageMenu(MenuButton languageButton, ConfigClient config,
                                     LanguageResourceBundle languageResourceBundle,
                                     StartScreenCtrl controller, String[] keys) {
@@ -65,7 +89,7 @@ public class LanguageButtonUtils {
             menuItem.setOnAction(event -> {
                 String language = menuItem.getText().toLowerCase();
                 languageResourceBundle.switchLanguage(language);
-                // switchTextLanguage(); // This method should be in your controller
+
                 config.setLanguage(language);
                 String[] contents = {config.getServerUrl(), config.getEmail(),
                         config.getIban(), config.getBic(),
@@ -85,7 +109,7 @@ public class LanguageButtonUtils {
                 languageButton.setText(menuItem.getText());
                 menuItem.setText(tempText);
 
-                controller.initialize(); // This method should be in your controller
+                controller.initialize();
             });
         }
     }

@@ -1,5 +1,6 @@
 package client.scenes;
 
+import client.utils.LanguageResourceBundle;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Event;
@@ -14,12 +15,42 @@ import javafx.collections.FXCollections;
 
 import javafx.event.ActionEvent;
 
+import java.util.ResourceBundle;
 
 
 public class EventOverviewCtrl {
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
+
+    private LanguageResourceBundle languageResourceBundle;
+
+    @FXML
+    private Text overviewParticipantsText;
+
+    @FXML
+    private Button overviewEditParticipantButton;
+
+    @FXML
+    private Button overviewAddParticipantButton;
+
+    @FXML
+    private Button overviewRemoveParticipantButton;
+
+    @FXML
+    private Button overviewAddExpenseButton;
+
+    @FXML
+    private Button sendInvitesButton;
+
+    @FXML
+    private Button backButton;
+
+    @FXML
+    private Button overviewSettleDebtsButton;
+
+    @FXML
+    private Tab tabPaneAll;
 
     @FXML
     private ChoiceBox participantsMenu;
@@ -237,11 +268,14 @@ public class EventOverviewCtrl {
      */
     public void includingPersonTabName() {
         if (event.getParticipants().isEmpty()){
-            tabPaneFromPerson.setText("Including");
+            tabPaneFromPerson.setText(languageResourceBundle.
+                    getResourceBundle().getString("tabPaneIncluding"));
         }
         else {
             Participant selectedParticipant = (Participant) participantsMenu.getValue();
-            tabPaneIncludingPerson.setText("Including " + selectedParticipant.getName());
+            tabPaneIncludingPerson.setText(languageResourceBundle.
+                    getResourceBundle().getString("tabPaneIncluding")
+                    + selectedParticipant.getName());
         }
     }
 
@@ -267,6 +301,9 @@ public class EventOverviewCtrl {
 
     public void initialize(){
         if (event != null){
+            languageResourceBundle = LanguageResourceBundle.getInstance();
+            switchLanguage();
+
             participantsMenu.setItems(FXCollections.observableArrayList(event.getParticipants()));
             participantsMenu.setConverter(new StringConverter<Participant>() {
                 @Override
@@ -296,6 +333,26 @@ public class EventOverviewCtrl {
             });
             tabPaneAllClick();
         }
+    }
+
+    /**
+     * Method that always updates language on initialize.
+     */
+
+    public void switchLanguage(){
+        ResourceBundle bundle = languageResourceBundle.getResourceBundle();
+
+        overviewParticipantsText.setText(bundle.getString("overviewParticipantsText"));
+        overviewEditParticipantButton.setText(bundle.getString("overviewEditParticipantButton"));
+        overviewAddParticipantButton.setText(bundle.getString("overviewAddParticipantButton"));
+        overviewRemoveParticipantButton.setText(bundle.
+                getString("overviewRemoveParticipantButton"));
+        overviewAddExpenseButton.setText(bundle.getString("overviewAddExpenseButton"));
+        sendInvitesButton.setText(bundle.getString("sendInvitesButton"));
+        backButton.setText(bundle.getString("backButton"));
+        overviewSettleDebtsButton.setText(bundle.getString("overviewSettleDebtsButton"));
+        tabPaneAll.setText(bundle.getString("tabPaneAll"));
+
     }
 
 

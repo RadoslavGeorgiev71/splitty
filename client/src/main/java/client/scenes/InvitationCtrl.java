@@ -5,7 +5,6 @@ import client.utils.ServerUtils;
 import com.google.inject.Inject;
 
 import java.net.URL;
-import java.util.Locale;
 import java.util.ResourceBundle;
 
 import commons.Event;
@@ -69,17 +68,24 @@ public class InvitationCtrl implements Initializable {
      * the root object was not localized.
      */
     public void initialize(URL location, ResourceBundle resources){
-        languageResourceBundle = LanguageResourceBundle.getInstance("");
         eventNameText.setText("");
         inviteCodeText.setText("");
 
     }
 
+    /**
+     * initialize method for invitationCtrl
+     */
     public void initialize(){
+        languageResourceBundle = LanguageResourceBundle.getInstance();
         switchTextLanguage();
         setInviteCodeText();
         setEventNameText();
     }
+
+    /**
+     * Switches the text language.
+     */
 
     public void switchTextLanguage(){
 
