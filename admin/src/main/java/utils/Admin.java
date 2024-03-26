@@ -194,7 +194,7 @@ public class Admin{
         var stomp = new WebSocketStompClient(client);
         stomp.setMessageConverter(new MappingJackson2MessageConverter());
         try{
-            return stomp.connectAsync(url, new StompSessionHandlerAdapter() {
+            return stomp.connect(url, new StompSessionHandlerAdapter() {
             }).get();
         } catch(InterruptedException e) {
             Thread.currentThread().interrupt();
