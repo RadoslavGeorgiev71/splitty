@@ -186,9 +186,9 @@ public class Admin{
 
 
     /**
-     * asd
-     * @param url asd
-     * @return asd
+     * Establishes a websocket connection
+     * @param url The url to the server
+     * @return A StompSession which is kept until admin is closed
      */
     private StompSession connect(String url) {
         var client = new StandardWebSocketClient();
@@ -244,9 +244,9 @@ public class Admin{
     }
 
     /**
-     * asd
-     * @param dest asd
-     * @param o asd
+     * Sends and object to a path (channel)
+     * @param dest the channel path
+     * @param o the object to be sent
      */
     public void send(String dest, Object o) {
         session.send(dest, o);

@@ -118,9 +118,9 @@ public class EventController {
     }
 
     /**
-     * asd
-     * @param e asd
-     * @return event
+     * Route for JSON inport
+     * @param e event that was imported
+     * @return event that has been added to DB
      */
     @MessageMapping("/events")
     @SendTo("/topic/events")
@@ -130,9 +130,9 @@ public class EventController {
     }
 
     /**
-     * asd
-     * @param e asd
-     * @return event
+     * Route for delete action
+     * @param e event to be deleted
+     * @return event that was deleted
      */
     @MessageMapping("/eventsDelete")
     @SendTo("/topic/eventsDelete")
