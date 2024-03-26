@@ -30,6 +30,7 @@ public class Admin{
 
     private static final String SERVER = "http://localhost:8080/";
     private String password = "none set";
+    private StompSession session = connect("ws://localhost:8080/websocket");
 
     /**
      * Sets the password for the Admin
@@ -181,7 +182,7 @@ public class Admin{
         alert.showAndWait();
     }
 
-    private StompSession session = connect("ws://localhost:8080/websocket");
+
 
     /**
      * asd
@@ -193,7 +194,8 @@ public class Admin{
         var stomp = new WebSocketStompClient(client);
         stomp.setMessageConverter(new MappingJackson2MessageConverter());
         try{
-            return stomp.connect(url, new StompSessionHandlerAdapter() {}).get();
+            return stomp.connectAsync(url, new StompSessionHandlerAdapter() {
+            }).get();
         } catch(InterruptedException e) {
             Thread.currentThread().interrupt();
         } catch(ExecutionException e){
