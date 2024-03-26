@@ -81,8 +81,9 @@ public class DebtService {
      * @param amount - the amount to be transferred
      * @param mostOwing - the person who is owing the most money
      */
-    private void settleTransaction(Map<Participant, Double> participantsDebts, Participant mostOwed,
-                                  double amount, Participant mostOwing, List<Participant> participants) {
+    private void settleTransaction(Map<Participant, Double> participantsDebts,
+                                   Participant mostOwed, double amount, Participant mostOwing,
+                                   List<Participant> participants) {
         if(participantsDebts.get(mostOwed) + amount == 0) {
             participantsDebts.remove(mostOwed);
             participants.remove(mostOwed);
