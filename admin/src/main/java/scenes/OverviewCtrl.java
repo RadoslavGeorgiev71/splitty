@@ -194,6 +194,9 @@ public class OverviewCtrl {
         admin.registerForEvents("/topic/events", e -> {
             events.add(e);
         });
+        admin.registerForEventDeletion("/topic/eventsDelete", e -> {
+            events.remove(e);
+        });
     }
 
 }

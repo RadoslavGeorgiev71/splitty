@@ -128,4 +128,16 @@ public class EventController {
         createEvent(e);
         return e;
     }
+
+    /**
+     * asd
+     * @param e asd
+     * @return event
+     */
+    @MessageMapping("/eventsDelete")
+    @SendTo("/topic/eventsDelete")
+    public Event deleteEvent(Event e){
+        delete(e.getId());
+        return e;
+    }
 }

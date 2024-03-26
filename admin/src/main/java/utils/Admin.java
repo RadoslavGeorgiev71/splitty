@@ -92,12 +92,14 @@ public class Admin{
      * @param event to delete
      */
     public void deleteEvent(Event event){
+        /*
         ClientBuilder.newClient(new ClientConfig()) //
                 .target(SERVER).path("api/events/{eventId}") //
                 .resolveTemplate("eventId", event.getId()) // Resolve the template with the event ID
                 .request() //
                 .delete();
-        //should delete all related expenses and debts!!!
+         */
+        send("/app/eventsDelete", event);
     }
 
     /**
@@ -164,7 +166,6 @@ public class Admin{
 
          */
         send("/app/events", event);
-
     }
 
     /**
@@ -205,11 +206,30 @@ public class Admin{
     }
 
     /**
-     * asd
+     * Registers an admin to this event channel
      * @param dest asd
      * @param consumer asd
      */
     public void registerForEvents(String dest, Consumer<Event> consumer) {
+        session.subscribe(dest, new StompFrameHandler() {
+            @Override
+            public Type getPayloadType(StompHeaders headers) {
+                return Event.class;
+            }
+
+            @Override
+            public void handleFrame(StompHeaders headers, Object payload) {
+                consumer.accept((Event) payload);
+            }
+        });
+    }
+
+    /**
+     * Registers an admin to this event deletion channel
+     * @param dest asd
+     * @param consumer asd
+     */
+    public void registerForEventDeletion(String dest, Consumer<Event> consumer) {
         session.subscribe(dest, new StompFrameHandler() {
             @Override
             public Type getPayloadType(StompHeaders headers) {
