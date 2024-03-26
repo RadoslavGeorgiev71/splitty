@@ -3,8 +3,11 @@ package commons;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -47,6 +50,19 @@ public class EventTest {
         event1 = new Event("BBQ", "inviteCode1", participants1, expenses1);
         event2 = new Event("Paintball", "inviteCode1", participants1, expenses2);
         event3 = new Event("Swimming", "inviteCode2", participants2, expenses1);
+    }
+
+    @Test
+    void testEmptyConstructor() {
+        Event event = new Event();
+        assertNotNull(event);
+    }
+
+    @Test
+    void testConstructorWithId() {
+        Event event = new Event(1, "New Year", "sdfsdafsdfsa",
+            new ArrayList<>(), new ArrayList<>(), "26/03/2024");
+        assertNotNull(event);
     }
 
     @Test
@@ -138,6 +154,13 @@ public class EventTest {
     }
 
     @Test
+    void testLastActivityNull() {
+        expenses2 = new ArrayList<>();
+        event1.setExpenses(expenses2);
+        assertNull(event1.getLastActivity());
+    }
+
+    @Test
     void getLastActivity() {
         Expense expense = event1.getLastActivity();
         assertEquals(e3, expense);
@@ -147,6 +170,54 @@ public class EventTest {
     void setDateTime() {
         event1.setDateTime("test");
         assertEquals("test", event1.getDateTime());
+    }
+
+    @Test
+    void testUpdateDateTime() {
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+        LocalDateTime now = LocalDateTime.now();
+        event1.updateDateTime();
+        assertEquals(event1.getDateTime(), dtf.format(now));
+    }
+
+    @Test
+    void testCreateInviteCode() {
+        String inviteCode = event1.createInviteCode();
+        assertNotNull(inviteCode);
+        assertEquals(inviteCode.length(), 8);
+        assertTrue(Pattern.matches("[a-zA-Z0-9]+", inviteCode));
+    }
+
+    @Test
+    void testEqualsEqual() {
+        Event event4 = new Event("Swimming", "inviteCode2", participants2, expenses1);
+        assertTrue(event3.equals(event4));
+    }
+
+    @Test
+    void testEqualsSameObject() {
+        assertTrue(event1.equals(event1));
+    }
+
+    @Test
+    void testEqualsDifferent() {
+        assertFalse(event1.equals(event3));
+    }
+
+    @Test
+    void testEqualsDifferentType() {
+        assertFalse(event1.equals(new Debt()));
+    }
+
+    @Test
+    void testHashCodeSame() {
+        Event event4 = new Event("Swimming", "inviteCode2", participants2, expenses1);
+        assertEquals(event4.hashCode(), event3.hashCode());
+    }
+
+    @Test
+    void testHashCodeDifferent() {
+        assertNotEquals(event1.hashCode(), event2.hashCode());
     }
 
 }
