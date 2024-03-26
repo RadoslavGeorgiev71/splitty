@@ -22,6 +22,12 @@ class DebtTest {
     }
 
     @Test
+    void testConstructorWithoutId() {
+        Debt d4 = new Debt(p1, p2, 500);
+        assertNotNull(d4);
+    }
+
+    @Test
     void testConstructor(){
         assertNotNull(d1);
     }
