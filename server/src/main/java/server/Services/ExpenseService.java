@@ -113,4 +113,13 @@ public class ExpenseService {
         eventRepo.flush();
         expenseRepo.flush();
     }
+
+    /**
+     * Method to get expenses by event id
+     * @param id of event
+     * @return Either the expenses or null
+     */
+    public List<Expense> findByEventId(long id){
+        return eventRepo.findById(id).get().getExpenses();
+    }
 }
