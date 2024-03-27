@@ -35,4 +35,13 @@ public class ExpenseController {
      * method that updates an expense
      */
 
+    /**
+     * Get all expenses of a specific event
+     * @return all expenses
+     */
+    @GetMapping(path = {"", "/"})
+    public List<Expense> getAllEvent() {
+        return expenseService.getAll();
+    }
+
 }
