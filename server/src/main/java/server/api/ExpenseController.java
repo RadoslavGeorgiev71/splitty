@@ -66,7 +66,8 @@ public class ExpenseController {
      * @return Response when expense created
      */
     @PostMapping(path = {"", "/{eventId}"})
-    public ResponseEntity<?> createEventExpense(@PathVariable("eventId") long eventId, @RequestBody Expense expense){
+    public ResponseEntity<?> createEventExpense(@PathVariable("eventId") long eventId,
+                                                @RequestBody Expense expense){
         Expense savedExpense = expenseService.create(eventId,expense);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedExpense);
     }
@@ -78,7 +79,8 @@ public class ExpenseController {
      * @return response when expense updated or not found
      */
     @PutMapping(path = {"", "/persist/{id}"})
-    public ResponseEntity<?> update(@PathVariable("id") long id, @RequestBody Expense updatedExpense) {
+    public ResponseEntity<?> update(@PathVariable("id") long id,
+                                    @RequestBody Expense updatedExpense) {
         Expense existingExpense = expenseService.update(id, updatedExpense);
         if (existingExpense != null) {
             return ResponseEntity.ok(existingExpense);

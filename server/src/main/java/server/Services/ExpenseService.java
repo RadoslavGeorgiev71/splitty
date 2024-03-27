@@ -18,6 +18,7 @@ public class ExpenseService {
     /**
      * Constructor for ExpenseService
      * @param expenseRepo - the repository for expenses
+     * @param eventRepo - the repository for events
      */
     public ExpenseService(ExpenseRepository expenseRepo, EventRepository eventRepo) {
         this.expenseRepo = expenseRepo;
