@@ -13,6 +13,9 @@ import javafx.scene.input.KeyEvent;
 import com.google.inject.Inject;
 import javafx.util.StringConverter;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
 public class AddExpenseCtrl{
 
     private final ServerUtils server;
@@ -158,6 +161,48 @@ public class AddExpenseCtrl{
             equally.setSelected(true);
             onlySome.setAllowIndeterminate(false);
             onlySome.setSelected(false);
+        }
+    }
+
+    /**
+     * Initiallizes the fields with the data
+     */
+    public void initializeEdit() {
+        if (event != null){
+            payerChoiceBox.setItems(FXCollections.observableArrayList(event.getParticipants()));
+            payerChoiceBox.setConverter(new StringConverter<Participant>() {
+                @Override
+                public String toString(Participant participant) {
+                    if (participant != null) {
+                        return participant.getName();
+                    }
+                    else {
+                        return "";
+                    }
+                }
+                @Override
+                public Participant fromString(String string) {
+                    return null;
+                }
+            } );
+
+            payerChoiceBox.getSelectionModel().selectFirst();
+            //payerChoiceBox.getSelectionModel().select(expense.getPayingParticipant());
+            titleField.setText(expense.getTitle());
+            amountField.setText("" + expense.getAmount());
+            equally.setAllowIndeterminate(false);
+            onlySome.setAllowIndeterminate(false);
+            if(event.getParticipants().equals(expense.getParticipants())){
+                equally.setSelected(true);
+                onlySome.setSelected(false);
+            }
+            else{
+                equally.setSelected(false);
+                onlySome.setSelected(true);
+            }
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd-yyyy");
+            LocalDate date = LocalDate.parse(expense.getDateTime(), formatter);
+            //datePicker.setConverter(formatter);
         }
     }
 }
