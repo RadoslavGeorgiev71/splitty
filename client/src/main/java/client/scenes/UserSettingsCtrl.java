@@ -8,6 +8,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +19,11 @@ public class UserSettingsCtrl {
     private final MainCtrl mainCtrl;
 
     private ConfigClient configClient;
+
+    private Path filePath = Paths.get("src/main/resources/config.txt").toAbsolutePath();
+
+    private String[] keys = {"serverUrl", "email", "iban", "bic", "language",
+            "currency", "name", "recentEvents"};
 
     @FXML
     private ChoiceBox currencyMenu;
@@ -40,9 +47,10 @@ public class UserSettingsCtrl {
      * @param mainCtrl
      */
     @Inject
-    public UserSettingsCtrl(ServerUtils server, MainCtrl mainCtrl) {
+    public UserSettingsCtrl(ServerUtils server, MainCtrl mainCtrl, ConfigClient configClient) {
         this.server = server;
         this.mainCtrl = mainCtrl;
+        this.configClient = configClient;
     }
 
     /**
@@ -59,10 +67,20 @@ public class UserSettingsCtrl {
      */
     @FXML
     public void onConfirmClick() {
-        configClient.setName(nameField.getText());
-        configClient.setEmail(emailField.getText());
-        configClient.setIban(ibanField.getText());
-        configClient.setBic(bicField.getText());
+        if(configClient != null) {
+            String[] configContent = new String[8];
+            configContent[0] = configClient.getServerUrl();
+            configContent[1] = emailField.getText();
+            configContent[2] = ibanField.getText();
+            configContent[3] = bicField.getText();
+            configContent[4] = configClient.getLanguage();
+            configContent[5] = currencyMenu.getValue().toString();
+            configContent[6] = nameField.getText();
+            configContent[7] = configClient.getRecentEvents();
+            configClient.writeToFile(String.valueOf(filePath), configContent, keys);
+            System.out.println("changes confirmed");
+        }
+
         clearFields();
         mainCtrl.showStartScreen();
     }
@@ -75,6 +93,7 @@ public class UserSettingsCtrl {
         emailField.clear();
         ibanField.clear();
         bicField.clear();
+        currencyMenu.getSelectionModel().selectFirst();
     }
 
     /**

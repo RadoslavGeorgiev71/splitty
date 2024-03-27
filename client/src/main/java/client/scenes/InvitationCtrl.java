@@ -6,6 +6,8 @@ import client.utils.ServerUtils;
 import com.google.inject.Inject;
 
 import java.net.URL;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -52,6 +54,9 @@ public class InvitationCtrl implements Initializable {
     private TextArea emailTextArea;
 
     private Event event;
+
+    private Path filePath = Paths.get("src/main/resources/config.txt").toAbsolutePath();
+
     /**
      *
      * @param server
@@ -146,7 +151,7 @@ public class InvitationCtrl implements Initializable {
      */
     private void sendInvites(){
         List<String> emails = new ArrayList<>();
-        String name = new ConfigClient().readFromFile("client/src/main/resources/config.txt")
+        String name = new ConfigClient().readFromFile(String.valueOf(filePath))
                 .getName();
         Scanner scanner = new Scanner(emailTextArea.getText());
         while(scanner.hasNextLine()){

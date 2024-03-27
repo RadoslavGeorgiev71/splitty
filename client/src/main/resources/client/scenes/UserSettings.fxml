@@ -59,7 +59,7 @@
               </rowConstraints>
                <children>
                   <Button alignment="BOTTOM_LEFT" mnemonicParsing="false" onAction="#onCancelClick" text="Cancel" />
-                  <Button fx:id="onConfirmClick" mnemonicParsing="false" text="Confirm" GridPane.columnIndex="1" />
+                  <Button mnemonicParsing="false" onAction="#onConfirmClick" text="Confirm" GridPane.columnIndex="1" />
                </children>
             </GridPane>
          </children>
