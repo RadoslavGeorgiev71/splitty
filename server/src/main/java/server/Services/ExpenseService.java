@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import server.database.EventRepository;
 import server.database.ExpenseRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,8 +38,7 @@ public class ExpenseService {
      * @return the expense that was just created
      */
     public Expense create(Expense newExpense){
-        Expense savedExpense = expenseRepo.save(newExpense);
-        return savedExpense;
+        return expenseRepo.save(newExpense);
     }
 
     /**
@@ -74,8 +74,7 @@ public class ExpenseService {
             existingExpense.get().setAmount(updatedExpense.getAmount());
             existingExpense.get().setParticipants(updatedExpense.getParticipants());
             existingExpense.get().setDateTime(updatedExpense.getDateTime());
-            Expense savedExpense = expenseRepo.save(existingExpense.get());
-            return savedExpense;
+            return expenseRepo.save(existingExpense.get());
         }
         return null;
     }
@@ -120,6 +119,10 @@ public class ExpenseService {
      * @return Either the expenses or null
      */
     public List<Expense> findByEventId(long id){
-        return eventRepo.findById(id).get().getExpenses();
+        Optional<Event> existingEvent = eventRepo.findById(id);
+        if(existingEvent.isPresent()){
+            return existingEvent.get().getExpenses();
+        }
+        return new ArrayList<>();
     }
 }

@@ -12,11 +12,11 @@ public class Expense {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     private String title;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private Participant payingParticipant; // should probably use id of
     // participant instead since we are not using entity for participant yet i will change later
     private double amount;
-    @ManyToMany
+    @OneToMany(cascade=CascadeType.ALL)
     private List<Participant> participants;
     private String dateTime;
 
@@ -78,6 +78,23 @@ public class Expense {
         this.participants = participants;
         this.dateTime = dateTime;
     }
+
+    /**
+     * Get id
+     * @return id of expense
+     */
+    public long getId() {
+        return id;
+    }
+
+    /**
+     * Set id
+     * @param id of expense
+     */
+    public void setId(long id) {
+        this.id = id;
+    }
+
 
     /**
      * @return Expense title
