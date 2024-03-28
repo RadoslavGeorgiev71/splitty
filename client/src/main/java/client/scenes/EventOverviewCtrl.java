@@ -180,9 +180,10 @@ public class EventOverviewCtrl {
         tabPaneAllGridPane.setHgap(10);
         if (event != null) {
             for (int i = 0; i < event.getExpenses().size(); i++) {
-                Label dateLabel = new Label(event.getExpenses().get(i).getDateTime());
-                Label nameLabel = new Label("expense creator");
-                nameLabel.setWrapText(true); // Wrap text to prevent truncation
+                Expense expense = event.getExpenses().get(i);
+                Label dateLabel = new Label(expense.getDateTime());
+                Label nameLabel;
+                nameLabel = new Label(expense.getPayingParticipant().getName());
                 Button editButton = new Button("Edit");
 
                 // Set fixed column widths
