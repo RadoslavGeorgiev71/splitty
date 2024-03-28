@@ -184,6 +184,9 @@ public class EditExpenseCtrl{
         }
     }
 
+    /**
+     * Initiallizes the payer choice box with the data
+     */
     public void initializePayer() {
         if (event != null) {
             payerChoiceBox.setItems(FXCollections.observableArrayList(event.getParticipants()));
@@ -215,6 +218,9 @@ public class EditExpenseCtrl{
         }
     }
 
+    /**
+     * Initiallizes the currency choice box with the data
+     */
     public void initializeCurr() {
         if(event == null) {
             currChoiceBox.getSelectionModel().selectFirst();
@@ -228,7 +234,7 @@ public class EditExpenseCtrl{
         while(currencies.get(j) != expense.getCurrency()){
             j++;
         }
-        if(j < 2){
+        if(j < 3){
             currChoiceBox.getSelectionModel().select(j);
         }
         else {

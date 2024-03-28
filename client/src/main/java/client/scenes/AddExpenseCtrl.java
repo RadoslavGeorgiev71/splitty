@@ -179,6 +179,9 @@ public class AddExpenseCtrl{
         }
     }
 
+    /**
+     * Initiallizes the currency choice box with the data
+     */
     public void initializeCurr() {
         if(currency == null || currency.length() < 1) {
             currChoiceBox.getSelectionModel().selectFirst();
@@ -192,7 +195,7 @@ public class AddExpenseCtrl{
         while(currencies.get(j) != currency){
             j++;
         }
-        if(j < 2){
+        if(j < 3){
             currChoiceBox.getSelectionModel().select(j);
         }
         else {
@@ -222,9 +225,9 @@ public class AddExpenseCtrl{
                 }
             } );
 
-            initializeCurr();
             payerChoiceBox.getSelectionModel().selectFirst();
             expenseField.setText("Add Expense");
+            initializeCurr();
             equally.setAllowIndeterminate(false);
             equally.setSelected(true);
             onlySome.setAllowIndeterminate(false);
