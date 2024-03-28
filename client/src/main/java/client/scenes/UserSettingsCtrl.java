@@ -68,15 +68,15 @@ public class UserSettingsCtrl {
      */
     @FXML
     public void onConfirmClick() {
-        String[] keys = {
-                "serverUrl",
-                "email",
-                "iban",
-                "bic",
-                "language",
-                "currency",
-                "name"
-        };
+        String[] keys = new String[7];
+        keys[0] = "serverUrl";
+        keys[1] = "email";
+        keys[2] = "iban";
+        keys[3] = "bic";
+        keys[4] = "language";
+        keys[5] = "currency";
+        keys[6] = "name";
+
         if(configClient != null) {
             String[] configContent = new String[7];
             configContent[0] = configClient.getServerUrl();
