@@ -48,7 +48,7 @@ public class EditExpenseCtrl{
     private Button expenseAbortButton;
 
     /**
-     * Constructor for AddExpenseCtrl
+     * Constructor for EditExpenseCtrl
      * @param server client is on
      * @param mainCtrl of client
      */
