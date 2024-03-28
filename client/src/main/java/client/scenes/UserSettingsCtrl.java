@@ -75,7 +75,8 @@ public class UserSettingsCtrl {
                 "bic",
                 "language",
                 "currency",
-                "name"};
+                "name"
+        };
         if(configClient != null) {
             String[] configContent = new String[7];
             configContent[0] = configClient.getServerUrl();
