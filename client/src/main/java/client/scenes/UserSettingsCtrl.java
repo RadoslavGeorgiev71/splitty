@@ -22,8 +22,12 @@ public class UserSettingsCtrl {
 
     private Path filePath = Paths.get("src/main/resources/config.txt").toAbsolutePath();
 
+    // excluding recentEvents
     private String[] keys = {"serverUrl", "email", "iban", "bic", "language",
-            "currency", "name", "recentEvents"};
+            "currency", "name"};
+
+//    private String[] keys = {"serverUrl", "email", "iban", "bic", "language",
+//            "currency", "name", "recentEvents"};
 
     @FXML
     private ChoiceBox currencyMenu;
@@ -68,7 +72,7 @@ public class UserSettingsCtrl {
     @FXML
     public void onConfirmClick() {
         if(configClient != null) {
-            String[] configContent = new String[8];
+            String[] configContent = new String[7];
             configContent[0] = configClient.getServerUrl();
             configContent[1] = emailField.getText();
             configContent[2] = ibanField.getText();
@@ -76,7 +80,6 @@ public class UserSettingsCtrl {
             configContent[4] = configClient.getLanguage();
             configContent[5] = currencyMenu.getValue().toString();
             configContent[6] = nameField.getText();
-            configContent[7] = configClient.getRecentEvents();
             configClient.writeToFile(String.valueOf(filePath), configContent, keys);
             System.out.println("changes confirmed");
         }

@@ -132,7 +132,7 @@ public class AddExpenseCtrl{
     }
 
     /**
-     * Initiallizes the fields with the data
+     * Initializes the fields with the data
      */
     public void initialize() {
         if (event != null){
