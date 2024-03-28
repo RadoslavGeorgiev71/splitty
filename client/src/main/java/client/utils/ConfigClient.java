@@ -212,7 +212,6 @@ public class ConfigClient {
 
         } catch (FileNotFoundException e) { // if the file is not found it should
             try {
-                System.out.println(filePath);
                 Files.createFile(filePath);
 
                 BufferedWriter writer = new BufferedWriter(

@@ -87,7 +87,6 @@ public class UserSettingsCtrl {
             configContent[5] = currencyMenu.getValue().toString();
             configContent[6] = nameField.getText();
             configClient.writeToFile(String.valueOf(filePath), configContent, keys);
-            System.out.println("changes confirmed");
         }
 
         clearFields();
