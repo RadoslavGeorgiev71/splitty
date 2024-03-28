@@ -43,7 +43,9 @@ public class EditExpenseCtrl{
     @FXML
     private TextField tags;                         //Expense Type
     @FXML
-    private Button expenseAddButton;
+    private Button expenseSaveButton;
+    @FXML
+    private Button expenseDeleteButton;
     @FXML
     private Button expenseAbortButton;
 
@@ -73,8 +75,7 @@ public class EditExpenseCtrl{
      * Sends back to Overview Event window back with the participant altered
      * @param actionEvent to handle
      */
-    public void onAddClick(ActionEvent actionEvent) {
-        Expense expense = new Expense();
+    public void onSaveClick(ActionEvent actionEvent) {
         expense.setTitle(titleField.getText());
 //        int index = 0;
 //        while(event.getParticipants().get(index).getName() != payerChoiceBox.getValue())
@@ -84,6 +85,20 @@ public class EditExpenseCtrl{
         expense.setDateTime(datePicker.getValue().toString());
         //server.addExpense(expense);
         event.addExpense(expense);
+        server.persistEvent(event);
+        clearFields();
+        //event = server.getEvent(event.getId());
+        mainCtrl.showEventOverview(event);
+    }
+
+    /**
+     * Controller class for the ok button
+     * Sends back to Overview Event window back with the participant altered
+     * @param actionEvent to handle
+     */
+    public void onDeleteClick(ActionEvent actionEvent) {
+        //server.addExpense(expense);
+        event.removeExpense(expense);
         server.persistEvent(event);
         clearFields();
         //event = server.getEvent(event.getId());
@@ -127,7 +142,7 @@ public class EditExpenseCtrl{
     public void keyPressed(KeyEvent e) {
         switch (e.getCode()) {
             case ENTER:
-                onAddClick(null);
+                onSaveClick(null);
                 break;
             case ESCAPE:
                 onAbortClick(null);

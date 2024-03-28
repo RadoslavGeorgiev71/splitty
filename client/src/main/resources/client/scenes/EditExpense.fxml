@@ -82,14 +82,16 @@
                 <GridPane>
                     <columnConstraints>
                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                         <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                     </columnConstraints>
                     <rowConstraints>
                         <RowConstraints />
                     </rowConstraints>
                     <children>
-                        <Button fx:id="expenseAddButton" mnemonicParsing="false" onAction="#onAddClick" text="Add" />
-                        <Button fx:id="expenseAbortButton" mnemonicParsing="false" onAction="#onAbortClick" text="Abort" GridPane.columnIndex="1" />
+                        <Button fx:id="expenseSaveButton" mnemonicParsing="false" onAction="#onSaveClick" text="Save" />
+                        <Button fx:id="expenseAbortButton" mnemonicParsing="false" onAction="#onAbortClick" text="Abort" GridPane.columnIndex="2" />
+                  <Button fx:id="expenseDeleteButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onDeleteClick" text="Delete" GridPane.columnIndex="1" />
                     </children>
                 </GridPane>
             </children>
