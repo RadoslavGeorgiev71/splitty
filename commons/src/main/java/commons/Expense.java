@@ -1,5 +1,6 @@
 package commons;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -173,6 +174,7 @@ public class Expense {
     /**
      * @return activity
      */
+    @JsonIgnore
     public String getActivity() {
         return this.title + " payed by " + this.payingParticipant.getName();
     }

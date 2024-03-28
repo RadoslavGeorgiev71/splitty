@@ -15,7 +15,6 @@
  */
 package client.scenes;
 
-import client.utils.ConfigClient;
 import commons.Event;
 import commons.Participant;
 import javafx.scene.Parent;
@@ -191,11 +190,10 @@ public class MainCtrl {
 
     /**
      * Switches the scene to the User Settings
-     * @param configClient - the client whose settings will be changed
      */
-    public void showUserSettings(ConfigClient configClient) {
+    public void showUserSettings() {
         primaryStage.setTitle("User Settings");
-        userSettingsCtrl.initialize(configClient);
+        userSettingsCtrl.initialize();
         primaryStage.setScene(usersettings);
     }
 }
