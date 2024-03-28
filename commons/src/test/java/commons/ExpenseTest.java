@@ -91,7 +91,7 @@ class ExpenseTest {
 
     @Test
     void getActivity() {
-        assertEquals("party payed by Ana", exp1.getActivity());
+        assertEquals("Ana paid 100.0 for party", exp1.getActivity());
     }
 
     @Test
