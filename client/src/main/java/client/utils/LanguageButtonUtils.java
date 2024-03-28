@@ -12,7 +12,8 @@ import java.nio.file.Paths;
 
 public class LanguageButtonUtils {
 
-    private static Path imagesFolderPath = Paths.get("src/main/resources/client/images/flags/").toAbsolutePath();
+    private static Path imagesFolderPath =
+            Paths.get("src/main/resources/client/images/flags/").toAbsolutePath();
 
     private static Path filePath = Paths.get("src/main/resources/config.txt").toAbsolutePath();
 

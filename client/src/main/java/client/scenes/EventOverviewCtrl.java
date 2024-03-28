@@ -213,8 +213,9 @@ public class EventOverviewCtrl {
                 if (event.getParticipants().get(i).equals(participantsMenu.
                         getSelectionModel().getSelectedItem())) {
                     Label dateLabel = new Label(event.getExpenses().get(i).getDateTime());
-                    Label nameLabel = new Label(event.getExpenses().get(i).getPayingParticipant().getName());
-                    nameLabel.setWrapText(true); // Wrap text to prevent truncation
+                    Label nameLabel;
+                    nameLabel = new Label(event.getExpenses().get(i).getPayingParticipant().getName());
+                    nameLabel.setWrapText(true);
                     Button editButton = new Button("Edit");
 
                     editButton.setOnAction(event -> {

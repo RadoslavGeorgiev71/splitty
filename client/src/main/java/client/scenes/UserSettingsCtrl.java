@@ -22,10 +22,6 @@ public class UserSettingsCtrl {
 
     private Path filePath = Paths.get("src/main/resources/config.txt").toAbsolutePath();
 
-    // excluding recentEvents
-    private String[] keys = {"serverUrl", "email", "iban", "bic", "language",
-            "currency", "name"};
-
 //    private String[] keys = {"serverUrl", "email", "iban", "bic", "language",
 //            "currency", "name", "recentEvents"};
 
@@ -49,6 +45,7 @@ public class UserSettingsCtrl {
      *
      * @param server
      * @param mainCtrl
+     * @param configClient
      */
     @Inject
     public UserSettingsCtrl(ServerUtils server, MainCtrl mainCtrl, ConfigClient configClient) {
@@ -71,6 +68,8 @@ public class UserSettingsCtrl {
      */
     @FXML
     public void onConfirmClick() {
+        String[] keys = {"serverUrl", "email", "iban", "bic", "language",
+                "currency", "name"};
         if(configClient != null) {
             String[] configContent = new String[7];
             configContent[0] = configClient.getServerUrl();
