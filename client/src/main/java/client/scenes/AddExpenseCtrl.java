@@ -14,9 +14,6 @@ import com.google.inject.Inject;
 import javafx.scene.text.Text;
 import javafx.util.StringConverter;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-
 public class AddExpenseCtrl{
 
     private final ServerUtils server;
