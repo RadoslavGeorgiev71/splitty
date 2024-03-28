@@ -194,7 +194,8 @@ public class TestExpenseRepository implements ExpenseRepository {
      */
     @Override
     public <S extends Expense, R> R findBy(Example<S> example,
-                                           Function<FluentQuery.FetchableFluentQuery<S>, R> queryFunction) {
+                                           Function<FluentQuery.FetchableFluentQuery<S>,
+                                                   R> queryFunction) {
         return null;
     }
 
