@@ -15,6 +15,9 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import javafx.util.StringConverter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class AddExpenseCtrl{
 
     private final ServerUtils server;
@@ -80,6 +83,7 @@ public class AddExpenseCtrl{
 //        while(event.getParticipants().get(index).getName() != payerChoiceBox.getValue())
         expense.setPayingParticipant((Participant) payerChoiceBox.getValue());
         expense.setAmount(Double.parseDouble(amountField.getText()));
+        expense.setCurrency(currChoiceBox.getSelectionModel().getSelectedItem().toString());
         expense.setParticipants(event.getParticipants());
         expense.setDateTime(datePicker.getValue().toString());
         //server.addExpense(expense);
@@ -187,6 +191,13 @@ public class AddExpenseCtrl{
                     return null;
                 }
             } );
+
+            List<String> currencies = new ArrayList<>();
+            currencies.add("EUR");
+            currencies.add("USD");
+            currencies.add("CHF");
+            currChoiceBox.setItems(FXCollections.observableArrayList(currencies));
+            currChoiceBox.getSelectionModel().selectFirst();
 
             payerChoiceBox.getSelectionModel().selectFirst();
             expenseField.setText("Add Expense");

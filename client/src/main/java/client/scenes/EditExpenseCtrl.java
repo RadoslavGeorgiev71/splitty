@@ -17,6 +17,8 @@ import javafx.util.StringConverter;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 public class EditExpenseCtrl{
 
@@ -84,6 +86,7 @@ public class EditExpenseCtrl{
 //        while(event.getParticipants().get(index).getName() != payerChoiceBox.getValue())
         expense.setPayingParticipant((Participant) payerChoiceBox.getValue());
         expense.setAmount(Double.parseDouble(amountField.getText()));
+        expense.setCurrency(currChoiceBox.getSelectionModel().getSelectedItem().toString());
         expense.setParticipants(event.getParticipants());
         expense.setDateTime(datePicker.getValue().toString());
         //server.addExpense(expense);
@@ -205,8 +208,34 @@ public class EditExpenseCtrl{
                 }
             } );
 
-            payerChoiceBox.getSelectionModel().selectFirst();
-            //payerChoiceBox.getSelectionModel().select(expense.getPayingParticipant());
+            int i = 0;
+            String name = expense.getPayingParticipant().getName();
+            while(event.getParticipants().get(i).getName() != name){
+                i++;
+            }
+            if(i >= event.getParticipants().size()){
+                payerChoiceBox.getSelectionModel().selectFirst();
+            }
+            else{
+                payerChoiceBox.getSelectionModel().select(i);
+            }
+
+            List<String> currencies = new ArrayList<>();
+            currencies.add("EUR");
+            currencies.add("USD");
+            currencies.add("CHF");
+            currChoiceBox.setItems(FXCollections.observableArrayList(currencies));
+            int j = 0;
+            while(currencies.get(j) != expense.getCurrency()){
+                j++;
+            }
+            if(j > 2){
+                payerChoiceBox.getSelectionModel().selectFirst();
+            }
+            else{
+                payerChoiceBox.getSelectionModel().select(j);
+            }
+
             expenseField.setText("Edit Expense");
             titleField.setText(expense.getTitle());
             amountField.setText("" + expense.getAmount());

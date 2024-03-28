@@ -26,8 +26,8 @@ class ExpenseTest {
         list.add(a);
         list.add(b);
         list.add(c);
-        exp1 = new Expense("party", a, 100, list, "2/25/2024");
-        exp2 = new Expense("party", a, 100, list, "2/25/2024");
+        exp1 = new Expense("party", a, 100, "EUR", list, "2/25/2024");
+        exp2 = new Expense("party", a, 100, "EUR", list, "2/25/2024");
         exp3 = new Expense("partyy", b, 56, list);
     }
 
@@ -91,7 +91,7 @@ class ExpenseTest {
 
     @Test
     void getActivity() {
-        assertEquals("Ana paid 100.0 for party", exp1.getActivity());
+        assertEquals("Ana paid 100.0 EUR for party", exp1.getActivity());
     }
 
     @Test
