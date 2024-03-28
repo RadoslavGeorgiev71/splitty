@@ -68,6 +68,7 @@ public class Admin{
     /**
      * This method sends a get request to the server which
      * generates a password and prints it to the server console
+     * @return boolean true if ok false if error
      */
     public boolean generatePassword(){
         try {
