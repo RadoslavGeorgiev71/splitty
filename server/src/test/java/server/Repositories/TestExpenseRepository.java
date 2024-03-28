@@ -1,13 +1,11 @@
 package server.Repositories;
 
-import commons.Event;
 import commons.Expense;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.query.FluentQuery;
-import server.database.EventRepository;
 import server.database.ExpenseRepository;
 
 import java.util.ArrayList;
@@ -142,7 +140,8 @@ public class TestExpenseRepository implements ExpenseRepository {
 
     /**
      * @param example must not be {@literal null}.
-     * @param sort    the {@link Sort} specification to sort the results by, may be {@link Sort#unsorted()}, must not be
+     * @param sort    the {@link Sort} specification to sort the results by,
+     *               may be {@link Sort#unsorted()}, must not be
      *                {@literal null}.
      * @param <S>
      * @return
@@ -154,7 +153,8 @@ public class TestExpenseRepository implements ExpenseRepository {
 
     /**
      * @param example  must not be {@literal null}.
-     * @param pageable the pageable to request a paged result, can be {@link Pageable#unpaged()}, must not be
+     * @param pageable the pageable to request a paged result,
+     *                 can be {@link Pageable#unpaged()}, must not be
      *                 {@literal null}.
      * @param <S>
      * @return
@@ -175,7 +175,8 @@ public class TestExpenseRepository implements ExpenseRepository {
     }
 
     /**
-     * @param example the {@link Example} to use for the existence check. Must not be {@literal null}.
+     * @param example the {@link Example} to use for the existence check.
+     *                Must not be {@literal null}.
      * @param <S>
      * @return
      */
@@ -192,7 +193,8 @@ public class TestExpenseRepository implements ExpenseRepository {
      * @return
      */
     @Override
-    public <S extends Expense, R> R findBy(Example<S> example, Function<FluentQuery.FetchableFluentQuery<S>, R> queryFunction) {
+    public <S extends Expense, R> R findBy(Example<S> example,
+                                           Function<FluentQuery.FetchableFluentQuery<S>, R> queryFunction) {
         return null;
     }
 
@@ -312,7 +314,8 @@ public class TestExpenseRepository implements ExpenseRepository {
     }
 
     /**
-     * @param sort the {@link Sort} specification to sort the results by, can be {@link Sort#unsorted()}, must not be
+     * @param sort the {@link Sort} specification to sort the results by,
+     *             can be {@link Sort#unsorted()}, must not be
      *             {@literal null}.
      * @return
      */
@@ -322,7 +325,8 @@ public class TestExpenseRepository implements ExpenseRepository {
     }
 
     /**
-     * @param pageable the pageable to request a paged result, can be {@link Pageable#unpaged()}, must not be
+     * @param pageable the pageable to request a paged result,
+     *                 can be {@link Pageable#unpaged()}, must not be
      *                 {@literal null}.
      * @return
      */
