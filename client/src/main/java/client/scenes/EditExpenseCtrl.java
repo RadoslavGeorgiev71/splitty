@@ -184,52 +184,69 @@ public class EditExpenseCtrl{
         }
     }
 
-    /**
-     * Initiallizes the fields with the data
-     */
-    public void initialize() {
-        if (event != null){
+    public void initializePayer() {
+        if (event != null) {
             payerChoiceBox.setItems(FXCollections.observableArrayList(event.getParticipants()));
             payerChoiceBox.setConverter(new StringConverter<Participant>() {
                 @Override
                 public String toString(Participant participant) {
                     if (participant != null) {
                         return participant.getName();
-                    }
-                    else {
+                    } else {
                         return "";
                     }
                 }
+
                 @Override
                 public Participant fromString(String string) {
                     return null;
                 }
-            } );
+            });
             int i = 0;
             String name = expense.getPayingParticipant().getName();
-            while(event.getParticipants().get(i).getName() != name){
+            while (event.getParticipants().get(i).getName() != name) {
                 i++;
             }
-            payerChoiceBox.getSelectionModel().selectFirst();
-            if(i < event.getParticipants().size()){
+            if (i < event.getParticipants().size()) {
                 payerChoiceBox.getSelectionModel().select(i);
+            } else {
+                payerChoiceBox.getSelectionModel().selectFirst();
             }
-            List<String> currencies = new ArrayList<>();
-            currencies.add("EUR");
-            currencies.add("USD");
-            currencies.add("CHF");
-            currChoiceBox.setItems(FXCollections.observableArrayList(currencies));
-            int j = 0;
-            while(currencies.get(j) != expense.getCurrency()){
-                j++;
-            }
-            payerChoiceBox.getSelectionModel().selectFirst();
-            if(j > 2){
-                payerChoiceBox.getSelectionModel().select(j);
-            }
+        }
+    }
+
+    public void initializeCurr() {
+        if(event == null) {
+            currChoiceBox.getSelectionModel().selectFirst();
+        }
+        List<String> currencies = new ArrayList<>();
+        currencies.add("EUR");
+        currencies.add("USD");
+        currencies.add("CHF");
+        currChoiceBox.setItems(FXCollections.observableArrayList(currencies));
+        int j = 0;
+        while(currencies.get(j) != expense.getCurrency()){
+            j++;
+        }
+        if(j < 2){
+            currChoiceBox.getSelectionModel().select(j);
+        }
+        else {
+            currChoiceBox.getSelectionModel().selectFirst();
+        }
+    }
+
+
+    /**
+     * Initiallizes the fields with the data
+     */
+    public void initialize() {
+        if(event != null){
+            initializePayer();
             expenseField.setText("Edit Expense");
             titleField.setText(expense.getTitle());
             amountField.setText("" + expense.getAmount());
+            initializeCurr();
             equally.setAllowIndeterminate(false);
             onlySome.setAllowIndeterminate(false);
             if(event.getParticipants().equals(expense.getParticipants())){

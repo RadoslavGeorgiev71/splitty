@@ -24,6 +24,7 @@ public class AddExpenseCtrl{
     private final MainCtrl mainCtrl;
     private Event event;
     private Expense expense;
+    private String currency;
 
     @FXML
     private Text expenseField;                 //Title
@@ -126,6 +127,14 @@ public class AddExpenseCtrl{
     }
 
     /**
+     * Setter for currency
+     * @param currency to set
+     */
+    public void setCurrency(String currency) {
+        this.currency = currency;
+    }
+
+    /**
      * Handles the key event pressed
      * @param e the KeyEvent to handle
      */
@@ -170,6 +179,27 @@ public class AddExpenseCtrl{
         }
     }
 
+    public void initializeCurr() {
+        if(currency == null || currency.length() < 1) {
+            currChoiceBox.getSelectionModel().selectFirst();
+        }
+        List<String> currencies = new ArrayList<>();
+        currencies.add("EUR");
+        currencies.add("USD");
+        currencies.add("CHF");
+        currChoiceBox.setItems(FXCollections.observableArrayList(currencies));
+        int j = 0;
+        while(currencies.get(j) != currency){
+            j++;
+        }
+        if(j < 2){
+            currChoiceBox.getSelectionModel().select(j);
+        }
+        else {
+            currChoiceBox.getSelectionModel().selectFirst();
+        }
+    }
+
     /**
      * Initiallizes the fields with the data
      */
@@ -192,13 +222,7 @@ public class AddExpenseCtrl{
                 }
             } );
 
-            List<String> currencies = new ArrayList<>();
-            currencies.add("EUR");
-            currencies.add("USD");
-            currencies.add("CHF");
-            currChoiceBox.setItems(FXCollections.observableArrayList(currencies));
-            currChoiceBox.getSelectionModel().selectFirst();
-
+            initializeCurr();
             payerChoiceBox.getSelectionModel().selectFirst();
             expenseField.setText("Add Expense");
             equally.setAllowIndeterminate(false);
