@@ -77,33 +77,34 @@
             <GridPane>
                <columnConstraints>
                   <ColumnConstraints hgrow="SOMETIMES" maxWidth="178.79998779296875" minWidth="10.0" prefWidth="95.59996032714844" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="178.79998779296875" minWidth="10.0" prefWidth="165.20003967285157" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="178.79998779296875" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="178.79998779296875" minWidth="10.0" prefWidth="100.0" />
                </columnConstraints>
                <rowConstraints>
                   <RowConstraints />
                   <RowConstraints />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" />
+                  <RowConstraints />
+                  <RowConstraints />
                </rowConstraints>
                <children>
-                  <Label text="How to split?" GridPane.rowIndex="1" />
-                      <CheckBox fx:id="equally" mnemonicParsing="false" text="Equally" GridPane.rowIndex="2" />
-                      <CheckBox fx:id="onlySome" mnemonicParsing="false" text="Only Some" GridPane.rowIndex="3" />
-                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="174.0" prefWidth="296.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
-                     <children>
-                        <GridPane fx:id="allGridPane" layoutX="-2.0" prefHeight="26.0" prefWidth="165.0">
-                           <rowConstraints>
-                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                           </rowConstraints>
-                           <columnConstraints>
-                              <ColumnConstraints halignment="LEFT" hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="101.4000244140625" />
-                              <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="187.7999755859375" />
-                           </columnConstraints>
-                        </GridPane>
-                     </children>
-                  </AnchorPane>
+                  <Label text="How to split?" />
+                  <CheckBox fx:id="onlySome" mnemonicParsing="false" onAction="#onlySomeChecked" text="Only Some" GridPane.columnIndex="2" />
+                  <CheckBox fx:id="equally" mnemonicParsing="false" text="Equally" GridPane.columnIndex="1" />
                </children>
             </GridPane>
+            <AnchorPane prefHeight="238.0" prefWidth="355.0">
+               <children>
+                  <GridPane fx:id="allGridPane" layoutX="-6.0" layoutY="5.0" prefHeight="4.0" prefWidth="111.0">
+                     <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
+                     <columnConstraints>
+                        <ColumnConstraints halignment="LEFT" hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="78.6" />
+                        <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="181.00000000000003" />
+                     </columnConstraints>
+                  </GridPane>
+               </children>
+            </AnchorPane>
                 <Label text="Expense Type" />
                 <TextField fx:id="tags" />
                 <GridPane>

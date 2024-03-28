@@ -156,6 +156,34 @@ public class EditExpenseCtrl{
     }
 
     /**
+     * Method to be executed when only some people have to pay
+     */
+    @FXML
+    public void onlySomeChecked() {
+        allGridPane.getChildren().clear();
+        allGridPane.setVgap(5);
+        allGridPane.setHgap(5);
+        if (event != null) {
+            for (int i = 0; i < event.getParticipants().size(); i++) {
+                Label nameLabel = new Label(event.getParticipants().get(i).getName());
+                nameLabel.setWrapText(true); // Wrap text to prevent truncation
+                CheckBox hasParticipated = new CheckBox("");
+
+                // Set fixed column widths
+                nameLabel.setMaxWidth(Double.MAX_VALUE);
+
+                GridPane.setFillWidth(nameLabel, true);
+
+                allGridPane.add(hasParticipated, 0, i);
+                allGridPane.add(nameLabel, 1, i);
+
+                Expense expensei = event.getExpenses().get(i);
+                hasParticipated.setSelected(false);
+            }
+        }
+    }
+
+    /**
      * Initiallizes the fields with the data
      */
     public void initialize() {
