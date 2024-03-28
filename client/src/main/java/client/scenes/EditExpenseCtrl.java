@@ -17,7 +17,7 @@ import javafx.util.StringConverter;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-public class AddExpenseCtrl{
+public class EditExpenseCtrl{
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
@@ -53,7 +53,7 @@ public class AddExpenseCtrl{
      * @param mainCtrl of client
      */
     @Inject
-    public AddExpenseCtrl(ServerUtils server, MainCtrl mainCtrl) {
+    public EditExpenseCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.server = server;
         this.mainCtrl = mainCtrl;
     }
@@ -160,11 +160,23 @@ public class AddExpenseCtrl{
             } );
 
             payerChoiceBox.getSelectionModel().selectFirst();
-            expenseField.setText("Add Expense");
+            //payerChoiceBox.getSelectionModel().select(expense.getPayingParticipant());
+            expenseField.setText("Edit Expense");
+            titleField.setText(expense.getTitle());
+            amountField.setText("" + expense.getAmount());
             equally.setAllowIndeterminate(false);
-            equally.setSelected(true);
             onlySome.setAllowIndeterminate(false);
-            onlySome.setSelected(false);
+            if(event.getParticipants().equals(expense.getParticipants())){
+                equally.setSelected(true);
+                onlySome.setSelected(false);
+            }
+            else{
+                equally.setSelected(false);
+                onlySome.setSelected(true);
+            }
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd-yyyy");
+            LocalDate date = LocalDate.parse(expense.getDateTime(), formatter);
+            //datePicker.setConverter(formatter);
         }
     }
 }
