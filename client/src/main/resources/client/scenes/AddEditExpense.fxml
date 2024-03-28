@@ -94,13 +94,13 @@
             </GridPane>
             <AnchorPane prefHeight="238.0" prefWidth="355.0">
                <children>
-                  <GridPane fx:id="allGridPane" layoutX="-6.0" layoutY="5.0" prefHeight="4.0" prefWidth="111.0">
+                  <GridPane fx:id="allGridPane" layoutY="8.0" prefHeight="10.0" prefWidth="260.0">
                      <rowConstraints>
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                      </rowConstraints>
                      <columnConstraints>
-                        <ColumnConstraints halignment="LEFT" hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="78.6" />
-                        <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="181.00000000000003" />
+                        <ColumnConstraints halignment="LEFT" hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="57.19999694824219" />
+                        <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="203.60000305175782" />
                      </columnConstraints>
                   </GridPane>
                </children>
