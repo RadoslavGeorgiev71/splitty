@@ -10,9 +10,19 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import javafx.scene.control.Alert;
 import org.glassfish.jersey.client.ClientConfig;
+import org.springframework.messaging.converter.MappingJackson2MessageConverter;
+import org.springframework.messaging.simp.stomp.StompFrameHandler;
+import org.springframework.messaging.simp.stomp.StompHeaders;
+import org.springframework.messaging.simp.stomp.StompSession;
+import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
+import org.springframework.web.socket.client.standard.StandardWebSocketClient;
+import org.springframework.web.socket.messaging.WebSocketStompClient;
 
 import java.io.*;
+import java.lang.reflect.Type;
 import java.util.*;
+import java.util.concurrent.ExecutionException;
+import java.util.function.Consumer;
 
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
@@ -20,6 +30,7 @@ public class Admin{
 
     private static final String SERVER = "http://localhost:8080/";
     private String password = "none set";
+    private StompSession session = connect("ws://localhost:8080/websocket");
 
     /**
      * Sets the password for the Admin
@@ -81,12 +92,14 @@ public class Admin{
      * @param event to delete
      */
     public void deleteEvent(Event event){
+        /*
         ClientBuilder.newClient(new ClientConfig()) //
                 .target(SERVER).path("api/events/{eventId}") //
                 .resolveTemplate("eventId", event.getId()) // Resolve the template with the event ID
                 .request() //
                 .delete();
-        //should delete all related expenses and debts!!!
+         */
+        send("/app/eventsDelete", event);
     }
 
     /**
@@ -130,28 +143,29 @@ public class Admin{
      * Takes a list of events to import in the database
      * If one of the events is already in the database (The id or the invitecode exists)
      * Then the process fails with a warning
-     * @param events events to add to the database
+     * @param event events to add to the database
      */
-    public void importEvents(List<Event> events) {
-        for(Event event : events){
-            List<Event> currentEvents = getEvents();
-            for(Event cevent : currentEvents){
-                if(cevent.getId() == event.getId() ||
-                        cevent.getInviteCode().equals(event.getInviteCode())) {
-                    showalert(event);
-                    return;
-                }
-            }
-            Response response = ClientBuilder.newClient(new ClientConfig())
-                    .target(SERVER).path("/api/events")
-                    .request(APPLICATION_JSON)
-                    .accept(APPLICATION_JSON)
-                    .post(Entity.json(event));
-
-            if (response.getStatus() != Response.Status.CREATED.getStatusCode()) {
+    public void importEvent(Event event) {
+        List<Event> currentEvents = getEvents();
+        for(Event cevent : currentEvents){
+            if(cevent.getId() == event.getId() ||
+                    cevent.getInviteCode().equals(event.getInviteCode())) {
                 showalert(event);
+                return;
             }
         }
+        /*
+        Response response = ClientBuilder.newClient(new ClientConfig())
+                .target(SERVER).path("/api/events")
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .post(Entity.json(event));
+        if (response.getStatus() != Response.Status.CREATED.getStatusCode()) {
+            showalert(event);
+        }
+
+         */
+        send("/app/events", event);
     }
 
     /**
@@ -167,5 +181,74 @@ public class Admin{
                 " could not be imported because there " +
                 "is already an event with this id or invite code in the database");
         alert.showAndWait();
+    }
+
+
+
+    /**
+     * Establishes a websocket connection
+     * @param url The url to the server
+     * @return A StompSession which is kept until admin is closed
+     */
+    private StompSession connect(String url) {
+        var client = new StandardWebSocketClient();
+        var stomp = new WebSocketStompClient(client);
+        stomp.setMessageConverter(new MappingJackson2MessageConverter());
+        try{
+            return stomp.connect(url, new StompSessionHandlerAdapter() {
+            }).get();
+        } catch(InterruptedException e) {
+            Thread.currentThread().interrupt();
+        } catch(ExecutionException e){
+            throw new RuntimeException(e);
+        }
+        throw new IllegalStateException();
+    }
+
+    /**
+     * Registers an admin to this event channel
+     * @param dest asd
+     * @param consumer asd
+     */
+    public void registerForEvents(String dest, Consumer<Event> consumer) {
+        session.subscribe(dest, new StompFrameHandler() {
+            @Override
+            public Type getPayloadType(StompHeaders headers) {
+                return Event.class;
+            }
+
+            @Override
+            public void handleFrame(StompHeaders headers, Object payload) {
+                consumer.accept((Event) payload);
+            }
+        });
+    }
+
+    /**
+     * Registers an admin to this event deletion channel
+     * @param dest asd
+     * @param consumer asd
+     */
+    public void registerForEventDeletion(String dest, Consumer<Event> consumer) {
+        session.subscribe(dest, new StompFrameHandler() {
+            @Override
+            public Type getPayloadType(StompHeaders headers) {
+                return Event.class;
+            }
+
+            @Override
+            public void handleFrame(StompHeaders headers, Object payload) {
+                consumer.accept((Event) payload);
+            }
+        });
+    }
+
+    /**
+     * Sends and object to a path (channel)
+     * @param dest the channel path
+     * @param o the object to be sent
+     */
+    public void send(String dest, Object o) {
+        session.send(dest, o);
     }
 }

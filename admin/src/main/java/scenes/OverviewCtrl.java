@@ -18,8 +18,6 @@ import utils.Admin;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
 
@@ -73,7 +71,7 @@ public class OverviewCtrl {
             if(result.get() == ButtonType.OK){
                 admin.deleteEvent(selectedEvent);
                 table.getItems().remove(selectedEvent);
-                initialize();
+                refresh();
             }
         }
     }
@@ -113,14 +111,14 @@ public class OverviewCtrl {
         File selectedFile = fileChooser.showOpenDialog(filestage);
         if (selectedFile != null) {
             try {
-                List<Event> events = readEvents(
+                Event e = readEvent(
                         new Scanner(new File( selectedFile.getAbsolutePath())));
-                admin.importEvents(events);
+                admin.importEvent(e);
             } catch (FileNotFoundException e) {
                 throw new RuntimeException(e);
             }
         }
-        initialize();
+        refresh();
     }
 
     /**
@@ -129,14 +127,13 @@ public class OverviewCtrl {
       * @param scanner to use
      * @return a list of events read
      */
-    public List<Event> readEvents(Scanner scanner){
-        List<Event> events = new ArrayList<>();
+    public Event readEvent(Scanner scanner){
         ObjectMapper objectMapper = new ObjectMapper();
+        Event event = null;
         try {
-            while(scanner.hasNextLine()){
+            if(scanner.hasNextLine()){
                 String json = scanner.nextLine();
-                Event event = objectMapper.readValue(json, Event.class);
-                events.add(event);
+                event = objectMapper.readValue(json, Event.class);
             }
         }
         catch (JsonProcessingException e) {
@@ -147,7 +144,7 @@ public class OverviewCtrl {
                     "Ensure that there is one event per line");
             alert.showAndWait();
         }
-        return events;
+        return event;
     }
 
     /**
@@ -155,7 +152,16 @@ public class OverviewCtrl {
      * @param event button clicked
      */
     public void refresh(ActionEvent event){
-        initialize();
+        refresh();
+    }
+
+    /**
+     * Refreshes the events in the table
+     */
+    public void refresh() {
+        var eventss = admin.getEvents();
+        events = FXCollections.observableList(eventss);
+        table.setItems(events);
     }
 
     /**
@@ -185,6 +191,12 @@ public class OverviewCtrl {
         creationDateColumn.setCellValueFactory(new PropertyValueFactory<>("DateTime"));
         table.setItems(events);
         table.getSelectionModel().selectFirst();
+        admin.registerForEvents("/topic/events", e -> {
+            events.add(e);
+        });
+        admin.registerForEventDeletion("/topic/eventsDelete", e -> {
+            events.remove(e);
+        });
     }
 
 }
