@@ -11,6 +11,7 @@ import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
 
 import com.google.inject.Inject;
+import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import javafx.util.StringConverter;
 
@@ -37,6 +38,8 @@ public class AddExpenseCtrl{
     private CheckBox equally;                       //How to split?
     @FXML
     private CheckBox onlySome;
+    @FXML
+    private GridPane allGridPane;
     @FXML
     private TextField tags;                         //Expense Type
     @FXML
