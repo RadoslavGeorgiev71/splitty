@@ -191,7 +191,8 @@ public class Expense {
      * @return activity
      */
     public String getActivity() {
-        return this.title + " payed by " + this.payingParticipant.getName();
+        return this.payingParticipant.getName() + " paid " + this.getAmount() +
+                " for " + this.getTitle();
     }
 
     /**
