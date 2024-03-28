@@ -10,15 +10,20 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import utils.Admin;
 
+import javax.swing.*;
+
 public class LoginCtrl {
 
     private final Admin admin;
     private final MainCtrl mainCtrl;
     @FXML
     private Label errorLabel;
+    @FXML
+    private Label serverLabel;
 
     @FXML
     private Button loginButton;
+    @FXML
     private Button generateButton;
 
     @FXML
@@ -41,6 +46,7 @@ public class LoginCtrl {
     public void initialize() {
         passwordField.clear();
         errorLabel.setVisible(false);
+        serverLabel.setText("Server: " + admin.getURL());
     }
 
     @FXML
@@ -52,6 +58,7 @@ public class LoginCtrl {
             mainCtrl.showOverview();
         }
         else {
+            errorLabel.setText("Error! Incorrect password or unable to connect to server");
             errorLabel.setVisible(true);
         }
     }
@@ -69,7 +76,25 @@ public class LoginCtrl {
 
     @FXML
     void generatePassword(ActionEvent event) {
-        admin.generatePassword();
+        errorLabel.setVisible(false);
+        if(!admin.generatePassword()){
+            errorLabel.setText("Error: Unable to connect to the server. " +
+                    "Please make sure the server is running and the URL is correct.");
+            errorLabel.setVisible(true);
+        }
+    }
+
+    /**
+     * Method to be called when the admin wants to change server
+     * @param actionEvent
+     */
+    public void changeURL(ActionEvent actionEvent) {
+        String url = JOptionPane.showInputDialog(null, "Please enter the url " +
+                "of the server you want to connect", admin.getURL());
+        if (url != null) {
+            admin.setURL(url);
+            initialize();
+        }
     }
 
 }
