@@ -22,8 +22,8 @@ import javafx.scene.control.TextArea;
 
 
 public class InvitationCtrl implements Initializable {
-    private final ServerUtils server;
-    private final MainCtrl mainCtrl;
+    private ServerUtils server;
+    private MainCtrl mainCtrl;
 
     private LanguageResourceBundle languageResourceBundle;
 
@@ -156,17 +156,17 @@ public class InvitationCtrl implements Initializable {
             Alert alert =  new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Success");
             alert.setHeaderText("Invitation emails were sent successfully");
-            alert.showAndWait();
             clearEmail();
+            alert.showAndWait();
         }
 
     }
 
     @FXML
     private void backToStart(){
-        mainCtrl.showStartScreen();
         resetFields();
         clearEmail();
+        mainCtrl.showStartScreen();
     }
 
     @FXML
@@ -174,5 +174,39 @@ public class InvitationCtrl implements Initializable {
         mainCtrl.showEventOverview(this.event);
         resetFields();
         clearEmail();
+    }
+
+    //The methods below are only for testing purposes, do not use.
+
+    /**
+     * Sets the server.
+     * @param server the server
+     */
+    public void setServer(ServerUtils server){
+        this.server = server;
+    }
+
+    /**
+     * Sets the mainCtrl.
+     * @param mainCtrl the mainCtrl
+     */
+    public void setMainCtrl(MainCtrl mainCtrl){
+        this.mainCtrl = mainCtrl;
+    }
+
+    /**
+     * Gets the invite code text.
+     * @return the invite code text
+     */
+    public String getInviteCodeText(){
+        return inviteCodeText.getText();
+    }
+
+    /**
+     * Gets the event name text.
+     * @return the event name text
+     */
+    public String getEventNameText(){
+        return eventNameText.getText();
     }
 }

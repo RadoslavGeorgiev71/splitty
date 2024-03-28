@@ -198,4 +198,22 @@ public class MainCtrl {
         userSettingsCtrl.initialize(configClient);
         primaryStage.setScene(usersettings);
     }
+
+    // For testing purposes, do not use
+
+    /**
+     * Returns the primary stage
+     * @return the primary stage
+     */
+    public Stage getPrimaryStage() {
+        return primaryStage;
+    }
+
+    /**
+     * Returns the startscreen
+     * @return the startscreen
+     */
+    public Scene getStartscreen() {
+        return startscreen;
+    }
 }
