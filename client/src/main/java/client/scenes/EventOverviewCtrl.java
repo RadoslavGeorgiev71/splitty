@@ -4,6 +4,7 @@ import client.utils.LanguageResourceBundle;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Event;
+import commons.Expense;
 import commons.Participant;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -210,11 +211,13 @@ public class EventOverviewCtrl {
         tabPaneFromGridPane.setHgap(10);
         if (event != null) {
             for (int i = 0; i < event.getExpenses().size(); i++) {
-                if (event.getParticipants().get(i).equals(participantsMenu.
+                Participant participant = event.getParticipants().get(i);
+                if (participant.equals(participantsMenu.
                         getSelectionModel().getSelectedItem())) {
-                    Label dateLabel = new Label(event.getExpenses().get(i).getDateTime());
+                    Expense expense = event.getExpenses().get(i);
+                    Label dateLabel = new Label(expense.getDateTime());
                     Label nameLabel;
-                    nameLabel = new Label(event.getExpenses().get(i).getPayingParticipant().getName());
+                    nameLabel = new Label(expense.getPayingParticipant().getName());
                     nameLabel.setWrapText(true);
                     Button editButton = new Button("Edit");
 

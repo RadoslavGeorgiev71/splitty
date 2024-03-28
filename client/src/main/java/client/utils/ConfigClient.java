@@ -215,7 +215,8 @@ public class ConfigClient {
                 System.out.println(filePath);
                 Files.createFile(filePath);
 
-                BufferedWriter writer = new BufferedWriter(new FileWriter(String.valueOf(filePath)));
+                BufferedWriter writer = new BufferedWriter(
+                        new FileWriter(String.valueOf(filePath)));
                 writer.write("serverUrl: null\n" +
                         "email: null\n" +
                         "iban: null\n" +
