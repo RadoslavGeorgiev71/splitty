@@ -145,6 +145,7 @@ public class EventOverviewCtrl {
 
     /**
      * Method to be executed when edit expense button is clicked
+     * @param expense to be edited
      */
 
     @FXML
