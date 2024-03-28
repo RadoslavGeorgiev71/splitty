@@ -90,8 +90,8 @@
                     </rowConstraints>
                     <children>
                         <Button fx:id="expenseSaveButton" mnemonicParsing="false" onAction="#onSaveClick" text="Save" />
+                        <Button fx:id="expenseDeleteButton" mnemonicParsing="false" onAction="#onDeleteClick" text="Delete" GridPane.columnIndex="1" />
                         <Button fx:id="expenseAbortButton" mnemonicParsing="false" onAction="#onAbortClick" text="Abort" GridPane.columnIndex="2" />
-                  <Button fx:id="expenseDeleteButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onDeleteClick" text="Delete" GridPane.columnIndex="1" />
                     </children>
                 </GridPane>
             </children>
