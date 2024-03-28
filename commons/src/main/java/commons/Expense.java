@@ -71,6 +71,7 @@ public class Expense {
      * @param title of Expense
      * @param payingParticipant of Expense
      * @param amount of Expense
+     * @param currency of Expense
      * @param participants of Expense
      * @param dateTime of Expense
      */
