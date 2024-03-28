@@ -67,7 +67,7 @@ public class Main extends Application {
         var addexpense = FXML.load(AddExpenseCtrl.class, "client",
                 "scenes", "AddEditExpense.fxml");
         var editexpense = FXML.load(EditExpenseCtrl.class, "client",
-                "scenes", "AddEditExpense.fxml");
+                "scenes", "EditExpense.fxml");
         var opendebts = FXML.load(OpenDebtsCtrl.class, "client", "scenes", "OpenDebts.fxml");
         var startscreen = FXML.load(StartScreenCtrl.class, "client", "scenes", "StartScreen.fxml");
         var invitation = FXML.load(InvitationCtrl.class, "client", "scenes", "Invitation.fxml");
