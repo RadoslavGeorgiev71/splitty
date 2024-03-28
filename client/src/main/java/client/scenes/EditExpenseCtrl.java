@@ -15,8 +15,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import javafx.util.StringConverter;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -207,19 +205,15 @@ public class EditExpenseCtrl{
                     return null;
                 }
             } );
-
             int i = 0;
             String name = expense.getPayingParticipant().getName();
             while(event.getParticipants().get(i).getName() != name){
                 i++;
             }
-            if(i >= event.getParticipants().size()){
-                payerChoiceBox.getSelectionModel().selectFirst();
-            }
-            else{
+            payerChoiceBox.getSelectionModel().selectFirst();
+            if(i < event.getParticipants().size()){
                 payerChoiceBox.getSelectionModel().select(i);
             }
-
             List<String> currencies = new ArrayList<>();
             currencies.add("EUR");
             currencies.add("USD");
@@ -229,13 +223,10 @@ public class EditExpenseCtrl{
             while(currencies.get(j) != expense.getCurrency()){
                 j++;
             }
+            payerChoiceBox.getSelectionModel().selectFirst();
             if(j > 2){
-                payerChoiceBox.getSelectionModel().selectFirst();
-            }
-            else{
                 payerChoiceBox.getSelectionModel().select(j);
             }
-
             expenseField.setText("Edit Expense");
             titleField.setText(expense.getTitle());
             amountField.setText("" + expense.getAmount());
@@ -249,9 +240,6 @@ public class EditExpenseCtrl{
                 equally.setSelected(false);
                 onlySome.setSelected(true);
             }
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd-yyyy");
-            LocalDate date = LocalDate.parse(expense.getDateTime(), formatter);
-            //datePicker.setConverter(formatter);
         }
     }
 }
