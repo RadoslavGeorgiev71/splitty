@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
@@ -16,7 +17,16 @@
       </Text>
       <PasswordField fx:id="passwordField" layoutX="87.0" layoutY="236.0" onKeyPressed="#keyPressed" prefHeight="34.0" prefWidth="180.0" promptText="Password" />
       <Button fx:id="loginButton" layoutX="88.0" layoutY="291.0" mnemonicParsing="false" onAction="#login" prefHeight="25.0" prefWidth="180.0" text="Login" />
-      <Label fx:id="errorLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="108.0" layoutY="185.0" prefHeight="43.0" prefWidth="139.0" text="Error! Incorrect password" textAlignment="CENTER" textFill="RED" />
-      <Button fx:id="generateButton" layoutX="88.0" layoutY="325.0" mnemonicParsing="false" onAction="#generatePassword" prefHeight="25.0" prefWidth="180.0" text="Generate Password" />
+      <Label fx:id="errorLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="12.0" layoutY="185.0" prefHeight="43.0" prefWidth="331.0" text="Error! Incorrect password" textAlignment="CENTER" textFill="RED" wrapText="true" />
+      <Button fx:id="generateButton" layoutX="88.0" layoutY="327.0" mnemonicParsing="false" onAction="#generatePassword" prefHeight="25.0" prefWidth="180.0" text="Generate Password" />
+      <Button fx:id="changeURLButton" layoutX="87.0" layoutY="361.0" mnemonicParsing="false" onAction="#changeURL" prefHeight="25.0" prefWidth="180.0" text="Connect to different Server" />
+      <Label fx:id="serverLabel" alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutY="20.0" prefHeight="17.0" prefWidth="353.0" text="Server: " textAlignment="RIGHT">
+         <font>
+            <Font size="11.0" />
+         </font>
+         <padding>
+            <Insets right="10.0" />
+         </padding>
+      </Label>
    </children>
 </AnchorPane>

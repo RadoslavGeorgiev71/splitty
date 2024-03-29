@@ -73,6 +73,7 @@ public class EditParticipantCtrl {
 //        participant = server.persistParticipant(participant);
         clearFields();
         server.persistEvent(event);
+        event = server.getEvent(event.getId());
         mainCtrl.showEventOverview(event);
     }
 
