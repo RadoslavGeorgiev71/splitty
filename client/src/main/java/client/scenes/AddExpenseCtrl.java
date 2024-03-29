@@ -87,7 +87,7 @@ public class AddExpenseCtrl{
     /**
      * Clear all fields for the next use
      */
-    private void clearFields() {
+    public void clearFields() {
         payerChoiceBox.getSelectionModel().selectFirst();
         titleField.clear();
         amountField.clear();
@@ -110,7 +110,7 @@ public class AddExpenseCtrl{
      * Setter for expense
      * @param expense to set
      */
-    public void setEvent(Expense expense) {
+    public void setExpense(Expense expense) {
         this.expense = expense;
     }
 
