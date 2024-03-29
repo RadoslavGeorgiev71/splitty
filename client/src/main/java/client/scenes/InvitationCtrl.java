@@ -22,8 +22,8 @@ import javafx.scene.control.TextArea;
 
 
 public class InvitationCtrl implements Initializable {
-    private ServerUtils server;
-    private MainCtrl mainCtrl;
+    private final ServerUtils server;
+    private final MainCtrl mainCtrl;
 
     private LanguageResourceBundle languageResourceBundle;
 
@@ -178,21 +178,6 @@ public class InvitationCtrl implements Initializable {
 
     //The methods below are only for testing purposes, do not use.
 
-    /**
-     * Sets the server.
-     * @param server the server
-     */
-    public void setServer(ServerUtils server){
-        this.server = server;
-    }
-
-    /**
-     * Sets the mainCtrl.
-     * @param mainCtrl the mainCtrl
-     */
-    public void setMainCtrl(MainCtrl mainCtrl){
-        this.mainCtrl = mainCtrl;
-    }
 
     /**
      * Gets the invite code text.

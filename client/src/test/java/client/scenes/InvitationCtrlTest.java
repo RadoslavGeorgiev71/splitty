@@ -6,6 +6,8 @@ import client.utils.ConfigClient;
 import client.utils.ServerUtils;
 import com.google.inject.Injector;
 import commons.Event;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.DialogPane;
 import javafx.stage.Stage;
@@ -20,7 +22,7 @@ import org.testfx.util.WaitForAsyncUtils;
 
 import static com.google.inject.Guice.createInjector;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 
 public class InvitationCtrlTest extends ApplicationTest {
 
@@ -35,25 +37,31 @@ public class InvitationCtrlTest extends ApplicationTest {
 
     @Override
     public void start(Stage stage) throws Exception {
-        var scenePair = FXML.load(InvitationCtrl.class, "client", "scenes", "Invitation.fxml");
-        invitationCtrl = scenePair.getKey();
 
         serverMock = Mockito.mock(ServerUtils.class);
-
         mainCtrlMock = Mockito.mock(MainCtrl.class);
         Mockito.doNothing().when(mainCtrlMock).showStartScreen();
         Mockito.doNothing().when(mainCtrlMock).showEventOverview(Mockito.any(Event.class));
-
         Mockito.when(serverMock.sendInvites(Mockito.anyList(), Mockito.any(Event.class), Mockito.anyString())).thenReturn(true);
-        invitationCtrl.setServer(serverMock);
-        invitationCtrl.setMainCtrl(mainCtrlMock);
 
         Event mockEvent = new Event();
         mockEvent.setInviteCode("testInviteCode");
         mockEvent.setTitle("testTitle");
+
+        invitationCtrl = new InvitationCtrl(serverMock, mainCtrlMock);
         invitationCtrl.setEvent(mockEvent);
 
-        stage.setScene(new Scene(scenePair.getValue()));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/client/scenes/Invitation.fxml"));
+        loader.setControllerFactory(type -> {
+            if (type == InvitationCtrl.class) {
+                return invitationCtrl;
+            } else {
+                throw new RuntimeException("Requested unknown controller type");
+            }
+        });
+
+        Parent root = loader.load();
+        stage.setScene(new Scene(root));
         stage.show();
     }
 
