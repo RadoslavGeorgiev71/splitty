@@ -77,8 +77,8 @@ public class Main extends Application {
                 addparticipant, eventoverview, addexpense,
                 opendebts, startscreen, invitation, usersettings);
 
-        primaryStage.setOnCloseRequest(e -> {
-            eventoverview.getKey().stop();
-        });
+//        primaryStage.setOnCloseRequest(e -> {
+//            eventoverview.getKey().stop();
+//        });
     }
 }

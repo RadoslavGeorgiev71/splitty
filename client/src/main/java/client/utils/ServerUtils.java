@@ -248,17 +248,9 @@ public class ServerUtils {
         });
     }
 
-    public void callUpdate() {
-        ClientBuilder.newClient(new ClientConfig())
-            .target(SERVER).path("api/events/update")
-            .request(APPLICATION_JSON)
-            .accept(APPLICATION_JSON)
-            .get(Response.class);
-    }
-
-    public void stop() {
-        EXEC.shutdownNow();
-    }
+//    public void stop() {
+//        EXEC.shutdownNow();
+//    }
 
     /**
      * Sends the invite code of the event to the specified emails

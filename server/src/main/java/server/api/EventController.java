@@ -74,7 +74,7 @@ public class EventController {
         return ResponseEntity.status(HttpStatus.CREATED).body(savedEvent);
     }
 
-    private Map<Object, Consumer<Event>> listeners = new HashMap<>();
+    private final Map<Object, Consumer<Event>> listeners = new HashMap<>();
 
     @GetMapping(path = {"update"})
     public DeferredResult<ResponseEntity<Event>> getUpdates() {
@@ -104,11 +104,11 @@ public class EventController {
         long eventId = updatedEvent.getId();
 
         Event existingEvent = eventService.update(eventId, updatedEvent);
+
         if (existingEvent != null) {
+            listeners.forEach((k, l) -> l.accept(existingEvent));
             return ResponseEntity.ok(existingEvent);
         }
-
-        listeners.forEach((k, l) -> l.accept(existingEvent));
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Event not found");
     }
