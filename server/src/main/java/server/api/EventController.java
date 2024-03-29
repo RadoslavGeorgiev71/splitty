@@ -5,7 +5,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.async.DeferredResult;
 import server.Services.EventService;
@@ -76,6 +75,10 @@ public class EventController {
 
     private final Map<Object, Consumer<Event>> listeners = new HashMap<>();
 
+    /**
+     * Returns the event when there is an update
+     * @return - response with the updated event
+     */
     @GetMapping(path = {"update"})
     public DeferredResult<ResponseEntity<Event>> getUpdates() {
         ResponseEntity<Event> noContent = ResponseEntity.status(HttpStatus.NO_CONTENT).build();

@@ -225,6 +225,10 @@ public class ServerUtils {
 
     private static final ExecutorService EXEC = Executors.newSingleThreadExecutor();
 
+    /**
+     * Registers changes in the event
+     * @param consumer - consumer that registers changes
+     */
     public void registerEventUpdate(Consumer<Event> consumer) {
         EXEC.submit(() -> {
             while(!Thread.interrupted()) {
