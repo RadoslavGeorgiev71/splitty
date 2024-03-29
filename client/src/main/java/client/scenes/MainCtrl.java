@@ -170,6 +170,9 @@ public class MainCtrl {
         primaryStage.setTitle("Add Expense");
         primaryStage.setScene(addexpense);
         addExpenseCtrl.setEvent(event);
+        ConfigClient configClient =  new ConfigClient();
+        configClient.readFromFile("client/src/main/resources/config.txt");
+        addExpenseCtrl.setCurrency(configClient.getCurrency());
         addExpenseCtrl.initialize();
     }
 

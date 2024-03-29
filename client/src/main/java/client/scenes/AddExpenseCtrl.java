@@ -15,12 +15,16 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import javafx.util.StringConverter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class AddExpenseCtrl{
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
     private Event event;
     private Expense expense;
+    private String currency;
 
     @FXML
     private Text expenseField;                 //Title
@@ -80,6 +84,7 @@ public class AddExpenseCtrl{
 //        while(event.getParticipants().get(index).getName() != payerChoiceBox.getValue())
         expense.setPayingParticipant((Participant) payerChoiceBox.getValue());
         expense.setAmount(Double.parseDouble(amountField.getText()));
+        expense.setCurrency(currChoiceBox.getSelectionModel().getSelectedItem().toString());
         expense.setParticipants(event.getParticipants());
         expense.setDateTime(datePicker.getValue().toString());
         //server.addExpense(expense);
@@ -119,6 +124,14 @@ public class AddExpenseCtrl{
      */
     public void setExpense(Expense expense) {
         this.expense = expense;
+    }
+
+    /**
+     * Setter for currency
+     * @param currency to set
+     */
+    public void setCurrency(String currency) {
+        this.currency = currency;
     }
 
     /**
@@ -167,6 +180,30 @@ public class AddExpenseCtrl{
     }
 
     /**
+     * Initiallizes the currency choice box with the data
+     */
+    public void initializeCurr() {
+        if(currency == null || currency.length() < 1) {
+            currChoiceBox.getSelectionModel().selectFirst();
+        }
+        List<String> currencies = new ArrayList<>();
+        currencies.add("EUR");
+        currencies.add("USD");
+        currencies.add("CHF");
+        currChoiceBox.setItems(FXCollections.observableArrayList(currencies));
+        int j = 0;
+        while(j <= 2 && currencies.get(j) != currency){
+            j++;
+        }
+        if(j < 3){
+            currChoiceBox.getSelectionModel().select(j);
+        }
+        else {
+            currChoiceBox.getSelectionModel().selectFirst();
+        }
+    }
+
+    /**
      * Initiallizes the fields with the data
      */
     public void initialize() {
@@ -190,6 +227,7 @@ public class AddExpenseCtrl{
 
             payerChoiceBox.getSelectionModel().selectFirst();
             expenseField.setText("Add Expense");
+            initializeCurr();
             equally.setAllowIndeterminate(false);
             equally.setSelected(true);
             onlySome.setAllowIndeterminate(false);
