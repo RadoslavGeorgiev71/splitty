@@ -103,24 +103,17 @@ public class EditParticipantCtrlTest extends ApplicationTest {
 
     @Test
     public void testRemoveParticipant() {
-            // Simulate a click on the removeParticipantButton
         clickOn("#removeParticipantButton");
 
-            // Interact with the alert dialog
         interact(() -> {
-                // Get the alert dialog
             DialogPane dialogPane = lookup(".dialog-pane").query();
 
             Button okButton = (Button) dialogPane.lookupButton(ButtonType.OK);
 
-                // Simulate a click on the OK button
             clickOn(okButton);
         });
 
-            // Verify that persistEvent was called
         Mockito.verify(serverMock, Mockito.times(1)).persistEvent(Mockito.any(Event.class));
-
-            // Verify that the participant was removed from the event
         assertTrue(mockEvent.getParticipants().isEmpty());
     }
 

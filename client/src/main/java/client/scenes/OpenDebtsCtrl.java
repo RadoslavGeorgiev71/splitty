@@ -65,7 +65,7 @@ public class OpenDebtsCtrl {
             languageResourceBundle = LanguageResourceBundle.getInstance();
             switchTextLanguage();
             gridPane.setAlignment(Pos.CENTER);
-            this.testDebts();
+            //this.testDebts();
             debts = getPaymentInstructions();
             titledPanes = new TitledPane[debts.size()];
             textFlows = new TextFlow[debts.size()];
@@ -142,10 +142,8 @@ public class OpenDebtsCtrl {
         alert.setTitle(bundle.getString("removeDebtAlertTitleText"));
         alert.setContentText(bundle.getString("removeDebtAlertContentText"));
 
-        //TODO: for now there is also an output on the console which should be removed in the future
         alert.showAndWait().ifPresent(response -> {
             if (response == ButtonType.OK) {
-                System.out.println("Ok");
                 server.deleteDebt(debt);
                 mainCtrl.showOpenDebts(event);
             }
@@ -232,7 +230,7 @@ public class OpenDebtsCtrl {
      * Retrieves all debts associated with a certain event
      * @return all debts associated with a given event
      */
-    private List<Debt> getPaymentInstructions() {
+    public List<Debt> getPaymentInstructions() {
         try {
             return server.getPaymentInstructions(event);
         } catch (WebApplicationException e) {
@@ -244,15 +242,15 @@ public class OpenDebtsCtrl {
         }
     }
 
-    // TODO: only to test the functionality for now, should be removed later
-    private void testDebts() {
-        Participant bob = new Participant("Bob");
-        Participant ana = new Participant("Ana");
-        for (Debt debt : server.getPaymentInstructions(event)) {
-            server.deleteDebt(debt);
-        }
-        server.addDebt(new Debt(5, bob, ana, 10));
-        server.addDebt(new Debt(6, ana, bob, 8));
-        server.addDebt(new Debt(7, ana, new Participant("Greg"), 30));
-    }
+//    // TODO: only to test the functionality for now, should be removed later
+//    private void testDebts() {
+//        Participant bob = new Participant("Bob");
+//        Participant ana = new Participant("Ana");
+//        for (Debt debt : server.getPaymentInstructions(event)) {
+//            server.deleteDebt(debt);
+//        }
+//        server.addDebt(new Debt(5, bob, ana, 10));
+//        server.addDebt(new Debt(6, ana, bob, 8));
+//        server.addDebt(new Debt(7, ana, new Participant("Greg"), 30));
+//    }
 }
