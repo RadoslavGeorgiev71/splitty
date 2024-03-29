@@ -192,7 +192,7 @@ public class AddExpenseCtrl{
         currencies.add("CHF");
         currChoiceBox.setItems(FXCollections.observableArrayList(currencies));
         int j = 0;
-        while(currencies.get(j) != currency){
+        while(j <= 2 && currencies.get(j) != currency){
             j++;
         }
         if(j < 3){

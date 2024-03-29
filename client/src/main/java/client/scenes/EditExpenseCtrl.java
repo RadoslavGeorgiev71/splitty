@@ -207,7 +207,8 @@ public class EditExpenseCtrl{
             });
             int i = 0;
             String name = expense.getPayingParticipant().getName();
-            while (event.getParticipants().get(i).getName() != name) {
+            List<Participant> people = event.getParticipants();
+            while (i < people.size() && people.get(i).getName() != name) {
                 i++;
             }
             if (i < event.getParticipants().size()) {
@@ -231,7 +232,7 @@ public class EditExpenseCtrl{
         currencies.add("CHF");
         currChoiceBox.setItems(FXCollections.observableArrayList(currencies));
         int j = 0;
-        while(currencies.get(j) != expense.getCurrency()){
+        while(j <= 2 && currencies.get(j) != expense.getCurrency()){
             j++;
         }
         if(j < 3){
