@@ -2,6 +2,7 @@ package utils;
 
 import commons.Event;
 
+import jakarta.ws.rs.ProcessingException;
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
@@ -28,7 +29,7 @@ import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
 public class Admin{
 
-    private static final String SERVER = "http://localhost:8080/";
+    private static  String server = "http://localhost:8080/";
     private String password = "none set";
     private StompSession session = connect("ws://localhost:8080/websocket");
 
@@ -49,15 +50,39 @@ public class Admin{
     }
 
     /**
+     * Sets the server for the Admin
+     * @param url to be set
+     */
+    public void setURL(String url){
+        this.server = url;
+    }
+
+    /**
+     * Getter for ServerURL
+     * @return server
+     */
+    public String getURL(){
+        return server;
+    }
+
+    /**
      * This method sends a get request to the server which
      * generates a password and prints it to the server console
+     * @return boolean true if ok false if error
      */
-    public void generatePassword(){
-        ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/admin/") //
-                .request(APPLICATION_JSON) //
-                .accept(APPLICATION_JSON) //
-                .get();
+    public boolean generatePassword(){
+        try {
+            Response response = ClientBuilder.newClient()
+                    .target(server)
+                    .path("api/admin/")
+                    .request(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .get();
+            response.close();
+        } catch (ProcessingException e) {
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -66,12 +91,16 @@ public class Admin{
      * @return Boolean authenticated
      */
     public boolean login(String password){
-        Response res = ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/admin/") //
-                .request(APPLICATION_JSON) //
-                .post(Entity.entity(password, APPLICATION_JSON));
-        boolean isAuthenticated = res.getStatus() == Response.Status.OK.getStatusCode();
-        return isAuthenticated;
+        try {
+            Response res = ClientBuilder.newClient(new ClientConfig()) //
+                    .target(server).path("api/admin/") //
+                    .request(APPLICATION_JSON) //
+                    .post(Entity.entity(password, APPLICATION_JSON));
+            boolean isAuthenticated = res.getStatus() == Response.Status.OK.getStatusCode();
+            return isAuthenticated;
+        } catch (ProcessingException e) {
+            return false;
+        }
     }
 
     /**
@@ -80,7 +109,7 @@ public class Admin{
      */
     public List<Event> getEvents(){
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/events") //
+                .target(server).path("api/events") //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .get(new GenericType<List<Event>>() {});
@@ -110,7 +139,7 @@ public class Admin{
      */
     public boolean jsonDump(long eventID){
         Client client = ClientBuilder.newClient();
-        Response response = client.target(SERVER)
+        Response response = client.target(server)
                 .path("api/events/id/" + eventID) //
                 .request(MediaType.APPLICATION_JSON)
                 .get();

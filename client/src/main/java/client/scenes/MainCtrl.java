@@ -15,8 +15,8 @@
  */
 package client.scenes;
 
-import client.utils.ConfigClient;
 import commons.Event;
+import commons.Expense;
 import commons.Participant;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -49,6 +49,9 @@ public class MainCtrl {
     private AddExpenseCtrl addExpenseCtrl;
     private Scene addexpense;
 
+    private EditExpenseCtrl editExpenseCtrl;
+    private Scene editexpense;
+
     private UserSettingsCtrl userSettingsCtrl;
     private Scene usersettings;
 
@@ -59,6 +62,7 @@ public class MainCtrl {
      * @param addparticipant
      * @param eventoverview
      * @param addexpense
+     * @param editexpense
      * @param opendebts
      * @param startscreen
      * @param invitation
@@ -69,6 +73,7 @@ public class MainCtrl {
                            Pair<AddParticipantCtrl, Parent> addparticipant,
                            Pair<EventOverviewCtrl, Parent> eventoverview,
                            Pair<AddExpenseCtrl, Parent> addexpense,
+                           Pair<EditExpenseCtrl, Parent> editexpense,
                            Pair<OpenDebtsCtrl, Parent> opendebts,
                            Pair<StartScreenCtrl, Parent> startscreen,
                            Pair<InvitationCtrl, Parent> invitation,
@@ -89,6 +94,9 @@ public class MainCtrl {
 
         this.addExpenseCtrl = addexpense.getKey();
         this.addexpense = new Scene(addexpense.getValue());
+
+        this.editExpenseCtrl = editexpense.getKey();
+        this.editexpense = new Scene(editexpense.getValue());
 
         this.openDebtsCtrl = opendebts.getKey();
         this.opendebts = new Scene(opendebts.getValue());
@@ -165,6 +173,19 @@ public class MainCtrl {
         addExpenseCtrl.initialize();
     }
 
+    /**
+     * Switches the scene to the edit participant window
+     * @param event takes an event as a parameter for which we edit an expense
+     * @param expense takes the expense as a parameter to edit
+     */
+    public void showEditExpense(Event event, Expense expense) {
+        primaryStage.setTitle("Edit Expense");
+        primaryStage.setScene(editexpense);
+        editExpenseCtrl.setEvent(event);
+        editExpenseCtrl.setExpense(expense);
+        editExpenseCtrl.initialize();
+    }
+
 
     /**
      * Switches the scene to the open debts window
@@ -191,11 +212,10 @@ public class MainCtrl {
 
     /**
      * Switches the scene to the User Settings
-     * @param configClient - the client whose settings will be changed
      */
-    public void showUserSettings(ConfigClient configClient) {
+    public void showUserSettings() {
         primaryStage.setTitle("User Settings");
-        userSettingsCtrl.initialize(configClient);
+        userSettingsCtrl.initialize();
         primaryStage.setScene(usersettings);
     }
 }

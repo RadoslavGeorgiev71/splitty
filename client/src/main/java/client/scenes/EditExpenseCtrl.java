@@ -15,7 +15,10 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import javafx.util.StringConverter;
 
-public class AddExpenseCtrl{
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
+public class EditExpenseCtrl{
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
@@ -43,17 +46,19 @@ public class AddExpenseCtrl{
     @FXML
     private TextField tags;                         //Expense Type
     @FXML
-    private Button expenseAddButton;
+    private Button expenseSaveButton;
+    @FXML
+    private Button expenseDeleteButton;
     @FXML
     private Button expenseAbortButton;
 
     /**
-     * Constructor for AddExpenseCtrl
+     * Constructor for EditExpenseCtrl
      * @param server client is on
      * @param mainCtrl of client
      */
     @Inject
-    public AddExpenseCtrl(ServerUtils server, MainCtrl mainCtrl) {
+    public EditExpenseCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.server = server;
         this.mainCtrl = mainCtrl;
     }
@@ -73,8 +78,7 @@ public class AddExpenseCtrl{
      * Sends back to Overview Event window back with the participant altered
      * @param actionEvent to handle
      */
-    public void onAddClick(ActionEvent actionEvent) {
-        Expense expense = new Expense();
+    public void onSaveClick(ActionEvent actionEvent) {
         expense.setTitle(titleField.getText());
 //        int index = 0;
 //        while(event.getParticipants().get(index).getName() != payerChoiceBox.getValue())
@@ -86,7 +90,21 @@ public class AddExpenseCtrl{
         event.addExpense(expense);
         server.persistEvent(event);
         clearFields();
-        event = server.getEvent(event.getId());
+        //event = server.getEvent(event.getId());
+        mainCtrl.showEventOverview(event);
+    }
+
+    /**
+     * Controller class for the ok button
+     * Sends back to Overview Event window back with the participant altered
+     * @param actionEvent to handle
+     */
+    public void onDeleteClick(ActionEvent actionEvent) {
+        //server.addExpense(expense);
+        event.removeExpense(expense);
+        server.persistEvent(event);
+        clearFields();
+        //event = server.getEvent(event.getId());
         mainCtrl.showEventOverview(event);
     }
 
@@ -101,7 +119,6 @@ public class AddExpenseCtrl{
         //datePicker.setConverter(event.getDateTime());
         equally.setSelected(true);
         onlySome.setSelected(false);
-        allGridPane.getChildren().clear();
         tags.clear();
     }
 
@@ -128,7 +145,7 @@ public class AddExpenseCtrl{
     public void keyPressed(KeyEvent e) {
         switch (e.getCode()) {
             case ENTER:
-                onAddClick(null);
+                onSaveClick(null);
                 break;
             case ESCAPE:
                 onAbortClick(null);
@@ -189,11 +206,23 @@ public class AddExpenseCtrl{
             } );
 
             payerChoiceBox.getSelectionModel().selectFirst();
-            expenseField.setText("Add Expense");
+            //payerChoiceBox.getSelectionModel().select(expense.getPayingParticipant());
+            expenseField.setText("Edit Expense");
+            titleField.setText(expense.getTitle());
+            amountField.setText("" + expense.getAmount());
             equally.setAllowIndeterminate(false);
-            equally.setSelected(true);
             onlySome.setAllowIndeterminate(false);
-            onlySome.setSelected(false);
+            if(event.getParticipants().equals(expense.getParticipants())){
+                equally.setSelected(true);
+                onlySome.setSelected(false);
+            }
+            else{
+                equally.setSelected(false);
+                onlySome.setSelected(true);
+            }
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd-yyyy");
+            LocalDate date = LocalDate.parse(expense.getDateTime(), formatter);
+            //datePicker.setConverter(formatter);
         }
     }
 }

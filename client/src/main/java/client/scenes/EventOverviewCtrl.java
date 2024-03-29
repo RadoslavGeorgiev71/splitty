@@ -4,6 +4,7 @@ import client.utils.LanguageResourceBundle;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Event;
+import commons.Expense;
 import commons.Participant;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -144,6 +145,16 @@ public class EventOverviewCtrl {
     }
 
     /**
+     * Method to be executed when edit expense button is clicked
+     * @param expense to be edited
+     */
+
+    @FXML
+    public void onEditExpenseClick(Expense expense) {
+        mainCtrl.showEditExpense(this.event, expense);
+    }
+
+    /**
      * Method to be executed when settle debts button is clicked
      */
 
@@ -181,7 +192,7 @@ public class EventOverviewCtrl {
         if (event != null) {
             for (int i = 0; i < event.getExpenses().size(); i++) {
                 Label dateLabel = new Label(event.getExpenses().get(i).getDateTime());
-                Label nameLabel = new Label("expense creator");
+                Label nameLabel = new Label(event.getExpenses().get(i).getActivity());
                 nameLabel.setWrapText(true); // Wrap text to prevent truncation
                 Button editButton = new Button("Edit");
 
@@ -195,6 +206,9 @@ public class EventOverviewCtrl {
                 tabPaneAllGridPane.add(dateLabel, 0, i);
                 tabPaneAllGridPane.add(nameLabel, 1, i);
                 tabPaneAllGridPane.add(editButton, 2, i);
+
+                Expense expensei = event.getExpenses().get(i);
+                editButton.setOnAction(event -> onEditExpenseClick(expensei));
             }
             fromPersonTabName();
         }
@@ -214,7 +228,7 @@ public class EventOverviewCtrl {
                 if (event.getParticipants().get(i).equals(participantsMenu.
                         getSelectionModel().getSelectedItem())) {
                     Label dateLabel = new Label(event.getExpenses().get(i).getDateTime());
-                    Label nameLabel = new Label("expense creator");
+                    Label nameLabel = new Label(event.getExpenses().get(i).getActivity());
                     nameLabel.setWrapText(true); // Wrap text to prevent truncation
                     Button editButton = new Button("Edit");
 
@@ -228,6 +242,9 @@ public class EventOverviewCtrl {
                     tabPaneFromGridPane.add(dateLabel, 0, i);
                     tabPaneFromGridPane.add(nameLabel, 1, i);
                     tabPaneFromGridPane.add(editButton, 2, i);
+
+                    Expense expensei = event.getExpenses().get(i);
+                    editButton.setOnAction(event -> onEditExpenseClick(expensei));
                 }
             }
         }
