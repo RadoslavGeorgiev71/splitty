@@ -79,6 +79,7 @@ public class AddExpenseCtrl{
         //server.addExpense(expense);
         event.addExpense(expense);
         server.persistEvent(event);
+        server.callUpdate();
         clearFields();
         //event = server.getEvent(event.getId());
         mainCtrl.showEventOverview(event);

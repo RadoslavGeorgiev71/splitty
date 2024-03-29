@@ -364,7 +364,15 @@ public class EventOverviewCtrl {
      */
 
     public void initialize(){
+        server.registerEventUpdate(event -> {
+            this.event = server.getEvent(event.getId());
+        });
+
         if (event != null){
+            server.registerEventUpdate(event -> {
+                this.event = server.getEvent(event.getId());
+            });
+
             languageResourceBundle = LanguageResourceBundle.getInstance();
             switchLanguage();
 
@@ -397,6 +405,10 @@ public class EventOverviewCtrl {
             });
             tabPaneAllClick();
         }
+    }
+
+    public void stop() {
+        server.stop();
     }
 
     /**

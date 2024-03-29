@@ -23,6 +23,9 @@ import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.function.Consumer;
 
 import commons.Debt;
 import jakarta.ws.rs.WebApplicationException;
@@ -216,8 +219,6 @@ public class ServerUtils {
      * @param event - the event to persist
      * @return the persisted event
      */
-
-
     public Event persistEvent(Event event) {
         Entity<Event> entity = Entity.entity(event, APPLICATION_JSON);
         return ClientBuilder.newClient(new ClientConfig())
@@ -225,6 +226,38 @@ public class ServerUtils {
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
                 .put(entity, Event.class);
+    }
+
+    private static final ExecutorService EXEC = Executors.newSingleThreadExecutor();
+
+    public void registerEventUpdate(Consumer<Event> consumer) {
+        EXEC.submit(() -> {
+            while(!Thread.interrupted()) {
+                Response res = ClientBuilder.newClient(new ClientConfig())
+                    .target(SERVER).path("api/events/update")
+                    .request(APPLICATION_JSON)
+                    .accept(APPLICATION_JSON)
+                    .get(Response.class);
+
+                if(res.getStatus() == 204) {
+                    continue;
+                }
+                Event event = res.readEntity(Event.class);
+                consumer.accept(event);
+            }
+        });
+    }
+
+    public void callUpdate() {
+        ClientBuilder.newClient(new ClientConfig())
+            .target(SERVER).path("api/events/update")
+            .request(APPLICATION_JSON)
+            .accept(APPLICATION_JSON)
+            .get(Response.class);
+    }
+
+    public void stop() {
+        EXEC.shutdownNow();
     }
 
     /**
