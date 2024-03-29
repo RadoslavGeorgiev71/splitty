@@ -1,5 +1,6 @@
 package commons;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -12,11 +13,11 @@ public class Expense {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     private String title;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private Participant payingParticipant; // should probably use id of
     // participant instead since we are not using entity for participant yet i will change later
     private double amount;
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     private List<Participant> participants;
     private String dateTime;
 
@@ -173,6 +174,7 @@ public class Expense {
     /**
      * @return activity
      */
+    @JsonIgnore
     public String getActivity() {
         return this.title + " payed by " + this.payingParticipant.getName();
     }

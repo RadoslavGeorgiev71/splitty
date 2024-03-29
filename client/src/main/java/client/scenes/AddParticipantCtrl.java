@@ -72,7 +72,6 @@ public class AddParticipantCtrl {
         participant.setIban(ibanField.getText());
         participant.setEmail(emailField.getText());
         participant.setBic(bicField.getText());
-        server.addParticipant(participant);
         event.addParticipant(participant);
         server.persistEvent(event);
         clearFields();
