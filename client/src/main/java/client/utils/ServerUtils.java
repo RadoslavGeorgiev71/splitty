@@ -229,7 +229,7 @@ public class ServerUtils {
         EXEC.submit(() -> {
             while(!Thread.interrupted()) {
                 Response res = ClientBuilder.newClient(new ClientConfig())
-                    .target(SERVER).path("api/events/update")
+                    .target(server).path("api/events/update")
                     .request(APPLICATION_JSON)
                     .accept(APPLICATION_JSON)
                     .get(Response.class);
