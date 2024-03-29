@@ -82,6 +82,7 @@ public class UserSettingsCtrl {
      * @param configClient
      */
     public void initialize(ConfigClient configClient) {
+        this.configClient = configClient;
         if(configClient.getName() != null) {
             nameField.setText(configClient.getName());
         }
