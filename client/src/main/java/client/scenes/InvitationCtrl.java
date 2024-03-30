@@ -151,8 +151,7 @@ public class InvitationCtrl implements Initializable {
      */
     private void sendInvites(){
         List<String> emails = new ArrayList<>();
-        String name = new ConfigClient().readFromFile(String.valueOf(filePath))
-                .getName();
+        String name = ConfigClient.getName();
         Scanner scanner = new Scanner(emailTextArea.getText());
         while(scanner.hasNextLine()){
             emails.add(scanner.nextLine());

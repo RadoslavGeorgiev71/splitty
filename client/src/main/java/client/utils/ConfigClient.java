@@ -8,21 +8,21 @@ import java.nio.file.Paths;
 import java.util.Scanner;
 
 public class ConfigClient {
-    private String serverUrl;
+    private static String serverUrl;
 
-    private String email;
+    private static String email;
 
-    private String iban;
+    private static String iban;
 
-    private String bic;
+    private static String bic;
 
-    private String language;
+    private static String language;
 
-    private String currency;
+    private static String currency;
 
-    private String name;
+    private static String name;
 
-    private String recentEvents;
+    private static String recentEvents;
 
     private Path filePath = Paths.get("src/main/resources/config.txt").toAbsolutePath();
 
@@ -63,42 +63,42 @@ public class ConfigClient {
      *
      * @return serverUrl from client
      */
-    public String getServerUrl() {
+    public static String getServerUrl() {
         return serverUrl;
     }
 
     /**
      * @return email of client
      */
-    public String getEmail() {
+    public static String getEmail() {
         return email;
     }
 
     /**
      * @return Iban of client
      */
-    public String getIban() {
+    public static String getIban() {
         return iban;
     }
 
     /**
      * @return bic of client
      */
-    public String getBic() {
+    public static String getBic() {
         return bic;
     }
 
     /**
      * @return currently preferred language of client
      */
-    public String getLanguage() {
+    public static String getLanguage() {
         return language;
     }
 
     /**
      * @return currently preferred currency of client
      */
-    public String getCurrency() {
+    public static String getCurrency() {
         return currency;
     }
 
@@ -150,7 +150,7 @@ public class ConfigClient {
      * @return name of the client
      */
 
-    public String getName() {
+    public static String getName() {
         return name;
     }
 
@@ -169,7 +169,7 @@ public class ConfigClient {
      * @return recent events of the client
      */
 
-    public String getRecentEvents() {
+    public static String getRecentEvents() {
         return recentEvents;
     }
 
@@ -206,6 +206,9 @@ public class ConfigClient {
                 }
             }
             configParse.close();
+            if(!newClient[0].equals("null")){
+                ServerUtils.setURL(newClient[0]);
+            }
             return new ConfigClient(newClient[0], newClient[1],
                     newClient[2], newClient[3], newClient[4], newClient[5],
                     newClient[6], newClient[7]);
@@ -214,14 +217,13 @@ public class ConfigClient {
             try {
                 Files.createFile(filePath);
 
-                BufferedWriter writer = new BufferedWriter(
-                        new FileWriter(String.valueOf(filePath)));
-                writer.write("serverUrl: null\n" +
+                BufferedWriter writer = new BufferedWriter(new FileWriter(filepath));
+                writer.write("serverUrl: http://localhost:8080/\n" +
                         "email: null\n" +
                         "iban: null\n" +
                         "bic: null\n" +
                         "language: en\n" +
-                        "currency: null\n" +
+                        "currency: EUR\n" +
                         "name: null\n" );
                 writer.close();
             } catch (IOException ioException) {

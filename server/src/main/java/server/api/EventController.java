@@ -6,10 +6,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.async.DeferredResult;
 import server.Services.EventService;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 @RestController
 @RequestMapping("/api/events")
@@ -69,6 +73,29 @@ public class EventController {
         return ResponseEntity.status(HttpStatus.CREATED).body(savedEvent);
     }
 
+    private final Map<Object, Consumer<Event>> listeners = new HashMap<>();
+
+    /**
+     * Returns the event when there is an update
+     * @return - response with the updated event
+     */
+    @GetMapping(path = {"update"})
+    public DeferredResult<ResponseEntity<Event>> getUpdates() {
+        ResponseEntity<Event> noContent = ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        DeferredResult<ResponseEntity<Event>> res =
+            new DeferredResult<>(5000L, noContent);
+
+        Object key = new Object();
+        listeners.put(key, q -> {
+            res.setResult(ResponseEntity.ok(q));
+        });
+        res.onCompletion(() -> {
+            listeners.remove(key);
+        });
+
+        return res;
+    }
+
     /**
      * Method to update an event
      * @param id of event
@@ -80,9 +107,12 @@ public class EventController {
         long eventId = updatedEvent.getId();
 
         Event existingEvent = eventService.update(eventId, updatedEvent);
+
         if (existingEvent != null) {
+            listeners.forEach((k, l) -> l.accept(existingEvent));
             return ResponseEntity.ok(existingEvent);
         }
+
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Event not found");
     }
 

@@ -33,8 +33,8 @@ public class EventTest {
         p2 = new Participant("Joe");
         p3 = new Participant("Donald");
 
-        e1 = new Expense("drinks", p1, 100, participants1, "2/25/2024");
-        e2 = new Expense("snacks", p1, 100, participants1, "2/25/2024");
+        e1 = new Expense("drinks", p1, 100, "EUR", participants1, "2/25/2024");
+        e2 = new Expense("snacks", p1, 100, "EUR", participants1, "2/25/2024");
         e3 = new Expense("fuel", p3, 56, participants1);
 
         participants1 = new ArrayList<>();

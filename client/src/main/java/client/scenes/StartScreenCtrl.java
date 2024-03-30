@@ -26,7 +26,7 @@ public class StartScreenCtrl {
     private ConfigClient config = new ConfigClient();
 
     private String[] keys = {"serverUrl", "email", "iban", "bic", "language",
-        "currency", "name", "recentEvents"};
+                             "currency", "name", "recentEvents"};
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
 
@@ -62,7 +62,6 @@ public class StartScreenCtrl {
     private Path filePath = Paths.get("src/main/resources/config.txt").toAbsolutePath();
 
     /**
-     *
      * @param server
      * @param mainCtrl
      */
@@ -88,21 +87,22 @@ public class StartScreenCtrl {
         config = config.readFromFile(String.valueOf(filePath));
 
         String language = config.getLanguage();
+        if (language != null) {
+            languageResourceBundle = LanguageResourceBundle.getInstance();
 
-        languageResourceBundle = LanguageResourceBundle.getInstance();
+            languageResourceBundle.switchLanguage(language);
 
-        languageResourceBundle.switchLanguage(language);
+            LanguageButtonUtils.updateLanguageMenuButton(languageButton, config);
 
-        LanguageButtonUtils.updateLanguageMenuButton(languageButton, config);
+            LanguageButtonUtils.languageMenu(languageButton, config,
+                    languageResourceBundle, this, keys);
 
-        LanguageButtonUtils.languageMenu(languageButton, config,
-                languageResourceBundle, this, keys);
+            languageButton.setPopupSide(Side.TOP);
 
-        languageButton.setPopupSide(Side.TOP);
+            switchTextLanguage();
+        }
 
-        switchTextLanguage();
-
-        if(config.getRecentEvents() == null){
+        if (config.getRecentEvents() == null) {
             return;
         }
 
@@ -113,9 +113,13 @@ public class StartScreenCtrl {
         HashMap<String, String> eventMap = new HashMap<>();
         String[] recentEvents = config.getRecentEvents().split(", ");
         for (String invite : recentEvents) {
-            Event event = server.getEventByCode(invite);
-            recentlyViewedEventsListView.getItems().add(event.getTitle());
-            eventMap.put(event.getTitle(), invite);
+            if (!invite.equals("null")) {
+                Event event = server.getEventByCode(invite);
+                if (event != null) {
+                    recentlyViewedEventsListView.getItems().add(event.getTitle());
+                    eventMap.put(event.getTitle(), invite);
+                }
+            }
         }
         recentlyViewedEventsListView.setCellFactory(param -> new ListCell<String>() {
             protected void updateItem(String item, boolean empty) {
@@ -157,7 +161,7 @@ public class StartScreenCtrl {
     /**
      * Switches the text language.
      */
-    public void switchTextLanguage(){
+    public void switchTextLanguage() {
 
         ResourceBundle bundle = languageResourceBundle.getResourceBundle();
         newEventStaticText.setText(bundle.getString("newEventStaticText"));
@@ -169,29 +173,48 @@ public class StartScreenCtrl {
 
     /**
      * Should allow joining events.
-     *
      */
-    public void joinEvent(){
+    public void joinEvent() {
         String inviteCode = joinEventText.getText();
-        if(!inviteCode.isEmpty()){
+        if (!inviteCode.isEmpty()) {
             Event event = server.getEventByCode(inviteCode);
-            writeEventToConfig(event);
-            mainCtrl.showEventOverview(event);
+            if (event != null) {
+                writeEventToConfig(event);
+                mainCtrl.showEventOverview(event);
+            } else {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText("Error: Unable to connect to the server or " +
+                        "event does not exists");
+                alert.setContentText("Please make sure that the URL and invite code are " +
+                        "correct and that the server is running");
+                alert.showAndWait();
+            }
         }
     }
 
     /**
      * Will be for the button that creates events.
      */
-    public void createEvent(){
+    public void createEvent() {
         String title = newEventText.getText();
-        if(!title.isEmpty()){
+        if (!title.isEmpty()) {
             Event event = new Event();
             event.setTitle(title);
             event.createInviteCode();
             event = server.addEvent(event);
-            writeEventToConfig(event);
-            mainCtrl.showInvitation(event);
+            if (event != null) {
+                writeEventToConfig(event);
+                mainCtrl.showInvitation(event);
+            } else {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText("Error: Unable to connect to the server");
+                alert.setContentText("Please make sure that the URL is " +
+                        "correct and that the server is running");
+                alert.showAndWait();
+                clearFields();
+            }
         }
     }
 
@@ -199,13 +222,13 @@ public class StartScreenCtrl {
      * Switches to the User Settings scene
      */
     public void onSettingsClick() {
-        mainCtrl.showUserSettings(config);
+        mainCtrl.showUserSettings();
     }
 
     /**
      * Clears text fields.
      */
-    public void clearFields(){
+    public void clearFields() {
         newEventText.clear();
         joinEventText.clear();
         recentlyViewedEventsListView.getItems().clear();
@@ -214,14 +237,15 @@ public class StartScreenCtrl {
     /**
      * When the user presses enter, it triggers the
      * create or join button
+     *
      * @param e
      */
     public void keyPressed(KeyEvent e) {
-        if(e.getCode() == KeyCode.ENTER){
-            if(e.getSource().equals(newEventText)){
+        if (e.getCode() == KeyCode.ENTER) {
+            if (e.getSource().equals(newEventText)) {
                 createEvent();
             }
-            if(e.getSource().equals(joinEventText)){
+            if (e.getSource().equals(joinEventText)) {
                 joinEvent();
             }
         }
@@ -229,15 +253,13 @@ public class StartScreenCtrl {
 
     /**
      * Writes an event to recently viewed in config.
+     *
      * @param event the event
      */
-    public void writeEventToConfig(Event event){
-        if(config.getRecentEvents() == null){
+    public void writeEventToConfig(Event event) {
+        if (config.getRecentEvents() == null || config.getRecentEvents().equals("")) {
             config.setRecentEvents(event.getInviteCode());
-        }
-        else if(config.getRecentEvents().equals("")){
-            config.setRecentEvents(event.getInviteCode());
-        } else {
+        }else {
             config.setRecentEvents(config.getRecentEvents() + ", " + event.getInviteCode());
         }
         String[] contents = {config.getServerUrl(), config.getEmail(),
@@ -249,13 +271,14 @@ public class StartScreenCtrl {
 
     /**
      * Deletes an event from recently viewed in config
+     *
      * @param invite - the invite code of the event
      */
-    public void deleteEventFromConfig(String invite){
+    public void deleteEventFromConfig(String invite) {
         String[] recentEvents = config.getRecentEvents().split(", ");
         ArrayList<String> newRecentEvents = new ArrayList<>();
-        for(String event : recentEvents){
-            if(!event.equals(invite)){
+        for (String event : recentEvents) {
+            if (!event.equals(invite)) {
                 newRecentEvents.add(event);
             }
         }

@@ -26,9 +26,35 @@ class ExpenseTest {
         list.add(a);
         list.add(b);
         list.add(c);
-        exp1 = new Expense("party", a, 100, list, "2/25/2024");
-        exp2 = new Expense("party", a, 100, list, "2/25/2024");
+        exp1 = new Expense("party", a, 100, "EUR", list, "2/25/2024");
+        exp2 = new Expense("party", a, 100, "EUR", list, "2/25/2024");
         exp3 = new Expense("partyy", b, 56, list);
+    }
+
+    @Test
+    void testEmptyConstructor() {
+        Expense expense = new Expense();
+        assertNotNull(expense);
+    }
+
+    @Test
+    void testPayingParticipantConstructor() {
+        Participant bob = new Participant("Bob");
+        Expense expense = new Expense(bob);
+        assertNotNull(expense);
+        assertEquals(expense.getPayingParticipant(), bob);
+
+    }
+
+    @Test
+    void testGetId() {
+        assertEquals(exp1.getId(), exp1.getId());
+    }
+
+    @Test
+    void testSetId() {
+        exp1.setId(5);
+        assertEquals(exp1.getId(), 5);
     }
 
     @Test
@@ -91,13 +117,29 @@ class ExpenseTest {
 
     @Test
     void getActivity() {
-        assertEquals("party payed by Ana", exp1.getActivity());
+        assertEquals("Ana paid 100.0 EUR for party", exp1.getActivity());
+    }
+
+    @Test
+    void testSameEquals() {
+        assertEquals(exp1, exp1);
+    }
+
+    @Test
+    void testNullEquals() {
+        assertNotEquals(exp1, null);
     }
 
     @Test
     void testEquals() {
         assertEquals(exp1, exp2);
         assertNotEquals(exp1, exp3);
+    }
+
+    @Test
+    void testHashCode() {
+        assertEquals(exp2.hashCode(), exp1.hashCode());
+        assertNotEquals(exp1.hashCode(), exp3.hashCode());
     }
 
     @Test
