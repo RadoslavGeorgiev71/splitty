@@ -217,7 +217,7 @@ public class ConfigClient {
             try {
                 Files.createFile(filePath);
 
-                BufferedWriter writer = new BufferedWriter(new FileWriter(filepath));
+                BufferedWriter writer = new BufferedWriter(new FileWriter(filePath));
                 writer.write("serverUrl: http://localhost:8080/\n" +
                         "email: null\n" +
                         "iban: null\n" +
