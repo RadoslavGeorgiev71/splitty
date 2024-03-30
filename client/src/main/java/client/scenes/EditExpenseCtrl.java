@@ -15,8 +15,8 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import javafx.util.StringConverter;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 public class EditExpenseCtrl{
 
@@ -84,6 +84,7 @@ public class EditExpenseCtrl{
 //        while(event.getParticipants().get(index).getName() != payerChoiceBox.getValue())
         expense.setPayingParticipant((Participant) payerChoiceBox.getValue());
         expense.setAmount(Double.parseDouble(amountField.getText()));
+        expense.setCurrency(currChoiceBox.getSelectionModel().getSelectedItem().toString());
         expense.setParticipants(event.getParticipants());
         expense.setDateTime(datePicker.getValue().toString());
         //server.addExpense(expense);
@@ -184,32 +185,75 @@ public class EditExpenseCtrl{
     }
 
     /**
-     * Initiallizes the fields with the data
+     * Initiallizes the payer choice box with the data
      */
-    public void initialize() {
-        if (event != null){
+    public void initializePayer() {
+        if (event != null) {
             payerChoiceBox.setItems(FXCollections.observableArrayList(event.getParticipants()));
             payerChoiceBox.setConverter(new StringConverter<Participant>() {
                 @Override
                 public String toString(Participant participant) {
                     if (participant != null) {
                         return participant.getName();
-                    }
-                    else {
+                    } else {
                         return "";
                     }
                 }
+
                 @Override
                 public Participant fromString(String string) {
                     return null;
                 }
-            } );
+            });
+            int i = 0;
+            String name = expense.getPayingParticipant().getName();
+            List<Participant> people = event.getParticipants();
+            while (i < people.size() && people.get(i).getName() != name) {
+                i++;
+            }
+            if (i < event.getParticipants().size()) {
+                payerChoiceBox.getSelectionModel().select(i);
+            } else {
+                payerChoiceBox.getSelectionModel().selectFirst();
+            }
+        }
+    }
 
-            payerChoiceBox.getSelectionModel().selectFirst();
-            //payerChoiceBox.getSelectionModel().select(expense.getPayingParticipant());
+    /**
+     * Initiallizes the currency choice box with the data
+     */
+    public void initializeCurr() {
+        if(event == null) {
+            currChoiceBox.getSelectionModel().selectFirst();
+        }
+        List<String> currencies = new ArrayList<>();
+        currencies.add("EUR");
+        currencies.add("USD");
+        currencies.add("CHF");
+        currChoiceBox.setItems(FXCollections.observableArrayList(currencies));
+        int j = 0;
+        while(j <= 2 && currencies.get(j) != expense.getCurrency()){
+            j++;
+        }
+        if(j < 3){
+            currChoiceBox.getSelectionModel().select(j);
+        }
+        else {
+            currChoiceBox.getSelectionModel().selectFirst();
+        }
+    }
+
+
+    /**
+     * Initiallizes the fields with the data
+     */
+    public void initialize() {
+        if(event != null){
+            initializePayer();
             expenseField.setText("Edit Expense");
             titleField.setText(expense.getTitle());
             amountField.setText("" + expense.getAmount());
+            initializeCurr();
             equally.setAllowIndeterminate(false);
             onlySome.setAllowIndeterminate(false);
             if(event.getParticipants().equals(expense.getParticipants())){
@@ -220,9 +264,6 @@ public class EditExpenseCtrl{
                 equally.setSelected(false);
                 onlySome.setSelected(true);
             }
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd-yyyy");
-            LocalDate date = LocalDate.parse(expense.getDateTime(), formatter);
-            //datePicker.setConverter(formatter);
         }
     }
 }

@@ -78,5 +78,9 @@ public class Main extends Application {
         mainCtrl.initialize(primaryStage, editparticipant,
                 addparticipant, eventoverview, addexpense, editexpense,
                 opendebts, startscreen, invitation, usersettings);
+
+//        primaryStage.setOnCloseRequest(e -> {
+//            eventoverview.getKey().stop();
+//        });
     }
 }

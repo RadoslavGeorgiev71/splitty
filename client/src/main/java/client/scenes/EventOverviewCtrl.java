@@ -6,6 +6,7 @@ import com.google.inject.Inject;
 import commons.Event;
 import commons.Expense;
 import commons.Participant;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
@@ -414,6 +415,11 @@ public class EventOverviewCtrl {
             });
             tabPaneAllClick();
         }
+
+        server.registerEventUpdate(event -> {
+            this.event = server.getEvent(event.getId());
+            Platform.runLater(this::initialize);
+        });
     }
 
     /**
