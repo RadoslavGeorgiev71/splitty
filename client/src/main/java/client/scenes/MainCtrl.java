@@ -15,6 +15,7 @@
  */
 package client.scenes;
 
+import client.utils.ConfigClient;
 import commons.Event;
 import commons.Expense;
 import commons.Participant;
@@ -220,5 +221,10 @@ public class MainCtrl {
         primaryStage.setTitle("User Settings");
         userSettingsCtrl.initialize();
         primaryStage.setScene(usersettings);
+    }
+
+    public void closeWindow() {
+        primaryStage.close();
+        System.exit(0);
     }
 }
