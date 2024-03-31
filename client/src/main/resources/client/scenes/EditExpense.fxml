@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="400.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.AddExpenseCtrl">
+<AnchorPane prefHeight="400.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.EditExpenseCtrl">
     <children>
         <VBox layoutY="1.0" prefHeight="389.0" prefWidth="280.0" spacing="10.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="1.0">
             <children>
@@ -111,14 +111,16 @@
                 <GridPane>
                     <columnConstraints>
                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                         <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                     </columnConstraints>
                     <rowConstraints>
                         <RowConstraints />
                     </rowConstraints>
                     <children>
-                        <Button fx:id="expenseAddButton" mnemonicParsing="false" onAction="#onAddClick" text="Add" />
-                        <Button fx:id="expenseAbortButton" mnemonicParsing="false" onAction="#onAbortClick" text="Abort" GridPane.columnIndex="1" />
+                        <Button fx:id="expenseSaveButton" mnemonicParsing="false" onAction="#onSaveClick" text="Save" />
+                        <Button fx:id="expenseDeleteButton" mnemonicParsing="false" onAction="#onDeleteClick" text="Delete" GridPane.columnIndex="1" />
+                        <Button fx:id="expenseAbortButton" mnemonicParsing="false" onAction="#onAbortClick" text="Abort" GridPane.columnIndex="2" />
                     </children>
                 </GridPane>
             </children>

@@ -17,14 +17,13 @@ package client.utils;
 
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.function.Consumer;
 
 import commons.Debt;
+import jakarta.ws.rs.ProcessingException;
 import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.Response;
 import commons.Event;
@@ -37,23 +36,14 @@ import jakarta.ws.rs.core.GenericType;
 
 public class ServerUtils {
 
-    private static final String SERVER = "http://localhost:8080/";
+    private static  String server = "http://localhost:8080/";
 
     /**
-     * Gets all quotes forcibly
-     *
-     * @throws IOException        - if the input stream is not found
-     * @throws URISyntaxException - if the URI is not found
+     * Setter for URL
+     * @param url
      */
-
-    public void getQuotesTheHardWay() throws IOException, URISyntaxException {
-        var url = new URI("http://localhost:8080/api/quotes").toURL();
-        var is = url.openConnection().getInputStream();
-        var br = new BufferedReader(new InputStreamReader(is));
-        String line;
-        while ((line = br.readLine()) != null) {
-            System.out.println(line);
-        }
+    public static void setURL(String url) {
+        server = url;
     }
 
     /**
@@ -64,7 +54,7 @@ public class ServerUtils {
      */
     public List<Debt> getPaymentInstructions(Event event) {
         return ClientBuilder.newClient(new ClientConfig())
-                .target(SERVER).path("api/debts/event/" + event.getId())
+                .target(server).path("api/debts/event/" + event.getId())
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
                 .get(new GenericType<>() {
@@ -80,7 +70,7 @@ public class ServerUtils {
 
     public Debt addDebt(Debt debt) {
         return ClientBuilder.newClient(new ClientConfig())
-                .target(SERVER).path("api/debts")
+                .target(server).path("api/debts")
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
                 .post(Entity.entity(debt, APPLICATION_JSON), Debt.class);
@@ -95,7 +85,7 @@ public class ServerUtils {
 
     public Response deleteDebt(Debt debt) {
         return ClientBuilder.newClient(new ClientConfig())
-                .target(SERVER).path("api/debts/" + debt.getId())
+                .target(server).path("api/debts/" + debt.getId())
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
                 .delete();
@@ -109,7 +99,7 @@ public class ServerUtils {
      */
     public Event getEvent(long id) {
         Response response = ClientBuilder.newClient(new ClientConfig())
-                .target(SERVER).path("/api/events/id/" + id)
+                .target(server).path("/api/events/id/" + id)
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
                 .get();
@@ -128,18 +118,22 @@ public class ServerUtils {
      */
     public Event addEvent(Event event) {
 
-        Response response = ClientBuilder.newClient(new ClientConfig())
-                .target(SERVER).path("/api/events")
-                .request(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .post(Entity.json(event));
+        try{
+            Response response = ClientBuilder.newClient(new ClientConfig())
+                    .target(server).path("/api/events")
+                    .request(APPLICATION_JSON)
+                    .accept(APPLICATION_JSON)
+                    .post(Entity.json(event));
 
-        if (response.getStatus() == Response.Status.CREATED.getStatusCode()) {
-            return response.readEntity(Event.class);
-        } else {
-            throw new WebApplicationException("Failed to create event. Status code: "
-                    + response.getStatus());
+            if (response.getStatus() == Response.Status.CREATED.getStatusCode()) {
+                return response.readEntity(Event.class);
+            } else {
+                return null;
+            }
+        }catch (ProcessingException e){
+            return null;
         }
+
     }
 
     /**
@@ -152,15 +146,19 @@ public class ServerUtils {
      * @return event with that inviteCode or an exception
      */
     public Event getEventByCode(String inviteCode) {
-        Response response = ClientBuilder.newClient(new ClientConfig())
-                .target(SERVER).path("/api/events/" + inviteCode)
-                .request(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .get();
-        if (response.getStatus() == Response.Status.OK.getStatusCode()) {
-            return response.readEntity(Event.class);
-        } else {
-            throw new WebApplicationException("Event not found" + response.getStatus());
+        try{
+            Response response = ClientBuilder.newClient(new ClientConfig())
+                    .target(server).path("/api/events/" + inviteCode)
+                    .request(APPLICATION_JSON)
+                    .accept(APPLICATION_JSON)
+                    .get();
+            if (response.getStatus() == Response.Status.OK.getStatusCode()) {
+                return response.readEntity(Event.class);
+            } else {
+                return  null;
+            }
+        }catch (ProcessingException e){
+            return null;
         }
 
     }
@@ -174,7 +172,7 @@ public class ServerUtils {
     public Participant persistParticipant(Participant participant) {
         Entity<Participant> entity = Entity.entity(participant, APPLICATION_JSON);
         return ClientBuilder.newClient(new ClientConfig())
-                .target(SERVER).path("api/participants/")
+                .target(server).path("api/participants/")
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
                 .put(entity, Participant.class);
@@ -189,7 +187,7 @@ public class ServerUtils {
 
     public Response deleteParticipant(Participant participant) {
         return ClientBuilder.newClient(new ClientConfig())
-                .target(SERVER).path("api/participants/" + participant.getId())
+                .target(server).path("api/participants/" + participant.getId())
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
                 .delete();
@@ -204,7 +202,7 @@ public class ServerUtils {
 
     public Response addParticipant(Participant participant) {
         return ClientBuilder.newClient(new ClientConfig())
-                .target(SERVER).path("api/participants/")
+                .target(server).path("api/participants/")
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
                 .post(Entity.json(participant));
@@ -216,16 +214,42 @@ public class ServerUtils {
      * @param event - the event to persist
      * @return the persisted event
      */
-
-
     public Event persistEvent(Event event) {
         Entity<Event> entity = Entity.entity(event, APPLICATION_JSON);
         return ClientBuilder.newClient(new ClientConfig())
-                .target(SERVER).path("api/events/persist/" + event.getId())
+                .target(server).path("api/events/persist/" + event.getId())
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
                 .put(entity, Event.class);
     }
+
+    private static final ExecutorService EXEC = Executors.newSingleThreadExecutor();
+
+    /**
+     * Registers changes in the event
+     * @param consumer - consumer that registers changes
+     */
+    public void registerEventUpdate(Consumer<Event> consumer) {
+        EXEC.submit(() -> {
+            while(!Thread.interrupted()) {
+                Response res = ClientBuilder.newClient(new ClientConfig())
+                    .target(server).path("api/events/update")
+                    .request(APPLICATION_JSON)
+                    .accept(APPLICATION_JSON)
+                    .get(Response.class);
+
+                if(res.getStatus() == 204) {
+                    continue;
+                }
+                Event event = res.readEntity(Event.class);
+                consumer.accept(event);
+            }
+        });
+    }
+
+//    public void stop() {
+//        EXEC.shutdownNow();
+//    }
 
     /**
      * Sends the invite code of the event to the specified emails
@@ -237,7 +261,7 @@ public class ServerUtils {
      */
     public boolean sendInvites(List<String> emails, Event event, String creatorname) {
         Response response = ClientBuilder.newClient(new ClientConfig())
-                .target(SERVER).path("/api/email/" + event.getInviteCode())
+                .target(server).path("/api/email/" + event.getInviteCode())
                 .queryParam("creatorName", creatorname)
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)

@@ -47,7 +47,7 @@ public class EmailController {
         if(!emails.isEmpty() && eventOptional.isPresent()){
             for(String email : emails){
                 String body = "";
-                if(creatorName == null){
+                if(creatorName.equals("null")){
                     body += "You are invited to " + eventOptional.get().getTitle() + " event." +
                             "You can connect to this event using the following code: " + inviteCode;
                 }
