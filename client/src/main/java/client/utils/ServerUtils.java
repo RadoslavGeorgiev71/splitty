@@ -23,6 +23,7 @@ import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 
 import commons.Debt;
+import commons.Expense;
 import jakarta.ws.rs.ProcessingException;
 import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.Response;
@@ -233,10 +234,10 @@ public class ServerUtils {
         EXEC.submit(() -> {
             while(!Thread.interrupted()) {
                 Response res = ClientBuilder.newClient(new ClientConfig())
-                    .target(server).path("api/events/update")
-                    .request(APPLICATION_JSON)
-                    .accept(APPLICATION_JSON)
-                    .get(Response.class);
+                        .target(server).path("api/events/update")
+                        .request(APPLICATION_JSON)
+                        .accept(APPLICATION_JSON)
+                        .get(Response.class);
 
                 if(res.getStatus() == 204) {
                     continue;
@@ -271,5 +272,65 @@ public class ServerUtils {
         } else {
             return false;
         }
+    }
+
+    /**
+     * Deletes an expense from the server
+     *
+     * @param eventId - id
+     * @param expense - the expense to delete
+     * @return the response from the server
+     */
+    public Response deleteExpense(long eventId, Expense expense) {
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(server).path("api/expenses/eventId/" + eventId + "/id/" + expense.getId())
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .delete();
+    }
+
+    /**
+     * Adds an expense to the server
+     *
+     * @param expense - the expense to add
+     * @return the response from the server
+     */
+    public Response addExpense(Expense expense) {
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(server).path("api/expenses/")
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .post(Entity.json(expense));
+    }
+
+    /**
+     * Adds an expense to the server
+     *
+     * @param eventId - where to add
+     * @param expense - the expense to add
+     * @return the response from the server
+     */
+    public Response addExpense(long eventId, Expense expense) {
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(server).path("api/expenses/event/" + eventId)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .post(Entity.json(expense));
+    }
+
+    /**
+     * Persists an expense
+     *
+     * @param eventId
+     * @param expense - the expense to persist
+     * @return the persisted expense
+     */
+    public Expense updateExpense(long eventId, Expense expense) {
+        Entity<Expense> entity = Entity.entity(expense, APPLICATION_JSON);
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(server).path("api/events/id/" + eventId)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .put(entity, Event.class).getLastActivity();
     }
 }
