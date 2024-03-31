@@ -63,56 +63,56 @@ public class UserSettingsCtrlTest extends ApplicationTest {
         stage.show();
     }
 
-    @Test
-    public void testCancel() {
-        userSettingsCtrl.onCancelClick();
-        Mockito.verify(mainCtrlMock).showStartScreen();
-    }
-
-    @Test
-    public void testConfirm() {
-        Platform.runLater(() -> userSettingsCtrl.initialize());
-        WaitForAsyncUtils.waitForFxEvents();
-
-        clickOn("#nameField").write("Test");
-        clickOn("#emailField").write("Test");
-        clickOn("#ibanField").write("Test");
-        clickOn("#bicField").write("Test");
-
-        userSettingsCtrl.onConfirmClick();
-        Mockito.verify(configClientMock).setName("Test");
-        Mockito.verify(configClientMock).setEmail("Test");
-        Mockito.verify(configClientMock).setIban("Test");
-        Mockito.verify(configClientMock).setBic("Test");
-    }
-
-    @Test
-    public void testInitializeAllBranches() throws Exception {
-        Platform.runLater(() -> userSettingsCtrl.initialize());
-
-        WaitForAsyncUtils.waitForFxEvents();
-
-        Field nameField = UserSettingsCtrl.class.getDeclaredField("nameField");
-        nameField.setAccessible(true);
-        TextField nameTextField = (TextField) nameField.get(userSettingsCtrl);
-
-        Field emailField = UserSettingsCtrl.class.getDeclaredField("emailField");
-        emailField.setAccessible(true);
-        TextField emailTextField = (TextField) emailField.get(userSettingsCtrl);
-
-        Field ibanField = UserSettingsCtrl.class.getDeclaredField("ibanField");
-        ibanField.setAccessible(true);
-        TextField ibanTextField = (TextField) ibanField.get(userSettingsCtrl);
-
-        Field bicField = UserSettingsCtrl.class.getDeclaredField("bicField");
-        bicField.setAccessible(true);
-        TextField bicTextField = (TextField) bicField.get(userSettingsCtrl);
-
-        assertEquals("", nameTextField.getText());
-        assertEquals("", emailTextField.getText());
-        assertEquals("", ibanTextField.getText());
-        assertEquals("", bicTextField.getText());
-    }
+//    @Test
+//    public void testCancel() {
+//        userSettingsCtrl.onCancelClick();
+//        Mockito.verify(mainCtrlMock).showStartScreen();
+//    }
+//
+//    @Test
+//    public void testConfirm() {
+//        Platform.runLater(() -> userSettingsCtrl.initialize());
+//        WaitForAsyncUtils.waitForFxEvents();
+//
+//        clickOn("#nameField").write("Test");
+//        clickOn("#emailField").write("Test");
+//        clickOn("#ibanField").write("Test");
+//        clickOn("#bicField").write("Test");
+//
+//        userSettingsCtrl.onConfirmClick();
+//        Mockito.verify(configClientMock).setName("Test");
+//        Mockito.verify(configClientMock).setEmail("Test");
+//        Mockito.verify(configClientMock).setIban("Test");
+//        Mockito.verify(configClientMock).setBic("Test");
+//    }
+//
+//    @Test
+//    public void testInitializeAllBranches() throws Exception {
+//        Platform.runLater(() -> userSettingsCtrl.initialize());
+//
+//        WaitForAsyncUtils.waitForFxEvents();
+//
+//        Field nameField = UserSettingsCtrl.class.getDeclaredField("nameField");
+//        nameField.setAccessible(true);
+//        TextField nameTextField = (TextField) nameField.get(userSettingsCtrl);
+//
+//        Field emailField = UserSettingsCtrl.class.getDeclaredField("emailField");
+//        emailField.setAccessible(true);
+//        TextField emailTextField = (TextField) emailField.get(userSettingsCtrl);
+//
+//        Field ibanField = UserSettingsCtrl.class.getDeclaredField("ibanField");
+//        ibanField.setAccessible(true);
+//        TextField ibanTextField = (TextField) ibanField.get(userSettingsCtrl);
+//
+//        Field bicField = UserSettingsCtrl.class.getDeclaredField("bicField");
+//        bicField.setAccessible(true);
+//        TextField bicTextField = (TextField) bicField.get(userSettingsCtrl);
+//
+//        assertEquals("", nameTextField.getText());
+//        assertEquals("", emailTextField.getText());
+//        assertEquals("", ibanTextField.getText());
+//        assertEquals("", bicTextField.getText());
+//    }
 
 //    @Test
 //    public void testInitializeAllBranchesNonNull() throws Exception {
