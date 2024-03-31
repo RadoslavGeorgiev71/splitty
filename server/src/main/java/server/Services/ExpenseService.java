@@ -63,18 +63,22 @@ public class ExpenseService {
 
     /**
      * Method to update an expense
-     * @param id The id of the expense to be updated
+     * @param id The id of the event to be updated
      * @param updatedExpense The already updated expense object
      * @return A expense object which reflects the one that was just persisted
      */
     public Expense update(long id, Expense updatedExpense){
-        Optional<Expense> existingExpense = expenseRepo.findById(id);
-        if (existingExpense.isPresent()){
-            existingExpense.get().setTitle(updatedExpense.getTitle());
-            existingExpense.get().setPayingParticipant(updatedExpense.getPayingParticipant());
-            existingExpense.get().setAmount(updatedExpense.getAmount());
-            existingExpense.get().setParticipants(updatedExpense.getParticipants());
-            existingExpense.get().setDateTime(updatedExpense.getDateTime());
+        Optional<Event> event = eventRepo.findById(id);
+        Optional<Expense> existingExpense = expenseRepo.findById(updatedExpense.getId());
+        if (event.isPresent() && existingExpense.isPresent()){
+            event.get().removeExpense(existingExpense.get());
+//            existingExpense.get().setTitle(updatedExpense.getTitle());
+//            existingExpense.get().setPayingParticipant(updatedExpense.getPayingParticipant());
+//            existingExpense.get().setAmount(updatedExpense.getAmount());
+//            existingExpense.get().setParticipants(updatedExpense.getParticipants());
+//            existingExpense.get().setDateTime(updatedExpense.getDateTime());
+            event.get().addExpense(updatedExpense);
+            eventRepo.save(event.get());
             return expenseRepo.save(existingExpense.get());
         }
         return null;
@@ -125,5 +129,22 @@ public class ExpenseService {
             return existingEvent.get().getExpenses();
         }
         return new ArrayList<>();
+    }
+
+    /**
+     * Method to get expenses by event id
+     *
+     * @param id      of event
+     * @param expense The already updated expense object
+     * @return Either the expenses or null
+     */
+    public Optional<Expense> deleteByEventId(long id, Expense expense){
+        Optional<Event> existingEvent = eventRepo.findById(id);
+        if(existingEvent.isPresent()){
+            existingEvent.get().removeExpense(expense);
+            eventRepo.save(existingEvent.get());
+        }
+        expenseRepo.deleteById(expense.getId());
+        return null;
     }
 }
