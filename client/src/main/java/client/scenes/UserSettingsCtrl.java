@@ -45,9 +45,10 @@ public class UserSettingsCtrl {
     /**
      * @param server
      * @param mainCtrl
+     * @param configClient
      */
     @Inject
-    public UserSettingsCtrl(ServerUtils server, MainCtrl mainCtrl) {
+    public UserSettingsCtrl(ServerUtils server, MainCtrl mainCtrl, ConfigClient configClient) {
         this.server = server;
         this.mainCtrl = mainCtrl;
         this.configClient = new ConfigClient();

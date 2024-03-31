@@ -226,12 +226,17 @@ public class EventOverviewCtrl {
         tabPaneFromGridPane.setHgap(10);
         if (event != null) {
             for (int i = 0; i < event.getExpenses().size(); i++) {
-                if (event.getParticipants().get(i).equals(participantsMenu.
+                Participant participant = event.getParticipants().get(i);
+                if (participant.equals(participantsMenu.
                         getSelectionModel().getSelectedItem())) {
                     Label dateLabel = new Label(event.getExpenses().get(i).getDateTime());
                     Label nameLabel = new Label(event.getExpenses().get(i).getActivity());
                     nameLabel.setWrapText(true); // Wrap text to prevent truncation
                     Button editButton = new Button("Edit");
+
+                    editButton.setOnAction(event -> {
+                       //maintCtrl.showEditExpense(event.getExpenses().get(i))
+                    });
 
                     // Set fixed column widths
                     dateLabel.setMaxWidth(Double.MAX_VALUE);
