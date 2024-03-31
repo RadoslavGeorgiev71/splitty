@@ -20,7 +20,7 @@
       <TextField fx:id="newEventText" layoutX="124.0" layoutY="80.0" prefHeight="25.0" prefWidth="235.0" />
       <TextField fx:id="joinEventText" layoutX="124.0" layoutY="175.0" prefHeight="25.0" prefWidth="235.0" />
       <Text fx:id="newEventStaticText" layoutX="124.0" layoutY="74.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Create new event"/>
-      <Button layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#onSettingsClick" text="Settings" />
+      <Button fx:id="settingsButton" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#onSettingsClick" text="Settings" />
       <Text fx:id="joinEventStaticText" layoutX="124.0" layoutY="169.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Join event">
          <font>
             <Font size="20.0" />

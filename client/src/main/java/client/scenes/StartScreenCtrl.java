@@ -57,6 +57,9 @@ public class StartScreenCtrl {
     @FXML
     private MenuButton languageButton;
 
+    @FXML
+    private Button settingsButton;
+
     /**
      *
      * @param server
@@ -263,5 +266,11 @@ public class StartScreenCtrl {
                 config.getName(), config.getRecentEvents()};
         config.writeToFile("client/src/main/resources/config.txt", contents, keys);
 
+    }
+
+    //FOR TESTING
+
+    public void setConfig(ConfigClient config){
+        this.config = config;
     }
 }

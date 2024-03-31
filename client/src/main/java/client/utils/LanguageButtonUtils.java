@@ -45,6 +45,10 @@ public class LanguageButtonUtils {
         File[] imageFiles = imagesFolder.listFiles((dir, name)
                 -> name.toLowerCase().endsWith(".png") || name.toLowerCase().endsWith(".jpg"));
 
+        if(imageFiles == null){
+            return;
+        }
+
         for (File imageFile : imageFiles) {
             if(imageFile.getName().equals(config.getLanguage() + ".png")){
                 Image image = new Image(Paths.get(imagesFolderPath,
