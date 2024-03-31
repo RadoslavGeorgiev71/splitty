@@ -46,5 +46,6 @@ subprojects {
 		testImplementation 'org.mockito:mockito-core:4.1.0'
 		testImplementation 'org.testfx:testfx-core:4.0.16-alpha'
 		testImplementation 'org.testfx:testfx-junit5:4.0.16-alpha'
+		testImplementation 'org.testfx:openjfx-monocle:21.0.2'
 	}
 }

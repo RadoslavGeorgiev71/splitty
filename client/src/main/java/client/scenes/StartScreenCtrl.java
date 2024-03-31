@@ -293,6 +293,10 @@ public class StartScreenCtrl {
 
     //FOR TESTING
 
+    /**
+     * Sets the config. Should only be used in testing.
+     * @param config - the config to set
+     */
     public void setConfig(ConfigClient config){
         this.config = config;
     }

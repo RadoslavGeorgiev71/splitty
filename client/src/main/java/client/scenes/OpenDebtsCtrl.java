@@ -4,7 +4,7 @@ import client.utils.LanguageResourceBundle;
 import client.utils.ServerUtils;
 import commons.Debt;
 import commons.Event;
-import commons.Participant;
+//import commons.Participant;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;

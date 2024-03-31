@@ -133,4 +133,14 @@ public class UserSettingsCtrl {
         }
     }
 
+    //For testing only!
+
+    /**
+     * Sets config for testing
+     * @param configClient the config
+     */
+    public void setConfigClient(ConfigClient configClient) {
+        this.configClient = configClient;
+    }
+
 }

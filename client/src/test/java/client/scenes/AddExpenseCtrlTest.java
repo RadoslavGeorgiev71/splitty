@@ -19,6 +19,7 @@ import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
+import org.junit.jupiter.api.BeforeAll;
 
 public class AddExpenseCtrlTest extends ApplicationTest {
 
@@ -31,6 +32,15 @@ public class AddExpenseCtrlTest extends ApplicationTest {
     Expense expenseMock;
 
     private AddExpenseCtrl addExpenseCtrl;
+
+    @BeforeAll
+    public static void setupSpec() throws Exception {
+        System.setProperty("testfx.robot", "glass");
+        System.setProperty("testfx.headless", "true");
+        System.setProperty("prism.order", "sw");
+        System.setProperty("prism.text", "t2k");
+        System.setProperty("java.awt.headless", "true");
+    }
 
     @Override
     public void start(Stage stage) throws Exception{
@@ -48,6 +58,7 @@ public class AddExpenseCtrlTest extends ApplicationTest {
         addExpenseCtrl.setExpense(expenseMock);
 
         Mockito.doNothing().when(mainCtrlMock).showEventOverview(eventMock);
+        Mockito.when(serverUtilsMock.getEvent(Mockito.anyLong())).thenReturn(eventMock);
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/client/scenes/AddEditExpense.fxml"));
         loader.setControllerFactory(type -> {

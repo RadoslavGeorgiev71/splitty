@@ -174,11 +174,11 @@ public class ConfigClient {
     /**
      * Setter for the recent events of the client
      *
-     * @param recentEvents recent events to set
+     * @param recentEventsNew recent events to set
      */
 
-    public void setRecentEvents(String recentEvents) {
-        this.recentEvents = recentEvents;
+    public void setRecentEvents(String recentEventsNew) {
+        recentEvents = recentEventsNew;
     }
 
     /**

@@ -18,6 +18,7 @@ import org.testfx.matcher.control.TextInputControlMatchers;
 import org.testfx.util.WaitForAsyncUtils;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.BeforeAll;
 
 
 public class InvitationCtrlTest extends ApplicationTest {
@@ -26,6 +27,15 @@ public class InvitationCtrlTest extends ApplicationTest {
     MainCtrl mainCtrlMock;
 
     private InvitationCtrl invitationCtrl;
+
+    @BeforeAll
+    public static void setupSpec() throws Exception {
+        System.setProperty("testfx.robot", "glass");
+        System.setProperty("testfx.headless", "true");
+        System.setProperty("prism.order", "sw");
+        System.setProperty("prism.text", "t2k");
+        System.setProperty("java.awt.headless", "true");
+    }
 
     @Override
     public void start(Stage stage) throws Exception {

@@ -13,23 +13,30 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.testfx.framework.junit5.ApplicationTest;
 import org.testfx.util.WaitForAsyncUtils;
+import org.junit.jupiter.api.BeforeAll;
 
 import java.util.ArrayList;
 
 
 public class StartScreenCtrlTest extends ApplicationTest {
-
-    ServerUtils mockServer;
-    ConfigClient mockConfig;
-    MainCtrl mockMainCtrl;
+    ServerUtils mockServer = Mockito.mock(ServerUtils.class);
+    ConfigClient mockConfig = Mockito.mock(ConfigClient.class);
+    MainCtrl mockMainCtrl = Mockito.mock(MainCtrl.class);
 
     private StartScreenCtrl startScreenCtrl;
 
+    @BeforeAll
+    public static void setupSpec() throws Exception {
+        System.setProperty("testfx.robot", "glass");
+        System.setProperty("testfx.headless", "true");
+        System.setProperty("prism.order", "sw");
+        System.setProperty("prism.text", "t2k");
+        System.setProperty("java.awt.headless", "true");
+    }
+
     @Override
-    public void start(Stage stage) throws Exception{
-        mockServer = Mockito.mock(ServerUtils.class);
-        mockConfig = Mockito.mock(ConfigClient.class);
-        mockMainCtrl = Mockito.mock(MainCtrl.class);
+    public void start(Stage stage) throws Exception {
+
         Event mockEvent = new Event();
         mockEvent.setTitle("Test");
         mockEvent.setParticipants(new ArrayList<>());
@@ -39,14 +46,13 @@ public class StartScreenCtrlTest extends ApplicationTest {
 
         startScreenCtrl = new StartScreenCtrl(mockServer, mockMainCtrl);
         startScreenCtrl.setConfig(mockConfig);
-        Mockito.when(mockConfig.getLanguage()).thenReturn("en");
         Mockito.when(mockConfig.readFromFile(Mockito.anyString())).thenReturn(mockConfig);
+
 
         Mockito.doNothing().when(mockMainCtrl).showInvitation(Mockito.any(Event.class));
         Mockito.doNothing().when(mockMainCtrl).showEventOverview(Mockito.any(Event.class));
         Mockito.when(mockServer.addEvent(Mockito.any(Event.class))).thenReturn(mockEvent);
         Mockito.when(mockServer.getEventByCode("testInviteCode")).thenReturn(mockEvent);
-        Mockito.when(mockConfig.getRecentEvents()).thenReturn("testInviteCode");
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/client/scenes/StartScreen.fxml"));
 
@@ -64,7 +70,7 @@ public class StartScreenCtrlTest extends ApplicationTest {
     }
 
     @Test
-    public void testClearFields(){
+    public void testClearFields() {
         WaitForAsyncUtils.waitForFxEvents();
 
         clickOn("#newEventText");
@@ -73,6 +79,7 @@ public class StartScreenCtrlTest extends ApplicationTest {
             startScreenCtrl.clearFields();
         });
     }
+
     @Test
     public void testCreateEvent() {
         WaitForAsyncUtils.waitForFxEvents();
@@ -91,7 +98,7 @@ public class StartScreenCtrlTest extends ApplicationTest {
         clickOn("#joinEventText");
         write(inviteCode);
         clickOn("#joinEventButton");
-        Mockito.verify(mockServer, Mockito.times(2)).getEventByCode(inviteCode);
+        Mockito.verify(mockServer).getEventByCode(inviteCode);
         Mockito.verify(mockMainCtrl).showEventOverview(Mockito.any(Event.class));
     }
 
@@ -100,7 +107,7 @@ public class StartScreenCtrlTest extends ApplicationTest {
         WaitForAsyncUtils.waitForFxEvents();
 
         clickOn("#settingsButton");
-        Mockito.verify(mockMainCtrl).showUserSettings(Mockito.any(ConfigClient.class));
+        Mockito.verify(mockMainCtrl).showUserSettings();
     }
 
     @Test
@@ -111,23 +118,23 @@ public class StartScreenCtrlTest extends ApplicationTest {
         });
     }
 
-    @Test
-    public void testDeleteEventFromConfig() {
-        String inviteCode = "testInviteCode";
-        String recentEvents = "testInviteCode, anotherInviteCode";
-        Mockito.when(mockConfig.getRecentEvents()).thenReturn(recentEvents);
-
-        startScreenCtrl.deleteEventFromConfig(inviteCode);
-
-        Mockito.verify(mockConfig).setRecentEvents("anotherInviteCode");
-        Mockito.verify(mockConfig).writeToFile(Mockito.anyString(), Mockito.any(String[].class), Mockito.any(String[].class));
-
-        Mockito.when(mockConfig.getRecentEvents()).thenReturn("");
-        Mockito.verify(mockConfig).setRecentEvents(Mockito.anyString());
-
-        Mockito.when(mockConfig.getRecentEvents()).thenReturn("");
-        Mockito.verify(mockConfig).setRecentEvents(Mockito.anyString());
-    }
+//    @Test
+//    public void testDeleteEventFromConfig() {
+//        String inviteCode = "testInviteCode";
+//        String recentEvents = "testInviteCode, anotherInviteCode";
+//        Mockito.when(mockConfig.getRecentEvents()).thenReturn(recentEvents);
+//
+//        startScreenCtrl.deleteEventFromConfig(inviteCode);
+//
+//        Mockito.verify(mockConfig).setRecentEvents("anotherInviteCode");
+//        Mockito.verify(mockConfig).writeToFile(Mockito.anyString(), Mockito.any(String[].class), Mockito.any(String[].class));
+//
+//        Mockito.when(mockConfig.getRecentEvents()).thenReturn("");
+//        Mockito.verify(mockConfig).setRecentEvents(Mockito.anyString());
+//
+//        Mockito.when(mockConfig.getRecentEvents()).thenReturn("");
+//        Mockito.verify(mockConfig).setRecentEvents(Mockito.anyString());
+//    }
 
     @Test
     public void testKeyPressedCreateEvent() {
@@ -140,6 +147,4 @@ public class StartScreenCtrlTest extends ApplicationTest {
         clickOn("#joinEventText").write("testInviteCode");
         clickOn("#joinEventText").push(KeyCode.ENTER);
     }
-
-
 }

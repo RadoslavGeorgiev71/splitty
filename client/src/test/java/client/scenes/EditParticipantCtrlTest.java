@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.BeforeAll;
 
 public class EditParticipantCtrlTest extends ApplicationTest {
     ServerUtils serverMock;
@@ -31,6 +32,15 @@ public class EditParticipantCtrlTest extends ApplicationTest {
     Participant participant;
 
     private EditParticipantCtrl editParticipantCtrl;
+
+    @BeforeAll
+    public static void setupSpec() throws Exception {
+        System.setProperty("testfx.robot", "glass");
+        System.setProperty("testfx.headless", "true");
+        System.setProperty("prism.order", "sw");
+        System.setProperty("prism.text", "t2k");
+        System.setProperty("java.awt.headless", "true");
+    }
 
 
     @Override
@@ -48,6 +58,8 @@ public class EditParticipantCtrlTest extends ApplicationTest {
 
         List<Participant> list = new ArrayList<>();
         list.add(participant);
+
+        Mockito.when(serverMock.getEvent(Mockito.anyLong())).thenReturn(mockEvent);
 
         mockEvent.setParticipants(list);
         mockEvent.setExpenses(new ArrayList<>());
@@ -153,6 +165,7 @@ public class EditParticipantCtrlTest extends ApplicationTest {
 
     @Test
     public void keyPressedTest(){
+        editParticipantCtrl.setEvent(mockEvent);
         clickOn("#nameField").push(javafx.scene.input.KeyCode.ENTER);
         Mockito.verify(serverMock).persistEvent(Mockito.any(Event.class));
         Mockito.verify(mainCtrlMock).showEventOverview(Mockito.any(Event.class));
