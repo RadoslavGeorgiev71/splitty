@@ -282,11 +282,12 @@ public class ServerUtils {
      * @return the response from the server
      */
     public Response deleteExpense(long eventId, Expense expense) {
+        Entity<Expense> entity = Entity.entity(expense, APPLICATION_JSON);
         return ClientBuilder.newClient(new ClientConfig())
-                .target(server).path("api/expenses/eventId/" + eventId + "/id/" + expense.getId())
+                .target(server).path("api/expenses/remove/" + eventId)
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
-                .delete();
+                .put(entity);
     }
 
     /**
@@ -310,12 +311,21 @@ public class ServerUtils {
      * @param expense - the expense to add
      * @return the response from the server
      */
-    public Response addExpense(long eventId, Expense expense) {
-        return ClientBuilder.newClient(new ClientConfig())
-                .target(server).path("api/expenses/event/" + eventId)
-                .request(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .post(Entity.json(expense));
+    public Expense addExpense(long eventId, Expense expense) {
+        try {
+            Response response = ClientBuilder.newClient(new ClientConfig())
+                    .target(server).path("api/expenses/event/" + eventId)
+                    .request(APPLICATION_JSON)
+                    .accept(APPLICATION_JSON)
+                    .post(Entity.json(expense));
+            if (response.getStatus() == 200) {
+                return response.readEntity(Expense.class);
+            } else {
+                return null;
+            }
+        }catch (ProcessingException e){
+            return null;
+        }
     }
 
     /**
@@ -328,9 +338,9 @@ public class ServerUtils {
     public Expense updateExpense(long eventId, Expense expense) {
         Entity<Expense> entity = Entity.entity(expense, APPLICATION_JSON);
         return ClientBuilder.newClient(new ClientConfig())
-                .target(server).path("api/events/id/" + eventId)
+                .target(server).path("api/events/" + eventId)
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
-                .put(entity, Event.class).getLastActivity();
+                .put(entity, Expense.class);
     }
 }

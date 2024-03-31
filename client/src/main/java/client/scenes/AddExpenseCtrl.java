@@ -63,7 +63,6 @@ public class AddExpenseCtrl{
     public AddExpenseCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.server = server;
         this.mainCtrl = mainCtrl;
-        this.participants = new ArrayList<>();
     }
 
     /**
@@ -82,7 +81,6 @@ public class AddExpenseCtrl{
      * @param actionEvent to handle
      */
     public void onAddClick(ActionEvent actionEvent) {
-        expense = new Expense();
         expense.setTitle(titleField.getText());
         expense.setPayingParticipant((Participant)
                 payerChoiceBox.getSelectionModel().getSelectedItem());
@@ -105,9 +103,9 @@ public class AddExpenseCtrl{
             expense.setParticipants(participants);
         }
         expense.setDateTime(datePicker.getValue().toString());
-        event.addExpense(expense);
-        //server.addExpense(expense);
-        server.persistEvent(event);
+        server.addExpense(event.getId(), expense);
+//        event.addExpense(expense);
+//        server.persistEvent(event);
         clearFields();
         event = server.getEvent(event.getId());
         mainCtrl.showEventOverview(event);
@@ -306,7 +304,9 @@ public class AddExpenseCtrl{
             equally.setSelected(true);
             onlySome.setAllowIndeterminate(false);
             onlySome.setSelected(false);
-            participants = new ArrayList<>();
+
+            this.expense = new Expense();
+            this.participants = new ArrayList<>();
         }
     }
 }

@@ -172,8 +172,6 @@ public class MainCtrl {
     public void showAddExpense(Event event) {
         primaryStage.setTitle("Add Expense");
         addExpenseCtrl.setEvent(event);
-        addExpenseCtrl.setExpense(new Expense());
-        addExpenseCtrl.setParticipants(new ArrayList<>());
 //        ConfigClient configClient =  new ConfigClient();
 //        configClient.readFromFile("client/src/main/resources/config.txt");
 //        addExpenseCtrl.setCurrency(configClient.getCurrency());

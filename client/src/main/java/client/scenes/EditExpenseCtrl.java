@@ -96,8 +96,6 @@ public class EditExpenseCtrl{
             expense.setParticipants(participants);
         }
         expense.setDateTime(datePicker.getValue().toString());
-        //event.addExpense(expense);
-        //server.persistEvent(event);
         server.updateExpense(event.getId(), expense);
         clearFields();
         mainCtrl.showEventOverview(event);
@@ -116,8 +114,6 @@ public class EditExpenseCtrl{
             alert.setContentText("Are you sure you want to remove " +
                     this.expense.getTitle() + "?");
             if (alert.showAndWait().get() == ButtonType.OK){
-                event.removeExpense(expense);
-                server.persistEvent(event);
                 server.deleteExpense(event.getId(), expense);
                 mainCtrl.showEventOverview(server.getEvent(event.getId()));
             }
