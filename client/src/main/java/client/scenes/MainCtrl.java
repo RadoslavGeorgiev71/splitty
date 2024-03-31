@@ -15,6 +15,7 @@
  */
 package client.scenes;
 
+import client.utils.ConfigClient;
 import commons.Event;
 import commons.Expense;
 import commons.Participant;
