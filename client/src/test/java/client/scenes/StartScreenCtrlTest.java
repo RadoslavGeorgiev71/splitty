@@ -1,17 +1,12 @@
 package client.scenes;
 
-import client.MyFXML;
-import client.MyModule;
 import client.utils.ConfigClient;
-import client.utils.LanguageButtonUtils;
 import client.utils.ServerUtils;
-import com.google.inject.Injector;
 import commons.Event;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.MenuButton;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
@@ -21,7 +16,6 @@ import org.testfx.util.WaitForAsyncUtils;
 
 import java.util.ArrayList;
 
-import static com.google.inject.Guice.createInjector;
 
 public class StartScreenCtrlTest extends ApplicationTest {
 
@@ -31,8 +25,6 @@ public class StartScreenCtrlTest extends ApplicationTest {
 
     private StartScreenCtrl startScreenCtrl;
 
-    private static final Injector INJECTOR = createInjector(new MyModule());
-    private static final MyFXML FXML = new MyFXML(INJECTOR);
     @Override
     public void start(Stage stage) throws Exception{
         mockServer = Mockito.mock(ServerUtils.class);

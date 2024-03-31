@@ -1,10 +1,7 @@
 package client.scenes;
 
-import client.MyFXML;
-import client.MyModule;
-import client.utils.ConfigClient;
+
 import client.utils.ServerUtils;
-import com.google.inject.Injector;
 import commons.Event;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -20,20 +17,15 @@ import org.testfx.matcher.base.NodeMatchers;
 import org.testfx.matcher.control.TextInputControlMatchers;
 import org.testfx.util.WaitForAsyncUtils;
 
-import static com.google.inject.Guice.createInjector;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
 public class InvitationCtrlTest extends ApplicationTest {
 
     ServerUtils serverMock;
-    ConfigClient configClientMock;
     MainCtrl mainCtrlMock;
 
     private InvitationCtrl invitationCtrl;
-
-    private static final Injector INJECTOR = createInjector(new MyModule());
-    private static final MyFXML FXML = new MyFXML(INJECTOR);
 
     @Override
     public void start(Stage stage) throws Exception {

@@ -1,10 +1,7 @@
 package client.scenes;
 
-import client.MyFXML;
-import client.MyModule;
 import client.utils.ConfigClient;
 import client.utils.ServerUtils;
-import com.google.inject.Injector;
 import commons.Event;
 import commons.Expense;
 import commons.Participant;
@@ -27,7 +24,6 @@ import org.testfx.util.WaitForAsyncUtils;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 
-import static com.google.inject.Guice.createInjector;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class EventOverviewCtrlTest extends ApplicationTest {
@@ -40,9 +36,6 @@ public class EventOverviewCtrlTest extends ApplicationTest {
     Participant mockParticipant;
 
     private EventOverviewCtrl eventOverviewCtrl;
-
-    private static final Injector INJECTOR = createInjector(new MyModule());
-    private static final MyFXML FXML = new MyFXML(INJECTOR);
 
     @Override
     public void start(Stage stage) throws Exception{

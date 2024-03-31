@@ -1,10 +1,6 @@
 package client.scenes;
 
-import client.MyFXML;
-import client.MyModule;
-import client.utils.ConfigClient;
 import client.utils.ServerUtils;
-import com.google.inject.Injector;
 import commons.Event;
 import commons.Participant;
 import javafx.fxml.FXMLLoader;
@@ -17,18 +13,14 @@ import org.testfx.framework.junit5.ApplicationTest;
 
 import java.util.ArrayList;
 
-import static com.google.inject.Guice.createInjector;
 
 public class AddParticipantCtrlTest extends ApplicationTest {
 
     ServerUtils serverMock;
-    ConfigClient configClientMock;
+
     MainCtrl mainCtrlMock;
 
     private AddParticipantCtrl addParticipantCtrl;
-
-    private static final Injector INJECTOR = createInjector(new MyModule());
-    private static final MyFXML FXML = new MyFXML(INJECTOR);
 
     @Override
     public void start(Stage stage) throws Exception{

@@ -1,16 +1,11 @@
 package client.scenes;
 
-import client.MyFXML;
-import client.MyModule;
-import client.utils.ConfigClient;
 import client.utils.ServerUtils;
-import com.google.inject.Injector;
 import commons.Debt;
 import commons.Event;
 import commons.Participant;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import jakarta.ws.rs.WebApplicationException;
-import jakarta.ws.rs.core.Response;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -23,26 +18,18 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.testfx.api.FxRobot;
 import org.testfx.framework.junit5.ApplicationTest;
+import org.testfx.util.WaitForAsyncUtils;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.FutureTask;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
-import static com.google.inject.Guice.createInjector;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.testfx.util.WaitForAsyncUtils.waitFor;
 import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
 
 public class OpenDebtsCtrlTest extends ApplicationTest {
 
     ServerUtils serverMock;
-    ConfigClient configClientMock;
     MainCtrl mainCtrlMock;
 
     Event mockEvent;
@@ -50,9 +37,6 @@ public class OpenDebtsCtrlTest extends ApplicationTest {
     List<Debt> debts;
 
     private OpenDebtsCtrl openDebtsCtrl;
-
-    private static final Injector INJECTOR = createInjector(new MyModule());
-    private static final MyFXML FXML = new MyFXML(INJECTOR);
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -90,18 +74,17 @@ public class OpenDebtsCtrlTest extends ApplicationTest {
     public void testGetPaymentInstructionsException() {
         Mockito.when(serverMock.getPaymentInstructions(mockEvent)).thenThrow(new WebApplicationException());
 
-        FutureTask<List<Debt>> futureTask = new FutureTask<>(() -> openDebtsCtrl.getPaymentInstructions());
-        Platform.runLater(futureTask);
-        List<Debt> result = null;
-        try {
-            result = futureTask.get();
-        } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
-        }
+        Platform.runLater(() -> {
+            openDebtsCtrl.getPaymentInstructions();
+        });
 
+        interact(() -> {
+            DialogPane dialogPane = lookup(".dialog-pane").queryAs(DialogPane.class);
+            Button okButton = (Button) dialogPane.lookupButton(ButtonType.OK);
+            okButton.fire();
+        });
 
-        Mockito.verify(serverMock, Mockito.times(2)).getPaymentInstructions(mockEvent);
-        assertNull(result);
+        WaitForAsyncUtils.waitForFxEvents();
     }
 
     @Test

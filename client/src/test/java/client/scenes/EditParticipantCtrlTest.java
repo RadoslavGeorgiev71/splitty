@@ -1,10 +1,7 @@
 package client.scenes;
 
-import client.MyFXML;
-import client.MyModule;
-import client.utils.ConfigClient;
+
 import client.utils.ServerUtils;
-import com.google.inject.Injector;
 import commons.Event;
 import commons.Participant;
 import javafx.fxml.FXMLLoader;
@@ -23,12 +20,10 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.google.inject.Guice.createInjector;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class EditParticipantCtrlTest extends ApplicationTest {
     ServerUtils serverMock;
-    ConfigClient configClientMock;
     MainCtrl mainCtrlMock;
 
     Event mockEvent;
@@ -37,8 +32,6 @@ public class EditParticipantCtrlTest extends ApplicationTest {
 
     private EditParticipantCtrl editParticipantCtrl;
 
-    private static final Injector INJECTOR = createInjector(new MyModule());
-    private static final MyFXML FXML = new MyFXML(INJECTOR);
 
     @Override
     public void start(Stage stage) throws Exception {
