@@ -20,8 +20,8 @@ public class UserSettingsCtrl {
 
     private ConfigClient configClient;
 
-    private String[] keys = {"serverUrl", "email", "iban", "bic",
-            "language", "currency", "name", "recentEvents"};
+    private String[] keys =
+            {"serverUrl", "email", "iban", "bic", "language", "currency", "name", "recentEvents"};
 
 
     @FXML
@@ -165,8 +165,7 @@ public class UserSettingsCtrl {
     private void moveToNextTextField(TextField currentTextField) {
         // Find the index of the current text field
         int index = -1;
-        TextField[] textFields = {nameField, emailField, ibanField,
-                bicField, serverURLField }; // Add all text fields here
+        TextField[] textFields = {nameField, emailField, ibanField, bicField, serverURLField}; // Add all text fields here
         for (int i = 0; i < textFields.length; i++) {
             if (textFields[i] == currentTextField) {
                 index = i;
