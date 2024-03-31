@@ -223,6 +223,9 @@ public class MainCtrl {
         primaryStage.setScene(usersettings);
     }
 
+    /**
+     * Closes the primary stage and kills the application
+     */
     public void closeWindow() {
         primaryStage.close();
         System.exit(0);

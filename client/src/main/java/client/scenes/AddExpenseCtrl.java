@@ -91,7 +91,8 @@ public class AddExpenseCtrl{
             Alert alert =  new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Invalid Input");
             alert.setHeaderText("Amount is not a number");
-            alert.setContentText("The value you entered for the amount of money paid should be a number");
+            alert.setContentText("The value you entered " +
+                    "for the amount of money paid should be a number");
             alert.showAndWait();
             return;
         }
@@ -171,6 +172,10 @@ public class AddExpenseCtrl{
         }
     }
 
+    /**
+     * Moves the focus to the next field
+     * @param currentTextField current field where the focus is now
+     */
     private void moveToNextTextField(TextField currentTextField) {
         // Find the index of the current text field
         int index = -1;

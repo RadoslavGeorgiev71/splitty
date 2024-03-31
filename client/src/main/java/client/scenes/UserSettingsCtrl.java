@@ -135,6 +135,10 @@ public class UserSettingsCtrl {
         }
     }
 
+    /**
+     * Method to be called when a key is pressed
+     * @param e keyevent to listen
+     */
     public void keyPressed(KeyEvent e) {
         if (e.isControlDown() && e.getCode() == KeyCode.W) {  //close window
             mainCtrl.closeWindow();
@@ -160,7 +164,8 @@ public class UserSettingsCtrl {
     private void moveToNextTextField(TextField currentTextField) {
         // Find the index of the current text field
         int index = -1;
-        TextField[] textFields = {nameField, emailField, ibanField, bicField, serverURLField }; // Add all text fields here
+        TextField[] textFields = {nameField, emailField,
+                                  ibanField, bicField, serverURLField }; // Add all text fields here
         for (int i = 0; i < textFields.length; i++) {
             if (textFields[i] == currentTextField) {
                 index = i;

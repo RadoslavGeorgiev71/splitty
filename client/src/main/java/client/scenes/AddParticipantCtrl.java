@@ -125,10 +125,15 @@ public class AddParticipantCtrl {
         }
     }
 
+    /**
+     * Moves the focus to the next field
+     * @param currentTextField current field where the focus is now
+     */
     private void moveToNextTextField(TextField currentTextField) {
         // Find the index of the current text field
         int index = -1;
-        TextField[] textFields = {nameField, emailField, ibanField, bicField }; // Add all text fields here
+        TextField[] textFields = {nameField, emailField,
+                                  ibanField, bicField }; // Add all text fields here
         for (int i = 0; i < textFields.length; i++) {
             if (textFields[i] == currentTextField) {
                 index = i;

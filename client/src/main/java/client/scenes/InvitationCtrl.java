@@ -177,6 +177,10 @@ public class InvitationCtrl implements Initializable {
         clearEmail();
     }
 
+    /**
+     * Method to be called when a key is pressed
+     * @param e keyevent to listen
+     */
     public void keyPressed(KeyEvent e) {
         if (e.isControlDown() && e.getCode() == KeyCode.W) {  //close window
             mainCtrl.closeWindow();

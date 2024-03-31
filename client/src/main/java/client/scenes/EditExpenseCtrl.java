@@ -166,6 +166,10 @@ public class EditExpenseCtrl{
         }
     }
 
+    /**
+     * Moves the focus to the next field
+     * @param currentTextField current field where the focus is now
+     */
     private void moveToNextTextField(TextField currentTextField) {
         // Find the index of the current text field
         int index = -1;
