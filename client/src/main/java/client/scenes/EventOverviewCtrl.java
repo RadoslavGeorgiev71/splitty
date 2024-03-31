@@ -418,4 +418,5 @@ public class EventOverviewCtrl {
         tabPaneAll.setText(bundle.getString("tabPaneAll"));
 
     }
+
 }
