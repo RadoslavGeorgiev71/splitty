@@ -15,6 +15,8 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.ResourceBundle;
@@ -57,6 +59,8 @@ public class StartScreenCtrl {
     @FXML
     private MenuButton languageButton;
 
+    private Path filePath = Paths.get("src/main/resources/config.txt").toAbsolutePath();
+
     /**
      * @param server
      * @param mainCtrl
@@ -80,7 +84,7 @@ public class StartScreenCtrl {
 
         languageButton.getItems().clear();
 
-        config = config.readFromFile("client/src/main/resources/config.txt");
+        config = config.readFromFile(String.valueOf(filePath));
 
         String language = config.getLanguage();
         if (language != null) {
@@ -245,6 +249,9 @@ public class StartScreenCtrl {
                 joinEvent();
             }
         }
+        if (e.isControlDown() && e.getCode() == KeyCode.W) {
+            mainCtrl.closeWindow();
+        }
     }
 
     /**
@@ -262,7 +269,7 @@ public class StartScreenCtrl {
                 config.getIban(), config.getBic(),
                 config.getLanguage(), config.getCurrency(),
                 config.getName(), config.getRecentEvents()};
-        config.writeToFile("client/src/main/resources/config.txt", contents, keys);
+        config.writeToFile(String.valueOf(filePath), contents, keys);
     }
 
     /**
@@ -284,7 +291,7 @@ public class StartScreenCtrl {
                 config.getIban(), config.getBic(),
                 config.getLanguage(), config.getCurrency(),
                 config.getName(), config.getRecentEvents()};
-        config.writeToFile("client/src/main/resources/config.txt", contents, keys);
+        config.writeToFile(String.valueOf(filePath), contents, keys);
 
     }
 }

@@ -22,6 +22,12 @@ public class TagTest {
     }
 
     @Test
+    void testEmptyConstructor() {
+        Tag t4 = new Tag();
+        assertNotNull(t4);
+    }
+
+    @Test
     void testGetType() {
         assertEquals("food", t1.getType());
     }
@@ -47,6 +53,16 @@ public class TagTest {
     void testEquals() {
         assertEquals(t2, t3);
         assertNotEquals(t1, t2);
+    }
+
+    @Test
+    void testEqualsSameReference() {
+        assertEquals(t2, t2);
+    }
+
+    @Test
+    void testNotEqualsNullReference() {
+        assertNotEquals(t2, null);
     }
 
     @Test

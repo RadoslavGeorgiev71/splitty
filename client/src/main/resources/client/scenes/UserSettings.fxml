@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="465.0" prefWidth="367.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.UserSettingsCtrl">
+<AnchorPane onKeyPressed="#keyPressed" prefHeight="465.0" prefWidth="367.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.UserSettingsCtrl">
    <children>
       <VBox alignment="TOP_CENTER" layoutY="1.0" prefHeight="389.0" prefWidth="280.0" spacing="10.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="1.0">
          <padding>
@@ -42,7 +42,7 @@
                        <GridPane.margin>
                            <Insets right="10.0" />
                        </GridPane.margin></Label>
-                  <TextField fx:id="nameField" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS" />
+                  <TextField fx:id="nameField" onKeyPressed="#keyPressed" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS" />
                    <Label alignment="CENTER_RIGHT" maxWidth="1.7976931348623157E308" text="Email" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS">
                        <GridPane.margin>
                            <Insets right="10.0" />
@@ -59,16 +59,16 @@
                        <GridPane.margin>
                            <Insets right="10.0" />
                        </GridPane.margin></Label>
-                  <TextField fx:id="emailField" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS" />
-                  <TextField fx:id="ibanField" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.vgrow="ALWAYS" />
-                  <TextField fx:id="bicField" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="3" GridPane.vgrow="ALWAYS" />
+                  <TextField fx:id="emailField" onKeyPressed="#keyPressed" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS" />
+                  <TextField fx:id="ibanField" onKeyPressed="#keyPressed" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.vgrow="ALWAYS" />
+                  <TextField fx:id="bicField" onKeyPressed="#keyPressed" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="3" GridPane.vgrow="ALWAYS" />
                    <ChoiceBox fx:id="currencyMenu" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
                    <Label alignment="CENTER_RIGHT" maxWidth="1.7976931348623157E308" prefHeight="17.0" prefWidth="108.0" text="Server URL" GridPane.rowIndex="4">
                        <GridPane.margin>
                            <Insets right="10.0" />
                        </GridPane.margin>
                    </Label>
-                   <TextField fx:id="serverURLField" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                   <TextField fx:id="serverURLField" onKeyPressed="#keyPressed" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                </children>
             </GridPane>
             <GridPane alignment="BOTTOM_CENTER" prefHeight="35.0" prefWidth="301.0" VBox.vgrow="ALWAYS">

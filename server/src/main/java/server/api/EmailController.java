@@ -48,16 +48,17 @@ public class EmailController {
             for(String email : emails){
                 String body = "";
                 if(creatorName.equals("null")){
-                    body += "You are invited to " + eventOptional.get().getTitle() + " event." +
+                    body += "You are invited to " + eventOptional.get().getTitle() + " event. " +
                             "You can connect to this event using the following code: " + inviteCode;
                 }
                 else{
                     body += creatorName + " invited you to " + eventOptional.get().getTitle()
-                            + " event." + "You can connect to this event using the following code: "
+                            + " event." +
+                            " You can connect to this event using the following code: "
                             + inviteCode;
                 }
                 emailService.sendEmail(email, eventOptional.get().getTitle()
-                                + "( " + inviteCode + " ) - Splitty",
+                                + " ( " + inviteCode + " ) - Splitty",
                         body);
             }
             return ResponseEntity.ok(HttpStatus.OK);

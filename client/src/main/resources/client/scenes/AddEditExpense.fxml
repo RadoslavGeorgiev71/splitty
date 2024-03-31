@@ -13,13 +13,17 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="400.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.AddExpenseCtrl">
+<AnchorPane prefHeight="400.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.AddExpenseCtrl">
     <children>
         <VBox layoutY="1.0" prefHeight="389.0" prefWidth="280.0" spacing="10.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="1.0">
             <children>
-                <Text fx:id="expenseField" strokeType="OUTSIDE" strokeWidth="0.0" text="Add/Edit Expense" />
+                <Text fx:id="expenseField" strokeType="OUTSIDE" strokeWidth="0.0" text="Add Expense" wrappingWidth="258.2265625">
+               <font>
+                  <Font size="14.0" />
+               </font></Text>
                 <GridPane>
                     <columnConstraints>
                         <ColumnConstraints hgrow="SOMETIMES" maxWidth="124.40001678466797" minWidth="10.0" prefWidth="90.79997253417969" />
@@ -43,7 +47,7 @@
                     </rowConstraints>
                     <children>
                         <Label text="What for?" />
-                        <TextField fx:id="titleField" prefHeight="26.0" prefWidth="185.0" GridPane.columnIndex="1" />
+                        <TextField fx:id="titleField" onKeyPressed="#keyPressed" prefHeight="26.0" prefWidth="185.0" GridPane.columnIndex="1" />
                     </children>
                 </GridPane>
                 <GridPane>
@@ -57,7 +61,7 @@
                         <RowConstraints />
                     </rowConstraints>
                     <children>
-                        <TextField fx:id="amountField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <TextField fx:id="amountField" onKeyPressed="#keyPressed" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                         <ChoiceBox fx:id="currChoiceBox" prefWidth="150.0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
                         <Label text="How much?" GridPane.rowIndex="1" />
                     </children>
@@ -107,18 +111,18 @@
                </children>
             </Pane>
                 <Label text="Expense Type" />
-                <TextField fx:id="tags" />
+                <TextField fx:id="tags" onKeyPressed="#keyPressed" />
                 <GridPane>
                     <columnConstraints>
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                        <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                     </columnConstraints>
                     <rowConstraints>
                         <RowConstraints />
                     </rowConstraints>
                     <children>
-                        <Button fx:id="expenseAddButton" mnemonicParsing="false" onAction="#onAddClick" text="Add" />
-                        <Button fx:id="expenseAbortButton" mnemonicParsing="false" onAction="#onAbortClick" text="Abort" GridPane.columnIndex="1" />
+                        <Button fx:id="expenseAddButton" mnemonicParsing="false" onAction="#onAddClick" text="Add" GridPane.columnIndex="1" />
+                        <Button fx:id="expenseAbortButton" mnemonicParsing="false" onAction="#onAbortClick" text="Abort" />
                     </children>
                 </GridPane>
             </children>

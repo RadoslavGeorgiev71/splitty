@@ -6,6 +6,8 @@ import client.utils.ServerUtils;
 import com.google.inject.Inject;
 
 import java.net.URL;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -16,6 +18,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Text;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
@@ -52,6 +56,9 @@ public class InvitationCtrl implements Initializable {
     private TextArea emailTextArea;
 
     private Event event;
+
+    private Path filePath = Paths.get("src/main/resources/config.txt").toAbsolutePath();
+
     /**
      *
      * @param server
@@ -173,5 +180,25 @@ public class InvitationCtrl implements Initializable {
         mainCtrl.showEventOverview(this.event);
         resetFields();
         clearEmail();
+    }
+
+    /**
+     * Method to be called when a key is pressed
+     * @param e keyevent to listen
+     */
+    public void keyPressed(KeyEvent e) {
+        if (e.isControlDown() && e.getCode() == KeyCode.W) {  //close window
+            mainCtrl.closeWindow();
+        }
+        switch (e.getCode()) {
+            case ENTER:
+                sendInvites();
+                break;
+            case ESCAPE:
+                backToStart();
+                break;
+            default:
+                break;
+        }
     }
 }

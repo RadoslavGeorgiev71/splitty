@@ -11,6 +11,8 @@ import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
@@ -254,5 +256,22 @@ public class OpenDebtsCtrl {
         server.addDebt(new Debt(5, bob, ana, 10));
         server.addDebt(new Debt(6, ana, bob, 8));
         server.addDebt(new Debt(7, ana, new Participant("Greg"), 30));
+    }
+
+    /**
+     * Method to be called when a key is pressed
+     * @param e keyevent to listen
+     */
+    public void keyPressed(KeyEvent e) {
+        if (e.isControlDown() && e.getCode() == KeyCode.W) {  //close window
+            mainCtrl.closeWindow();
+        }
+        switch (e.getCode()) {
+            case ESCAPE:
+                backToEvent();
+                break;
+            default:
+                break;
+        }
     }
 }

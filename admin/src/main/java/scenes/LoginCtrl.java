@@ -72,6 +72,9 @@ public class LoginCtrl {
         if(e.getCode() == KeyCode.ENTER){
             login(null);
         }
+        if(e.isControlDown() && e.getCode() == KeyCode.W){
+            mainCtrl.closeWindow();
+        }
     }
 
     @FXML
