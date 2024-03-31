@@ -37,6 +37,13 @@ class ExpenseTest {
     }
 
     @Test
+    void testSecondConstructor(){
+        Expense exp4 = new Expense(a);
+        assertNotNull(exp4);
+        assertEquals(exp4.getPayingParticipant(), a);
+    }
+
+    @Test
     void setTitle() {
         exp1.setTitle("Party");
         assertEquals("Party", exp1.getTitle());
@@ -113,5 +120,10 @@ class ExpenseTest {
         assertTrue(exp1.getParticipants().contains(a));
         exp1.delParticipant(a);
         assertFalse(exp1.getParticipants().contains(a));
+    }
+
+    @Test
+    void testNotEqualsNullReference(){
+        assertNotEquals(exp1, null);
     }
 }

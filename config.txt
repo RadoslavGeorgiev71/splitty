@@ -1,8 +1,7 @@
-serverUrl: generic
-email: blabla@gmail.com
-iban: 1234567890
-bic: BANK123
+serverUrl: null
+email: null
+iban: null
+bic: null
 language: en
-currency: EUR
-name: Alex
-recentEvents: 5, uI1lS3ox
+currency: null
+name: null
