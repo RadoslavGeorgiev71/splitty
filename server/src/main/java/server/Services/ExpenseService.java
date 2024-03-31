@@ -52,9 +52,7 @@ public class ExpenseService {
         Optional<Event> existingEvent = eventRepo.findById(id);
         if (existingEvent.isPresent()){
             Expense savedExpense = expenseRepo.save(newExpense);
-            List<Expense> addedExpense = existingEvent.get().getExpenses();
-            addedExpense.add(newExpense);
-            existingEvent.get().setExpenses(addedExpense);
+            existingEvent.get().addExpense(newExpense);
             eventRepo.save(existingEvent.get());
             return savedExpense;
         }
@@ -136,15 +134,16 @@ public class ExpenseService {
      *
      * @param id      of event
      * @param expense The already updated expense object
-     * @return Either the expenses or null
      */
-    public Optional<Expense> deleteByEventId(long id, Expense expense){
+    public boolean deleteByEventId(long id, Expense expense){
         Optional<Event> existingEvent = eventRepo.findById(id);
-        if(existingEvent.isPresent()){
-            existingEvent.get().removeExpense(expense);
+        Optional<Expense> exp = expenseRepo.findById(expense.getId());
+        if(existingEvent.isPresent() && exp.isPresent()){
+            existingEvent.get().removeExpense(exp.get());
             eventRepo.save(existingEvent.get());
+            return true;
         }
-        expenseRepo.deleteById(expense.getId());
-        return null;
+        return false;
+        //expenseRepo.deleteById(expense.getId());
     }
 }

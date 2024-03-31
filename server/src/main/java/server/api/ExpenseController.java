@@ -74,16 +74,16 @@ public class ExpenseController {
 
     /**
      * Method to update an expense
-     * @param id of expense
+     * @param eventId of expense
      * @param updatedExpense the changed expense
      * @return response when expense updated or not found
      */
-    @PutMapping(path = {"", "/id/{id}"})
-    public ResponseEntity<?> update(@PathVariable("id") long id,
+    @PutMapping(path = {"", "/event/{eventId}"})
+    public ResponseEntity<?> update(@PathVariable("eventId") long eventId,
                                     @RequestBody Expense updatedExpense) {
         //long expenseId = updatedExpense.getId();
 
-        Expense existingExpense = expenseService.update(id, updatedExpense);
+        Expense existingExpense = expenseService.update(eventId, updatedExpense);
         if (existingExpense != null) {
             return ResponseEntity.ok(existingExpense);
         }
@@ -91,19 +91,36 @@ public class ExpenseController {
     }
 
     /**
+     * Method to update an expense
+     * @param eventId of expense
+     * @param updatedExpense the changed expense
+     * @return response when expense updated or not found
+     */
+    @PutMapping(path = {"", "/remove/{eventId}"})
+    public ResponseEntity<?> remove(@PathVariable("eventId") long eventId,
+                                    @RequestBody Expense updatedExpense) {
+        //long expenseId = updatedExpense.getId();
+
+        boolean del = expenseService.deleteByEventId(eventId, updatedExpense);
+        if (del) {
+            return ResponseEntity.ok("Deleted");
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Expense not found");
+    }
+
+    /**
      * Deletes a expense by id if it exists
-     * @param id - the id of the expense we search for
      * @param eventId - the event id of the expense we search for
+     * @param expense - we delete
      * @return "Successful delete" response
      * if delete was successful, "Bad request" otherwise
      */
-    @DeleteMapping(path = {"/eventId/{eventId}/id/{id}"})
-    public ResponseEntity<String> delete(@PathVariable("id") long id,
-                                         @PathVariable("eventId") long eventId) {
-        Optional<Expense> expense = expenseService.deleteByEventId(eventId,
-                expenseService.findById(id).get());
-        if (expense.isPresent()) {
-            expenseService.deleteById(id);
+    @DeleteMapping(path = {"/eventId/{eventId}"})
+    public ResponseEntity<String> delete(@PathVariable("eventId") long eventId,
+                                         @RequestBody Expense expense) {
+        Optional<Expense> todel = expenseService.findById(expense.getId());
+        if (todel.isPresent()) {
+            expenseService.deleteByEventId(eventId, expense);
             return ResponseEntity.ok().body("Successful delete");
         }
         else {

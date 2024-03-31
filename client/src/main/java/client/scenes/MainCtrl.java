@@ -24,6 +24,8 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
+import java.util.ArrayList;
+
 public class MainCtrl {
 
     private Stage primaryStage;
@@ -169,12 +171,14 @@ public class MainCtrl {
      */
     public void showAddExpense(Event event) {
         primaryStage.setTitle("Add Expense");
-        primaryStage.setScene(addexpense);
         addExpenseCtrl.setEvent(event);
-        ConfigClient configClient =  new ConfigClient();
-        configClient.readFromFile("client/src/main/resources/config.txt");
-        addExpenseCtrl.setCurrency(configClient.getCurrency());
+        addExpenseCtrl.setExpense(new Expense());
+        addExpenseCtrl.setParticipants(new ArrayList<>());
+//        ConfigClient configClient =  new ConfigClient();
+//        configClient.readFromFile("client/src/main/resources/config.txt");
+//        addExpenseCtrl.setCurrency(configClient.getCurrency());
         addExpenseCtrl.initialize();
+        primaryStage.setScene(addexpense);
     }
 
     /**
