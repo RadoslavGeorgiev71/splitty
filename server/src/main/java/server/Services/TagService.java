@@ -1,6 +1,5 @@
 package server.Services;
 
-import commons.Debt;
 import commons.Tag;
 import org.springframework.stereotype.Service;
 import server.database.TagRepository;
