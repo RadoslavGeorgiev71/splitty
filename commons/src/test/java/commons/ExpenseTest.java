@@ -168,4 +168,16 @@ class ExpenseTest {
     void testNotEqualsNullReference(){
         assertNotEquals(exp1, null);
     }
+
+    @Test
+    void getCurrency() {
+        assertEquals(exp1.getCurrency(), "EUR");
+    }
+
+    @Test
+    void setCurrency() {
+        Expense exp4 = new Expense("party", a, 100, "EUR", list, "2/25/2024");
+        exp4.setCurrency("CHF");
+        assertEquals(exp4.getCurrency(), "CHF");
+    }
 }

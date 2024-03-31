@@ -88,6 +88,11 @@ public class ParticipantTest {
     }
 
     @Test
+    void testNotEqualsNull() {
+        assertNotEquals(p1, null);
+    }
+
+    @Test
     void testHashCode() {
         assertEquals(p2.hashCode(), p3.hashCode());
     }
