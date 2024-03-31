@@ -29,6 +29,7 @@ public class MyModule implements Module {
     @Override
     public void configure(Binder binder) {
         binder.bind(AddExpenseCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(EditExpenseCtrl.class).in(Scopes.SINGLETON);
         binder.bind(EditParticipantCtrl.class).in(Scopes.SINGLETON);
         binder.bind(AddParticipantCtrl.class).in(Scopes.SINGLETON);
         binder.bind(EventOverviewCtrl.class).in(Scopes.SINGLETON);

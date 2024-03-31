@@ -18,6 +18,10 @@ public class UserSettingsCtrl {
 
     private ConfigClient configClient;
 
+    private String[] keys = {"serverUrl", "email", "iban",
+                             "bic", "language", "currency", "name", "recentEvents"};
+
+
     @FXML
     private ChoiceBox currencyMenu;
 
@@ -32,10 +36,11 @@ public class UserSettingsCtrl {
 
     @FXML
     private TextField bicField;
+    @FXML
+    private TextField serverURLField;
 
 
     /**
-     *
      * @param server
      * @param mainCtrl
      */
@@ -43,6 +48,7 @@ public class UserSettingsCtrl {
     public UserSettingsCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.server = server;
         this.mainCtrl = mainCtrl;
+        this.configClient = new ConfigClient();
     }
 
     /**
@@ -63,6 +69,14 @@ public class UserSettingsCtrl {
         configClient.setEmail(emailField.getText());
         configClient.setIban(ibanField.getText());
         configClient.setBic(bicField.getText());
+        configClient.setServerUrl(serverURLField.getText());
+        ServerUtils.setURL(serverURLField.getText());
+        configClient.setCurrency(currencyMenu.getSelectionModel().getSelectedItem().toString());
+        String[] contents = {configClient.getServerUrl(), configClient.getEmail(),
+                configClient.getIban(), configClient.getBic(),
+                configClient.getLanguage(), configClient.getCurrency(),
+                configClient.getName(), configClient.getRecentEvents()};
+        configClient.writeToFile("client/src/main/resources/config.txt", contents, keys);
         clearFields();
         mainCtrl.showStartScreen();
     }
@@ -75,37 +89,48 @@ public class UserSettingsCtrl {
         emailField.clear();
         ibanField.clear();
         bicField.clear();
+        serverURLField.clear();
     }
 
     /**
      * Initializes the fields with the correct values (if available)
-     * @param configClient
      */
-    public void initialize(ConfigClient configClient) {
-        this.configClient = configClient;
-        if(configClient.getName() != null) {
+
+    public void initialize() {
+        if (configClient.getName() != null) {
             nameField.setText(configClient.getName());
         }
 
-        if(configClient.getEmail() != null) {
+        if (configClient.getEmail() != null) {
             emailField.setText(configClient.getEmail());
         }
 
-        if(configClient.getIban() != null) {
+        if (configClient.getIban() != null) {
             ibanField.setText(configClient.getIban());
         }
 
-        if(configClient.getBic() != null) {
+        if (configClient.getBic() != null) {
             bicField.setText(configClient.getBic());
         }
 
-        // Placeholder for now, there's probably a better way to do this
+        if (configClient.getServerUrl() != null) {
+            serverURLField.setText(configClient.getServerUrl());
+        }
+        initializeChoiceBox();
+    }
+
+    private void initializeChoiceBox() {
+
         List<String> currencies = new ArrayList<>();
         currencies.add("EUR");
         currencies.add("USD");
         currencies.add("AUD");
         currencyMenu.setItems(FXCollections.observableArrayList(currencies));
-        currencyMenu.getSelectionModel().selectFirst();
+        if (configClient.getCurrency() != null && currencies.contains(configClient.getCurrency())) {
+            currencyMenu.getSelectionModel().select(configClient.getCurrency());
+        } else {
+            currencyMenu.getSelectionModel().selectFirst();
+        }
     }
 
 }

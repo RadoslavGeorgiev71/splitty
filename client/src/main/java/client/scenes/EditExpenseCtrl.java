@@ -18,13 +18,12 @@ import javafx.util.StringConverter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AddExpenseCtrl{
+public class EditExpenseCtrl{
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
     private Event event;
     private Expense expense;
-    private String currency;
 
     @FXML
     private Text expenseField;                 //Title
@@ -47,17 +46,19 @@ public class AddExpenseCtrl{
     @FXML
     private TextField tags;                         //Expense Type
     @FXML
-    private Button expenseAddButton;
+    private Button expenseSaveButton;
+    @FXML
+    private Button expenseDeleteButton;
     @FXML
     private Button expenseAbortButton;
 
     /**
-     * Constructor for AddExpenseCtrl
+     * Constructor for EditExpenseCtrl
      * @param server client is on
      * @param mainCtrl of client
      */
     @Inject
-    public AddExpenseCtrl(ServerUtils server, MainCtrl mainCtrl) {
+    public EditExpenseCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.server = server;
         this.mainCtrl = mainCtrl;
     }
@@ -77,8 +78,7 @@ public class AddExpenseCtrl{
      * Sends back to Overview Event window back with the participant altered
      * @param actionEvent to handle
      */
-    public void onAddClick(ActionEvent actionEvent) {
-        Expense expense = new Expense();
+    public void onSaveClick(ActionEvent actionEvent) {
         expense.setTitle(titleField.getText());
 //        int index = 0;
 //        while(event.getParticipants().get(index).getName() != payerChoiceBox.getValue())
@@ -91,14 +91,28 @@ public class AddExpenseCtrl{
         event.addExpense(expense);
         server.persistEvent(event);
         clearFields();
-        event = server.getEvent(event.getId());
+        //event = server.getEvent(event.getId());
+        mainCtrl.showEventOverview(event);
+    }
+
+    /**
+     * Controller class for the ok button
+     * Sends back to Overview Event window back with the participant altered
+     * @param actionEvent to handle
+     */
+    public void onDeleteClick(ActionEvent actionEvent) {
+        //server.addExpense(expense);
+        event.removeExpense(expense);
+        server.persistEvent(event);
+        clearFields();
+        //event = server.getEvent(event.getId());
         mainCtrl.showEventOverview(event);
     }
 
     /**
      * Clear all fields for the next use
      */
-    public void clearFields() {
+    private void clearFields() {
         payerChoiceBox.getSelectionModel().selectFirst();
         titleField.clear();
         amountField.clear();
@@ -106,7 +120,6 @@ public class AddExpenseCtrl{
         //datePicker.setConverter(event.getDateTime());
         equally.setSelected(true);
         onlySome.setSelected(false);
-        allGridPane.getChildren().clear();
         tags.clear();
     }
 
@@ -127,21 +140,13 @@ public class AddExpenseCtrl{
     }
 
     /**
-     * Setter for currency
-     * @param currency to set
-     */
-    public void setCurrency(String currency) {
-        this.currency = currency;
-    }
-
-    /**
      * Handles the key event pressed
      * @param e the KeyEvent to handle
      */
     public void keyPressed(KeyEvent e) {
         switch (e.getCode()) {
             case ENTER:
-                onAddClick(null);
+                onSaveClick(null);
                 break;
             case ESCAPE:
                 onAbortClick(null);
@@ -180,10 +185,45 @@ public class AddExpenseCtrl{
     }
 
     /**
+     * Initiallizes the payer choice box with the data
+     */
+    public void initializePayer() {
+        if (event != null) {
+            payerChoiceBox.setItems(FXCollections.observableArrayList(event.getParticipants()));
+            payerChoiceBox.setConverter(new StringConverter<Participant>() {
+                @Override
+                public String toString(Participant participant) {
+                    if (participant != null) {
+                        return participant.getName();
+                    } else {
+                        return "";
+                    }
+                }
+
+                @Override
+                public Participant fromString(String string) {
+                    return null;
+                }
+            });
+            int i = 0;
+            String name = expense.getPayingParticipant().getName();
+            List<Participant> people = event.getParticipants();
+            while (i < people.size() && people.get(i).getName() != name) {
+                i++;
+            }
+            if (i < event.getParticipants().size()) {
+                payerChoiceBox.getSelectionModel().select(i);
+            } else {
+                payerChoiceBox.getSelectionModel().selectFirst();
+            }
+        }
+    }
+
+    /**
      * Initiallizes the currency choice box with the data
      */
     public void initializeCurr() {
-        if(currency == null || currency.length() < 1) {
+        if(event == null) {
             currChoiceBox.getSelectionModel().selectFirst();
         }
         List<String> currencies = new ArrayList<>();
@@ -192,7 +232,7 @@ public class AddExpenseCtrl{
         currencies.add("CHF");
         currChoiceBox.setItems(FXCollections.observableArrayList(currencies));
         int j = 0;
-        while(j <= 2 && currencies.get(j) != currency){
+        while(j <= 2 && currencies.get(j) != expense.getCurrency()){
             j++;
         }
         if(j < 3){
@@ -203,35 +243,27 @@ public class AddExpenseCtrl{
         }
     }
 
+
     /**
      * Initiallizes the fields with the data
      */
     public void initialize() {
-        if (event != null){
-            payerChoiceBox.setItems(FXCollections.observableArrayList(event.getParticipants()));
-            payerChoiceBox.setConverter(new StringConverter<Participant>() {
-                @Override
-                public String toString(Participant participant) {
-                    if (participant != null) {
-                        return participant.getName();
-                    }
-                    else {
-                        return "";
-                    }
-                }
-                @Override
-                public Participant fromString(String string) {
-                    return null;
-                }
-            } );
-
-            payerChoiceBox.getSelectionModel().selectFirst();
-            expenseField.setText("Add Expense");
+        if(event != null){
+            initializePayer();
+            expenseField.setText("Edit Expense");
+            titleField.setText(expense.getTitle());
+            amountField.setText("" + expense.getAmount());
             initializeCurr();
             equally.setAllowIndeterminate(false);
-            equally.setSelected(true);
             onlySome.setAllowIndeterminate(false);
-            onlySome.setSelected(false);
+            if(event.getParticipants().equals(expense.getParticipants())){
+                equally.setSelected(true);
+                onlySome.setSelected(false);
+            }
+            else{
+                equally.setSelected(false);
+                onlySome.setSelected(true);
+            }
         }
     }
 }
