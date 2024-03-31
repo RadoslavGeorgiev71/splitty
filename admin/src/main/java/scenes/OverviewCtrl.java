@@ -182,6 +182,15 @@ public class OverviewCtrl {
         if(e.isControlDown() && e.getCode() == KeyCode.R){
             refresh(null);
         }
+        if(e.isControlDown() && e.getCode() == KeyCode.W){
+            mainCtrl.closeWindow();
+        }
+        if(e.isControlDown() && e.getCode() == KeyCode.UP){
+            table.getSelectionModel().selectPrevious();
+        }
+        if(e.isControlDown() && e.getCode() == KeyCode.DOWN){
+            table.getSelectionModel().selectNext();
+        }
     }
 
     void initialize(){

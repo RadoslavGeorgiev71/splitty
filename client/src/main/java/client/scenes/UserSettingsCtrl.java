@@ -7,6 +7,8 @@ import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -96,23 +98,24 @@ public class UserSettingsCtrl {
      * Initializes the fields with the correct values (if available)
      */
     public void initialize() {
-        if (configClient.getName() != null) {
+
+        if (configClient.getName() != null && !configClient.getName().equals("null")) {
             nameField.setText(configClient.getName());
         }
 
-        if (configClient.getEmail() != null) {
+        if (configClient.getEmail() != null && !configClient.getEmail().equals("null")) {
             emailField.setText(configClient.getEmail());
         }
 
-        if (configClient.getIban() != null) {
+        if (configClient.getIban() != null  && !configClient.getIban().equals("null")) {
             ibanField.setText(configClient.getIban());
         }
 
-        if (configClient.getBic() != null) {
+        if (configClient.getBic() != null  && !configClient.getBic().equals("null")) {
             bicField.setText(configClient.getBic());
         }
 
-        if (configClient.getServerUrl() != null) {
+        if (configClient.getServerUrl() != null  && !configClient.getServerUrl().equals("null")) {
             serverURLField.setText(configClient.getServerUrl());
         }
         initializeChoiceBox();
@@ -129,6 +132,50 @@ public class UserSettingsCtrl {
             currencyMenu.getSelectionModel().select(configClient.getCurrency());
         } else {
             currencyMenu.getSelectionModel().selectFirst();
+        }
+    }
+
+    /**
+     * Method to be called when a key is pressed
+     * @param e keyevent to listen
+     */
+    public void keyPressed(KeyEvent e) {
+        if (e.isControlDown() && e.getCode() == KeyCode.W) {  //close window
+            mainCtrl.closeWindow();
+        }
+        if (e.isControlDown() && e.getCode() == KeyCode.S) {  //close window
+            onConfirmClick();
+        }
+        switch (e.getCode()) {
+//            case ENTER:
+//                moveToNextTextField((TextField) e.getSource());
+//                break;
+            case ESCAPE:
+                onCancelClick();
+                break;
+            case TAB:
+                moveToNextTextField((TextField) e.getSource());
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void moveToNextTextField(TextField currentTextField) {
+        // Find the index of the current text field
+        int index = -1;
+        TextField[] textFields = {nameField, emailField,
+                                  ibanField, bicField, serverURLField }; // Add all text fields here
+        for (int i = 0; i < textFields.length; i++) {
+            if (textFields[i] == currentTextField) {
+                index = i;
+                break;
+            }
+        }
+
+        // Move focus to the next text field
+        if (index != -1 && index < textFields.length - 1) {
+            textFields[index + 1].requestFocus();
         }
     }
 

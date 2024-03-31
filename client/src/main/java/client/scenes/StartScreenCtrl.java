@@ -245,6 +245,9 @@ public class StartScreenCtrl {
                 joinEvent();
             }
         }
+        if (e.isControlDown() && e.getCode() == KeyCode.W) {
+            mainCtrl.closeWindow();
+        }
     }
 
     /**

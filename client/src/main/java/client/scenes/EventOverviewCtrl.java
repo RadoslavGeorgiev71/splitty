@@ -11,6 +11,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
@@ -432,13 +433,28 @@ public class EventOverviewCtrl {
         overviewParticipantsText.setText(bundle.getString("overviewParticipantsText"));
         overviewEditParticipantButton.setText(bundle.getString("overviewEditParticipantButton"));
         overviewAddParticipantButton.setText(bundle.getString("overviewAddParticipantButton"));
-        overviewRemoveParticipantButton.setText(bundle.
-                getString("overviewRemoveParticipantButton"));
         overviewAddExpenseButton.setText(bundle.getString("overviewAddExpenseButton"));
         sendInvitesButton.setText(bundle.getString("sendInvitesButton"));
         backButton.setText(bundle.getString("backButton"));
         overviewSettleDebtsButton.setText(bundle.getString("overviewSettleDebtsButton"));
         tabPaneAll.setText(bundle.getString("tabPaneAll"));
 
+    }
+
+    /**
+     * Method to be called when a key is pressed
+     * @param e keyevent to listen
+     */
+    public void keyPressed(KeyEvent e) {
+        if (e.isControlDown() && e.getCode() == KeyCode.W) {  //close window
+            mainCtrl.closeWindow();
+        }
+        switch (e.getCode()) {
+            case ESCAPE:
+                onBackClick();
+                break;
+            default:
+                break;
+        }
     }
 }
