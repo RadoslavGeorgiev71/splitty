@@ -96,7 +96,9 @@ public class EditExpenseCtrl{
             expense.setParticipants(participants);
         }
         expense.setDateTime(datePicker.getValue().toString());
-        server.updateExpense(event.getId(), expense);
+        //server.updateExpense(event.getId(), expense);
+        server.persistEvent(event);
+        event.addExpense(expense);
         clearFields();
         mainCtrl.showEventOverview(event);
     }
@@ -264,6 +266,16 @@ public class EditExpenseCtrl{
     }
 
     /**
+     *  converted currency
+     */
+    public void convertCurrency(){
+        Double res = expense.getAmount();
+        res *= server.convertRate(expense.getDateTime(), expense.getCurrency(), currency);
+        expense.setAmount(res);
+        expense.setCurrency(currency);
+    }
+
+    /**
      * Initiallizes the payer choice box with the data
      */
     public void initializePayer() {
@@ -333,6 +345,9 @@ public class EditExpenseCtrl{
             initializePayer();
             expenseField.setText("Edit Expense");
             titleField.setText(expense.getTitle());
+            if(currency != null && currency.length() == 3){
+                convertCurrency();
+            }
             amountField.setText("" + expense.getAmount());
             initializeCurr();
             if(expense.getDateTime() != null){

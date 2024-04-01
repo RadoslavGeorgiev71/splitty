@@ -343,4 +343,26 @@ public class ServerUtils {
                 .accept(APPLICATION_JSON)
                 .put(entity, Expense.class);
     }
+
+    /**
+     * This should give converted currency
+     *
+     * @param date - the date it is looked for
+     * @param from currency
+     * @param to currency
+     * @return the event with the specified id
+     */
+    public Double convertRate(String date, String from, String to) {
+        String str = "/api/expenses/date/" + date + "/rate/" + from + "/" + to;
+        Response response = ClientBuilder.newClient(new ClientConfig())
+                .target(server).path(str)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get();
+        if (response.getStatus() == Response.Status.OK.getStatusCode()) {
+            return response.readEntity(Double.class);
+        } else {
+            throw new WebApplicationException("Rate not found" + response.getStatus());
+        }
+    }
 }

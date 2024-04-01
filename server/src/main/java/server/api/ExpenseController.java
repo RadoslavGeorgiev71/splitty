@@ -138,14 +138,12 @@ public class ExpenseController {
     @GetMapping(path = { "/date/{date}/rate/{from}/{to}"})
     public Double getRate(@PathVariable String from,
                           @PathVariable String to, @PathVariable String date) {
-        boolean historical = true;
         String url = "http://data.fixer.io/api/";
         if(date != null && date.length() == 10){
             url += date;
         }
         else{
             url += "latest";
-            historical = false;
         }
         url += "?access_key=488b2c548074f3e5d9e15ba3013a152d&base=" + from + "&symbols=" + to;
         RestTemplate restTemplate = new RestTemplate();
