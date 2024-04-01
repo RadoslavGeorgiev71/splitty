@@ -33,7 +33,7 @@ public class EditExpenseCtrl{
     @FXML
     private Text expenseField;                 //Title
     @FXML
-    private ChoiceBox payerChoiceBox;               //Who paid?
+    private ChoiceBox<Participant> payerChoiceBox;               //Who paid?
     @FXML
     private TextField titleField;                   //What for?
     @FXML
@@ -85,8 +85,7 @@ public class EditExpenseCtrl{
      */
     public void onSaveClick(ActionEvent actionEvent) {
         expense.setTitle(titleField.getText());
-        expense.setPayingParticipant((Participant)
-                payerChoiceBox.getSelectionModel().getSelectedItem());
+        expense.setPayingParticipant(payerChoiceBox.getSelectionModel().getSelectedItem());
         expense.setAmount(Double.parseDouble(amountField.getText()));
         expense.setCurrency(currChoiceBox.getSelectionModel().getSelectedItem().toString());
         if(equally.isSelected() || participants.size() == event.getParticipants().size()){
@@ -96,10 +95,9 @@ public class EditExpenseCtrl{
             expense.setParticipants(participants);
         }
         expense.setDateTime(datePicker.getValue().toString());
-        //server.updateExpense(event.getId(), expense);
-        event.addExpense(expense);
-        server.persistEvent(event);
+        server.persistExpense(expense);
         clearFields();
+        server.persistEvent(event);
         event = server.getEvent(event.getId());
         mainCtrl.showEventOverview(event);
     }
@@ -117,7 +115,9 @@ public class EditExpenseCtrl{
             alert.setContentText("Are you sure you want to remove " +
                     this.expense.getTitle() + "?");
             if (alert.showAndWait().get() == ButtonType.OK){
-                server.deleteExpense(event.getId(), expense);
+                event.removeExpense(expense);
+                server.persistEvent(event);
+                server.deleteExpense(expense);
                 mainCtrl.showEventOverview(server.getEvent(event.getId()));
             }
         }
@@ -131,9 +131,9 @@ public class EditExpenseCtrl{
         titleField.clear();
         amountField.clear();
         currChoiceBox.getSelectionModel().selectFirst();
-        //datePicker.setConverter(event.getDateTime());
         equally.setSelected(true);
         onlySome.setSelected(false);
+        allGridPane.getChildren().clear();
         tags.clear();
     }
 

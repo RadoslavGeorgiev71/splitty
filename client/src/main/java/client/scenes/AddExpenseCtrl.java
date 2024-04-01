@@ -32,7 +32,7 @@ public class AddExpenseCtrl{
     @FXML
     private Text expenseField;                 //Title
     @FXML
-    private ChoiceBox payerChoiceBox;               //Who paid?
+    private ChoiceBox<Participant> payerChoiceBox;               //Who paid?
     @FXML
     private TextField titleField;                   //What for?
     @FXML
@@ -81,9 +81,9 @@ public class AddExpenseCtrl{
      * @param actionEvent to handle
      */
     public void onAddClick(ActionEvent actionEvent) {
+        Expense expense = new Expense();
         expense.setTitle(titleField.getText());
-        expense.setPayingParticipant((Participant)
-                payerChoiceBox.getSelectionModel().getSelectedItem());
+        expense.setPayingParticipant(payerChoiceBox.getSelectionModel().getSelectedItem());
         try {
             expense.setAmount(Double.parseDouble(amountField.getText()));
         } catch (NumberFormatException e) {
@@ -103,7 +103,7 @@ public class AddExpenseCtrl{
             expense.setParticipants(participants);
         }
         expense.setDateTime(datePicker.getValue().toString());
-        //server.addExpense(event.getId(), expense);
+        server.addExpense(expense);
         event.addExpense(expense);
         server.persistEvent(event);
         clearFields();
@@ -305,7 +305,6 @@ public class AddExpenseCtrl{
             onlySome.setAllowIndeterminate(false);
             onlySome.setSelected(false);
 
-            this.expense = new Expense();
             this.participants = new ArrayList<>();
         }
     }

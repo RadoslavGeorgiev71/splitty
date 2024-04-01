@@ -291,17 +291,32 @@ public class ServerUtils {
     }
 
     /**
+     * Deletes an expense from the server
+     *
+     * @param expense - the expense to delete
+     * @return the response from the server
+     */
+    public Response deleteExpense(Expense expense) {
+        Entity<Expense> entity = Entity.entity(expense, APPLICATION_JSON);
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(server).path("api/expenses/id/" + expense.getId())
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .delete();
+    }
+
+    /**
      * Adds an expense to the server
      *
      * @param expense - the expense to add
      * @return the response from the server
      */
-    public Response addExpense(Expense expense) {
+    public Expense addExpense(Expense expense) {
         return ClientBuilder.newClient(new ClientConfig())
                 .target(server).path("api/expenses/")
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
-                .post(Entity.json(expense));
+                .post(Entity.entity(expense, APPLICATION_JSON), Expense.class);
     }
 
     /**
@@ -312,13 +327,13 @@ public class ServerUtils {
      * @return the response from the server
      */
     public Expense addExpense(long eventId, Expense expense) {
-        try {
+        try{
             Response response = ClientBuilder.newClient(new ClientConfig())
                     .target(server).path("api/expenses/event/" + eventId)
                     .request(APPLICATION_JSON)
                     .accept(APPLICATION_JSON)
                     .post(Entity.json(expense));
-            if (response.getStatus() == 200) {
+            if (response.getStatus() == Response.Status.CREATED.getStatusCode()) {
                 return response.readEntity(Expense.class);
             } else {
                 return null;
@@ -338,7 +353,22 @@ public class ServerUtils {
     public Expense updateExpense(long eventId, Expense expense) {
         Entity<Expense> entity = Entity.entity(expense, APPLICATION_JSON);
         return ClientBuilder.newClient(new ClientConfig())
-                .target(server).path("api/events/" + eventId)
+                .target(server).path("api/expenses/event/" + eventId)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .put(entity, Expense.class);
+    }
+
+    /**
+     * Persists an expense
+     *
+     * @param expense - the expense to persist
+     * @return the persisted expense
+     */
+    public Expense persistExpense(Expense expense) {
+        Entity<Expense> entity = Entity.entity(expense, APPLICATION_JSON);
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(server).path("api/expenses/id/" + expense.getId())
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
                 .put(entity, Expense.class);
