@@ -62,7 +62,7 @@ public class StartScreenCtrl {
     @FXML
     private MenuButton languageButton;
 
-    private Path filePath = Paths.get("src/main/resources/config.txt").toAbsolutePath();
+    private Path filePath = Paths.get("client/src/main/resources/config.txt").toAbsolutePath();
 
     /**
      * @param server
@@ -87,7 +87,7 @@ public class StartScreenCtrl {
 
         languageButton.getItems().clear();
 
-        config = config.readFromFile("client/src/main/resources/config.txt");
+        config = config.readFromFile(String.valueOf(filePath));
 
         String language = config.getLanguage();
         if (language != null) {
@@ -273,7 +273,7 @@ public class StartScreenCtrl {
                 config.getIban(), config.getBic(),
                 config.getLanguage(), config.getCurrency(),
                 config.getName(), config.getRecentEvents()};
-        config.writeToFile("client/src/main/resources/config.txt", contents, keys);
+        config.writeToFile(String.valueOf(filePath), contents, keys);
     }
 
     /**

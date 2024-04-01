@@ -36,7 +36,9 @@ public class Main extends Application {
     private static final MyFXML FXML = new MyFXML(INJECTOR);
     private ConfigClient configClient;
 
-    private final String filePath = "client/src/main/resources/config.txt";
+    private Path filepath = Paths.get("client/src/main/resources/config.txt").toAbsolutePath();
+    private final String filePath = String.valueOf(filepath);
+
 
     /**
      * Launches the app

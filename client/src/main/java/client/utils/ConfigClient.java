@@ -24,7 +24,9 @@ public class ConfigClient {
 
     private static String recentEvents;
 
-    private Path filePath = Paths.get("src/main/resources/config.txt").toAbsolutePath();
+    private Path filePath = Paths.get("client/src/main/resources/config.txt").toAbsolutePath();
+
+
 
     /**
      * Default constructor just in case.
@@ -216,12 +218,11 @@ public class ConfigClient {
         } catch (FileNotFoundException e) { // if the file is not found it should
             try {
                 // Get the absolute path of the resources folder
-                String filepath = "client/src/main/resources/config.txt";
-                Path filePath = Paths.get(filepath);
-                // Create the file
+                Files.createFile(filePath);
 
+                BufferedWriter writer = new BufferedWriter(new FileWriter(
+                        String.valueOf(filePath)));
 
-                BufferedWriter writer = new BufferedWriter(new FileWriter(filepath));
                 writer.write("serverUrl: http://localhost:8080/\n" +
                         "email: null\n" +
                         "iban: null\n" +

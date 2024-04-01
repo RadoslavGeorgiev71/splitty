@@ -18,9 +18,11 @@ import java.util.List;
 public class LanguageButtonUtils {
 
     private static Path imagesFolderPath =
-            Paths.get("src/main/resources/client/images/flags/").toAbsolutePath();
+            Paths.get("client/src/main/resources/client/images/flags/").toAbsolutePath();
 
-    private static Path filePath = Paths.get("src/main/resources/config.txt").toAbsolutePath();
+    private static Path filePath = Paths.get("client/src/main/resources/config.txt").toAbsolutePath();
+
+
 
     /**
      * Updates the language menu button with the current language and flags
@@ -51,16 +53,16 @@ public class LanguageButtonUtils {
         languageButton.getItems().add(questionItem);
 
 
-        String imagesFolderPath = "client/src/main/resources/client/images/flags/";
+        //String imagesFolderPath = "client/src/main/resources/client/images/flags/";
 
-        File imagesFolder = new File(imagesFolderPath);
+        File imagesFolder = new File(String.valueOf(imagesFolderPath));
 
         File[] imageFiles = imagesFolder.listFiles((dir, name)
                 -> name.toLowerCase().endsWith(".png") || name.toLowerCase().endsWith(".jpg"));
 
         for (File imageFile : imageFiles) {
             if(imageFile.getName().equals(config.getLanguage() + ".png")){
-                Image image = new Image(Paths.get(imagesFolderPath,
+                Image image = new Image(Paths.get(String.valueOf(imagesFolderPath),
                         imageFile.getName()).toUri().toString());
                 ImageView imageView = new ImageView(image);
                 languageButton.setGraphic(imageView);
@@ -72,7 +74,7 @@ public class LanguageButtonUtils {
             }
             MenuItem menuItem = new MenuItem();
 
-            Image image = new Image(Paths.get(imagesFolderPath,
+            Image image = new Image(Paths.get(String.valueOf(imagesFolderPath),
                     imageFile.getName()).toUri().toString());
             ImageView imageView = new ImageView(image);
             menuItem.setGraphic(imageView);
@@ -115,7 +117,7 @@ public class LanguageButtonUtils {
                         config.getLanguage(), config.getCurrency(),
                         config.getName(), config.getRecentEvents()};
 
-                config.writeToFile("client/src/main/resources/config.txt", contents, keys);
+                config.writeToFile(String.valueOf(filePath), contents, keys);
 
                 ImageView menuItemImageView = (ImageView) menuItem.getGraphic();
                 ImageView menuButtonImageView = (ImageView) languageButton.getGraphic();
