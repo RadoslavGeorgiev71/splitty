@@ -160,9 +160,12 @@ public class ExpenseService {
     public boolean deleteByEventId(long id, Expense expense){
         Optional<Event> existingEvent = eventRepo.findById(id);
         Optional<Expense> exp = expenseRepo.findById(expense.getId());
-        if(existingEvent.isPresent() && exp.isPresent()){
-            existingEvent.get().removeExpense(exp.get());
-            eventRepo.save(existingEvent.get());
+        if(exp.isPresent()){
+            if(existingEvent.isPresent()){
+                existingEvent.get().removeExpense(exp.get());
+                eventRepo.save(existingEvent.get());
+            }
+            expenseRepo.deleteById(expense.getId());
             return true;
         }
         return false;

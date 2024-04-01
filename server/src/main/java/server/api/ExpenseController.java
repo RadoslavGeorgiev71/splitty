@@ -136,6 +136,7 @@ public class ExpenseController {
         //long expenseId = updatedExpense.getId();
 
         boolean del = expenseService.deleteByEventId(eventId, updatedExpense);
+        expenseService.flush();
         if (del) {
             return ResponseEntity.ok("Deleted");
         }
@@ -149,15 +150,14 @@ public class ExpenseController {
      * if delete was successful, "Bad request" otherwise
      */
     @DeleteMapping(path = {"/id/{id}"})
-    public ResponseEntity<String> delete(@PathVariable("id") long id) {
-        Optional<Expense> todel = expenseService.findById(id);
-        if (todel.isPresent()) {
-            expenseService.deleteById(id);
-            return ResponseEntity.ok().body("Successful delete");
-        }
-        else {
+    public ResponseEntity<?> delete(@PathVariable("id") long id) {
+        if (!expenseService.existsById(id)) {
             return ResponseEntity.badRequest().build();
         }
+        Expense expense = expenseService.findById(id).get();
+        expenseService.deleteById(id);
+        expenseService.flush();
+        return ResponseEntity.ok().body("Successful delete");
     }
 
     /**
