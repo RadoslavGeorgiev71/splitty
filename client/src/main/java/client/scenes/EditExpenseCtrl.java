@@ -316,6 +316,10 @@ public class EditExpenseCtrl{
         }
     }
 
+    /**
+     * Switches the language of the text
+     */
+
     public void switchTextLanguage(){
         ResourceBundle bundle = languageResourceBundle.getResourceBundle();
 

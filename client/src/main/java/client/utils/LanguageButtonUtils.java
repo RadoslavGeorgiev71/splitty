@@ -20,7 +20,8 @@ public class LanguageButtonUtils {
     private static Path imagesFolderPath =
             Paths.get("client/src/main/resources/client/images/flags/").toAbsolutePath();
 
-    private static Path filePath = Paths.get("client/src/main/resources/config.txt").toAbsolutePath();
+    private static Path filePath = Paths.
+            get("client/src/main/resources/config.txt").toAbsolutePath();
 
 
 
