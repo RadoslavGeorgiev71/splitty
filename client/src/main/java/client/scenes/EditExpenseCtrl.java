@@ -86,7 +86,17 @@ public class EditExpenseCtrl{
     public void onSaveClick(ActionEvent actionEvent) {
         expense.setTitle(titleField.getText());
         expense.setPayingParticipant(payerChoiceBox.getSelectionModel().getSelectedItem());
-        expense.setAmount(Double.parseDouble(amountField.getText()));
+        try {
+            expense.setAmount(Double.parseDouble(amountField.getText()));
+        } catch (NumberFormatException e) {
+            Alert alert =  new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Invalid Input");
+            alert.setHeaderText("Amount is not a number");
+            alert.setContentText("The value you entered " +
+                    "for the amount of money paid should be a number");
+            alert.showAndWait();
+            return;
+        }
         expense.setCurrency(currChoiceBox.getSelectionModel().getSelectedItem().toString());
         if(equally.isSelected() || participants.size() == event.getParticipants().size()){
             expense.setParticipants(event.getParticipants());
@@ -117,7 +127,8 @@ public class EditExpenseCtrl{
             if (alert.showAndWait().get() == ButtonType.OK){
                 event.removeExpense(expense);
                 server.persistEvent(event);
-                server.deleteExpense(expense);
+                //server.deleteExpense(expense);
+                //server.deleteExpense(event.getId(), expense);
                 mainCtrl.showEventOverview(server.getEvent(event.getId()));
             }
         }

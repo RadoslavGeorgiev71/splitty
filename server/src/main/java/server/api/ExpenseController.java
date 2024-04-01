@@ -1,6 +1,5 @@
 package server.api;
 
-import commons.Event;
 import commons.Expense;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,7 +10,6 @@ import org.springframework.web.client.RestTemplate;
 import server.Services.ExpenseService;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/expenses")
@@ -70,7 +68,7 @@ public class ExpenseController {
      * @return Response when expense created
      */
     @PostMapping(path = {"", "/"})
-    public ResponseEntity<?> createExpense(@RequestBody Expense expense){
+    public ResponseEntity<Expense> createExpense(@RequestBody Expense expense){
         Expense savedExpense = expenseService.create(expense);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedExpense);
     }
@@ -82,7 +80,7 @@ public class ExpenseController {
      * @return Response when expense created
      */
     @PostMapping(path = "/event/{eventId}")
-    public ResponseEntity<?> createEventExpense(@PathVariable("eventId") long eventId,
+    public ResponseEntity<Expense> createEventExpense(@PathVariable("eventId") long eventId,
                                                 @RequestBody Expense expense){
         Expense savedExpense = expenseService.create(eventId,expense);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedExpense);
@@ -201,15 +199,14 @@ public class ExpenseController {
     }
 
     /**
-     * Route for JSON inport
-     * @param id event that was imported
+     * Route for JSON import
      * @param exp expense that was imported
-     * @return event that has been added to DB
+     * @return expense that has been added to DB
      */
     @MessageMapping("/expenses")
     @SendTo("/topic/expenses")
-    public Expense addExpense(long id, Expense exp){
-        createEventExpense(id, exp);
+    public Expense addExpense(Expense exp){
+        createExpense(exp);
         return exp;
     }
 

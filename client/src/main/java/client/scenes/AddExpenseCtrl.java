@@ -103,8 +103,8 @@ public class AddExpenseCtrl{
             expense.setParticipants(participants);
         }
         expense.setDateTime(datePicker.getValue().toString());
-        server.addExpense(expense);
-        event.addExpense(expense);
+        Expense newExpense = server.addExpense(expense);
+        event.addExpense(newExpense);
         server.persistEvent(event);
         clearFields();
         event = server.getEvent(event.getId());

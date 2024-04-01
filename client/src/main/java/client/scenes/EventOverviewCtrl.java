@@ -387,6 +387,8 @@ public class EventOverviewCtrl {
             languageResourceBundle = LanguageResourceBundle.getInstance();
             switchLanguage();
 
+            event.setExpenses(server.getEvent(event.getId()).getExpenses());
+
             participantsMenu.setItems(FXCollections.observableArrayList(event.getParticipants()));
             participantsMenu.setConverter(new StringConverter<Participant>() {
                 @Override

@@ -297,9 +297,8 @@ public class ServerUtils {
      * @return the response from the server
      */
     public Response deleteExpense(Expense expense) {
-        Entity<Expense> entity = Entity.entity(expense, APPLICATION_JSON);
         return ClientBuilder.newClient(new ClientConfig())
-                .target(server).path("api/expenses/id/" + expense.getId())
+                .target(server).path("api/expenses/" + expense.getId())
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
                 .delete();
@@ -312,11 +311,20 @@ public class ServerUtils {
      * @return the response from the server
      */
     public Expense addExpense(Expense expense) {
-        return ClientBuilder.newClient(new ClientConfig())
-                .target(server).path("api/expenses/")
-                .request(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .post(Entity.entity(expense, APPLICATION_JSON), Expense.class);
+        try{
+            Response response = ClientBuilder.newClient(new ClientConfig())
+                            .target(server).path("api/expenses")
+                            .request(APPLICATION_JSON)
+                            .accept(APPLICATION_JSON)
+                            .post(Entity.json(expense));
+            if (response.getStatus() == Response.Status.CREATED.getStatusCode()) {
+                return response.readEntity(Expense.class);
+            }
+            return null;
+        }
+        catch (ProcessingException e){
+            return null;
+        }
     }
 
     /**
@@ -341,6 +349,22 @@ public class ServerUtils {
         }catch (ProcessingException e){
             return null;
         }
+    }
+
+    /**
+     * List of expense to the server
+     *
+     * @param eventId - event
+     * @return the response from the server
+     */
+    public List<Expense> getExpense(long eventId) {
+        Response response = ClientBuilder.newClient(new ClientConfig())
+                .target(server).path("api/expenses/event/" + eventId)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get();
+        //return response.readEntity(List<Expense>.class);
+        return null;
     }
 
     /**
