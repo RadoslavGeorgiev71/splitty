@@ -1,5 +1,6 @@
 package client.scenes;
 
+import client.utils.LanguageResourceBundle;
 import client.utils.ServerUtils;
 import commons.Event;
 import commons.Expense;
@@ -18,6 +19,7 @@ import javafx.util.StringConverter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 
 public class EditExpenseCtrl{
 
@@ -25,6 +27,8 @@ public class EditExpenseCtrl{
     private final MainCtrl mainCtrl;
     private Event event;
     private Expense expense;
+
+    private LanguageResourceBundle languageResourceBundle;
 
     @FXML
     private Text expenseField;                 //Title
@@ -52,6 +56,18 @@ public class EditExpenseCtrl{
     private Button expenseDeleteButton;
     @FXML
     private Button expenseAbortButton;
+    @FXML
+    private Label editExpenseHowMuch;
+    @FXML
+    private Label editExpenseForWhat;
+    @FXML
+    private Label editExpenseWhoPaid;
+    @FXML
+    private Label editExpenseWhen;
+    @FXML
+    private Label editExpenseHow;
+    @FXML
+    private Label editExpenseType;
 
     /**
      * Constructor for EditExpenseCtrl
@@ -280,8 +296,10 @@ public class EditExpenseCtrl{
      */
     public void initialize() {
         if(event != null){
+
+            languageResourceBundle = LanguageResourceBundle.getInstance();
+            switchTextLanguage();
             initializePayer();
-            expenseField.setText("Edit Expense");
             titleField.setText(expense.getTitle());
             amountField.setText("" + expense.getAmount());
             initializeCurr();
@@ -296,5 +314,22 @@ public class EditExpenseCtrl{
                 onlySome.setSelected(true);
             }
         }
+    }
+
+    public void switchTextLanguage(){
+        ResourceBundle bundle = languageResourceBundle.getResourceBundle();
+
+        expenseField.setText(bundle.getString("editExpenseTitle"));
+        editExpenseHowMuch.setText(bundle.getString("editExpenseHowMuch"));
+        editExpenseForWhat.setText(bundle.getString("editExpenseForWhat"));
+        editExpenseWhoPaid.setText(bundle.getString("editExpenseWhoPaid"));
+        editExpenseWhen.setText(bundle.getString("editExpenseWhen"));
+        editExpenseHow.setText(bundle.getString("editExpenseHow"));
+        editExpenseType.setText(bundle.getString("editExpenseType"));
+        expenseSaveButton.setText(bundle.getString("expenseSaveButton"));
+        expenseDeleteButton.setText(bundle.getString("expenseDeleteButton"));
+        expenseAbortButton.setText(bundle.getString("expenseAbortButton"));
+        equally.setText(bundle.getString("editExpenseEqually"));
+        onlySome.setText(bundle.getString("editExpenseOnlySome"));
     }
 }
