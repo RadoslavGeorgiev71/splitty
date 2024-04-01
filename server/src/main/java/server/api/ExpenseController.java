@@ -49,6 +49,19 @@ public class ExpenseController {
     }
 
     /**
+     * Get expense
+     * @param id
+     * @return all expenses
+     */
+    @GetMapping(path = "/id/{id}")
+    public ResponseEntity<Expense> getExpense(@PathVariable("id") long id) {
+        if (id >= 0 && expenseService.findById(id).isPresent()){
+            return ResponseEntity.ok(expenseService.findById(id).get());
+        }
+        return ResponseEntity.badRequest().build();
+    }
+
+    /**
      * Mapping to create an expense
      * @param expense the expense to add to database
      * @return Response when expense created
@@ -79,11 +92,29 @@ public class ExpenseController {
      * @return response when expense updated or not found
      */
     @PutMapping(path = {"", "/event/{eventId}"})
-    public ResponseEntity<?> update(@PathVariable("eventId") long eventId,
+    public ResponseEntity<?> updateEventExpense(@PathVariable("eventId") long eventId,
+                                                @RequestBody Expense updatedExpense) {
+        //long expenseId = updatedExpense.getId();
+
+        Expense existingExpense = expenseService.updateEvent(eventId, updatedExpense);
+        if (existingExpense != null) {
+            return ResponseEntity.ok(existingExpense);
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Expense not found");
+    }
+
+    /**
+     * Method to update an expense
+     * @param id of expense
+     * @param updatedExpense the changed expense
+     * @return response when expense updated or not found
+     */
+    @PutMapping(path = {"", "/id/{id}"})
+    public ResponseEntity<?> update(@PathVariable("id") long id,
                                     @RequestBody Expense updatedExpense) {
         //long expenseId = updatedExpense.getId();
 
-        Expense existingExpense = expenseService.update(eventId, updatedExpense);
+        Expense existingExpense = expenseService.update(id, updatedExpense);
         if (existingExpense != null) {
             return ResponseEntity.ok(existingExpense);
         }
@@ -121,6 +152,24 @@ public class ExpenseController {
         Optional<Expense> todel = expenseService.findById(expense.getId());
         if (todel.isPresent()) {
             expenseService.deleteByEventId(eventId, expense);
+            return ResponseEntity.ok().body("Successful delete");
+        }
+        else {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    /**
+     * Deletes a expense by id if it exists
+     * @param id - the expense id of the expense we search for
+     * @return "Successful delete" response
+     * if delete was successful, "Bad request" otherwise
+     */
+    @DeleteMapping(path = {"/id/{id}"})
+    public ResponseEntity<String> delete(@PathVariable("id") long id) {
+        Optional<Expense> todel = expenseService.findById(id);
+        if (todel.isPresent()) {
+            expenseService.deleteById(id);
             return ResponseEntity.ok().body("Successful delete");
         }
         else {

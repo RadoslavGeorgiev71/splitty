@@ -65,7 +65,7 @@ public class ExpenseService {
      * @param updatedExpense The already updated expense object
      * @return A expense object which reflects the one that was just persisted
      */
-    public Expense update(long id, Expense updatedExpense){
+    public Expense updateEvent(long id, Expense updatedExpense){
         Optional<Event> event = eventRepo.findById(id);
         Optional<Expense> existingExpense = expenseRepo.findById(updatedExpense.getId());
         if (event.isPresent() && existingExpense.isPresent()){
@@ -73,11 +73,33 @@ public class ExpenseService {
 //            existingExpense.get().setTitle(updatedExpense.getTitle());
 //            existingExpense.get().setPayingParticipant(updatedExpense.getPayingParticipant());
 //            existingExpense.get().setAmount(updatedExpense.getAmount());
+//            existingExpense.get().setCurrency(updatedExpense.getCurrency());
 //            existingExpense.get().setParticipants(updatedExpense.getParticipants());
 //            existingExpense.get().setDateTime(updatedExpense.getDateTime());
             event.get().addExpense(updatedExpense);
             eventRepo.save(event.get());
-            return expenseRepo.save(existingExpense.get());
+//            return expenseRepo.save(existingExpense.get());
+            return expenseRepo.save(updatedExpense);
+        }
+        return null;
+    }
+
+    /**
+     * Method to update an expense
+     * @param id The id of the expense to be updated
+     * @param updatedExpense The already updated expense object
+     * @return A expense object which reflects the one that was just persisted
+     */
+    public Expense update(long id, Expense updatedExpense){
+        Optional<Expense> existingExpense = expenseRepo.findById(id);
+        if (existingExpense.isPresent()){
+//            existingExpense.get().setTitle(updatedExpense.getTitle());
+//            existingExpense.get().setPayingParticipant(updatedExpense.getPayingParticipant());
+//            existingExpense.get().setAmount(updatedExpense.getAmount());
+//            existingExpense.get().setCurrency(updatedExpense.getCurrency());
+//            existingExpense.get().setParticipants(updatedExpense.getParticipants());
+//            existingExpense.get().setDateTime(updatedExpense.getDateTime());
+            return expenseRepo.save(updatedExpense);
         }
         return null;
     }
