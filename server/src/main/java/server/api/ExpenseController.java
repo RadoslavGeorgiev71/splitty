@@ -1,8 +1,11 @@
 package server.api;
 
+import commons.Event;
 import commons.Expense;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import server.Services.ExpenseService;
@@ -196,5 +199,30 @@ public class ExpenseController {
         String rate = res.toString().split(to+"=")[1].split("}")[0];
         return Double.parseDouble(rate);
     }
+
+    /**
+     * Route for JSON inport
+     * @param id event that was imported
+     * @param exp expense that was imported
+     * @return event that has been added to DB
+     */
+    @MessageMapping("/expenses")
+    @SendTo("/topic/expenses")
+    public Expense addExpense(long id, Expense exp){
+        createEventExpense(id, exp);
+        return exp;
+    }
+
+//    /**
+//     * Route for delete action
+//     * @param e event to be deleted
+//     * @return event that was deleted
+//     */
+//    @MessageMapping("/eventsDelete")
+//    @SendTo("/topic/eventsDelete")
+//    public Event deleteEvent(Event e){
+//        delete(e.getId());
+//        return e;
+//    }
 
 }
