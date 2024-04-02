@@ -1,5 +1,6 @@
 package client.scenes;
 
+import client.utils.ConfigClient;
 import client.utils.LanguageResourceBundle;
 import client.utils.ServerUtils;
 import commons.Event;
@@ -27,6 +28,7 @@ public class AddExpenseCtrl{
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
     private Event event;
+    private Participant participant;
     private Expense expense;
     private String currency;
     private List<Participant> participants;
@@ -175,6 +177,14 @@ public class AddExpenseCtrl{
     }
 
     /**
+     * Setter for participant
+     * @param participant to set
+     */
+    public void setParticipant(Participant participant) {
+        this.participant = participant;
+    }
+
+    /**
      * Handles the key event pressed
      * @param e the KeyEvent to handle
      */
@@ -269,6 +279,7 @@ public class AddExpenseCtrl{
      * Initiallizes the currency choice box with the data
      */
     public void initializeCurr() {
+        currency = ConfigClient.getCurrency();
         if(currency == null || currency.length() < 1) {
             currChoiceBox.getSelectionModel().selectFirst();
         }
@@ -317,7 +328,7 @@ public class AddExpenseCtrl{
                 }
             } );
 
-            payerChoiceBox.getSelectionModel().selectFirst();
+            payerChoiceBox.getSelectionModel().select(participant);
             initializeCurr();
             datePicker.setValue(LocalDate.now());
             equally.setSelected(true);

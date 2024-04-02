@@ -24,6 +24,8 @@ import javafx.collections.FXCollections;
 
 import javafx.event.ActionEvent;
 
+import java.text.DecimalFormat;
+import java.util.Currency;
 import java.util.ResourceBundle;
 
 public class EventOverviewCtrl {
@@ -67,7 +69,7 @@ public class EventOverviewCtrl {
     private Tab tabPaneAll;
 
     @FXML
-    private ChoiceBox participantsMenu;
+    private ChoiceBox<Participant> participantsMenu;
 
     @FXML
     private GridPane tabPaneAllGridPane;
@@ -152,7 +154,8 @@ public class EventOverviewCtrl {
 
     @FXML
     public void onAddExpenseClick() {
-        mainCtrl.showAddExpense(this.event);
+        Participant p = participantsMenu.getValue();
+        mainCtrl.showAddExpense(this.event, p);
     }
 
     /**
@@ -192,6 +195,43 @@ public class EventOverviewCtrl {
     }
 
     /**
+     *  converted currency
+     * @param expense to convert
+     * @return converted amount
+     */
+    public Double convertCurrency(Expense expense){
+        String currency = ConfigClient.getCurrency();
+        Double res = expense.getAmount();
+        res *= server.convertRate(expense.getDateTime(), expense.getCurrency(), currency);
+        DecimalFormat df = new DecimalFormat("#.##");
+        res = Double.valueOf(df.format(res));
+        return res;
+    }
+
+    /**
+     * Method for converting
+     * @param expense
+     * @return updated expense with correct currency
+     */
+    public Expense foreignCurrency(Expense expense){
+        String currency = ConfigClient.getCurrency();
+        Expense show = new Expense();
+        if(currency != null && expense.getCurrency() != currency &&
+                currency.length() == 3){
+            try{
+                show.setAmount(convertCurrency(expense));
+                show.setCurrency(currency);
+                show.setTitle(expense.getTitle());
+                show.setPayingParticipant(expense.getPayingParticipant());
+            }
+            catch (Exception e){
+                show = expense;
+            }
+        }
+        return show;
+    }
+
+    /**
      * Method to be executed when delete event button is clicked
      */
 
@@ -202,8 +242,9 @@ public class EventOverviewCtrl {
         tabPaneAllGridPane.setHgap(10);
         if (event != null) {
             for (int i = 0; i < event.getExpenses().size(); i++) {
+                Expense show = foreignCurrency(event.getExpenses().get(i));
                 Label dateLabel = new Label(event.getExpenses().get(i).getDateTime());
-                Label nameLabel = new Label(event.getExpenses().get(i).getActivity());
+                Label nameLabel = new Label(show.getActivity());
                 nameLabel.setWrapText(true); // Wrap text to prevent truncation
                 Button editButton = new Button("Edit");
 
@@ -240,8 +281,9 @@ public class EventOverviewCtrl {
                 Participant participant = event.getExpenses().get(i).getPayingParticipant();
                 if (participant.equals(participantsMenu.
                         getSelectionModel().getSelectedItem())) {
+                    Expense show = foreignCurrency(event.getExpenses().get(i));
                     Label dateLabel = new Label(event.getExpenses().get(i).getDateTime());
-                    Label nameLabel = new Label(event.getExpenses().get(i).getActivity());
+                    Label nameLabel = new Label(show.getActivity());
                     nameLabel.setWrapText(true); // Wrap text to prevent truncation
                     Button editButton = new Button("Edit");
 
@@ -283,8 +325,9 @@ public class EventOverviewCtrl {
                 Participant participant = (Participant) participantsMenu.
                         getSelectionModel().getSelectedItem();
                 if (event.getExpenses().get(i).getParticipants().contains(participant)) {
+                    Expense show = foreignCurrency(event.getExpenses().get(i));
                     Label dateLabel = new Label(event.getExpenses().get(i).getDateTime());
-                    Label nameLabel = new Label(event.getExpenses().get(i).getActivity());
+                    Label nameLabel = new Label(show.getActivity());
                     nameLabel.setWrapText(true); // Wrap text to prevent truncation
                     Button editButton = new Button("Edit");
 
