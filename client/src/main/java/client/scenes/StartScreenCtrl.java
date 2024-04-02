@@ -61,9 +61,6 @@ public class StartScreenCtrl {
 
     @FXML
     private MenuButton languageButton;
-
-    @FXML
-    private Button settingsButton;
     private Path filePath = Paths.get("client/src/main/resources/config.txt").toAbsolutePath();
 
     /**

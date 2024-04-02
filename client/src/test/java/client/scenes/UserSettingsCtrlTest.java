@@ -41,7 +41,7 @@ public class UserSettingsCtrlTest extends ApplicationTest {
         serverMock = Mockito.mock(ServerUtils.class);
         mainCtrlMock = Mockito.mock(MainCtrl.class);
         configClientMock = Mockito.mock(ConfigClient.class);
-        userSettingsCtrl = new UserSettingsCtrl(serverMock, mainCtrlMock);
+        userSettingsCtrl = new UserSettingsCtrl(serverMock, mainCtrlMock, configClientMock);
         userSettingsCtrl.setConfigClient(configClientMock);
         configClientMock.setName("");
         configClientMock.setEmail("");
