@@ -25,7 +25,6 @@ import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 
 import java.text.DecimalFormat;
-import java.util.Currency;
 import java.util.ResourceBundle;
 
 public class EventOverviewCtrl {
