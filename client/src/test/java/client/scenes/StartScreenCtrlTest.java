@@ -28,10 +28,10 @@ public class StartScreenCtrlTest extends ApplicationTest {
     @BeforeAll
     public static void setupSpec() throws Exception {
         System.setProperty("testfx.robot", "glass");
-        System.setProperty("testfx.headless", "true");
+        System.setProperty("testfx.headless", "false");
         System.setProperty("prism.order", "sw");
         System.setProperty("prism.text", "t2k");
-        System.setProperty("java.awt.headless", "true");
+        System.setProperty("java.awt.headless", "false");
     }
 
     @Override

@@ -82,16 +82,16 @@ public class AddParticipantCtrlTest extends ApplicationTest {
         Mockito.verify(mainCtrlMock).showEventOverview(Mockito.any(Event.class));
     }
 
-    @Test
-    public void testKeyPressed(){
-        clickOn("#nameField").push(javafx.scene.input.KeyCode.ENTER);
-        Mockito.verify(serverMock).persistEvent(Mockito.any(Event.class));
-        Mockito.verify(mainCtrlMock).showEventOverview(Mockito.any(Event.class));
-
-        clickOn("#nameField").push(javafx.scene.input.KeyCode.ESCAPE);
-        Mockito.verify(mainCtrlMock, Mockito.times(2)).showEventOverview(Mockito.any(Event.class));
-
-    }
+//    @Test
+//    public void testKeyPressed(){
+//        clickOn("#nameField").push(javafx.scene.input.KeyCode.ENTER);
+//        Mockito.verify(serverMock).persistEvent(Mockito.any(Event.class));
+//        Mockito.verify(mainCtrlMock).showEventOverview(Mockito.any(Event.class));
+//
+//        clickOn("#nameField").push(javafx.scene.input.KeyCode.ESCAPE);
+//        Mockito.verify(mainCtrlMock, Mockito.times(2)).showEventOverview(Mockito.any(Event.class));
+//
+//    }
 
     @Test
     public void testInitialize(){

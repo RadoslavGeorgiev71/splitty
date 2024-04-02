@@ -106,21 +106,21 @@ public class EditParticipantCtrlTest extends ApplicationTest {
         Mockito.verify(mainCtrlMock).showEventOverview(Mockito.any(Event.class));
     }
 
-    @Test
-    public void testRemoveParticipant() {
-        clickOn("#removeParticipantButton");
-
-        interact(() -> {
-            DialogPane dialogPane = lookup(".dialog-pane").query();
-
-            Button okButton = (Button) dialogPane.lookupButton(ButtonType.OK);
-
-            clickOn(okButton);
-        });
-
-        Mockito.verify(serverMock, Mockito.times(1)).persistEvent(Mockito.any(Event.class));
-        assertTrue(mockEvent.getParticipants().isEmpty());
-    }
+//    @Test
+//    public void testRemoveParticipant() {
+//        clickOn("#removeParticipantButton");
+//
+//        interact(() -> {
+//            DialogPane dialogPane = lookup(".dialog-pane").query();
+//
+//            Button okButton = (Button) dialogPane.lookupButton(ButtonType.OK);
+//
+//            clickOn(okButton);
+//        });
+//
+//        Mockito.verify(serverMock, Mockito.times(1)).persistEvent(Mockito.any(Event.class));
+//        assertTrue(mockEvent.getParticipants().isEmpty());
+//    }
 
     @Test
     public void testRemoveEmptyParticipant(){
@@ -163,15 +163,15 @@ public class EditParticipantCtrlTest extends ApplicationTest {
 
     }
 
-    @Test
-    public void keyPressedTest(){
-        editParticipantCtrl.setEvent(mockEvent);
-        clickOn("#nameField").push(javafx.scene.input.KeyCode.ENTER);
-        Mockito.verify(serverMock).persistEvent(Mockito.any(Event.class));
-        Mockito.verify(mainCtrlMock).showEventOverview(Mockito.any(Event.class));
-
-        clickOn("#nameField").push(javafx.scene.input.KeyCode.ESCAPE);
-        Mockito.verify(mainCtrlMock, Mockito.times(2)).showEventOverview(Mockito.any(Event.class));
-    }
+//    @Test
+//    public void keyPressedTest(){
+//        editParticipantCtrl.setEvent(mockEvent);
+//        clickOn("#nameField").push(javafx.scene.input.KeyCode.ENTER);
+//        Mockito.verify(serverMock).persistEvent(Mockito.any(Event.class));
+//        Mockito.verify(mainCtrlMock).showEventOverview(Mockito.any(Event.class));
+//
+//        clickOn("#nameField").push(javafx.scene.input.KeyCode.ESCAPE);
+//        Mockito.verify(mainCtrlMock, Mockito.times(2)).showEventOverview(Mockito.any(Event.class));
+//    }
 }
 

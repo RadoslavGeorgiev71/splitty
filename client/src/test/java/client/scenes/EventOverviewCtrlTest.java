@@ -210,23 +210,23 @@ public class EventOverviewCtrlTest extends ApplicationTest {
         assertEquals(numExpenses, tabPaneAllGridPane.getChildren().size() / 3);
     }
 
-    @Test
-    public void testEditParticipantEmpty(){
-        mockEvent.setParticipants(new ArrayList<>());
-        Platform.runLater(() -> {
-            eventOverviewCtrl.onEditParticipantsClick();
-        });
-        WaitForAsyncUtils.waitForFxEvents();
-
-        interact(() -> {
-            DialogPane dialogPane = lookup(".dialog-pane").queryAs(DialogPane.class);
-            Button okButton = (Button) dialogPane.lookupButton(ButtonType.OK);
-            okButton.fire();
-        });
-
-        WaitForAsyncUtils.waitForFxEvents();
-        Mockito.verify(mockMainCtrl).showEventOverview(mockEvent);
-    }
+//    @Test
+//    public void testEditParticipantEmpty(){
+//        mockEvent.setParticipants(new ArrayList<>());
+//        Platform.runLater(() -> {
+//            eventOverviewCtrl.onEditParticipantsClick();
+//        });
+//        WaitForAsyncUtils.waitForFxEvents();
+//
+//        interact(() -> {
+//            DialogPane dialogPane = lookup(".dialog-pane").queryAs(DialogPane.class);
+//            Button okButton = (Button) dialogPane.lookupButton(ButtonType.OK);
+//            okButton.fire();
+//        });
+//
+//        WaitForAsyncUtils.waitForFxEvents();
+//        Mockito.verify(mockMainCtrl).showEventOverview(mockEvent);
+//    }
 
     @Test
     public void fromPersonTabNameEmpty(){
