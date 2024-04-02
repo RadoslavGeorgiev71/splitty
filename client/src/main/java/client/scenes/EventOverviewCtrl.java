@@ -398,6 +398,7 @@ public class EventOverviewCtrl {
      */
 
     public void initialize(){
+
         if (event != null){
             languageButton.getItems().clear();
 
