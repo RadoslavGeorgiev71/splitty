@@ -400,10 +400,8 @@ public class EventOverviewCtrl {
     public void initialize(){
         if (event != null){
             languageButton.getItems().clear();
-
             languageResourceBundle = LanguageResourceBundle.getInstance();
             LanguageButtonUtils.updateLanguageMenuButton(languageButton, new ConfigClient());
-
             LanguageButtonUtils.languageMenu(languageButton, new ConfigClient(),
                     languageResourceBundle, this::initialize, keys);
 
