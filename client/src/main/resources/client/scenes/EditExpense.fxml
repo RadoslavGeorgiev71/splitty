@@ -92,7 +92,7 @@
                         <RowConstraints />
                     </rowConstraints>
                     <children>
-                        <Label text="How to split?" />
+                        <Label fx:id="editExpenseHow" text="How to split?" />
                         <CheckBox fx:id="onlySome" mnemonicParsing="false" onAction="#onlySomeChecked" text="Only Some" GridPane.columnIndex="2" />
                         <CheckBox fx:id="equally" mnemonicParsing="false" onAction="#onlySomeChecked" text="Equally" GridPane.columnIndex="1" />
                     </children>
@@ -110,7 +110,7 @@
                         </GridPane>
                     </children>
                 </Pane>
-                <Label text="Expense Type" />
+                <Label fx:id="editExpenseType" text="Expense Type" />
                 <TextField fx:id="tags" onKeyPressed="#keyPressed" />
                 <GridPane alignment="TOP_RIGHT">
                     <columnConstraints>
