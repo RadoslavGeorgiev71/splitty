@@ -57,11 +57,11 @@ public class EventService {
     public Event update(long id, Event updatedEvent){
         Optional<Event> existingEvent = eventRepo.findById(id);
         if (existingEvent.isPresent()){
-           existingEvent.get().setTitle(updatedEvent.getTitle());
-           existingEvent.get().setInviteCode(updatedEvent.getInviteCode());
-           existingEvent.get().setParticipants(updatedEvent.getParticipants());
-           existingEvent.get().setExpenses(updatedEvent.getExpenses());
-           Event savedEvent = eventRepo.save(existingEvent.get());
+            existingEvent.get().setTitle(updatedEvent.getTitle());
+            existingEvent.get().setInviteCode(updatedEvent.getInviteCode());
+            existingEvent.get().setParticipants(updatedEvent.getParticipants());
+            existingEvent.get().setExpenses(updatedEvent.getExpenses());
+            Event savedEvent = eventRepo.save(existingEvent.get());
             return savedEvent;
         }
         return null;
