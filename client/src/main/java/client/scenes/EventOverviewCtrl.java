@@ -263,7 +263,8 @@ public class EventOverviewCtrl {
         tabPaneIncludingGridPane.setHgap(10);
         if (event != null) {
             for (int i = 0; i < event.getExpenses().size(); i++) {
-                Participant participant = (Participant) participantsMenu.getSelectionModel().getSelectedItem();
+                Participant participant =
+                        (Participant) participantsMenu.getSelectionModel().getSelectedItem();
                 Expense expense = event.getExpenses().get(i);
                 if (expense.getParticipants().contains(participant)) {
                     Label dateLabel = new Label(event.getExpenses().get(i).getDateTime());

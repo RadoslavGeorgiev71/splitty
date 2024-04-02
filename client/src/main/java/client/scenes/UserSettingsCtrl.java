@@ -49,31 +49,31 @@ public class UserSettingsCtrl {
     private TextField serverURLField;
 
     @FXML
-    public Label userSettingsLabel;
+    private Label userSettingsLabel;
 
     @FXML
-    public Label userSettingsNameLabel;
+    private Label userSettingsNameLabel;
 
     @FXML
-    public Label userSettingsEmailLabel;
+    private Label userSettingsEmailLabel;
 
     @FXML
-    public Label userSettingsIbanLabel;
+    private Label userSettingsIbanLabel;
 
     @FXML
-    public Label userSettingsBicLabel;
+    private Label userSettingsBicLabel;
 
     @FXML
-    public Label userSettingsCurrencyLabel;
+    private Label userSettingsCurrencyLabel;
 
     @FXML
-    public Label userSettingsServerURLLabel;
+    private Label userSettingsServerURLLabel;
 
     @FXML
-    public Button userSettingsCancelButton;
+    private Button userSettingsCancelButton;
 
     @FXML
-    public Button userSettingsConfirmButton;
+    private Button userSettingsConfirmButton;
 
     /**
      * @param server
