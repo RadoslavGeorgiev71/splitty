@@ -157,7 +157,7 @@
                         <Button fx:id="overviewSettleDebtsButton" mnemonicParsing="false" onAction="#onSettleDebtsClick" text="Settle Debts" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                     </children>
                 </GridPane>
-            <MenuButton fx:id="languageButton" mnemonicParsing="false" prefHeight="56.0" prefWidth="36.0" styleClass="language-menu-button">
+            <MenuButton fx:id="languageButton" mnemonicParsing="false" prefHeight="46.0" prefWidth="130.0" styleClass="language-menu-button">
                <graphic>
                   <ImageView fx:id="languageButtonImageView" fitHeight="38.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" style="-fx-border-width: 0;" />
                </graphic>
