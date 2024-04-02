@@ -1,5 +1,6 @@
 package client.scenes;
 
+import client.utils.LanguageResourceBundle;
 import client.utils.ServerUtils;
 import commons.Event;
 import commons.Expense;
@@ -18,6 +19,7 @@ import javafx.util.StringConverter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 
 public class AddExpenseCtrl{
 
@@ -26,6 +28,8 @@ public class AddExpenseCtrl{
     private Event event;
     private Expense expense;
     private String currency;
+
+    private LanguageResourceBundle languageResourceBundle;
 
     @FXML
     private Text expenseField;                 //Title
@@ -51,6 +55,18 @@ public class AddExpenseCtrl{
     private Button expenseAddButton;
     @FXML
     private Button expenseAbortButton;
+    @FXML
+    private Label addExpenseWhoPaid;
+    @FXML
+    private Label addExpenseForWhat;
+    @FXML
+    private Label addExpenseHowMuch;
+    @FXML
+    private Label addExpenseWhen;
+    @FXML
+    private Label addExpenseHow;
+    @FXML
+    private Label addExpenseType;
 
     /**
      * Constructor for AddExpenseCtrl
@@ -250,6 +266,10 @@ public class AddExpenseCtrl{
      */
     public void initialize() {
         if (event != null){
+
+            languageResourceBundle = languageResourceBundle.getInstance();
+            switchTextLanguage();
+
             payerChoiceBox.setItems(FXCollections.observableArrayList(event.getParticipants()));
             payerChoiceBox.setConverter(new StringConverter<Participant>() {
                 @Override
@@ -268,12 +288,33 @@ public class AddExpenseCtrl{
             } );
 
             payerChoiceBox.getSelectionModel().selectFirst();
-            expenseField.setText("Add Expense");
             initializeCurr();
             equally.setAllowIndeterminate(false);
             equally.setSelected(true);
             onlySome.setAllowIndeterminate(false);
             onlySome.setSelected(false);
         }
+    }
+
+    /**
+     * Switches the language of the text
+     */
+
+    public void switchTextLanguage(){
+        ResourceBundle bundle = languageResourceBundle.getResourceBundle();
+
+
+        expenseField.setText(bundle.getString("addExpenseTitle"));
+        addExpenseHow.setText(bundle.getString("addExpenseHow"));
+        addExpenseForWhat.setText(bundle.getString("addExpenseForWhat"));
+        addExpenseHowMuch.setText(bundle.getString("addExpenseHowMuch"));
+        addExpenseType.setText(bundle.getString("addExpenseType"));
+        addExpenseWhen.setText(bundle.getString("addExpenseWhen"));
+        addExpenseWhoPaid.setText(bundle.getString("addExpenseWhoPaid"));
+        expenseAddButton.setText(bundle.getString("expenseAddButton"));
+        expenseAbortButton.setText(bundle.getString("expenseAbortButton"));
+        onlySome.setText(bundle.getString("addExpenseOnlySome"));
+        equally.setText(bundle.getString("addExpenseEqually"));
+
     }
 }

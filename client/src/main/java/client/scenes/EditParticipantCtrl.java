@@ -188,10 +188,12 @@ public class EditParticipantCtrl {
      */
     public void removeParticipant(ActionEvent actionEvent) {
         if (participant != null){
+            ResourceBundle bundle = languageResourceBundle.getResourceBundle();
             Alert alert =  new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setTitle("Remove Participant");
-            alert.setHeaderText("You will remove this participant permanently from this event");
-            alert.setContentText("Are you sure you want to remove " + this.participant.getName());
+            alert.setTitle(bundle.getString("removeParticipantAlertTitleText"));
+            alert.setHeaderText(bundle.getString("removeParticipantAlertHeaderText"));
+            alert.setContentText(bundle.getString("removeParticipantAlertContentText")
+                    + " " + this.participant.getName());
             if (alert.showAndWait().get() == ButtonType.OK){
                 event.removeParticipant(participant);
                 server.persistEvent(event);
