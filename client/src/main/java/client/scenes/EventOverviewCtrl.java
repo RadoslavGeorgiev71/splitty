@@ -398,19 +398,13 @@ public class EventOverviewCtrl {
      */
 
     public void initialize(){
-
         if (event != null){
             languageButton.getItems().clear();
-
             languageResourceBundle = LanguageResourceBundle.getInstance();
             LanguageButtonUtils.updateLanguageMenuButton(languageButton, new ConfigClient());
-
             LanguageButtonUtils.languageMenu(languageButton, new ConfigClient(),
                     languageResourceBundle, this::initialize, keys);
-
             languageButton.setPopupSide(Side.TOP);
-
-
             switchLanguage();
 
             participantsMenu.setItems(FXCollections.observableArrayList(event.getParticipants()));
@@ -435,14 +429,13 @@ public class EventOverviewCtrl {
             participatingParticipants();
             fromPersonTabName();
             includingPersonTabName();
-
             participantsMenu.setOnAction(event -> {
                 fromPersonTabName();
                 includingPersonTabName();
             });
             tabPaneAllClick();
         }
-
+        
         server.registerEventUpdate(event -> {
             this.event = server.getEvent(event.getId());
             Platform.runLater(this::initialize);
