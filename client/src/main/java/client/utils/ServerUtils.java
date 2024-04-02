@@ -23,6 +23,7 @@ import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 
 import commons.Debt;
+import commons.Expense;
 import jakarta.ws.rs.ProcessingException;
 import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.Response;
@@ -233,10 +234,10 @@ public class ServerUtils {
         EXEC.submit(() -> {
             while(!Thread.interrupted()) {
                 Response res = ClientBuilder.newClient(new ClientConfig())
-                    .target(server).path("api/events/update")
-                    .request(APPLICATION_JSON)
-                    .accept(APPLICATION_JSON)
-                    .get(Response.class);
+                        .target(server).path("api/events/update")
+                        .request(APPLICATION_JSON)
+                        .accept(APPLICATION_JSON)
+                        .get(Response.class);
 
                 if(res.getStatus() == 204) {
                     continue;
@@ -270,6 +271,152 @@ public class ServerUtils {
             return true;
         } else {
             return false;
+        }
+    }
+
+    /**
+     * Deletes an expense from the server
+     *
+     * @param eventId - id
+     * @param expense - the expense to delete
+     * @return the response from the server
+     */
+    public Response deleteExpense(long eventId, Expense expense) {
+        Entity<Expense> entity = Entity.entity(expense, APPLICATION_JSON);
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(server).path("api/expenses/remove/" + eventId)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .put(entity);
+    }
+
+    /**
+     * Deletes an expense from the server
+     *
+     * @param expense - the expense to delete
+     * @return the response from the server
+     */
+    public Response deleteExpense(Expense expense) {
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(server).path("api/expenses/" + expense.getId())
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .delete();
+    }
+
+    /**
+     * Adds an expense to the server
+     *
+     * @param expense - the expense to add
+     * @return the response from the server
+     */
+    public Expense addExpense(Expense expense) {
+        try{
+            Response response = ClientBuilder.newClient(new ClientConfig())
+                            .target(server).path("api/expenses")
+                            .request(APPLICATION_JSON)
+                            .accept(APPLICATION_JSON)
+                            .post(Entity.json(expense));
+            if (response.getStatus() == Response.Status.CREATED.getStatusCode()) {
+                return response.readEntity(Expense.class);
+            }
+            return null;
+        }
+        catch (ProcessingException e){
+            return null;
+        }
+    }
+
+    /**
+     * Adds an expense to the server
+     *
+     * @param eventId - where to add
+     * @param expense - the expense to add
+     * @return the response from the server
+     */
+    public Expense addExpense(long eventId, Expense expense) {
+        try{
+            Response response = ClientBuilder.newClient(new ClientConfig())
+                    .target(server).path("api/expenses/event/" + eventId)
+                    .request(APPLICATION_JSON)
+                    .accept(APPLICATION_JSON)
+                    .post(Entity.json(expense));
+            if (response.getStatus() == Response.Status.CREATED.getStatusCode()) {
+                return response.readEntity(Expense.class);
+            } else {
+                return null;
+            }
+        }catch (ProcessingException e){
+            return null;
+        }
+    }
+
+    /**
+     * List of expense to the server
+     *
+     * @param eventId - event
+     * @return the response from the server
+     */
+    public List<Expense> getExpense(long eventId) {
+        Response response = ClientBuilder.newClient(new ClientConfig())
+                .target(server).path("api/expenses/event/" + eventId)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get();
+        //return response.readEntity(List<Expense>.class);
+        return null;
+    }
+
+    /**
+     * Persists an expense
+     *
+     * @param eventId
+     * @param expense - the expense to persist
+     * @return the persisted expense
+     */
+    public Expense updateExpense(long eventId, Expense expense) {
+        Entity<Expense> entity = Entity.entity(expense, APPLICATION_JSON);
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(server).path("api/expenses/event/" + eventId)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .put(entity, Expense.class);
+    }
+
+    /**
+     * Persists an expense
+     *
+     * @param expense - the expense to persist
+     * @return the persisted expense
+     */
+    public Expense persistExpense(Expense expense) {
+        Entity<Expense> entity = Entity.entity(expense, APPLICATION_JSON);
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(server).path("api/expenses/id/" + expense.getId())
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .put(entity, Expense.class);
+    }
+
+    /**
+     * This should give converted currency
+     *
+     * @param date - the date it is looked for
+     * @param from currency
+     * @param to currency
+     * @return the event with the specified id
+     */
+    public Double convertRate(String date, String from, String to) {
+        String str = "/api/expenses/date/" + date + "/rate/" + from + "/" + to;
+        Response response = ClientBuilder.newClient(new ClientConfig())
+                .target(server).path(str)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get();
+        if (response.getStatus() == Response.Status.OK.getStatusCode()) {
+            return response.readEntity(Double.class);
+        } else {
+            throw new WebApplicationException("Rate not found" + response.getStatus());
         }
     }
 }
