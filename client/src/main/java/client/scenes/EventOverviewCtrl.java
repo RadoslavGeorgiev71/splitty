@@ -236,9 +236,9 @@ public class EventOverviewCtrl {
         tabPaneFromGridPane.setHgap(10);
         if (event != null) {
             for (int i = 0; i < event.getExpenses().size(); i++) {
-                Participant participant = event.getParticipants().get(i);
                 Expense expense = event.getExpenses().get(i);
-                if (participant.equals(participantsMenu.
+                Participant payingParticipant = expense.getPayingParticipant();
+                if (payingParticipant.equals(participantsMenu.
                         getSelectionModel().getSelectedItem())) {
                     Label dateLabel = new Label(event.getExpenses().get(i).getDateTime());
                     Label nameLabel = new Label(event.getExpenses().get(i).getActivity());
@@ -339,7 +339,7 @@ public class EventOverviewCtrl {
      */
     public void includingPersonTabName() {
         if (event.getParticipants().isEmpty()){
-            tabPaneFromPerson.setText(languageResourceBundle.
+            tabPaneIncludingPerson.setText(languageResourceBundle.
                     getResourceBundle().getString("tabPaneIncluding"));
         }
         else {
