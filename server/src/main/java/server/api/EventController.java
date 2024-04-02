@@ -102,11 +102,11 @@ public class EventController {
      * @param updatedEvent the changed event
      * @return response when event updated or not found
      */
-    @PutMapping(path = {"", "/persist/{id}"})
+    @PutMapping(path = {"/persist/{id}"})
     public ResponseEntity<?> update(@PathVariable("id") long id, @RequestBody Event updatedEvent) {
-        long eventId = updatedEvent.getId();
+        //long eventId = updatedEvent.getId();
 
-        Event existingEvent = eventService.update(eventId, updatedEvent);
+        Event existingEvent = eventService.update(id, updatedEvent);
 
         if (existingEvent != null) {
             listeners.forEach((k, l) -> l.accept(existingEvent));
