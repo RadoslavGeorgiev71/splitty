@@ -1,5 +1,6 @@
 package client.scenes;
 
+import client.utils.LanguageResourceBundle;
 import client.utils.ServerUtils;
 import commons.Event;
 import commons.Expense;
@@ -8,6 +9,7 @@ import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
 import com.google.inject.Inject;
@@ -17,6 +19,7 @@ import javafx.util.StringConverter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 
 public class AddExpenseCtrl{
 
@@ -25,6 +28,8 @@ public class AddExpenseCtrl{
     private Event event;
     private Expense expense;
     private String currency;
+
+    private LanguageResourceBundle languageResourceBundle;
 
     @FXML
     private Text expenseField;                 //Title
@@ -50,6 +55,18 @@ public class AddExpenseCtrl{
     private Button expenseAddButton;
     @FXML
     private Button expenseAbortButton;
+    @FXML
+    private Label addExpenseWhoPaid;
+    @FXML
+    private Label addExpenseForWhat;
+    @FXML
+    private Label addExpenseHowMuch;
+    @FXML
+    private Label addExpenseWhen;
+    @FXML
+    private Label addExpenseHow;
+    @FXML
+    private Label addExpenseType;
 
     /**
      * Constructor for AddExpenseCtrl
@@ -83,7 +100,18 @@ public class AddExpenseCtrl{
 //        int index = 0;
 //        while(event.getParticipants().get(index).getName() != payerChoiceBox.getValue())
         expense.setPayingParticipant((Participant) payerChoiceBox.getValue());
-        expense.setAmount(Double.parseDouble(amountField.getText()));
+
+        try {
+            expense.setAmount(Double.parseDouble(amountField.getText()));
+        } catch (NumberFormatException e) {
+            Alert alert =  new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Invalid Input");
+            alert.setHeaderText("Amount is not a number");
+            alert.setContentText("The value you entered " +
+                    "for the amount of money paid should be a number");
+            alert.showAndWait();
+            return;
+        }
         expense.setCurrency(currChoiceBox.getSelectionModel().getSelectedItem().toString());
         expense.setParticipants(event.getParticipants());
         expense.setDateTime(datePicker.getValue().toString());
@@ -139,15 +167,45 @@ public class AddExpenseCtrl{
      * @param e the KeyEvent to handle
      */
     public void keyPressed(KeyEvent e) {
+        if (e.isControlDown() && e.getCode() == KeyCode.W) {  //close window
+            mainCtrl.closeWindow();
+        }
+        if (e.isControlDown() && e.getCode() == KeyCode.S) {  //close window
+            onAddClick(null);
+        }
         switch (e.getCode()) {
-            case ENTER:
-                onAddClick(null);
-                break;
+//            case ENTER:
+//                moveToNextTextField((TextField) e.getSource());
+//                break;
             case ESCAPE:
                 onAbortClick(null);
                 break;
+            case TAB:
+                moveToNextTextField((TextField) e.getSource());
+                break;
             default:
                 break;
+        }
+    }
+
+    /**
+     * Moves the focus to the next field
+     * @param currentTextField current field where the focus is now
+     */
+    private void moveToNextTextField(TextField currentTextField) {
+        // Find the index of the current text field
+        int index = -1;
+        TextField[] textFields = {titleField, amountField, tags}; // Add all text fields here
+        for (int i = 0; i < textFields.length; i++) {
+            if (textFields[i] == currentTextField) {
+                index = i;
+                break;
+            }
+        }
+
+        // Move focus to the next text field
+        if (index != -1 && index < textFields.length - 1) {
+            textFields[index + 1].requestFocus();
         }
     }
 
@@ -208,6 +266,10 @@ public class AddExpenseCtrl{
      */
     public void initialize() {
         if (event != null){
+
+            languageResourceBundle = languageResourceBundle.getInstance();
+            switchTextLanguage();
+
             payerChoiceBox.setItems(FXCollections.observableArrayList(event.getParticipants()));
             payerChoiceBox.setConverter(new StringConverter<Participant>() {
                 @Override
@@ -226,12 +288,33 @@ public class AddExpenseCtrl{
             } );
 
             payerChoiceBox.getSelectionModel().selectFirst();
-            expenseField.setText("Add Expense");
             initializeCurr();
             equally.setAllowIndeterminate(false);
             equally.setSelected(true);
             onlySome.setAllowIndeterminate(false);
             onlySome.setSelected(false);
         }
+    }
+
+    /**
+     * Switches the language of the text
+     */
+
+    public void switchTextLanguage(){
+        ResourceBundle bundle = languageResourceBundle.getResourceBundle();
+
+
+        expenseField.setText(bundle.getString("addExpenseTitle"));
+        addExpenseHow.setText(bundle.getString("addExpenseHow"));
+        addExpenseForWhat.setText(bundle.getString("addExpenseForWhat"));
+        addExpenseHowMuch.setText(bundle.getString("addExpenseHowMuch"));
+        addExpenseType.setText(bundle.getString("addExpenseType"));
+        addExpenseWhen.setText(bundle.getString("addExpenseWhen"));
+        addExpenseWhoPaid.setText(bundle.getString("addExpenseWhoPaid"));
+        expenseAddButton.setText(bundle.getString("expenseAddButton"));
+        expenseAbortButton.setText(bundle.getString("expenseAbortButton"));
+        onlySome.setText(bundle.getString("addExpenseOnlySome"));
+        equally.setText(bundle.getString("addExpenseEqually"));
+
     }
 }

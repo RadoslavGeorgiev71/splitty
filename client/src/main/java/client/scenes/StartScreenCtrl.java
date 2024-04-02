@@ -15,6 +15,8 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.ResourceBundle;
@@ -46,6 +48,9 @@ public class StartScreenCtrl {
     private Text recentEventsText;
 
     @FXML
+    private Button settingsButton;
+
+    @FXML
     private Button createEventButton;
 
     @FXML
@@ -59,6 +64,7 @@ public class StartScreenCtrl {
 
     @FXML
     private Button settingsButton;
+    private Path filePath = Paths.get("client/src/main/resources/config.txt").toAbsolutePath();
 
     /**
      * @param server
@@ -83,7 +89,7 @@ public class StartScreenCtrl {
 
         languageButton.getItems().clear();
 
-        config = config.readFromFile("client/src/main/resources/config.txt");
+        config = config.readFromFile(String.valueOf(filePath));
 
         String language = config.getLanguage();
         if (language != null) {
@@ -94,7 +100,7 @@ public class StartScreenCtrl {
             LanguageButtonUtils.updateLanguageMenuButton(languageButton, config);
 
             LanguageButtonUtils.languageMenu(languageButton, config,
-                    languageResourceBundle, this, keys);
+                    languageResourceBundle, this::initialize, keys);
 
             languageButton.setPopupSide(Side.TOP);
 
@@ -163,6 +169,7 @@ public class StartScreenCtrl {
     public void switchTextLanguage() {
 
         ResourceBundle bundle = languageResourceBundle.getResourceBundle();
+        settingsButton.setText(bundle.getString("settingsButtonText"));
         newEventStaticText.setText(bundle.getString("newEventStaticText"));
         joinEventStaticText.setText(bundle.getString("joinEventStaticText"));
         recentEventsText.setText(bundle.getString("recentEventsText"));
@@ -248,6 +255,9 @@ public class StartScreenCtrl {
                 joinEvent();
             }
         }
+        if (e.isControlDown() && e.getCode() == KeyCode.W) {
+            mainCtrl.closeWindow();
+        }
     }
 
     /**
@@ -265,7 +275,7 @@ public class StartScreenCtrl {
                 config.getIban(), config.getBic(),
                 config.getLanguage(), config.getCurrency(),
                 config.getName(), config.getRecentEvents()};
-        config.writeToFile("client/src/main/resources/config.txt", contents, keys);
+        config.writeToFile(String.valueOf(filePath), contents, keys);
     }
 
     /**

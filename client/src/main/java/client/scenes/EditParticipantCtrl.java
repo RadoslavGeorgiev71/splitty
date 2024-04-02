@@ -7,6 +7,7 @@ import commons.Participant;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
 import com.google.inject.Inject;
@@ -108,15 +109,46 @@ public class EditParticipantCtrl {
      * @param e the KeyEvent to handle
      */
     public void keyPressed(KeyEvent e) {
+        if (e.isControlDown() && e.getCode() == KeyCode.W) {  //close window
+            mainCtrl.closeWindow();
+        }
+        if (e.isControlDown() && e.getCode() == KeyCode.S) {  //close window
+            ok(null);
+        }
         switch (e.getCode()) {
-            case ENTER:
-                ok(null);
-                break;
+//            case ENTER:
+//                moveToNextTextField((TextField) e.getSource());
+//                break;
             case ESCAPE:
                 cancel(null);
                 break;
+            case TAB:
+                moveToNextTextField((TextField) e.getSource());
+                break;
             default:
                 break;
+        }
+    }
+
+    /**
+     * Moves the focus to the next field
+     * @param currentTextField current field where the focus is now
+     */
+    private void moveToNextTextField(TextField currentTextField) {
+        // Find the index of the current text field
+        int index = -1;
+        TextField[] textFields = {nameField, emailField,
+                                  ibanField, bicField }; // Add all text fields here
+        for (int i = 0; i < textFields.length; i++) {
+            if (textFields[i] == currentTextField) {
+                index = i;
+                break;
+            }
+        }
+
+        // Move focus to the next text field
+        if (index != -1 && index < textFields.length - 1) {
+            textFields[index + 1].requestFocus();
         }
     }
 
@@ -156,10 +188,12 @@ public class EditParticipantCtrl {
      */
     public void removeParticipant(ActionEvent actionEvent) {
         if (participant != null){
+            ResourceBundle bundle = languageResourceBundle.getResourceBundle();
             Alert alert =  new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setTitle("Remove Participant");
-            alert.setHeaderText("You will remove this participant permanently from this event");
-            alert.setContentText("Are you sure you want to remove " + this.participant.getName());
+            alert.setTitle(bundle.getString("removeParticipantAlertTitleText"));
+            alert.setHeaderText(bundle.getString("removeParticipantAlertHeaderText"));
+            alert.setContentText(bundle.getString("removeParticipantAlertContentText")
+                    + " " + this.participant.getName());
             if (alert.showAndWait().get() == ButtonType.OK){
                 event.removeParticipant(participant);
                 server.persistEvent(event);

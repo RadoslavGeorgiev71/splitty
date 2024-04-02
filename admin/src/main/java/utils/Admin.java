@@ -29,9 +29,27 @@ import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
 public class Admin{
 
-    private static  String server = "http://localhost:8080/";
+    private String server;
     private String password = "none set";
-    private StompSession session = connect("ws://localhost:8080/websocket");
+    private final StompSession session;
+
+    /**
+     * Constructor for Admin
+     */
+    public Admin(){
+        this.session = connect("ws://localhost:8080/websocket");
+        this.server = "http://localhost:8080/";
+    }
+
+    /**
+     * Constructor for Admin, for testing purposes
+     * @param s Url of the mock server
+     * @param mockStompSession StompSession from Mockito
+     */
+    public Admin(String s, StompSession mockStompSession){
+        this.session = mockStompSession;
+        this.server = s;
+    }
 
     /**
      * Sets the password for the Admin

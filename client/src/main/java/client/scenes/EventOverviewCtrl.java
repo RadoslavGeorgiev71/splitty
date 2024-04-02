@@ -1,5 +1,7 @@
 package client.scenes;
 
+import client.utils.ConfigClient;
+import client.utils.LanguageButtonUtils;
 import client.utils.LanguageResourceBundle;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
@@ -8,9 +10,11 @@ import commons.Expense;
 import commons.Participant;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.geometry.Side;
 import javafx.scene.control.*;
 
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
@@ -28,6 +32,12 @@ public class EventOverviewCtrl {
     private final MainCtrl mainCtrl;
 
     private LanguageResourceBundle languageResourceBundle;
+
+    private String[] keys = {"serverUrl", "email", "iban", "bic", "language",
+        "currency", "name", "recentEvents"};
+
+    @FXML
+    private MenuButton languageButton;
 
     @FXML
     private Text overviewParticipantsText;
@@ -114,9 +124,10 @@ public class EventOverviewCtrl {
     @FXML
     public void onEditParticipantsClick() {
         if (event.getParticipants().isEmpty()) {
+            ResourceBundle bundle = languageResourceBundle.getResourceBundle();
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Error");
-            alert.setHeaderText("There are no available participants to edit");
+            alert.setHeaderText(bundle.getString("eventNoParticipantsToEdit"));
             if (alert.showAndWait().get() == ButtonType.OK){
                 mainCtrl.showEventOverview(this.event);
             }
@@ -225,12 +236,17 @@ public class EventOverviewCtrl {
         tabPaneFromGridPane.setHgap(10);
         if (event != null) {
             for (int i = 0; i < event.getExpenses().size(); i++) {
-                if (event.getParticipants().get(i).equals(participantsMenu.
+                Participant participant = event.getParticipants().get(i);
+                if (participant.equals(participantsMenu.
                         getSelectionModel().getSelectedItem())) {
                     Label dateLabel = new Label(event.getExpenses().get(i).getDateTime());
                     Label nameLabel = new Label(event.getExpenses().get(i).getActivity());
                     nameLabel.setWrapText(true); // Wrap text to prevent truncation
                     Button editButton = new Button("Edit");
+
+                    editButton.setOnAction(event -> {
+                       //maintCtrl.showEditExpense(event.getExpenses().get(i))
+                    });
 
                     // Set fixed column widths
                     dateLabel.setMaxWidth(Double.MAX_VALUE);
@@ -383,7 +399,17 @@ public class EventOverviewCtrl {
 
     public void initialize(){
         if (event != null){
+            languageButton.getItems().clear();
+
             languageResourceBundle = LanguageResourceBundle.getInstance();
+            LanguageButtonUtils.updateLanguageMenuButton(languageButton, new ConfigClient());
+
+            LanguageButtonUtils.languageMenu(languageButton, new ConfigClient(),
+                    languageResourceBundle, this::initialize, keys);
+
+            languageButton.setPopupSide(Side.TOP);
+
+
             switchLanguage();
 
             participantsMenu.setItems(FXCollections.observableArrayList(event.getParticipants()));
@@ -432,8 +458,6 @@ public class EventOverviewCtrl {
         overviewParticipantsText.setText(bundle.getString("overviewParticipantsText"));
         overviewEditParticipantButton.setText(bundle.getString("overviewEditParticipantButton"));
         overviewAddParticipantButton.setText(bundle.getString("overviewAddParticipantButton"));
-        overviewRemoveParticipantButton.setText(bundle.
-                getString("overviewRemoveParticipantButton"));
         overviewAddExpenseButton.setText(bundle.getString("overviewAddExpenseButton"));
         sendInvitesButton.setText(bundle.getString("sendInvitesButton"));
         backButton.setText(bundle.getString("backButton"));
@@ -442,4 +466,20 @@ public class EventOverviewCtrl {
 
     }
 
+    /**
+     * Method to be called when a key is pressed
+     * @param e keyevent to listen
+     */
+    public void keyPressed(KeyEvent e) {
+        if (e.isControlDown() && e.getCode() == KeyCode.W) {  //close window
+            mainCtrl.closeWindow();
+        }
+        switch (e.getCode()) {
+            case ESCAPE:
+                onBackClick();
+                break;
+            default:
+                break;
+        }
+    }
 }

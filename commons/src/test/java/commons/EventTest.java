@@ -112,6 +112,13 @@ public class EventTest {
     }
 
     @Test
+    void testParticipantsEmpty() {
+        List<Participant> participants = new ArrayList<>();
+        event1.setParticipants(participants);
+        assertTrue(event1.getParticipants().isEmpty());
+    }
+
+    @Test
     void getExpenses() {
         assertEquals(expenses1, event1.getExpenses());
     }
@@ -134,6 +141,13 @@ public class EventTest {
     void removeExpense() {
         event1.removeExpense(e1);
         assertFalse(event1.getExpenses().contains(e1));
+    }
+
+    @Test
+    void testExpensesEmpty() {
+        List<Expense> expenses = new ArrayList<>();
+        event1.setExpenses(expenses);
+        assertTrue(event1.getExpenses().isEmpty());
     }
 
     @Test
