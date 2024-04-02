@@ -15,7 +15,6 @@
  */
 package client.scenes;
 
-import client.utils.ConfigClient;
 import commons.Event;
 import commons.Expense;
 import commons.Participant;
@@ -23,8 +22,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.util.Pair;
-
-import java.util.ArrayList;
 
 public class MainCtrl {
 
