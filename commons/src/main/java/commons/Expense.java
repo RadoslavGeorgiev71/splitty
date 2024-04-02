@@ -13,12 +13,12 @@ public class Expense {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     private String title;
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne
     private Participant payingParticipant; // should probably use id of
     // participant instead since we are not using entity for participant yet i will change later
     private double amount;
     private String currency;
-    @OneToMany(cascade=CascadeType.ALL)
+    @OneToMany
     private List<Participant> participants;
     private String dateTime;
 
