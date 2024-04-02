@@ -13,11 +13,11 @@ public class Expense {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     private String title;
-    @ManyToOne(cascade = CascadeType.PERSIST) //keep
+    @ManyToOne//(cascade = CascadeType.PERSIST) //keep
     private Participant payingParticipant;
     private double amount;
     private String currency;
-    @OneToMany(cascade=CascadeType.ALL) //keep
+    @OneToMany//(cascade=CascadeType.ALL) //keep
     private List<Participant> participants;
     private String dateTime;
 
