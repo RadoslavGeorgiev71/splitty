@@ -235,8 +235,9 @@ public class EventOverviewCtrl {
         tabPaneFromGridPane.setVgap(10);
         tabPaneFromGridPane.setHgap(10);
         if (event != null) {
+            int j = 0;
             for (int i = 0; i < event.getExpenses().size(); i++) {
-                Participant participant = event.getParticipants().get(i);
+                Participant participant = event.getExpenses().get(i).getPayingParticipant();
                 if (participant.equals(participantsMenu.
                         getSelectionModel().getSelectedItem())) {
                     Label dateLabel = new Label(event.getExpenses().get(i).getDateTime());
@@ -255,9 +256,9 @@ public class EventOverviewCtrl {
                     GridPane.setFillWidth(dateLabel, true);
                     GridPane.setFillWidth(nameLabel, true);
 
-                    tabPaneFromGridPane.add(dateLabel, 0, i);
-                    tabPaneFromGridPane.add(nameLabel, 1, i);
-                    tabPaneFromGridPane.add(editButton, 2, i);
+                    tabPaneFromGridPane.add(dateLabel, 0, j);
+                    tabPaneFromGridPane.add(nameLabel, 1, j);
+                    tabPaneFromGridPane.add(editButton, 2, j++);
 
                     Expense expensei = event.getExpenses().get(i);
                     editButton.setOnAction(event -> onEditExpenseClick(expensei));
@@ -273,6 +274,40 @@ public class EventOverviewCtrl {
     @FXML
     public void tabPaneIncludingPersonClick() {
         tabPaneIncludingGridPane.getChildren().clear();
+        tabPaneIncludingGridPane.getChildren().clear();
+        tabPaneIncludingGridPane.setVgap(10);
+        tabPaneIncludingGridPane.setHgap(10);
+        if (event != null) {
+            int j = 0;
+            for (int i = 0; i < event.getExpenses().size(); i++) {
+                Participant participant = (Participant) participantsMenu.
+                        getSelectionModel().getSelectedItem();
+                if (event.getExpenses().get(i).getParticipants().contains(participant)) {
+                    Label dateLabel = new Label(event.getExpenses().get(i).getDateTime());
+                    Label nameLabel = new Label(event.getExpenses().get(i).getActivity());
+                    nameLabel.setWrapText(true); // Wrap text to prevent truncation
+                    Button editButton = new Button("Edit");
+
+                    editButton.setOnAction(event -> {
+                        //maintCtrl.showEditExpense(event.getExpenses().get(i))
+                    });
+
+                    // Set fixed column widths
+                    dateLabel.setMaxWidth(Double.MAX_VALUE);
+                    nameLabel.setMaxWidth(Double.MAX_VALUE);
+
+                    GridPane.setFillWidth(dateLabel, true);
+                    GridPane.setFillWidth(nameLabel, true);
+
+                    tabPaneIncludingGridPane.add(dateLabel, 0, j);
+                    tabPaneIncludingGridPane.add(nameLabel, 1, j);
+                    tabPaneIncludingGridPane.add(editButton, 2, j++);
+
+                    Expense expensei = event.getExpenses().get(i);
+                    editButton.setOnAction(event -> onEditExpenseClick(expensei));
+                }
+            }
+        }
     }
 
     /**
