@@ -312,11 +312,13 @@ public class ServerUtils {
      */
     public Expense addExpense(Expense expense) {
         try{
+            expense.setId(1000);
+            Entity<Expense> entity = Entity.entity(expense, APPLICATION_JSON);
             Response response = ClientBuilder.newClient(new ClientConfig())
                             .target(server).path("api/expenses")
                             .request(APPLICATION_JSON)
                             .accept(APPLICATION_JSON)
-                            .post(Entity.json(expense));
+                            .post(entity);
             if (response.getStatus() == Response.Status.CREATED.getStatusCode()) {
                 return response.readEntity(Expense.class);
             }
@@ -336,6 +338,7 @@ public class ServerUtils {
      */
     public Expense addExpense(long eventId, Expense expense) {
         try{
+            expense.setId(1000);
             Response response = ClientBuilder.newClient(new ClientConfig())
                     .target(server).path("api/expenses/event/" + eventId)
                     .request(APPLICATION_JSON)
