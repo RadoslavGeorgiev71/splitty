@@ -47,9 +47,9 @@ public class EditExpenseCtrl{
     @FXML
     private DatePicker datePicker;                  //When?
     @FXML
-    private CheckBox equally;                       //How to split?
+    private RadioButton equally;                       //How to split?
     @FXML
-    private CheckBox onlySome;
+    private RadioButton onlySome;
     @FXML
     private GridPane allGridPane;
     @FXML
@@ -384,8 +384,6 @@ public class EditExpenseCtrl{
             if(expense.getDateTime() != null){
                 datePicker.setValue(LocalDate.parse(expense.getDateTime()));
             }
-            equally.setAllowIndeterminate(false);
-            onlySome.setAllowIndeterminate(false);
             List<Participant> edited = new ArrayList<>();
             for(Participant p: expense.getParticipants()){
                 edited.add(p);

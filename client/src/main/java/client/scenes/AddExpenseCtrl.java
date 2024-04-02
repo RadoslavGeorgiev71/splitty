@@ -46,9 +46,9 @@ public class AddExpenseCtrl{
     @FXML
     private DatePicker datePicker;                  //When?
     @FXML
-    private CheckBox equally;                       //How to split?
+    private RadioButton equally;                       //How to split?
     @FXML
-    private CheckBox onlySome;
+    private RadioButton onlySome;
     @FXML
     private GridPane allGridPane;
     @FXML
@@ -320,9 +320,7 @@ public class AddExpenseCtrl{
             payerChoiceBox.getSelectionModel().selectFirst();
             initializeCurr();
             datePicker.setValue(LocalDate.now());
-            equally.setAllowIndeterminate(false);
             equally.setSelected(true);
-            onlySome.setAllowIndeterminate(false);
             onlySome.setSelected(false);
 
             this.participants = new ArrayList<>();
