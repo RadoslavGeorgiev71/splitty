@@ -156,6 +156,7 @@ public class ExpenseService {
      *
      * @param id      of event
      * @param expense The already updated expense object
+     * @return true if deleted
      */
     public boolean deleteByEventId(long id, Expense expense){
         Optional<Event> existingEvent = eventRepo.findById(id);
