@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.net.URL?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
@@ -17,11 +16,14 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane onKeyPressed="#keyPressed" prefHeight="465.0" prefWidth="341.0" styleClass="eventoverview-body" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.EventOverviewCtrl">
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.control.MenuButton?>
+<?import java.net.URL?>
+<AnchorPane onKeyPressed="#keyPressed" prefHeight="465.0" prefWidth="341.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.EventOverviewCtrl">
     <stylesheets>
-        <URL value="@/client/eventOverview.css" />
+        <URL value="@/client/styles.css" />
     </stylesheets>
-    <children>
+   <children>
       <VBox layoutY="1.0" prefHeight="389.0" prefWidth="280.0" spacing="10.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="1.0">
          <children>
             <GridPane prefHeight="30.0" prefWidth="297.0" VBox.vgrow="ALWAYS">
@@ -43,7 +45,7 @@
             <HBox alignment="CENTER_LEFT" prefHeight="28.0" prefWidth="280.0" spacing="10.0">
                <children>
                   <Text fx:id="overviewParticipantsText" strokeType="OUTSIDE" strokeWidth="0.0" text="Participants" />
-                  <Button fx:id="overviewEditParticipantButton" mnemonicParsing="false" onAction="#onEditParticipantsClick" styleClass="custom-button" text="Edit(pen)" />
+                  <Button fx:id="overviewEditParticipantButton" mnemonicParsing="false" onAction="#onEditParticipantsClick" text="Edit(pen)" />
                   <Button fx:id="overviewAddParticipantButton" mnemonicParsing="false" onAction="#onAddParticipantClick" text="Add(guy+)" />
                </children>
             </HBox>
@@ -72,14 +74,14 @@
                                 <content>
                                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="174.0" prefWidth="296.0">
                                        <children>
-                                          <GridPane fx:id="tabPaneAllGridPane" layoutX="3.0" prefHeight="50.0" prefWidth="290.0">
+                                          <GridPane fx:id="tabPaneAllGridPane" layoutX="4.0" layoutY="14.0" prefHeight="25.0" prefWidth="289.0">
                                             <rowConstraints>
                                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                             </rowConstraints>
                                              <columnConstraints>
-                                                <ColumnConstraints halignment="LEFT" hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="74.0" />
-                                                <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="175.0" />
-                                                <ColumnConstraints halignment="RIGHT" hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="50.0" />
+                                                <ColumnConstraints halignment="LEFT" hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="100.0" />
+                                                <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="100.0" />
+                                                <ColumnConstraints halignment="RIGHT" hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="100.0" />
                                              </columnConstraints>
                                           </GridPane>
                                        </children>
@@ -97,14 +99,14 @@
                                  <content>
                                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="174.0" prefWidth="296.0">
                                        <children>
-                                          <GridPane fx:id="tabPaneFromGridPane" layoutX="3.0" prefHeight="50.0" prefWidth="290.0">
+                                          <GridPane fx:id="tabPaneFromGridPane" layoutX="4.0" layoutY="14.0" prefHeight="25.0" prefWidth="296.0">
                                              <rowConstraints>
                                                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                              </rowConstraints>
                                              <columnConstraints>
-                                                <ColumnConstraints halignment="LEFT" hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="74.0" />
-                                                <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="175.0" />
-                                                <ColumnConstraints halignment="RIGHT" hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="50.0" />
+                                                <ColumnConstraints halignment="LEFT" hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="100.0" />
+                                                <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="100.0" />
+                                                <ColumnConstraints halignment="RIGHT" hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="100.0" />
                                              </columnConstraints>
                                           </GridPane>
                                        </children>
@@ -122,14 +124,14 @@
                                  <content>
                                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="174.0" prefWidth="296.0">
                                        <children>
-                                          <GridPane fx:id="tabPaneIncludingGridPane" layoutX="3.0" prefHeight="50.0" prefWidth="290.0">
+                                          <GridPane fx:id="tabPaneIncludingGridPane" layoutX="4.0" layoutY="14.0" prefHeight="25.0" prefWidth="296.0">
                                              <rowConstraints>
                                                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                              </rowConstraints>
                                              <columnConstraints>
-                                                <ColumnConstraints halignment="LEFT" hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="74.0" />
-                                                <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="175.0" />
-                                                <ColumnConstraints halignment="RIGHT" hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="50.0" />
+                                                <ColumnConstraints halignment="LEFT" hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="100.0" />
+                                                <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="100.0" />
+                                                <ColumnConstraints halignment="RIGHT" hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="100.0" />
                                              </columnConstraints>
                                           </GridPane>
                                        </children>
@@ -159,6 +161,11 @@
          <padding>
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
          </padding>
+          <MenuButton fx:id="languageButton" layoutX="482.0" layoutY="345.0" mnemonicParsing="false" styleClass="language-menu-button">
+              <graphic>
+                  <ImageView fx:id="languageButtonImageView" style="-fx-border-width: 0;" />
+              </graphic>
+          </MenuButton>
       </VBox>
    </children>
 </AnchorPane>

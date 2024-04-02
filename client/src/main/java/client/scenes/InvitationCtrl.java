@@ -103,6 +103,8 @@ public class InvitationCtrl implements Initializable {
     public void switchTextLanguage(){
 
         ResourceBundle bundle = languageResourceBundle.getResourceBundle();
+
+        emailTextArea.setPromptText(bundle.getString("emailPromptText"));
         sendInvitesButton.setText(bundle.getString("sendInvitesButton"));
         goEventButton.setText(bundle.getString("goEventButton"));
         goBackButton.setText(bundle.getString("backButton"));

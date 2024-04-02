@@ -2,7 +2,6 @@ package client.scenes;
 
 import client.utils.ConfigClient;
 import client.utils.LanguageResourceBundle;
-import java.util.ResourceBundle;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import javafx.collections.FXCollections;
@@ -16,22 +15,50 @@ import javafx.scene.input.KeyEvent;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 
 public class UserSettingsCtrl {
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
 
-
-    private LanguageResourceBundle languageResourceBundle;
-
     private ConfigClient configClient;
 
     private String[] keys = {"serverUrl", "email", "iban",
                              "bic", "language", "currency", "name", "recentEvents"};
 
+    private LanguageResourceBundle languageResourceBundle;
+
+
     @FXML
     private ChoiceBox currencyMenu;
+
+    @FXML
+    private Label settingsTitle;
+
+    @FXML
+    private Label nameLabel;
+
+    @FXML
+    private Label emailLabel;
+
+    @FXML
+    private Label ibanLabel;
+
+    @FXML
+    private Label bicLabel;
+
+    @FXML
+    private Label currencyLabel;
+
+    @FXML
+    private Label serverLabel;
+
+    @FXML
+    private Button cancelButton;
+
+    @FXML
+    private Button onConfirmClick;
 
     @FXML
     private TextField nameField;
@@ -44,36 +71,9 @@ public class UserSettingsCtrl {
 
     @FXML
     private TextField bicField;
-
     @FXML
     private TextField serverURLField;
 
-    @FXML
-    private Label userSettingsLabel;
-
-    @FXML
-    private Label userSettingsNameLabel;
-
-    @FXML
-    private Label userSettingsEmailLabel;
-
-    @FXML
-    private Label userSettingsIbanLabel;
-
-    @FXML
-    private Label userSettingsBicLabel;
-
-    @FXML
-    private Label userSettingsCurrencyLabel;
-
-    @FXML
-    private Label userSettingsServerURLLabel;
-
-    @FXML
-    private Button userSettingsCancelButton;
-
-    @FXML
-    private Button userSettingsConfirmButton;
 
     /**
      * @param server
@@ -85,22 +85,6 @@ public class UserSettingsCtrl {
         this.server = server;
         this.mainCtrl = mainCtrl;
         this.configClient = new ConfigClient();
-    }
-
-    /**
-     * Switches the language to the chosen language
-     */
-    public void switchTextLanguage(){
-        ResourceBundle bundle = languageResourceBundle.getResourceBundle();
-
-        userSettingsLabel.setText(bundle.getString("userSettingsLabel"));
-        userSettingsNameLabel.setText(bundle.getString("userSettingsNameLabel"));
-        userSettingsEmailLabel.setText(bundle.getString("userSettingsEmailLabel"));
-        userSettingsIbanLabel.setText(bundle.getString("userSettingsIbanLabel"));
-        userSettingsBicLabel.setText(bundle.getString("userSettingsBicLabel"));
-        userSettingsServerURLLabel.setText(bundle.getString("userSettingsServerURLLabel"));
-        userSettingsCancelButton.setText(bundle.getString("userSettingsCancelButton"));
-        userSettingsConfirmButton.setText(bundle.getString("userSettingsConfirmButton"));
     }
 
     /**
@@ -168,12 +152,26 @@ public class UserSettingsCtrl {
         if (configClient.getServerUrl() != null  && !configClient.getServerUrl().equals("null")) {
             serverURLField.setText(configClient.getServerUrl());
         }
-        initializeChoiceBox();
-
-        String language = configClient.getLanguage();
 
         languageResourceBundle = LanguageResourceBundle.getInstance();
+
         switchTextLanguage();
+
+        initializeChoiceBox();
+    }
+
+    private void switchTextLanguage(){
+        ResourceBundle bundle = languageResourceBundle.getResourceBundle();
+
+        nameLabel.setText(bundle.getString("settingsNameLabel"));
+        emailLabel.setText(bundle.getString("settingsEmailLabel"));
+        ibanLabel.setText(bundle.getString("settingsIbanLabel"));
+        bicLabel.setText(bundle.getString("settingsBICLabel"));
+        currencyLabel.setText(bundle.getString("settingsCurrencyLabel"));
+        serverLabel.setText(bundle.getString("settingsURLLabel"));
+        cancelButton.setText(bundle.getString("settingsCancelButton"));
+        onConfirmClick.setText(bundle.getString("settingsConfirmButton"));
+        settingsTitle.setText(bundle.getString("settingsTitle"));
     }
 
     private void initializeChoiceBox() {

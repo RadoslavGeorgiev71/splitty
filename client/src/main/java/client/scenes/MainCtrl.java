@@ -15,7 +15,6 @@
  */
 package client.scenes;
 
-import client.utils.ConfigClient;
 import commons.Event;
 import commons.Expense;
 import commons.Participant;
@@ -23,9 +22,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.util.Pair;
-
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 public class MainCtrl {
 
@@ -58,8 +54,6 @@ public class MainCtrl {
 
     private UserSettingsCtrl userSettingsCtrl;
     private Scene usersettings;
-
-    private Path filePath = Paths.get("src/main/resources/config.txt").toAbsolutePath();
 
     /**
      * Initializes stage
@@ -174,12 +168,12 @@ public class MainCtrl {
      */
     public void showAddExpense(Event event) {
         primaryStage.setTitle("Add Expense");
-        primaryStage.setScene(addexpense);
         addExpenseCtrl.setEvent(event);
-        ConfigClient configClient =  new ConfigClient();
-        configClient.readFromFile(String.valueOf(filePath));
-        addExpenseCtrl.setCurrency(configClient.getCurrency());
+//        ConfigClient configClient =  new ConfigClient();
+//        configClient.readFromFile("client/src/main/resources/config.txt");
+//        addExpenseCtrl.setCurrency(configClient.getCurrency());
         addExpenseCtrl.initialize();
+        primaryStage.setScene(addexpense);
     }
 
     /**
