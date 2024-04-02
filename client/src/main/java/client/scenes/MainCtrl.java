@@ -24,6 +24,9 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 public class MainCtrl {
 
     private Stage primaryStage;
@@ -55,6 +58,8 @@ public class MainCtrl {
 
     private UserSettingsCtrl userSettingsCtrl;
     private Scene usersettings;
+
+    private Path filePath = Paths.get("src/main/resources/config.txt").toAbsolutePath();
 
     /**
      * Initializes stage
@@ -172,7 +177,7 @@ public class MainCtrl {
         primaryStage.setScene(addexpense);
         addExpenseCtrl.setEvent(event);
         ConfigClient configClient =  new ConfigClient();
-        configClient.readFromFile("client/src/main/resources/config.txt");
+        configClient.readFromFile(String.valueOf(filePath));
         addExpenseCtrl.setCurrency(configClient.getCurrency());
         addExpenseCtrl.initialize();
     }

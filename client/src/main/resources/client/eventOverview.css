@@ -1,3 +1,7 @@
 .eventoverview-body {
     -fx-background-color: #b7b7b7;
 }
+
+.custom-button {
+    -fx-background-image: url("client/images/icons/graypencil.png");
+}
