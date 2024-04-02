@@ -1,6 +1,5 @@
 package server.Repositories;
 
-import commons.Debt;
 import commons.Participant;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
@@ -19,18 +18,34 @@ public class TestParticipantRepository implements ParticipantRepository {
     private List<Participant> participants = new ArrayList<>();
     private List<String> calledMethods = new ArrayList<>();
 
+    /**
+     *
+     * @return -
+     */
     public List<Participant> getParticipants() {
         return participants;
     }
 
+    /**
+     *
+     * @param participants -
+     */
     public void setParticipants(List<Participant> participants) {
         this.participants = participants;
     }
 
+    /**
+     *
+     * @return -
+     */
     public List<String> getCalledMethods() {
         return calledMethods;
     }
 
+    /**
+     *
+     * @param calledMethods -
+     */
     public void setCalledMethods(List<String> calledMethods) {
         this.calledMethods = calledMethods;
     }
@@ -199,7 +214,8 @@ public class TestParticipantRepository implements ParticipantRepository {
      */
     @Override
     public <S extends Participant, R> R findBy(Example<S> example,
-                                               Function<FluentQuery.FetchableFluentQuery<S>, R> queryFunction) {
+                                               Function<FluentQuery.FetchableFluentQuery<S>,
+                                                   R> queryFunction) {
         return null;
     }
 
@@ -251,7 +267,8 @@ public class TestParticipantRepository implements ParticipantRepository {
     @Override
     public boolean existsById(Long aLong) {
         calledMethods.add("existsById");
-        List<Participant> matchingParticipants = participants.stream().filter(x -> x.getId() == aLong).toList();
+        List<Participant> matchingParticipants = participants.stream()
+            .filter(x -> x.getId() == aLong).toList();
         if(matchingParticipants.size() == 1) {
             return true;
         }
