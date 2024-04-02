@@ -121,9 +121,10 @@ public class EditExpenseCtrl{
             expense.setParticipants(participants);
         }
         expense.setDateTime(datePicker.getValue().toString());
-        server.persistExpense(expense);
+        server.updateExpense(event.getId(), expense);
+        //server.persistExpense(expense);
         clearFields();
-        server.persistEvent(event);
+        //server.persistEvent(event);
         event = server.getEvent(event.getId());
         mainCtrl.showEventOverview(event);
     }
@@ -141,10 +142,10 @@ public class EditExpenseCtrl{
             alert.setContentText("Are you sure you want to remove " +
                     this.expense.getTitle() + "?");
             if (alert.showAndWait().get() == ButtonType.OK){
-                event.removeExpense(expense);
-                server.persistEvent(event);
+//                event.removeExpense(expense);
+//                server.persistEvent(event);
                 //server.deleteExpense(expense);
-                //server.deleteExpense(event.getId(), expense);
+                server.deleteExpense(event.getId(), expense);
                 mainCtrl.showEventOverview(server.getEvent(event.getId()));
             }
         }
