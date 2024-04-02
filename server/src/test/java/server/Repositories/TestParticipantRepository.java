@@ -1,59 +1,36 @@
 package server.Repositories;
 
-import commons.Tag;
+import commons.Debt;
+import commons.Participant;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.query.FluentQuery;
-import server.database.TagRepository;
+import server.database.ParticipantRepository;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
-public class TestTagRepository implements TagRepository {
+public class TestParticipantRepository implements ParticipantRepository {
 
-    private List<Tag> tags = new ArrayList<>();
+    private List<Participant> participants = new ArrayList<>();
     private List<String> calledMethods = new ArrayList<>();
 
-    /**
-     * Add a method to the list of called methods
-     * @param name
-     */
-    private void call(String name) {
-        calledMethods.add(name);
+    public List<Participant> getParticipants() {
+        return participants;
     }
 
-    /**
-     * Get the list of tags
-     * @return -
-     */
-    public List<Tag> getTags() {
-        return tags;
+    public void setParticipants(List<Participant> participants) {
+        this.participants = participants;
     }
 
-    /**
-     * Set the list of debts
-     * @param tags -
-     */
-    public void setTags(List<Tag> tags) {
-        this.tags = tags;
-    }
-
-    /**
-     * Get the list of called methods
-     * @return -
-     */
     public List<String> getCalledMethods() {
         return calledMethods;
     }
 
-    /**
-     *
-     * @param calledMethods -
-     */
     public void setCalledMethods(List<String> calledMethods) {
         this.calledMethods = calledMethods;
     }
@@ -73,7 +50,7 @@ public class TestTagRepository implements TagRepository {
      * @param <S> -
      */
     @Override
-    public <S extends Tag> S saveAndFlush(S entity) {
+    public <S extends Participant> S saveAndFlush(S entity) {
         return null;
     }
 
@@ -84,7 +61,7 @@ public class TestTagRepository implements TagRepository {
      * @param <S> -
      */
     @Override
-    public <S extends Tag> List<S> saveAllAndFlush(Iterable<S> entities) {
+    public <S extends Participant> List<S> saveAllAndFlush(Iterable<S> entities) {
         return null;
     }
 
@@ -93,7 +70,7 @@ public class TestTagRepository implements TagRepository {
      * @param entities -
      */
     @Override
-    public void deleteAllInBatch(Iterable<Tag> entities) {
+    public void deleteAllInBatch(Iterable<Participant> entities) {
 
     }
 
@@ -120,7 +97,7 @@ public class TestTagRepository implements TagRepository {
      * @return -
      */
     @Override
-    public Tag getOne(Long aLong) {
+    public Participant getOne(Long aLong) {
         return null;
     }
 
@@ -130,7 +107,7 @@ public class TestTagRepository implements TagRepository {
      * @return -
      */
     @Override
-    public Tag getById(Long aLong) {
+    public Participant getById(Long aLong) {
         return null;
     }
 
@@ -140,7 +117,7 @@ public class TestTagRepository implements TagRepository {
      * @return -
      */
     @Override
-    public Tag getReferenceById(Long aLong) {
+    public Participant getReferenceById(Long aLong) {
         return null;
     }
 
@@ -151,7 +128,7 @@ public class TestTagRepository implements TagRepository {
      * @param <S> -
      */
     @Override
-    public <S extends Tag> Optional<S> findOne(Example<S> example) {
+    public <S extends Participant> Optional<S> findOne(Example<S> example) {
         return Optional.empty();
     }
 
@@ -162,7 +139,7 @@ public class TestTagRepository implements TagRepository {
      * @param <S> -
      */
     @Override
-    public <S extends Tag> List<S> findAll(Example<S> example) {
+    public <S extends Participant> List<S> findAll(Example<S> example) {
         return null;
     }
 
@@ -174,7 +151,7 @@ public class TestTagRepository implements TagRepository {
      * @param <S> -
      */
     @Override
-    public <S extends Tag> List<S> findAll(Example<S> example, Sort sort) {
+    public <S extends Participant> List<S> findAll(Example<S> example, Sort sort) {
         return null;
     }
 
@@ -186,7 +163,7 @@ public class TestTagRepository implements TagRepository {
      * @param <S> -
      */
     @Override
-    public <S extends Tag> Page<S> findAll(Example<S> example, Pageable pageable) {
+    public <S extends Participant> Page<S> findAll(Example<S> example, Pageable pageable) {
         return null;
     }
 
@@ -197,7 +174,7 @@ public class TestTagRepository implements TagRepository {
      * @param <S> -
      */
     @Override
-    public <S extends Tag> long count(Example<S> example) {
+    public <S extends Participant> long count(Example<S> example) {
         return 0;
     }
 
@@ -208,7 +185,7 @@ public class TestTagRepository implements TagRepository {
      * @param <S> -
      */
     @Override
-    public <S extends Tag> boolean exists(Example<S> example) {
+    public <S extends Participant> boolean exists(Example<S> example) {
         return false;
     }
 
@@ -221,9 +198,8 @@ public class TestTagRepository implements TagRepository {
      * @param <R> -
      */
     @Override
-    public <S extends Tag, R> R findBy(Example<S> example,
-                                       Function<FluentQuery.FetchableFluentQuery<S>,
-                                           R> queryFunction) {
+    public <S extends Participant, R> R findBy(Example<S> example,
+                                               Function<FluentQuery.FetchableFluentQuery<S>, R> queryFunction) {
         return null;
     }
 
@@ -234,8 +210,10 @@ public class TestTagRepository implements TagRepository {
      * @param <S> -
      */
     @Override
-    public <S extends Tag> S save(S entity) {
-        return null;
+    public <S extends Participant> S save(S entity) {
+        calledMethods.add("save");
+        participants.add(entity);
+        return entity;
     }
 
     /**
@@ -245,7 +223,7 @@ public class TestTagRepository implements TagRepository {
      * @param <S> -
      */
     @Override
-    public <S extends Tag> List<S> saveAll(Iterable<S> entities) {
+    public <S extends Participant> List<S> saveAll(Iterable<S> entities) {
         return null;
     }
 
@@ -255,8 +233,14 @@ public class TestTagRepository implements TagRepository {
      * @return -
      */
     @Override
-    public Optional<Tag> findById(Long aLong) {
-        return Optional.empty();
+    public Optional<Participant> findById(Long aLong) {
+        calledMethods.add("findById");
+        List<Participant> rightParticipants =  participants.stream()
+            .filter(x -> x.getId() == aLong).toList();
+        if (rightParticipants.isEmpty()) {
+            return Optional.empty();
+        }
+        return Optional.of(rightParticipants.getFirst());
     }
 
     /**
@@ -266,7 +250,14 @@ public class TestTagRepository implements TagRepository {
      */
     @Override
     public boolean existsById(Long aLong) {
-        return false;
+        calledMethods.add("existsById");
+        List<Participant> matchingParticipants = participants.stream().filter(x -> x.getId() == aLong).toList();
+        if(matchingParticipants.size() == 1) {
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 
     /**
@@ -274,8 +265,9 @@ public class TestTagRepository implements TagRepository {
      * @return -
      */
     @Override
-    public List<Tag> findAll() {
-        return null;
+    public List<Participant> findAll() {
+        calledMethods.add("findAll");
+        return participants;
     }
 
     /**
@@ -284,7 +276,7 @@ public class TestTagRepository implements TagRepository {
      * @return -
      */
     @Override
-    public List<Tag> findAllById(Iterable<Long> longs) {
+    public List<Participant> findAllById(Iterable<Long> longs) {
         return null;
     }
 
@@ -303,7 +295,8 @@ public class TestTagRepository implements TagRepository {
      */
     @Override
     public void deleteById(Long aLong) {
-
+        calledMethods.add("deleteById");
+        participants = participants.stream().filter(x -> x.getId() != aLong).toList();
     }
 
     /**
@@ -311,7 +304,7 @@ public class TestTagRepository implements TagRepository {
      * @param entity -
      */
     @Override
-    public void delete(Tag entity) {
+    public void delete(Participant entity) {
 
     }
 
@@ -329,7 +322,7 @@ public class TestTagRepository implements TagRepository {
      * @param entities -
      */
     @Override
-    public void deleteAll(Iterable<? extends Tag> entities) {
+    public void deleteAll(Iterable<? extends Participant> entities) {
 
     }
 
@@ -347,7 +340,7 @@ public class TestTagRepository implements TagRepository {
      * @return -
      */
     @Override
-    public List<Tag> findAll(Sort sort) {
+    public List<Participant> findAll(Sort sort) {
         return null;
     }
 
@@ -357,7 +350,7 @@ public class TestTagRepository implements TagRepository {
      * @return -
      */
     @Override
-    public Page<Tag> findAll(Pageable pageable) {
+    public Page<Participant> findAll(Pageable pageable) {
         return null;
     }
 }
