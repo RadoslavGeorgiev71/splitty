@@ -34,7 +34,7 @@
                     </rowConstraints>
                     <children>
                         <ChoiceBox fx:id="payerChoiceBox" prefWidth="150.0" GridPane.columnIndex="1" />
-                        <Label text="Who paid?" />
+                        <Label fx:id="addExpenseWhoPaid" text="Who paid?" />
                     </children>
                 </GridPane>
                 <GridPane>
@@ -46,7 +46,7 @@
                         <RowConstraints />
                     </rowConstraints>
                     <children>
-                        <Label text="What for?" />
+                        <Label fx:id="addExpenseForWhat" text="What for?" />
                         <TextField fx:id="titleField" onKeyPressed="#keyPressed" prefHeight="26.0" prefWidth="185.0" GridPane.columnIndex="1" />
                     </children>
                 </GridPane>
@@ -63,7 +63,7 @@
                     <children>
                         <TextField fx:id="amountField" onKeyPressed="#keyPressed" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                         <ChoiceBox fx:id="currChoiceBox" prefWidth="150.0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                        <Label text="How much?" GridPane.rowIndex="1" />
+                        <Label fx:id="addExpenseHowMuch" text="How much?" GridPane.rowIndex="1" />
                     </children>
                 </GridPane>
                 <GridPane>
@@ -75,7 +75,7 @@
                         <RowConstraints />
                     </rowConstraints>
                     <children>
-                        <Label text="When?" />
+                        <Label fx:id="addExpenseWhen" text="When?" />
                         <DatePicker fx:id="datePicker" GridPane.columnIndex="1" />
                     </children>
                 </GridPane>

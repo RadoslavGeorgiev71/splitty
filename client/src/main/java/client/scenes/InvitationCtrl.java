@@ -6,6 +6,8 @@ import client.utils.ServerUtils;
 import com.google.inject.Inject;
 
 import java.net.URL;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -54,6 +56,9 @@ public class InvitationCtrl implements Initializable {
     private TextArea emailTextArea;
 
     private Event event;
+
+    private Path filePath = Paths.get("src/main/resources/config.txt").toAbsolutePath();
+
     /**
      *
      * @param server
@@ -98,6 +103,8 @@ public class InvitationCtrl implements Initializable {
     public void switchTextLanguage(){
 
         ResourceBundle bundle = languageResourceBundle.getResourceBundle();
+
+        emailTextArea.setPromptText(bundle.getString("emailPromptText"));
         sendInvitesButton.setText(bundle.getString("sendInvitesButton"));
         goEventButton.setText(bundle.getString("goEventButton"));
         goBackButton.setText(bundle.getString("backButton"));

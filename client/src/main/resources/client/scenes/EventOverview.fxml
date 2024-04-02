@@ -16,7 +16,13 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.control.MenuButton?>
+<?import java.net.URL?>
 <AnchorPane onKeyPressed="#keyPressed" prefHeight="465.0" prefWidth="341.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.EventOverviewCtrl">
+    <stylesheets>
+        <URL value="@/client/styles.css" />
+    </stylesheets>
    <children>
       <VBox layoutY="1.0" prefHeight="389.0" prefWidth="280.0" spacing="10.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="1.0">
          <children>
@@ -155,6 +161,11 @@
          <padding>
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
          </padding>
+          <MenuButton fx:id="languageButton" layoutX="482.0" layoutY="345.0" mnemonicParsing="false" styleClass="language-menu-button">
+              <graphic>
+                  <ImageView fx:id="languageButtonImageView" style="-fx-border-width: 0;" />
+              </graphic>
+          </MenuButton>
       </VBox>
    </children>
 </AnchorPane>
