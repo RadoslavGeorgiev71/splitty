@@ -218,8 +218,8 @@ public class EventOverviewCtrl {
                 tabPaneAllGridPane.add(nameLabel, 1, i);
                 tabPaneAllGridPane.add(editButton, 2, i);
 
-                Expense expensei = event.getExpenses().get(i);
-                editButton.setOnAction(event -> onEditExpenseClick(expensei));
+                Expense expense = event.getExpenses().get(i);
+                editButton.setOnAction(event -> onEditExpenseClick(expense));
             }
             fromPersonTabName();
         }
@@ -236,17 +236,14 @@ public class EventOverviewCtrl {
         tabPaneFromGridPane.setHgap(10);
         if (event != null) {
             for (int i = 0; i < event.getExpenses().size(); i++) {
-                Participant participant = event.getParticipants().get(i);
-                if (participant.equals(participantsMenu.
+                Expense expense = event.getExpenses().get(i);
+                Participant payingParticipant = expense.getPayingParticipant();
+                if (payingParticipant.equals(participantsMenu.
                         getSelectionModel().getSelectedItem())) {
                     Label dateLabel = new Label(event.getExpenses().get(i).getDateTime());
                     Label nameLabel = new Label(event.getExpenses().get(i).getActivity());
                     nameLabel.setWrapText(true); // Wrap text to prevent truncation
                     Button editButton = new Button("Edit");
-
-                    editButton.setOnAction(event -> {
-                       //maintCtrl.showEditExpense(event.getExpenses().get(i))
-                    });
 
                     // Set fixed column widths
                     dateLabel.setMaxWidth(Double.MAX_VALUE);
@@ -259,8 +256,7 @@ public class EventOverviewCtrl {
                     tabPaneFromGridPane.add(nameLabel, 1, i);
                     tabPaneFromGridPane.add(editButton, 2, i);
 
-                    Expense expensei = event.getExpenses().get(i);
-                    editButton.setOnAction(event -> onEditExpenseClick(expensei));
+                    editButton.setOnAction(event -> onEditExpenseClick(expense));
                 }
             }
         }
@@ -273,6 +269,34 @@ public class EventOverviewCtrl {
     @FXML
     public void tabPaneIncludingPersonClick() {
         tabPaneIncludingGridPane.getChildren().clear();
+        tabPaneIncludingGridPane.setVgap(10);
+        tabPaneIncludingGridPane.setHgap(10);
+        if (event != null) {
+            for (int i = 0; i < event.getExpenses().size(); i++) {
+                Participant participant =
+                        (Participant) participantsMenu.getSelectionModel().getSelectedItem();
+                Expense expense = event.getExpenses().get(i);
+                if (expense.getParticipants().contains(participant)) {
+                    Label dateLabel = new Label(event.getExpenses().get(i).getDateTime());
+                    Label nameLabel = new Label(event.getExpenses().get(i).getActivity());
+                    nameLabel.setWrapText(true); // Wrap text to prevent truncation
+                    Button editButton = new Button("Edit");
+
+                    // Set fixed column widths
+                    dateLabel.setMaxWidth(Double.MAX_VALUE);
+                    nameLabel.setMaxWidth(Double.MAX_VALUE);
+
+                    GridPane.setFillWidth(dateLabel, true);
+                    GridPane.setFillWidth(nameLabel, true);
+
+                    tabPaneIncludingGridPane.add(dateLabel, 0, i);
+                    tabPaneIncludingGridPane.add(nameLabel, 1, i);
+                    tabPaneIncludingGridPane.add(editButton, 2, i);
+
+                    editButton.setOnAction(event -> onEditExpenseClick(expense));
+                }
+            }
+        }
     }
 
     /**
@@ -315,7 +339,7 @@ public class EventOverviewCtrl {
      */
     public void includingPersonTabName() {
         if (event.getParticipants().isEmpty()){
-            tabPaneFromPerson.setText(languageResourceBundle.
+            tabPaneIncludingPerson.setText(languageResourceBundle.
                     getResourceBundle().getString("tabPaneIncluding"));
         }
         else {
