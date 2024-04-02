@@ -1,6 +1,5 @@
 package server.Repositories;
 
-import commons.Event;
 import commons.Participant;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
@@ -31,7 +30,7 @@ public class TestParticipantRepository implements ParticipantRepository {
     /**
      * Returns the list of participants.
      *
-     * @return
+     * @return The list of participants
      */
     public List<Participant> getParticipants() {
         return participants;
@@ -204,7 +203,8 @@ public class TestParticipantRepository implements ParticipantRepository {
      * @return
      */
     @Override
-    public <S extends Participant, R> R findBy(Example<S> example, Function<FluentQuery.FetchableFluentQuery<S>, R> queryFunction) {
+    public <S extends Participant, R> R findBy(Example<S> example,
+                      Function<FluentQuery.FetchableFluentQuery<S>, R> queryFunction) {
         return null;
     }
 
