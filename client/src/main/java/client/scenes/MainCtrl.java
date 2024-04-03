@@ -165,10 +165,12 @@ public class MainCtrl {
     /**
      * Switches the scene to the add expense window
      * @param event - takes an event as a parameter for which we add a participant
+     * @param participant - that adds expense
      */
-    public void showAddExpense(Event event) {
+    public void showAddExpense(Event event, Participant participant) {
         primaryStage.setTitle("Add Expense");
         addExpenseCtrl.setEvent(event);
+        addExpenseCtrl.setParticipant(participant);
 //        ConfigClient configClient =  new ConfigClient();
 //        configClient.readFromFile("client/src/main/resources/config.txt");
 //        addExpenseCtrl.setCurrency(configClient.getCurrency());
