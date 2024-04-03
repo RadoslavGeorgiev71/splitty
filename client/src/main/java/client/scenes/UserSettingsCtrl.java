@@ -112,7 +112,7 @@ public class UserSettingsCtrl {
                 configClient.getIban(), configClient.getBic(),
                 configClient.getLanguage(), configClient.getCurrency(),
                 configClient.getName(), configClient.getRecentEvents()};
-        configClient.writeToFile("client/src/main/resources/config.txt", contents, keys);
+        configClient.writeToFile("config.txt", contents, keys);
         clearFields();
         mainCtrl.showStartScreen();
     }

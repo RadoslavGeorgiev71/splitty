@@ -172,7 +172,7 @@ public class MainCtrl {
         primaryStage.setScene(addexpense);
         addExpenseCtrl.setEvent(event);
         ConfigClient configClient =  new ConfigClient();
-        configClient.readFromFile("client/src/main/resources/config.txt");
+        configClient.readFromFile("config.txt");
         addExpenseCtrl.setCurrency(configClient.getCurrency());
         addExpenseCtrl.initialize();
     }

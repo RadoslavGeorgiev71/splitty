@@ -9,6 +9,8 @@ import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -17,11 +19,8 @@ import java.util.List;
 
 public class LanguageButtonUtils {
 
-    private static Path imagesFolderPath =
-            Paths.get("client/src/main/resources/client/images/flags/").toAbsolutePath();
-
-    private static Path filePath = Paths.
-            get("client/src/main/resources/config.txt").toAbsolutePath();
+    private static String imagesFolderPath = "client/images/flags/";
+    private static String filePath = "config.txt";
 
 
 
@@ -53,34 +52,45 @@ public class LanguageButtonUtils {
         questionItem.setText("New");
         languageButton.getItems().add(questionItem);
 
+        URL url = LanguageButtonUtils.class.getClassLoader().getResource(imagesFolderPath);
+        if (url == null) {
+            throw new RuntimeException("Resources folder not found");
+        }
 
-        //String imagesFolderPath = "client/src/main/resources/client/images/flags/";
-
-        File imagesFolder = new File(String.valueOf(imagesFolderPath));
+        File imagesFolder;
+        try {
+            imagesFolder = new File(url.toURI());
+        } catch (URISyntaxException e) {
+            imagesFolder = new File(url.getPath());
+        }
 
         File[] imageFiles = imagesFolder.listFiles((dir, name)
                 -> name.toLowerCase().endsWith(".png") || name.toLowerCase().endsWith(".jpg"));
 
-        for (File imageFile : imageFiles) {
-            if(imageFile.getName().equals(config.getLanguage() + ".png")){
-                Image image = new Image(Paths.get(String.valueOf(imagesFolderPath),
-                        imageFile.getName()).toUri().toString());
-                ImageView imageView = new ImageView(image);
-                languageButton.setGraphic(imageView);
+        if (imageFiles == null) {
+            throw new RuntimeException("No image files found in the directory: " + imagesFolderPath);
+        }
 
-                String imageName = imageFile.getName();
+        for (File imageFile : imageFiles) {
+            String imageName = imageFile.getName();
+            String imagePath = imagesFolderPath + imageName;
+            URL imageUrl = LanguageButtonUtils.class.getClassLoader().getResource(imagePath);
+            if (imageUrl == null) {
+                throw new RuntimeException("Image file not found: " + imagePath);
+            }
+
+            Image image = new Image(imageUrl.toString());
+            ImageView imageView = new ImageView(image);
+
+            if(imageName.equals(config.getLanguage() + ".png")){
+                languageButton.setGraphic(imageView);
                 String menuButtonText = imageName.substring(0, imageName.lastIndexOf('.'));
                 languageButton.setText(menuButtonText.toUpperCase());
                 continue;
             }
+
             MenuItem menuItem = new MenuItem();
-
-            Image image = new Image(Paths.get(String.valueOf(imagesFolderPath),
-                    imageFile.getName()).toUri().toString());
-            ImageView imageView = new ImageView(image);
             menuItem.setGraphic(imageView);
-
-            String imageName = imageFile.getName();
             String menuItemText = imageName.substring(0, imageName.lastIndexOf('.'));
             menuItem.setText(menuItemText.toUpperCase());
 
@@ -118,7 +128,7 @@ public class LanguageButtonUtils {
                         config.getLanguage(), config.getCurrency(),
                         config.getName(), config.getRecentEvents()};
 
-                config.writeToFile(String.valueOf(filePath), contents, keys);
+                config.writeToFile(filePath, contents, keys);
 
                 ImageView menuItemImageView = (ImageView) menuItem.getGraphic();
                 ImageView menuButtonImageView = (ImageView) languageButton.getGraphic();
@@ -147,7 +157,7 @@ public class LanguageButtonUtils {
         if (file != null) {
             try {
                 Path languageFilePath = Paths.get(
-                        "client/src/main/resources/client/languages/Language_en.properties");
+                        "client/languages/Language_en.properties");
                 List<String> lines = Files.readAllLines(languageFilePath, StandardCharsets.UTF_8);
                 lines.add(0, "# Language file template");
                 lines.add(1, "# Please fill in the translations for the following keys");

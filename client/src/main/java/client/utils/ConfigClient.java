@@ -2,6 +2,8 @@ package client.utils;
 
 import java.io.*;
 
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -193,8 +195,12 @@ public class ConfigClient {
      */
     public ConfigClient readFromFile(String path) {
         try {
-            File config = new File(path);
-            Scanner configParse = new Scanner(config);
+            InputStream configStream = getClass().getClassLoader().getResourceAsStream(path);
+            if (configStream == null) {
+                System.out.println("NERD");
+                throw new FileNotFoundException("File not found: " + path);
+            }
+            Scanner configParse = new Scanner(configStream);
             String[] newClient = new String[8];
             int counter = 0;
             while (configParse.hasNextLine()) {
@@ -208,32 +214,37 @@ public class ConfigClient {
                 }
             }
             configParse.close();
-            if(!newClient[0].equals("null")){
+            if (!newClient[0].equals("null")) {
                 ServerUtils.setURL(newClient[0]);
             }
             return new ConfigClient(newClient[0], newClient[1],
                     newClient[2], newClient[3], newClient[4], newClient[5],
                     newClient[6], newClient[7]);
-
-        } catch (FileNotFoundException e) { // if the file is not found it should
+        } catch (FileNotFoundException e) {
             try {
-                // Get the absolute path of the resources folder
-                Files.createFile(filePath);
+                URL url = getClass().getClassLoader().getResource("");
 
-                BufferedWriter writer = new BufferedWriter(new FileWriter(
-                        String.valueOf(filePath)));
+                if (url == null) {
+                    throw new FileNotFoundException("Resources folder not found");
+                }
 
-                writer.write("serverUrl: http://localhost:8080/\n" +
-                        "email: null\n" +
-                        "iban: null\n" +
-                        "bic: null\n" +
-                        "language: en\n" +
-                        "currency: EUR\n" +
-                        "name: null\n" );
-                writer.close();
-            } catch (IOException ioException) {
-                System.out.println("An error occurred: " + ioException.getMessage());
-                ioException.printStackTrace();
+                Path resourcesPath = Paths.get(url.toURI());
+                Path configFilePath = resourcesPath.resolve("config.txt");
+
+                Files.createFile(configFilePath);
+
+                try (BufferedWriter writer = new BufferedWriter(new FileWriter(configFilePath.toFile()))) {
+                    writer.write("serverUrl: http://localhost:8080/\n" +
+                            "email: null\n" +
+                            "iban: null\n" +
+                            "bic: null\n" +
+                            "language: en\n" +
+                            "currency: EUR\n" +
+                            "name: null\n");
+                }
+            } catch (IOException | URISyntaxException exception) {
+                System.out.println("An error occurred: " + exception.getMessage());
+                exception.printStackTrace();
             }
             return new ConfigClient();
         }
@@ -254,13 +265,21 @@ public class ConfigClient {
      *                      this helps with actually writing the file.
      */
     public void writeToFile(String path, String[] configContent, String[] keys) {
-
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(path))) {
-            for (int i = 0; i < keys.length; i++) {
-                writer.write(keys[i] + ": " + configContent[i]);
-                writer.newLine();
+        try {
+            URL url = getClass().getClassLoader().getResource("");
+            if (url == null) {
+                throw new FileNotFoundException("Resources folder not found");
             }
-        } catch (IOException e) {
+            Path resourcesPath = Paths.get(url.toURI());
+            Path configFilePath = resourcesPath.resolve(path);
+
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(configFilePath.toFile()))) {
+                for (int i = 0; i < keys.length; i++) {
+                    writer.write(keys[i] + ": " + configContent[i]);
+                    writer.newLine();
+                }
+            }
+        } catch (IOException | URISyntaxException e) {
             System.out.println("Error writing to file: " + e.getMessage());
         }
     }
