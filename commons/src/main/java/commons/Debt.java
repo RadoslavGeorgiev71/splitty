@@ -16,7 +16,7 @@ public class Debt {
     @ManyToOne
     private Participant personPaying;
     @ManyToOne
-    private Participant personOwed;
+    private Participant personOwing;
     private double amount;
     private boolean paid;
     private LocalDateTime paidDateTime;
@@ -29,12 +29,12 @@ public class Debt {
     /**
      * Constructor for the Debt class
      * @param personPaying The participant who has to pay the debt
-     * @param personOwed The participant who will receive the debt
+     * @param personOwing The participant who will receive the debt
      * @param amount The amount of debt
      */
-    public Debt(Participant personPaying, Participant personOwed, double amount){
+    public Debt(Participant personPaying, Participant personOwing, double amount){
         this.personPaying = personPaying;
-        this.personOwed = personOwed;
+        this.personOwing = personOwing;
         this.amount = amount;
         this.paid = false;
         this.paidDateTime = null;
@@ -44,12 +44,12 @@ public class Debt {
      * Constructor for the Debt class
      * @param id Unique identifier for the Debt instance
      * @param personPaying The participant who has to pay the debt
-     * @param personOwed The participant who will receive the debt
+     * @param personOwing The participant who will receive the debt
      * @param amount The amount of debt
      */
-    public Debt(long id, Participant personPaying, Participant personOwed, double amount){
+    public Debt(long id, Participant personPaying, Participant personOwing, double amount){
         this.personPaying = personPaying;
-        this.personOwed = personOwed;
+        this.personOwing = personOwing;
         this.amount = amount;
         this.id = id;
         this.paid = false;
@@ -74,11 +74,11 @@ public class Debt {
     }
 
     /**
-     * Getter for personOwed
+     * Getter for personOwing
      * @return The person who is owed the money
      */
-    public Participant getPersonOwed() {
-        return personOwed;
+    public Participant getPersonOwing() {
+        return personOwing;
     }
 
     /**
@@ -128,11 +128,11 @@ public class Debt {
     }
 
     /**
-     * Setter for personOwed
-     * @param personOwed The new Participant who is owed money
+     * Setter for personOwing
+     * @param personOwing The new Participant who is owed money
      */
-    public void setPersonOwed(Participant personOwed) {
-        this.personOwed = personOwed;
+    public void setPersonOwing(Participant personOwing) {
+        this.personOwing = personOwing;
     }
 
     /**
@@ -175,7 +175,7 @@ public class Debt {
         Debt debt = (Debt) o;
         return id == debt.id && Double.compare(amount, debt.amount) == 0
                 && paid == debt.paid && Objects.equals(personPaying, debt.personPaying)
-                && Objects.equals(personOwed, debt.personOwed)
+                && Objects.equals(personOwing, debt.personOwing)
                 && Objects.equals(paidDateTime, debt.paidDateTime);
     }
 
@@ -185,6 +185,6 @@ public class Debt {
      */
     @Override
     public int hashCode() {
-        return Objects.hash(id, personPaying, personOwed, amount, paid, paidDateTime);
+        return Objects.hash(id, personPaying, personOwing, amount, paid, paidDateTime);
     }
 }

@@ -3,6 +3,7 @@ package client.scenes;
 import client.utils.ConfigClient;
 import client.utils.LanguageResourceBundle;
 import client.utils.ServerUtils;
+import commons.Debt;
 import commons.Event;
 import commons.Expense;
 import commons.Participant;
@@ -124,6 +125,14 @@ public class AddExpenseCtrl{
         //Expense newExpense = server.addExpense(event.getId(), expense);
         //Expense newExpense = server.addExpense(expense);
         event.addExpense(expense);
+        for(Participant participant : expense.getParticipants()) {
+            if(participant.equals(expense.getPayingParticipant())) {
+                continue;
+            }
+            Debt debt = new Debt(expense.getPayingParticipant(), participant,
+                expense.getAmount() / (expense.getParticipants().size()));
+            server.addDebt(debt);
+        }
         server.persistEvent(event);
         clearFields();
         event = server.getEvent(event.getId());

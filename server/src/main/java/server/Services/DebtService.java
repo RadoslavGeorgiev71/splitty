@@ -48,7 +48,7 @@ public class DebtService {
             calculateDebtPerParticipant(debts, participantsDebts);
             
             List<Debt> result = new ArrayList<>();
-            List<Participant> participants = event.get().getParticipants();
+            List<Participant> participants = new ArrayList<>(participantsDebts.keySet());
             while(!participantsDebts.isEmpty()) {
                 Participant mostOwing = participants.getFirst();
                 Participant mostOwed = participants.getFirst();
@@ -109,16 +109,16 @@ public class DebtService {
     private void calculateDebtPerParticipant(List<Debt> debts,
                                         Map<Participant, Double> participantsDebts) {
         for(Debt debt : debts) {
-            if(!participantsDebts.containsKey(debt.getPersonOwed())) {
-                participantsDebts.put(debt.getPersonOwed(), 0.0);
+            if(!participantsDebts.containsKey(debt.getPersonOwing())) {
+                participantsDebts.put(debt.getPersonOwing(), 0.0);
             }
-            participantsDebts.put(debt.getPersonOwed(),
-                participantsDebts.get(debt.getPersonOwed()) - debt.getAmount());
+            participantsDebts.put(debt.getPersonOwing(),
+                participantsDebts.get(debt.getPersonOwing()) + debt.getAmount());
             if(!participantsDebts.containsKey(debt.getPersonPaying())) {
                 participantsDebts.put(debt.getPersonPaying(), 0.0);
             }
             participantsDebts.put(debt.getPersonPaying(),
-                participantsDebts.get(debt.getPersonPaying()) + debt.getAmount());
+                participantsDebts.get(debt.getPersonPaying()) - debt.getAmount());
         }
     }
 
@@ -130,7 +130,7 @@ public class DebtService {
      */
     public Debt add(Debt debt) {
         if (debt.getPersonPaying() == null ||
-            debt.getPersonOwed() == null || debt.getAmount() <= 0) {
+            debt.getPersonOwing() == null || debt.getAmount() <= 0) {
             return null;
         }
         return debtRepo.save(debt);

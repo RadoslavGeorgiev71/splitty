@@ -4,7 +4,6 @@ import client.utils.LanguageResourceBundle;
 import client.utils.ServerUtils;
 import commons.Debt;
 import commons.Event;
-import commons.Participant;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
@@ -67,8 +66,8 @@ public class OpenDebtsCtrl {
             languageResourceBundle = LanguageResourceBundle.getInstance();
             switchTextLanguage();
             gridPane.setAlignment(Pos.CENTER);
-            this.testDebts();
-            debts = getPaymentInstructions();
+//            this.testDebts();
+            debts = this.getPaymentInstructions();
             titledPanes = new TitledPane[debts.size()];
             textFlows = new TextFlow[debts.size()];
             envelopeIcons = new FontAwesomeIconView[debts.size()];
@@ -119,8 +118,8 @@ public class OpenDebtsCtrl {
         bankIcons[i].setSize("15");
         GridPane.setValignment(bankIcons[i], javafx.geometry.VPos.TOP);
         GridPane.setHalignment(bankIcons[i], javafx.geometry.HPos.LEFT);
-        if (debts.get(i).getPersonOwed().getBic() == null ||
-            debts.get(i).getPersonOwed().getIban() == null) {
+        if (debts.get(i).getPersonOwing().getBic() == "" ||
+            debts.get(i).getPersonOwing().getIban() == "") {
             bankIcons[i].setFill(Color.GREY);
         }
         GridPane.setMargin(bankIcons[i], new Insets(7, 0, 0, 30));
@@ -168,10 +167,10 @@ public class OpenDebtsCtrl {
         Text payer = new Text(debt.getPersonPaying().getName());
         payer.setStyle("-fx-font-weight: bold");
         Text gives = new Text(" gives ");
-        Text amount = new Text(Double.toString(debt.getAmount()));
+        Text amount = new Text(String.format("%.2f", debt.getAmount()));
         amount.setStyle("-fx-font-weight: bold");
         Text to = new Text(" to ");
-        Text receiver = new Text(debt.getPersonOwed().getName());
+        Text receiver = new Text(debt.getPersonOwing().getName());
         receiver.setStyle("-fx-font-weight: bold");
         tf.getChildren().addAll(payer, gives, amount, to, receiver);
         tf.setStyle("-fx-alignment: center-left; -fx-padding: 10");
@@ -187,12 +186,12 @@ public class OpenDebtsCtrl {
     private Label generateExpandableLabel(Debt debt) {
         String text = "";
         int size = 0;
-        if (debt.getPersonOwed().getBic() != null
-            && debt.getPersonOwed().getIban() != null) {
+        if (debt.getPersonOwing().getBic() != ""
+            && debt.getPersonOwing().getIban() != "") {
             text += "Bank information available, transfer the money to:\n" +
-                "Account Holder: " + debt.getPersonOwed().getName() + "\n" +
-                "IBAN: " + debt.getPersonOwed().getIban() + "\n" +
-                "BIC: " + debt.getPersonOwed().getBic();
+                "Account Holder: " + debt.getPersonOwing().getName() + "\n" +
+                "IBAN: " + debt.getPersonOwing().getIban() + "\n" +
+                "BIC: " + debt.getPersonOwing().getBic();
             size += 80;
         } else {
             text += "Bank information not available.";
@@ -200,7 +199,7 @@ public class OpenDebtsCtrl {
         }
         text += "\n\n";
         size += 20;
-        if (debt.getPersonOwed().getEmail() != null) {
+        if (debt.getPersonOwing().getEmail() != null) {
             text += "Email configured: ";
             size += 20;
         } else {
@@ -247,16 +246,16 @@ public class OpenDebtsCtrl {
     }
 
     // TODO: only to test the functionality for now, should be removed later
-    private void testDebts() {
-        Participant bob = new Participant("Bob");
-        Participant ana = new Participant("Ana");
-        for (Debt debt : server.getPaymentInstructions(event)) {
-            server.deleteDebt(debt);
-        }
-        server.addDebt(new Debt(5, bob, ana, 10));
-        server.addDebt(new Debt(6, ana, bob, 8));
-        server.addDebt(new Debt(7, ana, new Participant("Greg"), 30));
-    }
+//    private void testDebts() {
+//        Participant bob = new Participant("Bob");
+//        Participant ana = new Participant("Ana");
+//        for (Debt debt : server.getPaymentInstructions(event)) {
+//            server.deleteDebt(debt);
+//        }
+//        server.addDebt(new Debt(5, bob, ana, 10));
+//        server.addDebt(new Debt(6, ana, bob, 8));
+//        server.addDebt(new Debt(7, ana, new Participant("Greg"), 30));
+//    }
 
     /**
      * Method to be called when a key is pressed

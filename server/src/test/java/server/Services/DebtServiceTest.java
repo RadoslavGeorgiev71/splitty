@@ -11,7 +11,6 @@ import server.Repositories.TestEventRepository;
 import server.database.DebtRepository;
 import server.database.EventRepository;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -95,7 +94,7 @@ public class DebtServiceTest {
         for(Debt instruction : instructions) {
             equal = false;
             for(Debt debt : paymentInstructions) {
-                if(debt.getPersonOwed().equals(instruction.getPersonOwed())
+                if(debt.getPersonOwing().equals(instruction.getPersonOwing())
                 && debt.getAmount() == instruction.getAmount()
                 && debt.getPersonPaying().equals(instruction.getPersonPaying())) {
                     equal = true;

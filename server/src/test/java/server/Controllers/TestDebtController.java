@@ -96,7 +96,7 @@ public class TestDebtController {
         for(Debt instruction : instructions) {
             equal = false;
             for(Debt debt : paymentInstructions) {
-                if(debt.getPersonOwed().equals(instruction.getPersonOwed())
+                if(debt.getPersonOwing().equals(instruction.getPersonOwing())
                     && debt.getAmount() == instruction.getAmount()
                     && debt.getPersonPaying().equals(instruction.getPersonPaying())) {
                     equal = true;
