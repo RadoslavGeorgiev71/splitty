@@ -19,6 +19,8 @@ public class Expense {
     private String currency;
     @ManyToMany//(cascade=CascadeType.ALL) //keep
     private List<Participant> participants;
+    @OneToMany
+    private List<Debt> debts;
     private String dateTime;
 
     /**
@@ -191,6 +193,22 @@ public class Expense {
      */
     public void delParticipant(Participant participant){
         participants.remove(participant);
+    }
+
+    /**
+     * Returns the debts associated with the Expense
+     * @return - the debts of the expense
+     */
+    public List<Debt> getDebts() {
+        return debts;
+    }
+
+    /**
+     * Set the debts of the expense
+     * @param debts - the debts to be set
+     */
+    public void setDebts(List<Debt> debts) {
+        this.debts = debts;
     }
 
     /**
