@@ -13,6 +13,8 @@ import javafx.fxml.FXML;
 import javafx.geometry.Side;
 import javafx.scene.control.*;
 
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -24,7 +26,12 @@ import javafx.collections.FXCollections;
 
 import javafx.event.ActionEvent;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ResourceBundle;
+
+import javafx.scene.control.MenuButton;
+import java.net.URI;
 
 public class EventOverviewCtrl {
 
@@ -89,6 +96,12 @@ public class EventOverviewCtrl {
 
     @FXML
     private GridPane tabPaneIncludingGridPane;
+
+    @FXML
+    private Text amountText;
+
+    private static Path iconsFolderPath =
+            Paths.get("client/src/main/resources/client/images/icons/").toAbsolutePath();
 
     private TextField titleTextField;
 
@@ -200,12 +213,15 @@ public class EventOverviewCtrl {
         tabPaneAllGridPane.getChildren().clear();
         tabPaneAllGridPane.setVgap(10);
         tabPaneAllGridPane.setHgap(10);
+        double amount = 0;
         if (event != null) {
             for (int i = 0; i < event.getExpenses().size(); i++) {
-                Label dateLabel = new Label(event.getExpenses().get(i).getDateTime());
-                Label nameLabel = new Label(event.getExpenses().get(i).getActivity());
+                Expense expense = event.getExpenses().get(i);
+                amount += expense.getAmount();
+                Label dateLabel = new Label(expense.getDateTime());
+                Label nameLabel = new Label(expense.getActivity());
                 nameLabel.setWrapText(true); // Wrap text to prevent truncation
-                Button editButton = new Button("Edit");
+                Button editButton = new Button();
 
                 // Set fixed column widths
                 dateLabel.setMaxWidth(Double.MAX_VALUE);
@@ -218,10 +234,12 @@ public class EventOverviewCtrl {
                 tabPaneAllGridPane.add(nameLabel, 1, i);
                 tabPaneAllGridPane.add(editButton, 2, i);
 
-                Expense expense = event.getExpenses().get(i);
                 editButton.setOnAction(event -> onEditExpenseClick(expense));
+                setEditIcon(editButton);
             }
             fromPersonTabName();
+            includingPersonTabName();
+            setAmount(amount);
         }
     }
 
@@ -234,16 +252,18 @@ public class EventOverviewCtrl {
         tabPaneFromGridPane.getChildren().clear();
         tabPaneFromGridPane.setVgap(10);
         tabPaneFromGridPane.setHgap(10);
+        double amount = 0;
         if (event != null) {
             for (int i = 0; i < event.getExpenses().size(); i++) {
                 Expense expense = event.getExpenses().get(i);
                 Participant payingParticipant = expense.getPayingParticipant();
                 if (payingParticipant.equals(participantsMenu.
                         getSelectionModel().getSelectedItem())) {
-                    Label dateLabel = new Label(event.getExpenses().get(i).getDateTime());
-                    Label nameLabel = new Label(event.getExpenses().get(i).getActivity());
+                    amount += expense.getAmount();
+                    Label dateLabel = new Label(expense.getDateTime());
+                    Label nameLabel = new Label(expense.getActivity());
                     nameLabel.setWrapText(true); // Wrap text to prevent truncation
-                    Button editButton = new Button("Edit");
+                    Button editButton = new Button();
 
                     // Set fixed column widths
                     dateLabel.setMaxWidth(Double.MAX_VALUE);
@@ -257,8 +277,12 @@ public class EventOverviewCtrl {
                     tabPaneFromGridPane.add(editButton, 2, i);
 
                     editButton.setOnAction(event -> onEditExpenseClick(expense));
+                    setEditIcon(editButton);
                 }
             }
+            fromPersonTabName();
+            includingPersonTabName();
+            setAmount(amount);
         }
     }
 
@@ -271,16 +295,18 @@ public class EventOverviewCtrl {
         tabPaneIncludingGridPane.getChildren().clear();
         tabPaneIncludingGridPane.setVgap(10);
         tabPaneIncludingGridPane.setHgap(10);
+        double amount = 0;
         if (event != null) {
             for (int i = 0; i < event.getExpenses().size(); i++) {
                 Participant participant =
                         (Participant) participantsMenu.getSelectionModel().getSelectedItem();
                 Expense expense = event.getExpenses().get(i);
                 if (expense.getParticipants().contains(participant)) {
-                    Label dateLabel = new Label(event.getExpenses().get(i).getDateTime());
-                    Label nameLabel = new Label(event.getExpenses().get(i).getActivity());
+                    amount += expense.getAmount();
+                    Label dateLabel = new Label(expense.getDateTime());
+                    Label nameLabel = new Label(expense.getActivity());
                     nameLabel.setWrapText(true); // Wrap text to prevent truncation
-                    Button editButton = new Button("Edit");
+                    Button editButton = new Button();
 
                     // Set fixed column widths
                     dateLabel.setMaxWidth(Double.MAX_VALUE);
@@ -294,9 +320,18 @@ public class EventOverviewCtrl {
                     tabPaneIncludingGridPane.add(editButton, 2, i);
 
                     editButton.setOnAction(event -> onEditExpenseClick(expense));
+                    setEditIcon(editButton);
                 }
             }
+            fromPersonTabName();
+            includingPersonTabName();
+            setAmount(amount);
         }
+    }
+
+    @FXML
+    public void setAmount(double amount) {
+        amountText.setText("Currency" + amount);
     }
 
     /**
@@ -418,6 +453,56 @@ public class EventOverviewCtrl {
     }
 
     /**
+     * Sets the icon of a button to "edit".
+     * @param button - the button to be changed.
+     */
+    private void setEditIcon(Button button) {
+        String iconsFolderPathString = iconsFolderPath.toString();
+        String graypencil = "\\graypencil.png";
+
+        Path grayPencilPath = Paths.get(iconsFolderPathString + graypencil);
+
+        URI uri = grayPencilPath.toUri();
+
+        String urlStringEdit = uri.toString();
+
+        Image editImage = new Image(urlStringEdit);
+        ImageView editImageView = new ImageView();
+
+        editImageView.setImage(editImage);
+
+        editImageView.setFitWidth(15);
+        editImageView.setFitHeight(15);
+
+        button.setGraphic(editImageView);
+    }
+
+    /**
+     * Sets the icon of a button to "add".
+     * @param button - the button to be changed.
+     */
+    private void setAddIcon(Button button) {
+        String iconsFolderPathString = iconsFolderPath.toString();
+        String addperson = "\\addperson.png";
+
+        Path addPersonPath = Paths.get(iconsFolderPathString + addperson);
+
+        URI uri = addPersonPath.toUri();
+
+        String urlStringAdd = uri.toString();
+
+        Image addImage = new Image(urlStringAdd);
+        ImageView addImageView = new ImageView();
+
+        addImageView.setImage(addImage);
+
+        addImageView.setFitWidth(15);
+        addImageView.setFitHeight(15);
+
+        button.setGraphic(addImageView);
+    }
+
+    /**
      * Initializes the event overview
      */
 
@@ -459,6 +544,9 @@ public class EventOverviewCtrl {
                 includingPersonTabName();
             });
             tabPaneAllClick();
+
+            setEditIcon(overviewEditParticipantButton);
+            setAddIcon(overviewAddParticipantButton);
         }
         
         server.registerEventUpdate(event -> {
