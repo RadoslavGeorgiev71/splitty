@@ -3,6 +3,7 @@ package client.scenes;
 import client.utils.ConfigClient;
 import client.utils.LanguageResourceBundle;
 import client.utils.ServerUtils;
+import commons.Debt;
 import commons.Event;
 import commons.Expense;
 import commons.Participant;
@@ -123,6 +124,18 @@ public class EditExpenseCtrl{
             expense.setParticipants(participants);
         }
         expense.setDateTime(datePicker.getValue().toString());
+        for(Debt debt : expense.getDebts()) {
+            server.deleteDebt(debt);
+        }
+        for(Participant participant : expense.getParticipants()) {
+            if(participant.equals(expense.getPayingParticipant())) {
+                continue;
+            }
+            Debt debt = new Debt(expense.getPayingParticipant(), participant,
+                expense.getAmount() / (expense.getParticipants().size()));
+            expense.add(debt);
+            server.addDebt(debt);
+        }
         //server.updateExpense(event.getId(), expense);
         //server.persistExpense(expense);
         clearFields();
@@ -143,6 +156,11 @@ public class EditExpenseCtrl{
             alert.setHeaderText("You will remove this expense permanently from this event");
             alert.setContentText("Are you sure you want to remove " +
                     this.expense.getTitle() + "?");
+
+            for(Debt debt : expense.getDebts()) {
+                server.deleteDebt(debt);
+            }
+
             if (alert.showAndWait().get() == ButtonType.OK){
                 event.removeExpense(expense);
                 server.persistEvent(event);

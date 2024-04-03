@@ -124,16 +124,16 @@ public class AddExpenseCtrl{
         expense.setDateTime(datePicker.getValue().toString());
         //Expense newExpense = server.addExpense(event.getId(), expense);
         //Expense newExpense = server.addExpense(expense);
-        event.addExpense(expense);
         for(Participant participant : expense.getParticipants()) {
             if(participant.equals(expense.getPayingParticipant())) {
                 continue;
             }
             Debt debt = new Debt(expense.getPayingParticipant(), participant,
                 expense.getAmount() / (expense.getParticipants().size()));
-            expense.add(Debt);
+            expense.add(debt);
             server.addDebt(debt);
         }
+        event.addExpense(expense);
         server.persistEvent(event);
         clearFields();
         event = server.getEvent(event.getId());

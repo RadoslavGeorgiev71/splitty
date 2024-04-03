@@ -2,6 +2,7 @@ package server.Services;
 
 import commons.Debt;
 import commons.Event;
+import commons.Expense;
 import commons.Participant;
 import org.springframework.stereotype.Service;
 import server.database.DebtRepository;
@@ -41,8 +42,10 @@ public class DebtService {
     public List<Debt> getPaymentInstructions(long eventId) {
         Optional<Event> event = eventRepo.findById(eventId);
         if(event.isPresent()) {
-            List<Debt> debts = debtRepo.findAll().stream().
-                filter(x -> event.get().getParticipants().contains(x.getPersonPaying())).toList();
+            List<Debt> debts = new ArrayList<>();
+            for(Expense expense : event.get().getExpenses()) {
+                debts.addAll(expense.getDebts());
+            }
             Map<Participant, Double> participantsDebts = new HashMap<>();
             
             calculateDebtPerParticipant(debts, participantsDebts);

@@ -65,6 +65,7 @@ public class OpenDebtsCtrl {
         if (event != null) {
             languageResourceBundle = LanguageResourceBundle.getInstance();
             switchTextLanguage();
+            gridPane.getChildren().clear();
             gridPane.setAlignment(Pos.CENTER);
 //            this.testDebts();
             debts = this.getPaymentInstructions();
