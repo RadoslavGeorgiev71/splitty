@@ -197,7 +197,6 @@ public class ConfigClient {
         try {
             InputStream configStream = getClass().getClassLoader().getResourceAsStream(path);
             if (configStream == null) {
-                System.out.println("NERD");
                 throw new FileNotFoundException("File not found: " + path);
             }
             Scanner configParse = new Scanner(configStream);
