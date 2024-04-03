@@ -86,9 +86,9 @@ public class DebtServiceTest {
         event.addParticipant(d);
         eventRepo.save(event);
         List<Debt> paymentInstructions = sut.getPaymentInstructions(event.getId());
-        Debt instruction1 = new Debt(b, d, 55);
-        Debt instruction2 = new Debt(a, d, 10);
-        Debt instruction3 = new Debt(c, d, 5);
+        Debt instruction1 = new Debt(d, b, 55);
+        Debt instruction2 = new Debt(d, a, 10);
+        Debt instruction3 = new Debt(d, c, 5);
         List<Debt> instructions = List.of(instruction1, instruction2, instruction3);
         boolean equal;
         for(Debt instruction : instructions) {
