@@ -33,6 +33,7 @@ public class Expense {
         this.amount = 0.0d;
         this.currency = "EUR";
         this.participants = new ArrayList<>();
+        this.debts = new ArrayList<>();
         this.dateTime = "";
     }
 
@@ -48,6 +49,7 @@ public class Expense {
         this.amount = 0.0d;
         this.currency = "EUR";
         this.participants = new ArrayList<>();
+        this.debts = new ArrayList<>();
         this.dateTime = "";
     }
 
@@ -65,6 +67,7 @@ public class Expense {
         this.amount = amount;
         this.currency = "EUR";
         this.participants = participants;
+        this.debts = new ArrayList<>();
         this.dateTime = "";
     }
 
@@ -84,6 +87,7 @@ public class Expense {
         this.amount = amount;
         this.currency = currency;
         this.participants = participants;
+        this.debts = new ArrayList<>();
         this.dateTime = dateTime;
     }
 
@@ -193,6 +197,14 @@ public class Expense {
      */
     public void delParticipant(Participant participant){
         participants.remove(participant);
+    }
+
+    /**
+     * Adds a debt to the expense
+     * @param debt - the debts to be added
+     */
+    public void add(Debt debt) {
+        this.debts.add(debt);
     }
 
     /**

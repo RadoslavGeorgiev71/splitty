@@ -112,6 +112,13 @@ class ExpenseTest {
     }
 
     @Test
+    void testAddDebt() {
+        Debt debt = new Debt(a, b, 100);
+        exp1.add(debt);
+        assertEquals(exp1.getDebts(), List.of(debt));
+    }
+
+    @Test
     void testGetDebts() {
         Debt debt = new Debt(a, b, 100);
         exp1.setDebts(List.of(debt));
