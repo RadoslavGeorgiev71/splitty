@@ -258,8 +258,8 @@ public class EventOverviewCtrl {
                 tabPaneAllGridPane.add(nameLabel, 1, i);
                 tabPaneAllGridPane.add(editButton, 2, i);
 
-                Expense expensei = event.getExpenses().get(i);
-                editButton.setOnAction(event -> onEditExpenseClick(expensei));
+                Expense expense = event.getExpenses().get(i);
+                editButton.setOnAction(event -> onEditExpenseClick(expense));
             }
             fromPersonTabName();
         }
@@ -286,10 +286,6 @@ public class EventOverviewCtrl {
                     nameLabel.setWrapText(true); // Wrap text to prevent truncation
                     Button editButton = new Button("Edit");
 
-                    editButton.setOnAction(event -> {
-                       //maintCtrl.showEditExpense(event.getExpenses().get(i))
-                    });
-
                     // Set fixed column widths
                     dateLabel.setMaxWidth(Double.MAX_VALUE);
                     nameLabel.setMaxWidth(Double.MAX_VALUE);
@@ -301,8 +297,7 @@ public class EventOverviewCtrl {
                     tabPaneFromGridPane.add(nameLabel, 1, j);
                     tabPaneFromGridPane.add(editButton, 2, j++);
 
-                    Expense expensei = event.getExpenses().get(i);
-                    editButton.setOnAction(event -> onEditExpenseClick(expensei));
+                    editButton.setOnAction(event -> onEditExpenseClick(expense));
                 }
             }
         }
@@ -392,7 +387,7 @@ public class EventOverviewCtrl {
      */
     public void includingPersonTabName() {
         if (event.getParticipants().isEmpty()){
-            tabPaneFromPerson.setText(languageResourceBundle.
+            tabPaneIncludingPerson.setText(languageResourceBundle.
                     getResourceBundle().getString("tabPaneIncluding"));
         }
         else {
@@ -481,7 +476,6 @@ public class EventOverviewCtrl {
             LanguageButtonUtils.updateLanguageMenuButton(languageButton, new ConfigClient());
             LanguageButtonUtils.languageMenu(languageButton, new ConfigClient(),
                     languageResourceBundle, this::initialize, keys);
-
             languageButton.setPopupSide(Side.TOP);
             switchLanguage();
             event.setExpenses(server.getEvent(event.getId()).getExpenses());
@@ -508,14 +502,13 @@ public class EventOverviewCtrl {
             participatingParticipants();
             fromPersonTabName();
             includingPersonTabName();
-
             participantsMenu.setOnAction(event -> {
                 fromPersonTabName();
                 includingPersonTabName();
             });
             tabPaneAllClick();
         }
-
+        
         server.registerEventUpdate(event -> {
             this.event = server.getEvent(event.getId());
             Platform.runLater(this::initialize);
