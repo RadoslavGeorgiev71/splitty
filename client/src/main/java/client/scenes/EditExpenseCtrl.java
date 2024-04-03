@@ -100,6 +100,7 @@ public class EditExpenseCtrl{
      * @param actionEvent to handle
      */
     public void onSaveClick(ActionEvent actionEvent) {
+        Event undoEvent = event;
         expense.setTitle(titleField.getText());
         expense.setPayingParticipant(payerChoiceBox.getSelectionModel().getSelectedItem());
         try {
@@ -126,7 +127,12 @@ public class EditExpenseCtrl{
         clearFields();
         server.persistEvent(event);
         event = server.getEvent(event.getId());
-        mainCtrl.showEventOverview(event);
+        if(event != null){
+            mainCtrl.showEventOverview(event);
+        }
+        else{
+            mainCtrl.showEventOverview(undoEvent);
+        }
     }
 
     /**
@@ -142,11 +148,18 @@ public class EditExpenseCtrl{
             alert.setContentText("Are you sure you want to remove " +
                     this.expense.getTitle() + "?");
             if (alert.showAndWait().get() == ButtonType.OK){
+                Event undoEvent = event;
                 event.removeExpense(expense);
                 server.persistEvent(event);
                 //server.deleteExpense(expense);
                 //server.deleteExpense(event.getId(), expense);
-                mainCtrl.showEventOverview(server.getEvent(event.getId()));
+                event = server.getEvent(event.getId());
+                if(event != null){
+                    mainCtrl.showEventOverview(event);
+                }
+                else{
+                    mainCtrl.showEventOverview(undoEvent);
+                }
             }
         }
     }
@@ -299,9 +312,12 @@ public class EditExpenseCtrl{
      */
     public void convertCurrency(){
         Double res = expense.getAmount();
-        res *= server.convertRate(expense.getDateTime(), expense.getCurrency(), currency);
-        expense.setAmount(res);
-        expense.setCurrency(currency);
+        Double rate = server.convertRate(expense.getDateTime(), expense.getCurrency(), currency);
+        if(rate != null){
+            res *= rate;
+            expense.setAmount(res);
+            expense.setCurrency(currency);
+        }
     }
 
     /**

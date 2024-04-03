@@ -430,8 +430,10 @@ public class EventOverviewCtrl {
                     languageResourceBundle, this::initialize, keys);
             languageButton.setPopupSide(Side.TOP);
             switchLanguage();
-            event.setExpenses(server.getEvent(event.getId()).getExpenses());
-
+            event = server.getEvent(event.getId());
+            if(event == null){
+                mainCtrl.showStartScreen();
+            }
             participantsMenu.setItems(FXCollections.observableArrayList(event.getParticipants()));
             participantsMenu.setConverter(new StringConverter<Participant>() {
                 @Override

@@ -67,6 +67,7 @@ public class EditParticipantCtrl {
      * @param actionEvent to handle
      */
     public void ok(ActionEvent actionEvent) {
+        Event undoEvent = event;
         participant.setName(nameField.getText());
         participant.setIban(ibanField.getText());
         participant.setEmail(emailField.getText());
@@ -75,7 +76,12 @@ public class EditParticipantCtrl {
         clearFields();
         server.persistEvent(event);
         event = server.getEvent(event.getId());
-        mainCtrl.showEventOverview(event);
+        if(event != null){
+            mainCtrl.showEventOverview(event);
+        }
+        else{
+            mainCtrl.showEventOverview(undoEvent);
+        }
     }
 
     /**
@@ -195,10 +201,17 @@ public class EditParticipantCtrl {
             alert.setContentText(bundle.getString("removeParticipantAlertContentText")
                     + " " + this.participant.getName());
             if (alert.showAndWait().get() == ButtonType.OK){
+                Event undoEvent = event;
                 event.removeParticipant(participant);
                 server.persistEvent(event);
                 server.deleteParticipant(participant);
-                mainCtrl.showEventOverview(server.getEvent(event.getId()));
+                event = server.getEvent(event.getId());
+                if(event != null){
+                    mainCtrl.showEventOverview(event);
+                }
+                else{
+                    mainCtrl.showEventOverview(undoEvent);
+                }
             }
         }
 

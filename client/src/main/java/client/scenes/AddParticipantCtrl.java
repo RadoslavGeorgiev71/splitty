@@ -68,6 +68,7 @@ public class AddParticipantCtrl {
      * @param actionEvent to handle
      */
     public void ok(ActionEvent actionEvent) {
+        Event undoEvent = event;
         Participant participant = new Participant();
         participant.setName(nameField.getText());
         participant.setIban(ibanField.getText());
@@ -78,7 +79,12 @@ public class AddParticipantCtrl {
         server.persistEvent(event);
         clearFields();
         event = server.getEvent(event.getId());
-        mainCtrl.showEventOverview(event);
+        if(event != null){
+            mainCtrl.showEventOverview(event);
+        }
+        else{
+            mainCtrl.showEventOverview(undoEvent);
+        }
     }
 
     /**

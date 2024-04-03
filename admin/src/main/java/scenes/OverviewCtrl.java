@@ -160,8 +160,10 @@ public class OverviewCtrl {
      */
     public void refresh() {
         var eventss = admin.getEvents();
-        events = FXCollections.observableList(eventss);
-        table.setItems(events);
+        if(eventss != null){
+            events = FXCollections.observableList(eventss);
+            table.setItems(events);
+        }
     }
 
     /**

@@ -185,14 +185,6 @@ public class StartScreenCtrl {
             if (event != null) {
                 writeEventToConfig(event);
                 mainCtrl.showEventOverview(event);
-            } else {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setHeaderText("Error: Unable to connect to the server or " +
-                        "event does not exists");
-                alert.setContentText("Please make sure that the URL and invite code are " +
-                        "correct and that the server is running");
-                alert.showAndWait();
             }
         }
     }
@@ -210,13 +202,8 @@ public class StartScreenCtrl {
             if (event != null) {
                 writeEventToConfig(event);
                 mainCtrl.showInvitation(event);
-            } else {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setHeaderText("Error: Unable to connect to the server");
-                alert.setContentText("Please make sure that the URL is " +
-                        "correct and that the server is running");
-                alert.showAndWait();
+            }
+            else{
                 clearFields();
             }
         }

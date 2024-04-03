@@ -97,6 +97,7 @@ public class AddExpenseCtrl{
      * @param actionEvent to handle
      */
     public void onAddClick(ActionEvent actionEvent) {
+        Event undoEvent = event;
         Expense expense = new Expense();
         expense.setTitle(titleField.getText());
         expense.setPayingParticipant(payerChoiceBox.getSelectionModel().getSelectedItem());
@@ -125,7 +126,12 @@ public class AddExpenseCtrl{
         server.persistEvent(event);
         clearFields();
         event = server.getEvent(event.getId());
-        mainCtrl.showEventOverview(event);
+        if(event != null){
+            mainCtrl.showEventOverview(event);
+        }
+        else{
+            mainCtrl.showEventOverview(undoEvent);
+        }
     }
 
     /**

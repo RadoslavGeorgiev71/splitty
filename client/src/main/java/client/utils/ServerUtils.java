@@ -25,10 +25,11 @@ import java.util.function.Consumer;
 import commons.Debt;
 import commons.Expense;
 import jakarta.ws.rs.ProcessingException;
-import jakarta.ws.rs.WebApplicationException;
+//import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.Response;
 import commons.Event;
 import commons.Participant;
+import javafx.scene.control.Alert;
 import org.glassfish.jersey.client.ClientConfig;
 
 import jakarta.ws.rs.client.ClientBuilder;
@@ -99,15 +100,22 @@ public class ServerUtils {
      * @return the event with the specified id
      */
     public Event getEvent(long id) {
-        Response response = ClientBuilder.newClient(new ClientConfig())
-                .target(server).path("/api/events/id/" + id)
-                .request(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .get();
-        if (response.getStatus() == Response.Status.OK.getStatusCode()) {
-            return response.readEntity(Event.class);
-        } else {
-            throw new WebApplicationException("Event not found" + response.getStatus());
+        try{
+            Response response = ClientBuilder.newClient(new ClientConfig())
+                    .target(server).path("/api/events/id/" + id)
+                    .request(APPLICATION_JSON)
+                    .accept(APPLICATION_JSON)
+                    .get();
+            if (response.getStatus() == Response.Status.OK.getStatusCode()) {
+                return response.readEntity(Event.class);
+            } else {
+                showAlert();
+                return  null;
+            }
+        }
+        catch(ProcessingException e){
+            showAlert();
+            return null;
         }
     }
 
@@ -129,12 +137,13 @@ public class ServerUtils {
             if (response.getStatus() == Response.Status.CREATED.getStatusCode()) {
                 return response.readEntity(Event.class);
             } else {
+                showAlert();
                 return null;
             }
         }catch (ProcessingException e){
+            showAlert();
             return null;
         }
-
     }
 
     /**
@@ -159,9 +168,9 @@ public class ServerUtils {
                 return  null;
             }
         }catch (ProcessingException e){
+            showAlert(inviteCode);
             return null;
         }
-
     }
 
     /**
@@ -187,11 +196,16 @@ public class ServerUtils {
      */
 
     public Response deleteParticipant(Participant participant) {
-        return ClientBuilder.newClient(new ClientConfig())
-                .target(server).path("api/participants/" + participant.getId())
-                .request(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .delete();
+        try{
+            return ClientBuilder.newClient(new ClientConfig())
+                    .target(server).path("api/participants/" + participant.getId())
+                    .request(APPLICATION_JSON)
+                    .accept(APPLICATION_JSON)
+                    .delete();
+        }
+        catch(ProcessingException e){
+            return null;
+        }
     }
 
     /**
@@ -217,11 +231,17 @@ public class ServerUtils {
      */
     public Event persistEvent(Event event) {
         Entity<Event> entity = Entity.entity(event, APPLICATION_JSON);
-        return ClientBuilder.newClient(new ClientConfig())
-                .target(server).path("api/events/persist/" + event.getId())
-                .request(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .put(entity, Event.class);
+        try{
+            return ClientBuilder.newClient(new ClientConfig())
+                    .target(server).path("api/events/persist/" + event.getId())
+                    .request(APPLICATION_JSON)
+                    .accept(APPLICATION_JSON)
+                    .put(entity, Event.class);
+        }
+        catch(ProcessingException e) {
+            showAlert();
+            return null;
+        }
     }
 
     private static final ExecutorService EXEC = Executors.newSingleThreadExecutor();
@@ -261,17 +281,25 @@ public class ServerUtils {
      * @return true if the emails were sent successfully
      */
     public boolean sendInvites(List<String> emails, Event event, String creatorname) {
-        Response response = ClientBuilder.newClient(new ClientConfig())
-                .target(server).path("/api/email/" + event.getInviteCode())
-                .queryParam("creatorName", creatorname)
-                .request(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .post(Entity.json(emails));
-        if (response.getStatus() == Response.Status.OK.getStatusCode()) {
-            return true;
-        } else {
+        try{
+            Response response = ClientBuilder.newClient(new ClientConfig())
+                    .target(server).path("/api/email/" + event.getInviteCode())
+                    .queryParam("creatorName", creatorname)
+                    .request(APPLICATION_JSON)
+                    .accept(APPLICATION_JSON)
+                    .post(Entity.json(emails));
+            if (response.getStatus() == Response.Status.OK.getStatusCode()) {
+                return true;
+            } else {
+                showAlert();
+                return false;
+            }
+        }
+        catch(ProcessingException e){
+            showAlert();
             return false;
         }
+
     }
 
     /**
@@ -419,7 +447,36 @@ public class ServerUtils {
         if (response.getStatus() == Response.Status.OK.getStatusCode()) {
             return response.readEntity(Double.class);
         } else {
-            throw new WebApplicationException("Rate not found" + response.getStatus());
+            showAlert();
+            return null;
         }
+    }
+
+    /**
+     * Show a pop up window with an alert when the client cannot connect
+     * to the server
+     */
+    public void showAlert(){
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText("Error: Unable to connect to the server");
+        alert.setContentText("Please make sure that the URL is " +
+                "correct and that the server is running");
+        alert.showAndWait();
+    }
+
+    /**
+     * Show a pop up window with an alert when the client cannot connect
+     * to the server
+     * @param inviteCode that caused the problem
+     */
+    public void showAlert(String inviteCode){
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText("Error: Unable to connect to the server or " +
+                "event with invite code: " + inviteCode + " does not exists");
+        alert.setContentText("Please make sure that the URL and invite code are " +
+                "correct and that the server is running");
+        alert.showAndWait();
     }
 }
