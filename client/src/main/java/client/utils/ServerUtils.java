@@ -438,14 +438,19 @@ public class ServerUtils {
      * @return the event with the specified id
      */
     public Double convertRate(String date, String from, String to) {
-        String str = "/api/expenses/date/" + date + "/rate/" + from + "/" + to;
+        String key = "488b2c548074f3e5d9e15ba3013a152d";
+        String url = "http://data.fixer.io/api/" + date;
+        url += "?access_key=" + key+ "&base=" + from + "&symbols=" + to;
         Response response = ClientBuilder.newClient(new ClientConfig())
-                .target(server).path(str)
+                .target(url)
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
                 .get();
         if (response.getStatus() == Response.Status.OK.getStatusCode()) {
-            return response.readEntity(Double.class);
+            Object res = response.readEntity(Object.class);
+            String rate = res.toString();
+            rate = rate.split(to+"=")[1].split("}")[0];
+            return Double.parseDouble(rate);
         } else {
             showAlert();
             return null;
