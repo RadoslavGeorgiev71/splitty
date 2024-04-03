@@ -51,7 +51,6 @@ public class LanguageButtonUtils {
         MenuItem questionItem = new MenuItem();
         questionItem.setText("New");
         languageButton.getItems().add(questionItem);
-
         URL url = LanguageButtonUtils.class.getClassLoader().getResource(imagesFolderPath);
         if (url == null) {
             throw new RuntimeException("Resources folder not found");
@@ -68,7 +67,8 @@ public class LanguageButtonUtils {
                 -> name.toLowerCase().endsWith(".png") || name.toLowerCase().endsWith(".jpg"));
 
         if (imageFiles == null) {
-            throw new RuntimeException("No image files found in the directory: " + imagesFolderPath);
+            throw new RuntimeException(
+                    "No image files found in the directory: " + imagesFolderPath);
         }
 
         for (File imageFile : imageFiles) {

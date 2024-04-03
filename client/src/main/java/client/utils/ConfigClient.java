@@ -221,18 +221,10 @@ public class ConfigClient {
                     newClient[6], newClient[7]);
         } catch (FileNotFoundException e) {
             try {
-                URL url = getClass().getClassLoader().getResource("");
+                Path configFilePath = pathAndCreate();
 
-                if (url == null) {
-                    throw new FileNotFoundException("Resources folder not found");
-                }
-
-                Path resourcesPath = Paths.get(url.toURI());
-                Path configFilePath = resourcesPath.resolve("config.txt");
-
-                Files.createFile(configFilePath);
-
-                try (BufferedWriter writer = new BufferedWriter(new FileWriter(configFilePath.toFile()))) {
+                try (BufferedWriter writer = new
+                        BufferedWriter(new FileWriter(configFilePath.toFile()))) {
                     writer.write("serverUrl: http://localhost:8080/\n" +
                             "email: null\n" +
                             "iban: null\n" +
@@ -247,6 +239,27 @@ public class ConfigClient {
             }
             return new ConfigClient();
         }
+    }
+
+    /**
+     * method for creating a file if it doesn't exist(config.txt)
+     * @return the path of the file
+     * @throws URISyntaxException if the URL is not correct
+     * @throws IOException if the file cannot be created
+     */
+
+    private Path pathAndCreate() throws URISyntaxException, IOException {
+        URL url = getClass().getClassLoader().getResource("");
+
+        if (url == null) {
+            throw new FileNotFoundException("Resources folder not found");
+        }
+
+        Path resourcesPath = Paths.get(url.toURI());
+        Path configFilePath = resourcesPath.resolve("config.txt");
+
+        Files.createFile(configFilePath);
+        return configFilePath;
     }
 
     /**
@@ -272,7 +285,8 @@ public class ConfigClient {
             Path resourcesPath = Paths.get(url.toURI());
             Path configFilePath = resourcesPath.resolve(path);
 
-            try (BufferedWriter writer = new BufferedWriter(new FileWriter(configFilePath.toFile()))) {
+            try (BufferedWriter writer = new
+                    BufferedWriter(new FileWriter(configFilePath.toFile()))) {
                 for (int i = 0; i < keys.length; i++) {
                     writer.write(keys[i] + ": " + configContent[i]);
                     writer.newLine();
