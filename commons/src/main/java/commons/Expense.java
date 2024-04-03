@@ -17,7 +17,7 @@ public class Expense {
     private Participant payingParticipant;
     private double amount;
     private String currency;
-    @OneToMany//(cascade=CascadeType.ALL) //keep
+    @ManyToMany//(cascade=CascadeType.ALL) //keep
     private List<Participant> participants;
     private String dateTime;
 
