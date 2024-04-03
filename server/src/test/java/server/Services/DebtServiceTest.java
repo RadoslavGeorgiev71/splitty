@@ -24,7 +24,7 @@ public class DebtServiceTest {
     private DebtService sut;
 
     @BeforeEach
-    void DebtServiceSetUp() {
+    void debtServiceSetUp() {
         debtRepo = new TestDebtRepository();
         eventRepo = new TestEventRepository();
         sut =  new DebtService(debtRepo, eventRepo);

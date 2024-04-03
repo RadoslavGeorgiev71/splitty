@@ -16,7 +16,7 @@ import java.util.function.Function;
 public class TestTagRepository implements TagRepository {
 
     private List<Tag> tags = new ArrayList<>();
-    private final List<String> calledMethods = new ArrayList<>();
+    private List<String> calledMethods = new ArrayList<>();
 
     /**
      * Add a method to the list of called methods
@@ -48,6 +48,14 @@ public class TestTagRepository implements TagRepository {
      */
     public List<String> getCalledMethods() {
         return calledMethods;
+    }
+
+    /**
+     *
+     * @param calledMethods -
+     */
+    public void setCalledMethods(List<String> calledMethods) {
+        this.calledMethods = calledMethods;
     }
 
     /**
