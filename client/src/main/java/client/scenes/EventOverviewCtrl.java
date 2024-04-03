@@ -297,8 +297,8 @@ public class EventOverviewCtrl {
                     tabPaneFromGridPane.add(nameLabel, 1, j);
                     tabPaneFromGridPane.add(editButton, 2, j++);
 
-                    editButton.setOnAction(event -> onEditExpenseClick(expense));
-                }
+                    Expense expensei = event.getExpenses().get(i);
+                    editButton.setOnAction(event -> onEditExpenseClick(expensei));                }
             }
         }
     }
