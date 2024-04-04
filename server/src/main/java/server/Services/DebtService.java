@@ -42,10 +42,7 @@ public class DebtService {
     public List<Debt> getPaymentInstructions(long eventId) {
         Optional<Event> event = eventRepo.findById(eventId);
         if(event.isPresent()) {
-            List<Debt> debts = new ArrayList<>();
-            for(Expense expense : event.get().getExpenses()) {
-                debts.addAll(expense.getDebts());
-            }
+            List<Debt> debts = getAllDebts(event.get());
             Map<Participant, Double> participantsDebts = new HashMap<>();
             
             calculateDebtPerParticipant(debts, participantsDebts);
@@ -75,6 +72,20 @@ public class DebtService {
         else {
             return null;
         }
+    }
+
+    /**
+     * Gets all debts related to the event
+     * @param event - the event for which we retrieve the debts
+     * @return - the debts related to the event
+     */
+    private List<Debt> getAllDebts(Event event) {
+        List<Debt> debts = new ArrayList<>();
+        for(Expense expense : event.getExpenses()) {
+            debts.addAll(expense.getDebts());
+        }
+        debts.addAll(event.getSettledDebts());
+        return debts;
     }
 
     /**
