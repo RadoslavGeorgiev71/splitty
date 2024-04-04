@@ -110,9 +110,12 @@ public class OpenDebtsCtrl {
         envelopeIcons[i].setSize("15");
         GridPane.setValignment(envelopeIcons[i], javafx.geometry.VPos.TOP);
         GridPane.setHalignment(envelopeIcons[i], javafx.geometry.HPos.LEFT);
+        Tooltip toolTipEnvelope = new Tooltip("Email available!");
         if(debts.get(i).getPersonOwing().getEmail() == "") {
             envelopeIcons[i].setFill(Color.GREY);
+            toolTipEnvelope.setText("Email NOT available!");
         }
+        Tooltip.install(envelopeIcons[i], toolTipEnvelope);
         GridPane.setMargin(envelopeIcons[i], new Insets(7, 0, 0, 10));
         gridPane.add(envelopeIcons[i], 1, i, 1, 1);
 
@@ -121,10 +124,13 @@ public class OpenDebtsCtrl {
         bankIcons[i].setSize("15");
         GridPane.setValignment(bankIcons[i], javafx.geometry.VPos.TOP);
         GridPane.setHalignment(bankIcons[i], javafx.geometry.HPos.LEFT);
+        Tooltip toolTipBank = new Tooltip("Bank information available!");
         if (debts.get(i).getPersonOwing().getBic() == "" ||
             debts.get(i).getPersonOwing().getIban() == "") {
             bankIcons[i].setFill(Color.GREY);
+            toolTipBank.setText("Bank information NOT available!");
         }
+        Tooltip.install(bankIcons[i], toolTipBank);
         GridPane.setMargin(bankIcons[i], new Insets(7, 0, 0, 30));
         gridPane.add(bankIcons[i], 1, i, 1, 1);
 
@@ -180,9 +186,10 @@ public class OpenDebtsCtrl {
         }
         text += "\n\n";
         size += 20;
-        if (debt.getPersonOwing().getEmail() != null) {
+        if (debt.getPersonOwing().getEmail() != "") {
             text += "Email configured: ";
             size += 20;
+            //TODO: add the email button
         } else {
             text += "Email not configured.";
             size += 20;
@@ -204,7 +211,10 @@ public class OpenDebtsCtrl {
 
         alert.showAndWait().ifPresent(response -> {
             if (response == ButtonType.OK) {
-                
+                event.addSettledDebt(new Debt(debt.getPersonPaying(),
+                    debt.getPersonOwing(), debt.getAmount()));
+                server.persistEvent(event);
+                event = server.getEvent(event.getId());
                 mainCtrl.showOpenDebts(event);
             }
         });

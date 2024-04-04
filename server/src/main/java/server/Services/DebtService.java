@@ -98,14 +98,14 @@ public class DebtService {
     private void settleTransaction(Map<Participant, Double> participantsDebts,
                                    Participant mostOwed, double amount, Participant mostOwing,
                                    List<Participant> participants) {
-        if(participantsDebts.get(mostOwed) + amount == 0) {
+        if(Math.abs(participantsDebts.get(mostOwed) + amount) < 0.01) {
             participantsDebts.remove(mostOwed);
             participants.remove(mostOwed);
         }
         else {
             participantsDebts.put(mostOwed, participantsDebts.get(mostOwed) + amount);
         }
-        if(participantsDebts.get(mostOwing) - amount == 0) {
+        if(Math.abs(participantsDebts.get(mostOwing) - amount) < 0.01) {
             participantsDebts.remove(mostOwing);
             participants.remove(mostOwing);
         }
@@ -134,6 +134,7 @@ public class DebtService {
             participantsDebts.put(debt.getPersonPaying(),
                 participantsDebts.get(debt.getPersonPaying()) - debt.getAmount());
         }
+        participantsDebts.entrySet().removeIf(x -> x.getValue() == 0);
     }
 
     /**
