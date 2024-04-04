@@ -1,4 +1,4 @@
-package server;
+package server.Services;
 
 import org.junit.jupiter.api.Test;
 import server.Services.AuthService;

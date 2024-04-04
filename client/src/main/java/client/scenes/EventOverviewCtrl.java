@@ -24,6 +24,7 @@ import javafx.collections.FXCollections;
 
 import javafx.event.ActionEvent;
 
+import java.text.DecimalFormat;
 import java.util.ResourceBundle;
 
 public class EventOverviewCtrl {
@@ -67,7 +68,7 @@ public class EventOverviewCtrl {
     private Tab tabPaneAll;
 
     @FXML
-    private ChoiceBox participantsMenu;
+    private ChoiceBox<Participant> participantsMenu;
 
     @FXML
     private GridPane tabPaneAllGridPane;
@@ -152,7 +153,8 @@ public class EventOverviewCtrl {
 
     @FXML
     public void onAddExpenseClick() {
-        mainCtrl.showAddExpense(this.event);
+        Participant p = participantsMenu.getValue();
+        mainCtrl.showAddExpense(this.event, p);
     }
 
     /**
@@ -192,6 +194,43 @@ public class EventOverviewCtrl {
     }
 
     /**
+     *  converted currency
+     * @param expense to convert
+     * @return converted amount
+     */
+    public Double convertCurrency(Expense expense){
+        String currency = ConfigClient.getCurrency();
+        Double res = expense.getAmount();
+        res *= server.convertRate(expense.getDateTime(), expense.getCurrency(), currency);
+        DecimalFormat df = new DecimalFormat("#.##");
+        res = Double.valueOf(df.format(res));
+        return res;
+    }
+
+    /**
+     * Method for converting
+     * @param expense
+     * @return updated expense with correct currency
+     */
+    public Expense foreignCurrency(Expense expense){
+        String currency = ConfigClient.getCurrency();
+        Expense show = new Expense();
+        if(currency != null && expense.getCurrency() != currency &&
+                currency.length() == 3){
+            try{
+                show.setAmount(convertCurrency(expense));
+                show.setCurrency(currency);
+                show.setTitle(expense.getTitle());
+                show.setPayingParticipant(expense.getPayingParticipant());
+            }
+            catch (Exception e){
+                show = expense;
+            }
+        }
+        return show;
+    }
+
+    /**
      * Method to be executed when delete event button is clicked
      */
 
@@ -202,8 +241,9 @@ public class EventOverviewCtrl {
         tabPaneAllGridPane.setHgap(10);
         if (event != null) {
             for (int i = 0; i < event.getExpenses().size(); i++) {
+                Expense show = foreignCurrency(event.getExpenses().get(i));
                 Label dateLabel = new Label(event.getExpenses().get(i).getDateTime());
-                Label nameLabel = new Label(event.getExpenses().get(i).getActivity());
+                Label nameLabel = new Label(show.getActivity());
                 nameLabel.setWrapText(true); // Wrap text to prevent truncation
                 Button editButton = new Button("Edit");
 
@@ -218,8 +258,8 @@ public class EventOverviewCtrl {
                 tabPaneAllGridPane.add(nameLabel, 1, i);
                 tabPaneAllGridPane.add(editButton, 2, i);
 
-                Expense expensei = event.getExpenses().get(i);
-                editButton.setOnAction(event -> onEditExpenseClick(expensei));
+                Expense expense = event.getExpenses().get(i);
+                editButton.setOnAction(event -> onEditExpenseClick(expense));
             }
             fromPersonTabName();
         }
@@ -235,18 +275,16 @@ public class EventOverviewCtrl {
         tabPaneFromGridPane.setVgap(10);
         tabPaneFromGridPane.setHgap(10);
         if (event != null) {
+            int j = 0;
             for (int i = 0; i < event.getExpenses().size(); i++) {
-                Participant participant = event.getParticipants().get(i);
+                Participant participant = event.getExpenses().get(i).getPayingParticipant();
                 if (participant.equals(participantsMenu.
                         getSelectionModel().getSelectedItem())) {
+                    Expense show = foreignCurrency(event.getExpenses().get(i));
                     Label dateLabel = new Label(event.getExpenses().get(i).getDateTime());
-                    Label nameLabel = new Label(event.getExpenses().get(i).getActivity());
+                    Label nameLabel = new Label(show.getActivity());
                     nameLabel.setWrapText(true); // Wrap text to prevent truncation
                     Button editButton = new Button("Edit");
-
-                    editButton.setOnAction(event -> {
-                       //maintCtrl.showEditExpense(event.getExpenses().get(i))
-                    });
 
                     // Set fixed column widths
                     dateLabel.setMaxWidth(Double.MAX_VALUE);
@@ -255,13 +293,12 @@ public class EventOverviewCtrl {
                     GridPane.setFillWidth(dateLabel, true);
                     GridPane.setFillWidth(nameLabel, true);
 
-                    tabPaneFromGridPane.add(dateLabel, 0, i);
-                    tabPaneFromGridPane.add(nameLabel, 1, i);
-                    tabPaneFromGridPane.add(editButton, 2, i);
+                    tabPaneFromGridPane.add(dateLabel, 0, j);
+                    tabPaneFromGridPane.add(nameLabel, 1, j);
+                    tabPaneFromGridPane.add(editButton, 2, j++);
 
                     Expense expensei = event.getExpenses().get(i);
-                    editButton.setOnAction(event -> onEditExpenseClick(expensei));
-                }
+                    editButton.setOnAction(event -> onEditExpenseClick(expensei));                }
             }
         }
     }
@@ -273,6 +310,41 @@ public class EventOverviewCtrl {
     @FXML
     public void tabPaneIncludingPersonClick() {
         tabPaneIncludingGridPane.getChildren().clear();
+        tabPaneIncludingGridPane.getChildren().clear();
+        tabPaneIncludingGridPane.setVgap(10);
+        tabPaneIncludingGridPane.setHgap(10);
+        if (event != null) {
+            int j = 0;
+            for (int i = 0; i < event.getExpenses().size(); i++) {
+                Participant participant = (Participant) participantsMenu.
+                        getSelectionModel().getSelectedItem();
+                if (event.getExpenses().get(i).getParticipants().contains(participant)) {
+                    Expense show = foreignCurrency(event.getExpenses().get(i));
+                    Label dateLabel = new Label(event.getExpenses().get(i).getDateTime());
+                    Label nameLabel = new Label(show.getActivity());
+                    nameLabel.setWrapText(true); // Wrap text to prevent truncation
+                    Button editButton = new Button("Edit");
+
+                    editButton.setOnAction(event -> {
+                        //maintCtrl.showEditExpense(event.getExpenses().get(i))
+                    });
+
+                    // Set fixed column widths
+                    dateLabel.setMaxWidth(Double.MAX_VALUE);
+                    nameLabel.setMaxWidth(Double.MAX_VALUE);
+
+                    GridPane.setFillWidth(dateLabel, true);
+                    GridPane.setFillWidth(nameLabel, true);
+
+                    tabPaneIncludingGridPane.add(dateLabel, 0, j);
+                    tabPaneIncludingGridPane.add(nameLabel, 1, j);
+                    tabPaneIncludingGridPane.add(editButton, 2, j++);
+
+                    Expense expensei = event.getExpenses().get(i);
+                    editButton.setOnAction(event -> onEditExpenseClick(expensei));
+                }
+            }
+        }
     }
 
     /**
@@ -315,7 +387,7 @@ public class EventOverviewCtrl {
      */
     public void includingPersonTabName() {
         if (event.getParticipants().isEmpty()){
-            tabPaneFromPerson.setText(languageResourceBundle.
+            tabPaneIncludingPerson.setText(languageResourceBundle.
                     getResourceBundle().getString("tabPaneIncluding"));
         }
         else {
@@ -400,17 +472,13 @@ public class EventOverviewCtrl {
     public void initialize(){
         if (event != null){
             languageButton.getItems().clear();
-
             languageResourceBundle = LanguageResourceBundle.getInstance();
             LanguageButtonUtils.updateLanguageMenuButton(languageButton, new ConfigClient());
-
             LanguageButtonUtils.languageMenu(languageButton, new ConfigClient(),
                     languageResourceBundle, this::initialize, keys);
-
             languageButton.setPopupSide(Side.TOP);
-
-
             switchLanguage();
+            event.setExpenses(server.getEvent(event.getId()).getExpenses());
 
             participantsMenu.setItems(FXCollections.observableArrayList(event.getParticipants()));
             participantsMenu.setConverter(new StringConverter<Participant>() {
@@ -434,14 +502,13 @@ public class EventOverviewCtrl {
             participatingParticipants();
             fromPersonTabName();
             includingPersonTabName();
-
             participantsMenu.setOnAction(event -> {
                 fromPersonTabName();
                 includingPersonTabName();
             });
             tabPaneAllClick();
         }
-
+        
         server.registerEventUpdate(event -> {
             this.event = server.getEvent(event.getId());
             Platform.runLater(this::initialize);

@@ -13,9 +13,9 @@ public class Debt {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     private Participant personPaying;
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     private Participant personOwed;
     private double amount;
     private boolean paid;
