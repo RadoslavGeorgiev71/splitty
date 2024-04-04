@@ -303,8 +303,26 @@ public class ServerUtils {
 
     }
 
-    public void sendDefault() {
-
+    public boolean sendDefault() {
+        try{
+            Participant participant = new Participant(0, ConfigClient.getName(),
+                    ConfigClient.getEmail(), ConfigClient.getIban(), ConfigClient.getBic());
+            Response response = ClientBuilder.newClient(new ClientConfig())
+                    .target(server).path("/api/email/default")
+                    .request(APPLICATION_JSON)
+                    .accept(APPLICATION_JSON)
+                    .post(Entity.json(participant));
+            if (response.getStatus() == Response.Status.OK.getStatusCode()) {
+                return true;
+            } else {
+                showAlert();
+                return false;
+            }
+        }
+        catch(ProcessingException e){
+            showAlert();
+            return false;
+        }
     }
 
     /**
@@ -471,7 +489,7 @@ public class ServerUtils {
         alert.setTitle("Error");
         alert.setHeaderText("Error: Unable to connect to the server");
         alert.setContentText("Please make sure that the URL is " +
-                "correct and that the server is running");
+                "correct, that the server is running and that your email credentials are correct");
         alert.showAndWait();
     }
 
@@ -486,7 +504,7 @@ public class ServerUtils {
         alert.setHeaderText("Error: Unable to connect to the server or " +
                 "event with invite code: " + inviteCode + " does not exists");
         alert.setContentText("Please make sure that the URL and invite code are " +
-                "correct and that the server is running");
+                "correct, that the server is running and that your email credentials are correct");
         alert.showAndWait();
     }
 

@@ -235,7 +235,13 @@ public class UserSettingsCtrl {
 
     public void sendDefault(ActionEvent actionEvent) {
         if(emailField.getText() != null){
-            server.sendDefault();
+            if(server.sendDefault()){
+                ResourceBundle bundle = languageResourceBundle.getResourceBundle();
+                Alert alert =  new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle(bundle.getString("settingsAlertInfoTitleText"));
+                alert.setHeaderText(bundle.getString("settingsAlertInfoHeaderText"));
+                alert.showAndWait();
+            }
         }
         else{
             ResourceBundle bundle = languageResourceBundle.getResourceBundle();
