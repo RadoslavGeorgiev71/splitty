@@ -285,6 +285,7 @@ public class ServerUtils {
             Response response = ClientBuilder.newClient(new ClientConfig())
                     .target(server).path("/api/email/" + event.getInviteCode())
                     .queryParam("creatorName", creatorname)
+                    .queryParam("creatorEmail", ConfigClient.getEmail())
                     .request(APPLICATION_JSON)
                     .accept(APPLICATION_JSON)
                     .post(Entity.json(emails));
@@ -299,6 +300,10 @@ public class ServerUtils {
             showAlert();
             return false;
         }
+
+    }
+
+    public void sendDefault() {
 
     }
 
@@ -484,4 +489,6 @@ public class ServerUtils {
                 "correct and that the server is running");
         alert.showAndWait();
     }
+
+
 }

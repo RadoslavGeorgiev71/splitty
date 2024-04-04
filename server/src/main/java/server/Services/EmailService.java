@@ -27,12 +27,14 @@ public class EmailService {
      * @param body of the email
      */
     @Async
-    public void sendEmail(String to, String subject, String body) {
+    public void sendEmail(String to, String subject, String body, String creatorEmail) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(to);
         message.setSubject(subject);
         message.setText(body);
-
+        if(!creatorEmail.equals("null")){ //If the creators email is not set we have an empty cc
+            message.setCc(creatorEmail);
+        }
         mailSender.send(message);
     }
 }

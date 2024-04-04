@@ -25,15 +25,13 @@ public class EmailServiceTest {
 
     @Test
     public void testSendEmail() {
-        // Given
         String to = "recipient@example.com";
         String subject = "Test Subject";
         String body = "Test Body";
+        String cc = "sender@example.com";
 
-        // When
-        emailService.sendEmail(to, subject, body);
+        emailService.sendEmail(to, subject, body, cc);
 
-        // Then
         verify(mailSender, times(1)).send(any(SimpleMailMessage.class));
     }
 }
