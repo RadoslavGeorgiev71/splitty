@@ -15,6 +15,7 @@
  */
 package client.scenes;
 
+import client.utils.ConfigClient;
 import commons.Event;
 import commons.Expense;
 import commons.Participant;
@@ -172,7 +173,7 @@ public class MainCtrl {
         addExpenseCtrl.setEvent(event);
         ConfigClient configClient =  new ConfigClient();
         configClient.readFromFile("config.txt");
-        addExpenseCtrl.setCurrency(configClient.getCurrency());
+        addExpenseCtrl.setCurrency(ConfigClient.getCurrency());
         addExpenseCtrl.setParticipant(participant);
         addExpenseCtrl.initialize();
         primaryStage.setScene(addexpense);
