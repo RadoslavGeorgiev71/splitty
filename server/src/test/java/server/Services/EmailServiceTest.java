@@ -1,5 +1,6 @@
 package server.Services;
 
+import jakarta.mail.internet.AddressException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -30,7 +31,11 @@ public class EmailServiceTest {
         String body = "Test Body";
         String cc = "sender@example.com";
 
-        emailService.sendEmail(to, subject, body, cc);
+        try {
+            emailService.sendEmail(to, subject, body, cc);
+        } catch (AddressException e) {
+            throw new RuntimeException(e);
+        }
 
         verify(mailSender, times(1)).send(any(SimpleMailMessage.class));
     }

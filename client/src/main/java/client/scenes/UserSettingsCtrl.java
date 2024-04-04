@@ -233,6 +233,11 @@ public class UserSettingsCtrl {
         }
     }
 
+    /**
+     * Sends a default email to the user to check if the
+     * credentials are correctly set
+     * @param actionEvent
+     */
     public void sendDefault(ActionEvent actionEvent) {
         if(emailField.getText() != null){
             if(server.sendDefault()){

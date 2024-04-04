@@ -26,9 +26,11 @@ public class EmailService {
      * @param to email to send
      * @param subject of the email
      * @param body of the email
+     * @param creatorEmail email of the user
      */
     @Async
-    public void sendEmail(String to, String subject, String body, String creatorEmail) throws AddressException {
+    public void sendEmail(String to, String subject, String body,
+                          String creatorEmail) throws AddressException {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(to);
         message.setSubject(subject);

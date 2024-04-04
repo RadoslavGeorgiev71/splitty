@@ -303,6 +303,11 @@ public class ServerUtils {
 
     }
 
+    /**
+     * Sends a default email to the user to check
+     * if the credentials are correct
+     * @return boolean
+     */
     public boolean sendDefault() {
         try{
             Participant participant = new Participant(0, ConfigClient.getName(),
@@ -325,6 +330,39 @@ public class ServerUtils {
         }
     }
 
+    /**
+     * Method to send a remainder email to the person who has to pay a debt
+     *
+     * @param participant the participant of the person who will receive the money
+     * @param amount amount that has to be paid
+     * @param email email of the person who has to pay
+     * @param eventTitle title of the event in which the expense is in
+     * @return boolena
+     */
+    public boolean sendRemainder(Participant participant, double amount,
+                                 String email, String eventTitle) {
+        try{
+            Response response = ClientBuilder.newClient(new ClientConfig())
+                    .target(server).path("/api/email/")
+                    .queryParam("creatorEmail", ConfigClient.getEmail())
+                    .queryParam("amount", amount)
+                    .queryParam("email", email)
+                    .queryParam("eventTitle", eventTitle)
+                    .request(APPLICATION_JSON)
+                    .accept(APPLICATION_JSON)
+                    .post(Entity.json(participant));
+            if (response.getStatus() == Response.Status.OK.getStatusCode()) {
+                return true;
+            } else {
+                showAlert();
+                return false;
+            }
+        }
+        catch(ProcessingException e){
+            showAlert();
+            return false;
+        }
+    }
     /**
      * Deletes an expense from the server
      *
@@ -507,6 +545,7 @@ public class ServerUtils {
                 "correct, that the server is running and that your email credentials are correct");
         alert.showAndWait();
     }
+
 
 
 }
