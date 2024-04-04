@@ -61,6 +61,7 @@ public class EventService {
             existingEvent.get().setInviteCode(updatedEvent.getInviteCode());
             existingEvent.get().setParticipants(updatedEvent.getParticipants());
             existingEvent.get().setExpenses(updatedEvent.getExpenses());
+            existingEvent.get().setSettledDebts(updatedEvent.getSettledDebts());
             Event savedEvent = eventRepo.save(existingEvent.get());
             return savedEvent;
         }

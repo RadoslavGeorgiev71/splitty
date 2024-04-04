@@ -63,13 +63,13 @@ public class ServerUtils {
                 });
     }
 
+
     /**
      * Adds debt to the database
      *
      * @param debt the debt to add
      * @return the debt added
      */
-
     public Debt addDebt(Debt debt) {
         return ClientBuilder.newClient(new ClientConfig())
                 .target(server).path("api/debts")

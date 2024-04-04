@@ -30,7 +30,7 @@ public class DebtController {
     }
 
     /**
-     * Return all debts associated with a specific event
+     * Return payment instructions associated with a specific event
      * @param eventId - the id of event we retrieve the debts for
      * @return a response entity with the correct debts,
      * bad request response otherwise

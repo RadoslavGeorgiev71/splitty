@@ -512,8 +512,10 @@ public class EventOverviewCtrl {
         }
         
         server.registerEventUpdate(event -> {
-            this.event = server.getEvent(event.getId());
-            Platform.runLater(this::initialize);
+            if(this.event.getId() == event.getId()) {
+                this.event = server.getEvent(event.getId());
+                Platform.runLater(this::initialize);
+            }
         });
     }
 

@@ -73,14 +73,14 @@ public class TestDebtController {
         Debt debt5 = new Debt(a, c, 15);
         Debt debt6 = new Debt(d, c, 15);
         Debt debt7 = new Debt(c, d, 35);
-        debtService.add(debt1);
-        debtService.add(debt2);
-        debtService.add(debt3);
-        debtService.add(debt4);
-        debtService.add(debt5);
-        debtService.add(debt6);
-        debtService.add(debt7);
         Event event = new Event();
+        event.addSettledDebt(debt1);
+        event.addSettledDebt(debt2);
+        event.addSettledDebt(debt3);
+        event.addSettledDebt(debt4);
+        event.addSettledDebt(debt5);
+        event.addSettledDebt(debt6);
+        event.addSettledDebt(debt7);
         event.addParticipant(a);
         event.addParticipant(b);
         event.addParticipant(c);
@@ -88,15 +88,15 @@ public class TestDebtController {
         eventRepo.save(event);
         List<Debt> paymentInstructions = sut.getPaymentInstructions(event.getId()).getBody();
         assertNotNull(paymentInstructions);
-        Debt instruction1 = new Debt(b, d, 55);
-        Debt instruction2 = new Debt(a, d, 10);
-        Debt instruction3 = new Debt(c, d, 5);
+        Debt instruction1 = new Debt(d, b, 55);
+        Debt instruction2 = new Debt(d, a, 10);
+        Debt instruction3 = new Debt(d, c, 5);
         List<Debt> instructions = List.of(instruction1, instruction2, instruction3);
         boolean equal;
         for(Debt instruction : instructions) {
             equal = false;
             for(Debt debt : paymentInstructions) {
-                if(debt.getPersonOwed().equals(instruction.getPersonOwed())
+                if(debt.getPersonOwing().equals(instruction.getPersonOwing())
                     && debt.getAmount() == instruction.getAmount()
                     && debt.getPersonPaying().equals(instruction.getPersonPaying())) {
                     equal = true;

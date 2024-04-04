@@ -4,7 +4,6 @@ import client.utils.LanguageResourceBundle;
 import client.utils.ServerUtils;
 import commons.Debt;
 import commons.Event;
-import commons.Participant;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
@@ -66,9 +65,9 @@ public class OpenDebtsCtrl {
         if (event != null) {
             languageResourceBundle = LanguageResourceBundle.getInstance();
             switchTextLanguage();
+            gridPane.getChildren().clear();
             gridPane.setAlignment(Pos.CENTER);
-            this.testDebts();
-            debts = getPaymentInstructions();
+            debts = this.getPaymentInstructions();
             titledPanes = new TitledPane[debts.size()];
             textFlows = new TextFlow[debts.size()];
             envelopeIcons = new FontAwesomeIconView[debts.size()];
@@ -111,6 +110,12 @@ public class OpenDebtsCtrl {
         envelopeIcons[i].setSize("15");
         GridPane.setValignment(envelopeIcons[i], javafx.geometry.VPos.TOP);
         GridPane.setHalignment(envelopeIcons[i], javafx.geometry.HPos.LEFT);
+        Tooltip toolTipEnvelope = new Tooltip("Email available!");
+        if(debts.get(i).getPersonOwing().getEmail() == "") {
+            envelopeIcons[i].setFill(Color.GREY);
+            toolTipEnvelope.setText("Email NOT available!");
+        }
+        Tooltip.install(envelopeIcons[i], toolTipEnvelope);
         GridPane.setMargin(envelopeIcons[i], new Insets(7, 0, 0, 10));
         gridPane.add(envelopeIcons[i], 1, i, 1, 1);
 
@@ -119,10 +124,13 @@ public class OpenDebtsCtrl {
         bankIcons[i].setSize("15");
         GridPane.setValignment(bankIcons[i], javafx.geometry.VPos.TOP);
         GridPane.setHalignment(bankIcons[i], javafx.geometry.HPos.LEFT);
-        if (debts.get(i).getPersonOwed().getBic() == null ||
-            debts.get(i).getPersonOwed().getIban() == null) {
+        Tooltip toolTipBank = new Tooltip("Bank information available!");
+        if (debts.get(i).getPersonOwing().getBic() == "" ||
+            debts.get(i).getPersonOwing().getIban() == "") {
             bankIcons[i].setFill(Color.GREY);
+            toolTipBank.setText("Bank information NOT available!");
         }
+        Tooltip.install(bankIcons[i], toolTipBank);
         GridPane.setMargin(bankIcons[i], new Insets(7, 0, 0, 30));
         gridPane.add(bankIcons[i], 1, i, 1, 1);
 
@@ -132,29 +140,6 @@ public class OpenDebtsCtrl {
         GridPane.setHalignment(buttonReceived[i], javafx.geometry.HPos.LEFT);
         GridPane.setMargin(buttonReceived[i], new Insets(5, 10, 0, 15));
         gridPane.add(buttonReceived[i], 2, i, 1, 1);
-    }
-
-    /**
-     * Shows an alert message for confirmation of settling(deleting) the debt
-     * @param debt - the debt to be settled(removed)
-     */
-    private void removeDebt(Debt debt) {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        ResourceBundle bundle = languageResourceBundle.getResourceBundle();
-        alert.setTitle(bundle.getString("removeDebtAlertTitleText"));
-        alert.setContentText(bundle.getString("removeDebtAlertContentText"));
-
-        //TODO: for now there is also an output on the console which should be removed in the future
-        alert.showAndWait().ifPresent(response -> {
-            if (response == ButtonType.OK) {
-                System.out.println("Ok");
-                server.deleteDebt(debt);
-                mainCtrl.showOpenDebts(event);
-            }
-            else if (response == ButtonType.CANCEL) {
-                System.out.println("Cancel");
-            }
-        });
     }
 
     /**
@@ -168,10 +153,10 @@ public class OpenDebtsCtrl {
         Text payer = new Text(debt.getPersonPaying().getName());
         payer.setStyle("-fx-font-weight: bold");
         Text gives = new Text(" gives ");
-        Text amount = new Text(Double.toString(debt.getAmount()));
+        Text amount = new Text(String.format("%.2f", debt.getAmount()));
         amount.setStyle("-fx-font-weight: bold");
         Text to = new Text(" to ");
-        Text receiver = new Text(debt.getPersonOwed().getName());
+        Text receiver = new Text(debt.getPersonOwing().getName());
         receiver.setStyle("-fx-font-weight: bold");
         tf.getChildren().addAll(payer, gives, amount, to, receiver);
         tf.setStyle("-fx-alignment: center-left; -fx-padding: 10");
@@ -187,12 +172,13 @@ public class OpenDebtsCtrl {
     private Label generateExpandableLabel(Debt debt) {
         String text = "";
         int size = 0;
-        if (debt.getPersonOwed().getBic() != null
-            && debt.getPersonOwed().getIban() != null) {
-            text += "Bank information available, transfer the money to:\n" +
-                "Account Holder: " + debt.getPersonOwed().getName() + "\n" +
-                "IBAN: " + debt.getPersonOwed().getIban() + "\n" +
-                "BIC: " + debt.getPersonOwed().getBic();
+        if (debt.getPersonOwing().getBic() != ""
+            && debt.getPersonOwing().getIban() != "") {
+            text += "Bank information available,\n" +
+                " transfer the money to:\n" +
+                "Account Holder: " + debt.getPersonOwing().getName() + "\n" +
+                "IBAN: " + debt.getPersonOwing().getIban() + "\n" +
+                "BIC: " + debt.getPersonOwing().getBic();
             size += 80;
         } else {
             text += "Bank information not available.";
@@ -200,9 +186,10 @@ public class OpenDebtsCtrl {
         }
         text += "\n\n";
         size += 20;
-        if (debt.getPersonOwed().getEmail() != null) {
+        if (debt.getPersonOwing().getEmail() != "") {
             text += "Email configured: ";
             size += 20;
+            //TODO: add the email button
         } else {
             text += "Email not configured.";
             size += 20;
@@ -210,6 +197,27 @@ public class OpenDebtsCtrl {
         Label label = new Label(text);
         label.setStyle("-fx-min-height: " + size);
         return label;
+    }
+
+    /**
+     * Shows an alert message for confirmation of settling(deleting) the debt
+     * @param debt - the debt to be settled(removed)
+     */
+    private void removeDebt(Debt debt) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        ResourceBundle bundle = languageResourceBundle.getResourceBundle();
+        alert.setTitle(bundle.getString("removeDebtAlertTitleText"));
+        alert.setContentText(bundle.getString("removeDebtAlertContentText"));
+
+        alert.showAndWait().ifPresent(response -> {
+            if (response == ButtonType.OK) {
+                event.addSettledDebt(new Debt(debt.getPersonPaying(),
+                    debt.getPersonOwing(), debt.getAmount()));
+                server.persistEvent(event);
+                event = server.getEvent(event.getId());
+                mainCtrl.showOpenDebts(event);
+            }
+        });
     }
 
     /**
@@ -244,18 +252,6 @@ public class OpenDebtsCtrl {
             alert.showAndWait();
             return null;
         }
-    }
-
-    // TODO: only to test the functionality for now, should be removed later
-    private void testDebts() {
-        Participant bob = new Participant("Bob");
-        Participant ana = new Participant("Ana");
-        for (Debt debt : server.getPaymentInstructions(event)) {
-            server.deleteDebt(debt);
-        }
-        server.addDebt(new Debt(5, bob, ana, 10));
-        server.addDebt(new Debt(6, ana, bob, 8));
-        server.addDebt(new Debt(7, ana, new Participant("Greg"), 30));
     }
 
     /**

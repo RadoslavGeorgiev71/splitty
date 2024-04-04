@@ -1,7 +1,5 @@
 package commons;
 
-import commons.Debt;
-import commons.Participant;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
@@ -44,7 +42,7 @@ class DebtTest {
 
     @Test
     void testGetPersonOwed() {
-        assertEquals(p2, d1.getPersonOwed());
+        assertEquals(p2, d1.getPersonOwing());
     }
 
     @Test
@@ -76,8 +74,8 @@ class DebtTest {
 
     @Test
     void testPersonOwed() {
-        d1.setPersonOwed(p1);
-        assertEquals(p1, d1.getPersonOwed());
+        d1.setPersonOwing(p1);
+        assertEquals(p1, d1.getPersonOwing());
     }
 
     @Test
@@ -114,7 +112,7 @@ class DebtTest {
 
     @Test
     void getPersonOwed() {
-        Participant p = d1.getPersonOwed();
+        Participant p = d1.getPersonOwing();
         assertEquals(p2, p);
     }
 
@@ -130,10 +128,10 @@ class DebtTest {
     @Test
     void setPersonOwed() {
         Debt d = new Debt(123, p1, p2, 500);
-        Participant p = d.getPersonOwed();
-        d.setPersonOwed(p1);
-        assertNotEquals(p, d.getPersonOwed());
-        assertEquals(p1, d.getPersonOwed());
+        Participant p = d.getPersonOwing();
+        d.setPersonOwing(p1);
+        assertNotEquals(p, d.getPersonOwing());
+        assertEquals(p1, d.getPersonOwing());
     }
 
     @Test

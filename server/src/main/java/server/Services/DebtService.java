@@ -2,6 +2,7 @@ package server.Services;
 
 import commons.Debt;
 import commons.Event;
+import commons.Expense;
 import commons.Participant;
 import org.springframework.stereotype.Service;
 import server.database.DebtRepository;
@@ -41,14 +42,13 @@ public class DebtService {
     public List<Debt> getPaymentInstructions(long eventId) {
         Optional<Event> event = eventRepo.findById(eventId);
         if(event.isPresent()) {
-            List<Debt> debts = debtRepo.findAll().stream().
-                filter(x -> event.get().getParticipants().contains(x.getPersonPaying())).toList();
+            List<Debt> debts = getAllDebts(event.get());
             Map<Participant, Double> participantsDebts = new HashMap<>();
             
             calculateDebtPerParticipant(debts, participantsDebts);
             
             List<Debt> result = new ArrayList<>();
-            List<Participant> participants = event.get().getParticipants();
+            List<Participant> participants = new ArrayList<>(participantsDebts.keySet());
             while(!participantsDebts.isEmpty()) {
                 Participant mostOwing = participants.getFirst();
                 Participant mostOwed = participants.getFirst();
@@ -75,6 +75,20 @@ public class DebtService {
     }
 
     /**
+     * Gets all debts related to the event
+     * @param event - the event for which we retrieve the debts
+     * @return - the debts related to the event
+     */
+    private List<Debt> getAllDebts(Event event) {
+        List<Debt> debts = new ArrayList<>();
+        for(Expense expense : event.getExpenses()) {
+            debts.addAll(expense.getDebts());
+        }
+        debts.addAll(event.getSettledDebts());
+        return debts;
+    }
+
+    /**
      * Transfers money between the two participants
      * @param participantsDebts - the map in which the money is transferred
      * @param mostOwed - the person to whom is owned the most money
@@ -84,14 +98,14 @@ public class DebtService {
     private void settleTransaction(Map<Participant, Double> participantsDebts,
                                    Participant mostOwed, double amount, Participant mostOwing,
                                    List<Participant> participants) {
-        if(participantsDebts.get(mostOwed) + amount == 0) {
+        if(Math.abs(participantsDebts.get(mostOwed) + amount) < 0.01) {
             participantsDebts.remove(mostOwed);
             participants.remove(mostOwed);
         }
         else {
             participantsDebts.put(mostOwed, participantsDebts.get(mostOwed) + amount);
         }
-        if(participantsDebts.get(mostOwing) - amount == 0) {
+        if(Math.abs(participantsDebts.get(mostOwing) - amount) < 0.01) {
             participantsDebts.remove(mostOwing);
             participants.remove(mostOwing);
         }
@@ -109,17 +123,18 @@ public class DebtService {
     private void calculateDebtPerParticipant(List<Debt> debts,
                                         Map<Participant, Double> participantsDebts) {
         for(Debt debt : debts) {
-            if(!participantsDebts.containsKey(debt.getPersonOwed())) {
-                participantsDebts.put(debt.getPersonOwed(), 0.0);
+            if(!participantsDebts.containsKey(debt.getPersonOwing())) {
+                participantsDebts.put(debt.getPersonOwing(), 0.0);
             }
-            participantsDebts.put(debt.getPersonOwed(),
-                participantsDebts.get(debt.getPersonOwed()) - debt.getAmount());
+            participantsDebts.put(debt.getPersonOwing(),
+                participantsDebts.get(debt.getPersonOwing()) + debt.getAmount());
             if(!participantsDebts.containsKey(debt.getPersonPaying())) {
                 participantsDebts.put(debt.getPersonPaying(), 0.0);
             }
             participantsDebts.put(debt.getPersonPaying(),
-                participantsDebts.get(debt.getPersonPaying()) + debt.getAmount());
+                participantsDebts.get(debt.getPersonPaying()) - debt.getAmount());
         }
+        participantsDebts.entrySet().removeIf(x -> x.getValue() == 0);
     }
 
     /**
@@ -130,7 +145,7 @@ public class DebtService {
      */
     public Debt add(Debt debt) {
         if (debt.getPersonPaying() == null ||
-            debt.getPersonOwed() == null || debt.getAmount() <= 0) {
+            debt.getPersonOwing() == null || debt.getAmount() <= 0) {
             return null;
         }
         return debtRepo.save(debt);
