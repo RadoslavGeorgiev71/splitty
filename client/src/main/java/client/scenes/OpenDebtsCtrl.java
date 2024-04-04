@@ -67,7 +67,6 @@ public class OpenDebtsCtrl {
             switchTextLanguage();
             gridPane.getChildren().clear();
             gridPane.setAlignment(Pos.CENTER);
-//            this.testDebts();
             debts = this.getPaymentInstructions();
             titledPanes = new TitledPane[debts.size()];
             textFlows = new TextFlow[debts.size()];
@@ -111,6 +110,9 @@ public class OpenDebtsCtrl {
         envelopeIcons[i].setSize("15");
         GridPane.setValignment(envelopeIcons[i], javafx.geometry.VPos.TOP);
         GridPane.setHalignment(envelopeIcons[i], javafx.geometry.HPos.LEFT);
+        if(debts.get(i).getPersonOwing().getEmail() == "") {
+            envelopeIcons[i].setFill(Color.GREY);
+        }
         GridPane.setMargin(envelopeIcons[i], new Insets(7, 0, 0, 10));
         gridPane.add(envelopeIcons[i], 1, i, 1, 1);
 
@@ -132,29 +134,6 @@ public class OpenDebtsCtrl {
         GridPane.setHalignment(buttonReceived[i], javafx.geometry.HPos.LEFT);
         GridPane.setMargin(buttonReceived[i], new Insets(5, 10, 0, 15));
         gridPane.add(buttonReceived[i], 2, i, 1, 1);
-    }
-
-    /**
-     * Shows an alert message for confirmation of settling(deleting) the debt
-     * @param debt - the debt to be settled(removed)
-     */
-    private void removeDebt(Debt debt) {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        ResourceBundle bundle = languageResourceBundle.getResourceBundle();
-        alert.setTitle(bundle.getString("removeDebtAlertTitleText"));
-        alert.setContentText(bundle.getString("removeDebtAlertContentText"));
-
-        //TODO: for now there is also an output on the console which should be removed in the future
-        alert.showAndWait().ifPresent(response -> {
-            if (response == ButtonType.OK) {
-                System.out.println("Ok");
-                server.deleteDebt(debt);
-                mainCtrl.showOpenDebts(event);
-            }
-            else if (response == ButtonType.CANCEL) {
-                System.out.println("Cancel");
-            }
-        });
     }
 
     /**
@@ -189,7 +168,8 @@ public class OpenDebtsCtrl {
         int size = 0;
         if (debt.getPersonOwing().getBic() != ""
             && debt.getPersonOwing().getIban() != "") {
-            text += "Bank information available, transfer the money to:\n" +
+            text += "Bank information available,\n" +
+                " transfer the money to:\n" +
                 "Account Holder: " + debt.getPersonOwing().getName() + "\n" +
                 "IBAN: " + debt.getPersonOwing().getIban() + "\n" +
                 "BIC: " + debt.getPersonOwing().getBic();
@@ -210,6 +190,24 @@ public class OpenDebtsCtrl {
         Label label = new Label(text);
         label.setStyle("-fx-min-height: " + size);
         return label;
+    }
+
+    /**
+     * Shows an alert message for confirmation of settling(deleting) the debt
+     * @param debt - the debt to be settled(removed)
+     */
+    private void removeDebt(Debt debt) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        ResourceBundle bundle = languageResourceBundle.getResourceBundle();
+        alert.setTitle(bundle.getString("removeDebtAlertTitleText"));
+        alert.setContentText(bundle.getString("removeDebtAlertContentText"));
+
+        alert.showAndWait().ifPresent(response -> {
+            if (response == ButtonType.OK) {
+                
+                mainCtrl.showOpenDebts(event);
+            }
+        });
     }
 
     /**
@@ -245,18 +243,6 @@ public class OpenDebtsCtrl {
             return null;
         }
     }
-
-    // TODO: only to test the functionality for now, should be removed later
-//    private void testDebts() {
-//        Participant bob = new Participant("Bob");
-//        Participant ana = new Participant("Ana");
-//        for (Debt debt : server.getPaymentInstructions(event)) {
-//            server.deleteDebt(debt);
-//        }
-//        server.addDebt(new Debt(5, bob, ana, 10));
-//        server.addDebt(new Debt(6, ana, bob, 8));
-//        server.addDebt(new Debt(7, ana, new Participant("Greg"), 30));
-//    }
 
     /**
      * Method to be called when a key is pressed

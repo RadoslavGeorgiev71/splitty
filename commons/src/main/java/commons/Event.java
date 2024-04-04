@@ -23,11 +23,12 @@ public class Event {
     private long id;
     private String title;
     private String inviteCode;
-
     @OneToMany(cascade = CascadeType.ALL)
     private List<Participant> participants;
     @OneToMany(cascade = CascadeType.ALL)
     private List<Expense> expenses;
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Debt> settledDebts;
     private String dateTime;
 
 
@@ -45,6 +46,7 @@ public class Event {
     public Event() {
         participants = new ArrayList<>();
         expenses = new ArrayList<>();
+        settledDebts = new ArrayList<>();
         updateDateTime();
     }
 
@@ -61,6 +63,7 @@ public class Event {
         this.inviteCode = inviteCode;
         this.participants = participants;
         this.expenses = expenses;
+        this.settledDebts = new ArrayList<>();
         // Placeholder ID
         this.id = 0;
 
@@ -85,6 +88,7 @@ public class Event {
         this.inviteCode = inviteCode;
         this.participants = participants;
         this.expenses = expenses;
+        this.settledDebts = new ArrayList<>();
         this.dateTime = dateTime;
     }
 
@@ -254,6 +258,30 @@ public class Event {
     }
 
     /**
+     * Getter for settleDebts
+     * @return - the settled debts
+     */
+    public List<Debt> getSettledDebts() {
+        return settledDebts;
+    }
+
+    /**
+     * Setter for settledDebts
+     * @param settledDebts - the settledDebts
+     */
+    public void setSettledDebts(List<Debt> settledDebts) {
+        this.settledDebts = settledDebts;
+    }
+
+    /**
+     * Adds a new settled debt
+     * @param debt - the debt to be added
+     */
+    public void addSettledDebt(Debt debt) {
+        this.settledDebts.add(debt);
+    }
+
+    /**
      * Getter for the dateTime
      * @return dateTime
      */
@@ -296,6 +324,8 @@ public class Event {
                 Objects.equals(getExpenses(), event.getExpenses()) &&
                 Objects.equals(getDateTime(), event.getDateTime());
     }
+
+
 
     /**
      * HashCode method for Event
