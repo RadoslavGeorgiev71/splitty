@@ -169,7 +169,7 @@ public class EventOverviewCtrl {
             ResourceBundle bundle = languageResourceBundle.getResourceBundle();
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Error");
-            alert.setHeaderText(bundle.getString("eventNoParticipantsToEdit"));
+            alert.setHeaderText(bundle.getString("eventNotEnoughParticipants"));
             if (alert.showAndWait().get() == ButtonType.OK){
                 mainCtrl.showEventOverview(this.event);
             }

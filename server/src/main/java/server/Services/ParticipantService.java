@@ -79,4 +79,8 @@ public class ParticipantService {
         Optional<Participant> participantOptional = participantRepo.findById(participantId);
         return participantOptional;
     }
+
+    public void flush() {
+        participantRepo.flush();
+    }
 }

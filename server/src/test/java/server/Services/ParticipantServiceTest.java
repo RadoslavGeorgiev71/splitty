@@ -10,7 +10,6 @@ import server.database.ParticipantRepository;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -53,6 +52,12 @@ public class ParticipantServiceTest {
         assertNotNull(participant);
         assertEquals(1, result.getId());
         verify(participantRepo, times(1)).save(participant);
+    }
+
+    @Test
+    void testFlush() {
+        sut.flush();
+        verify(participantRepo, times(1)).flush();
     }
 
 }
