@@ -165,7 +165,18 @@ public class EventOverviewCtrl {
 
     @FXML
     public void onAddExpenseClick() {
-        mainCtrl.showAddExpense(this.event);
+        if (event.getParticipants().size() <= 1) {
+            ResourceBundle bundle = languageResourceBundle.getResourceBundle();
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Error");
+            alert.setHeaderText(bundle.getString("eventNoParticipantsToEdit"));
+            if (alert.showAndWait().get() == ButtonType.OK){
+                mainCtrl.showEventOverview(this.event);
+            }
+        }
+        else {
+            mainCtrl.showAddExpense(this.event);
+        }
     }
 
     /**
