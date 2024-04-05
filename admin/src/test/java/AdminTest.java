@@ -1,18 +1,31 @@
 import static org.junit.jupiter.api.Assertions.*;
 
+import commons.Event;
+import jakarta.ws.rs.client.Entity;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.mockito.Mock;
+
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.when;
 import org.mockito.MockitoAnnotations;
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.Invocation;
 import jakarta.ws.rs.client.WebTarget;
 import jakarta.ws.rs.core.Response;
 import org.mockserver.client.MockServerClient;
+import org.mockserver.integration.ClientAndServer;
+import static org.mockito.Mockito.verify;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.same;
+import org.mockserver.model.Delay;
 import org.mockserver.model.HttpRequest;
 import org.mockserver.model.HttpResponse;
 import org.springframework.messaging.simp.stomp.StompSession;
 import utils.Admin;
+
+import java.util.concurrent.TimeUnit;
 
 class AdminTest {
 
@@ -30,12 +43,16 @@ class AdminTest {
     @Mock
     StompSession mockStompSession;
 
+
     Admin admin;
+
+    private ClientAndServer mockServer;
 
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        admin = new Admin("http://mocked-server/", mockStompSession);
+        mockServer = ClientAndServer.startClientAndServer(8080);
+        admin = new Admin("http://mocked-server:8080/", mockStompSession);
     }
 
     @Test
@@ -57,27 +74,45 @@ class AdminTest {
 
     @Test
     void getURL() {
-        assertEquals("http://mocked-server/", admin.getURL());
+        assertEquals("http://mocked-server:8080/", admin.getURL());
     }
 
     @Test
-    public void testGeneratePassword_Success() {
-        // Set up expectations for the mock server
-        new MockServerClient("localhost", 8080)
-                .when(
-                        HttpRequest.request()
-                                .withMethod("GET")
-                                .withPath("/api/admin/")
-                )
-                .respond(
-                        HttpResponse.response()
-                                .withStatusCode(200)
-                );
-
-        // Call the method to be tested
+    public void testGeneratePassword_Failure() {
+        mockServer.when(
+                HttpRequest.request()
+                        .withMethod("GET")
+                        .withPath("/api/admin/")
+        ).respond(
+                HttpResponse.response()
+                        .withStatusCode(200)
+        );
         boolean result = admin.generatePassword();
+        assertFalse(result);
+    }
 
-        // Assert that the method returns true on success
-        assertTrue(result);
+    @Test
+    public void testLoginFailure() {
+        Response response = Response.ok().entity("Your response body here").build();
+        String responseBody = response.getEntity().toString();
+        HttpResponse httpResponse = HttpResponse.response()
+                .withStatusCode(response.getStatus())
+                .withBody(responseBody);
+        mockServer.when(
+                HttpRequest.request()
+                        .withMethod("POST")
+                        .withPath("/api/admin/")
+        ).respond(
+                HttpResponse.response()
+                        .withStatusCode(200)
+                        .withDelay(TimeUnit.SECONDS, 10) //simulate timeout which leads to processing error
+        );
+        boolean result = admin.login("random");
+        assertFalse(result);
+    }
+
+    @AfterEach
+    public void tearDown() {
+        mockServer.stop();
     }
 }
