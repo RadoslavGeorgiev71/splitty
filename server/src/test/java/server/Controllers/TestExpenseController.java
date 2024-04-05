@@ -42,8 +42,7 @@ class TestExpenseController {
 
     @Test
     void testGetAll() {
-        Expense e1 = new Expense("e1", null,
-        10.0, null);
+        Expense e1 = new Expense("e1", null,10.0, null);
         Expense e2 = new Expense("e2", null,20.0, null);
         List<Expense> events = new ArrayList<>();
         List<Expense> eventsSaved = sut.getAll();
