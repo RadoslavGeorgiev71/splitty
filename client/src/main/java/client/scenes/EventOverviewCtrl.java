@@ -332,6 +332,7 @@ public class EventOverviewCtrl {
      * @param expense
      * @param i
      */
+
     private void visualizeExpense(Expense expense, int i) {
         Label dateLabel = new Label(expense.getDateTime());
         Label nameLabel = new Label(expense.getActivity());
@@ -352,6 +353,11 @@ public class EventOverviewCtrl {
         editButton.setOnAction(event -> onEditExpenseClick(expense));
         setEditIcon(editButton);
     }
+
+    /**
+     * Sets the amount (in the set currency)
+     * @param amount
+     */
 
     @FXML
     public void setAmount(double amount) {
