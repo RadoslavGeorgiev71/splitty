@@ -229,24 +229,7 @@ public class EventOverviewCtrl {
             for (int i = 0; i < event.getExpenses().size(); i++) {
                 Expense expense = event.getExpenses().get(i);
                 amount += expense.getAmount();
-                Label dateLabel = new Label(expense.getDateTime());
-                Label nameLabel = new Label(expense.getActivity());
-                nameLabel.setWrapText(true); // Wrap text to prevent truncation
-                Button editButton = new Button();
-
-                // Set fixed column widths
-                dateLabel.setMaxWidth(Double.MAX_VALUE);
-                nameLabel.setMaxWidth(Double.MAX_VALUE);
-
-                GridPane.setFillWidth(dateLabel, true);
-                GridPane.setFillWidth(nameLabel, true);
-
-                tabPaneAllGridPane.add(dateLabel, 0, i);
-                tabPaneAllGridPane.add(nameLabel, 1, i);
-                tabPaneAllGridPane.add(editButton, 2, i);
-
-                editButton.setOnAction(event -> onEditExpenseClick(expense));
-                setEditIcon(editButton);
+                visualizeExpense(expense, i);
             }
             fromPersonTabName();
             includingPersonTabName();
@@ -271,24 +254,7 @@ public class EventOverviewCtrl {
                 if (payingParticipant.equals(participantsMenu.
                         getSelectionModel().getSelectedItem())) {
                     amount += expense.getAmount();
-                    Label dateLabel = new Label(expense.getDateTime());
-                    Label nameLabel = new Label(expense.getActivity());
-                    nameLabel.setWrapText(true); // Wrap text to prevent truncation
-                    Button editButton = new Button();
-
-                    // Set fixed column widths
-                    dateLabel.setMaxWidth(Double.MAX_VALUE);
-                    nameLabel.setMaxWidth(Double.MAX_VALUE);
-
-                    GridPane.setFillWidth(dateLabel, true);
-                    GridPane.setFillWidth(nameLabel, true);
-
-                    tabPaneFromGridPane.add(dateLabel, 0, i);
-                    tabPaneFromGridPane.add(nameLabel, 1, i);
-                    tabPaneFromGridPane.add(editButton, 2, i);
-
-                    editButton.setOnAction(event -> onEditExpenseClick(expense));
-                    setEditIcon(editButton);
+                    visualizeExpense(expense, i);
                 }
             }
             fromPersonTabName();
@@ -314,30 +280,34 @@ public class EventOverviewCtrl {
                 Expense expense = event.getExpenses().get(i);
                 if (expense.getParticipants().contains(participant)) {
                     amount += expense.getAmount();
-                    Label dateLabel = new Label(expense.getDateTime());
-                    Label nameLabel = new Label(expense.getActivity());
-                    nameLabel.setWrapText(true); // Wrap text to prevent truncation
-                    Button editButton = new Button();
-
-                    // Set fixed column widths
-                    dateLabel.setMaxWidth(Double.MAX_VALUE);
-                    nameLabel.setMaxWidth(Double.MAX_VALUE);
-
-                    GridPane.setFillWidth(dateLabel, true);
-                    GridPane.setFillWidth(nameLabel, true);
-
-                    tabPaneIncludingGridPane.add(dateLabel, 0, i);
-                    tabPaneIncludingGridPane.add(nameLabel, 1, i);
-                    tabPaneIncludingGridPane.add(editButton, 2, i);
-
-                    editButton.setOnAction(event -> onEditExpenseClick(expense));
-                    setEditIcon(editButton);
+                    visualizeExpense(expense, i);
                 }
             }
             fromPersonTabName();
             includingPersonTabName();
             setAmount(amount);
         }
+    }
+
+    private void visualizeExpense(Expense expense, int i) {
+        Label dateLabel = new Label(expense.getDateTime());
+        Label nameLabel = new Label(expense.getActivity());
+        nameLabel.setWrapText(true); // Wrap text to prevent truncation
+        Button editButton = new Button();
+
+        // Set fixed column widths
+        dateLabel.setMaxWidth(Double.MAX_VALUE);
+        nameLabel.setMaxWidth(Double.MAX_VALUE);
+
+        GridPane.setFillWidth(dateLabel, true);
+        GridPane.setFillWidth(nameLabel, true);
+
+        tabPaneIncludingGridPane.add(dateLabel, 0, i);
+        tabPaneIncludingGridPane.add(nameLabel, 1, i);
+        tabPaneIncludingGridPane.add(editButton, 2, i);
+
+        editButton.setOnAction(event -> onEditExpenseClick(expense));
+        setEditIcon(editButton);
     }
 
     @FXML
