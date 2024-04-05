@@ -327,6 +327,11 @@ public class EventOverviewCtrl {
         }
     }
 
+    /**
+     * Sets the Grid Pane with the necessary expense info
+     * @param expense
+     * @param i
+     */
     private void visualizeExpense(Expense expense, int i) {
         Label dateLabel = new Label(expense.getDateTime());
         Label nameLabel = new Label(expense.getActivity());
