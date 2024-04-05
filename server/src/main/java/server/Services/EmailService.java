@@ -35,7 +35,8 @@ public class EmailService {
         message.setTo(to);
         message.setSubject(subject);
         message.setText(body);
-        if(!creatorEmail.equals("null")){ //If the creators email is not set we have an empty cc
+        if(!creatorEmail.equals("null") && !creatorEmail.equals("")
+                && creatorEmail != null){ //If the creators email is not set we have an empty cc
             message.setCc(creatorEmail);
         }
         mailSender.send(message);

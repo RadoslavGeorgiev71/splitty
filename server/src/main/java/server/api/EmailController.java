@@ -63,7 +63,7 @@ public class EmailController {
                     body += creatorName + " invited you to " + eventOptional.get().getTitle()
                             + " event." +
                             " You can connect to this event using the following code: "
-                            + inviteCode + ". The server URL is: " + serverUrl;;
+                            + inviteCode + ". The server URL is: " + serverUrl;
                 }
                 try{
                     emailService.sendEmail(email, eventOptional.get().getTitle()
