@@ -1,7 +1,6 @@
 package server.Controllers;
 
 import commons.Expense;
-import commons.Participant;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -60,8 +59,7 @@ class TestExpenseController {
 
     @Test
     void testGetById() {
-        Expense e1 = new Expense("e1", null,
-                10.0, null);
+        Expense e1 = new Expense("e1", null,10.0, null);
         Expense expenseSaved = expenseService.create(e1);
         ResponseEntity<?> response = sut.getExpense(expenseSaved.getId());
         assertEquals(response.getBody(), expenseSaved);
@@ -76,8 +74,7 @@ class TestExpenseController {
 
     @Test
     void testCreate() {
-        Expense e1 = new Expense("e1", null,
-                10.0, null);
+        Expense e1 = new Expense("e1", null,10.0, null);
         ResponseEntity<?> response = sut.createExpense(e1);
         assertEquals(response.getBody(), e1);
         List<Expense> expenses = expenseService.getAll();
@@ -86,8 +83,7 @@ class TestExpenseController {
 
     @Test
     void testDelete() {
-        Expense e1 = new Expense("e1", null,
-                10.0, null);
+        Expense e1 = new Expense("e1", null,10.0, null);
         Expense expenseSaved = expenseService.create(e1);
         ResponseEntity<?> response = sut.delete(expenseSaved.getId());
         assertEquals(response.getStatusCode(), HttpStatus.OK);
@@ -111,10 +107,8 @@ class TestExpenseController {
 
     @Test
     void testUpdate() {
-        Expense e1 = new Expense("e1", null,
-                10.0, null);
-        Expense e2 = new Expense("e2", null,
-                20.0, null);
+        Expense e1 = new Expense("e1", null,10.0, null);
+        Expense e2 = new Expense("e2", null,20.0, null);
         sut.createExpense(e1);
         sut.update(e1.getId(), e2);
         List<Expense> expenses = expenseService.getAll();
