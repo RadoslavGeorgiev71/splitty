@@ -80,6 +80,9 @@ public class ParticipantService {
         return participantOptional;
     }
 
+    /**
+     * Method to flush the participant repository
+     */
     public void flush() {
         participantRepo.flush();
     }
