@@ -16,7 +16,7 @@ import java.util.function.Function;
 public class TestParticipantRepository implements ParticipantRepository {
 
     private List<Participant> participants = new ArrayList<>();
-    private final List<String> calledMethods = new ArrayList<>();
+    private List<String> calledMethods = new ArrayList<>();
 
     /**
      * Adds the name of the called method to the list of called methods.
@@ -55,6 +55,14 @@ public class TestParticipantRepository implements ParticipantRepository {
     }
 
     /**
+--
+     * @param calledMethods -
+     */
+    public void setCalledMethods(List<String> calledMethods) {
+        this.calledMethods = calledMethods;
+    }
+
+    /**
      *
      */
     @Override
@@ -63,9 +71,9 @@ public class TestParticipantRepository implements ParticipantRepository {
     }
 
     /**
-     * @param entity
-     * @param <S>
-     * @return
+     * @param entity -
+     * @param <S> -
+     * @return -
      */
     @Override
     public <S extends Participant> S saveAndFlush(S entity) {
@@ -73,9 +81,9 @@ public class TestParticipantRepository implements ParticipantRepository {
     }
 
     /**
-     * @param entities
-     * @param <S>
-     * @return
+     * @param entities -
+     * @param <S> -
+     * @return -
      */
     @Override
     public <S extends Participant> java.util.List<S> saveAllAndFlush(Iterable<S> entities) {
@@ -83,7 +91,7 @@ public class TestParticipantRepository implements ParticipantRepository {
     }
 
     /**
-     * @param entities
+     * @param entities -
      */
     @Override
     public void deleteAllInBatch(Iterable<Participant> entities) {
@@ -91,7 +99,7 @@ public class TestParticipantRepository implements ParticipantRepository {
     }
 
     /**
-     * @param longs
+     * @param longs -
      */
     @Override
     public void deleteAllByIdInBatch(Iterable<Long> longs) {
@@ -107,8 +115,8 @@ public class TestParticipantRepository implements ParticipantRepository {
     }
 
     /**
-     * @param aLong
-     * @deprecated
+     * @param aLong -
+     * @return -
      */
     @Override
     public Participant getOne(Long aLong) {
@@ -116,8 +124,8 @@ public class TestParticipantRepository implements ParticipantRepository {
     }
 
     /**
-     * @param aLong
-     * @deprecated
+     * @param aLong -
+     * @return -
      */
     @Override
     public Participant getById(Long aLong) {
@@ -125,8 +133,8 @@ public class TestParticipantRepository implements ParticipantRepository {
     }
 
     /**
-     * @param aLong
-     * @return
+     * @param aLong -
+     * @return -
      */
     @Override
     public Participant getReferenceById(Long aLong) {
@@ -134,9 +142,9 @@ public class TestParticipantRepository implements ParticipantRepository {
     }
 
     /**
-     * @param example
-     * @param <S>
-     * @return
+     * @param example -
+     * @param <S> -
+     * @return -
      */
     @Override
     public <S extends Participant> Optional<S> findOne(Example<S> example) {
@@ -144,9 +152,9 @@ public class TestParticipantRepository implements ParticipantRepository {
     }
 
     /**
-     * @param example
-     * @param <S>
-     * @return
+     * @param example -
+     * @param <S> -
+     * @return -
      */
     @Override
     public <S extends Participant> java.util.List<S> findAll(Example<S> example) {
@@ -154,10 +162,10 @@ public class TestParticipantRepository implements ParticipantRepository {
     }
 
     /**
-     * @param example
-     * @param sort
-     * @param <S>
-     * @return
+     * @param example -
+     * @param sort -
+     * @param <S> -
+     * @return -
      */
     @Override
     public <S extends Participant> java.util.List<S> findAll(Example<S> example, Sort sort) {
@@ -165,10 +173,10 @@ public class TestParticipantRepository implements ParticipantRepository {
     }
 
     /**
-     * @param example
-     * @param pageable
-     * @param <S>
-     * @return
+     * @param example -
+     * @param pageable -
+     * @return -
+     * @param <S> -
      */
     @Override
     public <S extends Participant> Page<S> findAll(Example<S> example, Pageable pageable) {
@@ -176,9 +184,9 @@ public class TestParticipantRepository implements ParticipantRepository {
     }
 
     /**
-     * @param example
-     * @param <S>
-     * @return
+     * @param example -
+     * @return -
+     * @param <S> -
      */
     @Override
     public <S extends Participant> long count(Example<S> example) {
@@ -186,9 +194,9 @@ public class TestParticipantRepository implements ParticipantRepository {
     }
 
     /**
-     * @param example
-     * @param <S>
-     * @return
+     * @param example -
+     * @return -
+     * @param <S> -
      */
     @Override
     public <S extends Participant> boolean exists(Example<S> example) {
@@ -196,91 +204,115 @@ public class TestParticipantRepository implements ParticipantRepository {
     }
 
     /**
-     * @param example
-     * @param queryFunction
-     * @param <S>
-     * @param <R>
-     * @return
+     * @param example -
+     * @param queryFunction -
+     * @param <S> -
+     * @param <R> -
+     * @return -
      */
     @Override
     public <S extends Participant, R> R findBy(Example<S> example,
-                      Function<FluentQuery.FetchableFluentQuery<S>, R> queryFunction) {
+                                               Function<FluentQuery.FetchableFluentQuery<S>,
+                                                   R> queryFunction) {
         return null;
     }
 
     /**
-     * @param entity
-     * @param <S>
-     * @return
+     * @param entity -
+     * @param <S> -
+     * @return -
      */
     @Override
     public <S extends Participant> S save(S entity) {
-        return null;
+        calledMethods.add("save");
+        participants.add(entity);
+        return entity;
     }
 
     /**
-     * @param entities
-     * @param <S>
-     * @return
+     * @param entities -
+     * @param <S> -
+     * @return -
      */
     @Override
-    public <S extends Participant> java.util.List<S> saveAll(Iterable<S> entities) {
+    public <S extends Participant> List<S> saveAll(Iterable<S> entities) {
         return null;
     }
 
     /**
-     * @param aLong
-     * @return
+     *
+     * @param aLong -
+     * @return -
      */
     @Override
     public Optional<Participant> findById(Long aLong) {
-        return Optional.empty();
+        calledMethods.add("findById");
+        List<Participant> rightParticipants =  participants.stream()
+            .filter(x -> x.getId() == aLong).toList();
+        if (rightParticipants.isEmpty()) {
+            return Optional.empty();
+        }
+        return Optional.of(rightParticipants.getFirst());
     }
 
     /**
-     * @param aLong
-     * @return
+     *
+     * @param aLong -
+     * @return -
      */
     @Override
     public boolean existsById(Long aLong) {
-        return false;
+        calledMethods.add("existsById");
+        List<Participant> matchingParticipants = participants.stream()
+            .filter(x -> x.getId() == aLong).toList();
+        if(matchingParticipants.size() == 1) {
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 
     /**
-     * @return
+     *
+     * @return -
      */
     @Override
-    public java.util.List<Participant> findAll() {
+    public List<Participant> findAll() {
+        calledMethods.add("findAll");
+        return participants;
+    }
+
+    /**
+     *
+     * @param longs -
+     * @return -
+     */
+    @Override
+    public List<Participant> findAllById(Iterable<Long> longs) {
         return null;
     }
 
     /**
-     * @param longs
-     * @return
-     */
-    @Override
-    public java.util.List<Participant> findAllById(Iterable<Long> longs) {
-        return null;
-    }
-
-    /**
-     * @return
+     * @return -
      */
     @Override
     public long count() {
         return 0;
     }
 
+
     /**
-     * @param aLong
+     * @param aLong -
      */
     @Override
     public void deleteById(Long aLong) {
-
+        calledMethods.add("deleteById");
+        participants = participants.stream().filter(x -> x.getId() != aLong).toList();
     }
 
     /**
-     * @param entity
+     * @param entity -
      */
     @Override
     public void delete(Participant entity) {
@@ -288,7 +320,7 @@ public class TestParticipantRepository implements ParticipantRepository {
     }
 
     /**
-     * @param longs
+     * @param longs -
      */
     @Override
     public void deleteAllById(Iterable<? extends Long> longs) {
@@ -296,7 +328,7 @@ public class TestParticipantRepository implements ParticipantRepository {
     }
 
     /**
-     * @param entities
+     * @param entities -
      */
     @Override
     public void deleteAll(Iterable<? extends Participant> entities) {
@@ -312,22 +344,21 @@ public class TestParticipantRepository implements ParticipantRepository {
     }
 
     /**
-     * @param sort
-     * @return
+     * @param sort -
+     * @return -
      */
     @Override
-    public java.util.List<Participant> findAll(Sort sort) {
+    public List<Participant> findAll(Sort sort) {
         return null;
     }
 
     /**
-     * @param pageable
-     * @return
+     *
+     * @param pageable -
+     * @return -
      */
     @Override
     public Page<Participant> findAll(Pageable pageable) {
         return null;
     }
-
-
 }

@@ -61,7 +61,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException {
         configClient =  new ConfigClient();
-        configClient.readFromFile(filePath);
+        configClient.readFromFile("config.txt");
 
         var editparticipant = FXML.load(EditParticipantCtrl.class, "client",
                 "scenes", "EditParticipant.fxml");

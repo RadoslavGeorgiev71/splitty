@@ -15,8 +15,6 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.ResourceBundle;
@@ -62,8 +60,6 @@ public class StartScreenCtrl {
     @FXML
     private MenuButton languageButton;
 
-    private Path filePath = Paths.get("client/src/main/resources/config.txt").toAbsolutePath();
-
     /**
      * @param server
      * @param mainCtrl
@@ -87,7 +83,7 @@ public class StartScreenCtrl {
 
         languageButton.getItems().clear();
 
-        config = config.readFromFile(String.valueOf(filePath));
+        config = config.readFromFile("config.txt");
 
         String language = config.getLanguage();
         if (language != null) {
@@ -185,14 +181,6 @@ public class StartScreenCtrl {
             if (event != null) {
                 writeEventToConfig(event);
                 mainCtrl.showEventOverview(event);
-            } else {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setHeaderText("Error: Unable to connect to the server or " +
-                        "event does not exists");
-                alert.setContentText("Please make sure that the URL and invite code are " +
-                        "correct and that the server is running");
-                alert.showAndWait();
             }
         }
     }
@@ -210,13 +198,8 @@ public class StartScreenCtrl {
             if (event != null) {
                 writeEventToConfig(event);
                 mainCtrl.showInvitation(event);
-            } else {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setHeaderText("Error: Unable to connect to the server");
-                alert.setContentText("Please make sure that the URL is " +
-                        "correct and that the server is running");
-                alert.showAndWait();
+            }
+            else{
                 clearFields();
             }
         }
@@ -273,7 +256,7 @@ public class StartScreenCtrl {
                 config.getIban(), config.getBic(),
                 config.getLanguage(), config.getCurrency(),
                 config.getName(), config.getRecentEvents()};
-        config.writeToFile(String.valueOf(filePath), contents, keys);
+        config.writeToFile("config.txt", contents, keys);
     }
 
     /**
@@ -295,7 +278,7 @@ public class StartScreenCtrl {
                 config.getIban(), config.getBic(),
                 config.getLanguage(), config.getCurrency(),
                 config.getName(), config.getRecentEvents()};
-        config.writeToFile("client/src/main/resources/config.txt", contents, keys);
+        config.writeToFile("config.txt", contents, keys);
 
     }
 }

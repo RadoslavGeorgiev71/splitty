@@ -1,5 +1,6 @@
 package client.scenes;
 
+import client.utils.ConfigClient;
 import client.utils.LanguageResourceBundle;
 import client.utils.ServerUtils;
 import commons.Event;
@@ -17,6 +18,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import javafx.util.StringConverter;
 
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,9 +49,9 @@ public class EditExpenseCtrl{
     @FXML
     private DatePicker datePicker;                  //When?
     @FXML
-    private CheckBox equally;                       //How to split?
+    private RadioButton equally;                       //How to split?
     @FXML
-    private CheckBox onlySome;
+    private RadioButton onlySome;
     @FXML
     private GridPane allGridPane;
     @FXML
@@ -100,6 +102,7 @@ public class EditExpenseCtrl{
      * @param actionEvent to handle
      */
     public void onSaveClick(ActionEvent actionEvent) {
+        Event undoEvent = event;
         expense.setTitle(titleField.getText());
         expense.setPayingParticipant(payerChoiceBox.getSelectionModel().getSelectedItem());
         try {
@@ -126,7 +129,12 @@ public class EditExpenseCtrl{
         clearFields();
         server.persistEvent(event);
         event = server.getEvent(event.getId());
-        mainCtrl.showEventOverview(event);
+        if(event != null){
+            mainCtrl.showEventOverview(event);
+        }
+        else{
+            mainCtrl.showEventOverview(undoEvent);
+        }
     }
 
     /**
@@ -142,11 +150,18 @@ public class EditExpenseCtrl{
             alert.setContentText("Are you sure you want to remove " +
                     this.expense.getTitle() + "?");
             if (alert.showAndWait().get() == ButtonType.OK){
+                Event undoEvent = event;
                 event.removeExpense(expense);
                 server.persistEvent(event);
                 //server.deleteExpense(expense);
                 //server.deleteExpense(event.getId(), expense);
-                mainCtrl.showEventOverview(server.getEvent(event.getId()));
+                event = server.getEvent(event.getId());
+                if(event != null){
+                    mainCtrl.showEventOverview(event);
+                }
+                else{
+                    mainCtrl.showEventOverview(undoEvent);
+                }
             }
         }
     }
@@ -296,12 +311,15 @@ public class EditExpenseCtrl{
 
     /**
      *  converted currency
+     * @return converted amount
      */
-    public void convertCurrency(){
+    public Double convertCurrency(){
+        String currency = ConfigClient.getCurrency();
         Double res = expense.getAmount();
         res *= server.convertRate(expense.getDateTime(), expense.getCurrency(), currency);
-        expense.setAmount(res);
-        expense.setCurrency(currency);
+        DecimalFormat df = new DecimalFormat("#.##");
+        res = Double.valueOf(df.format(res));
+        return res;
     }
 
     /**
@@ -348,20 +366,20 @@ public class EditExpenseCtrl{
      * Initiallizes the currency choice box with the data
      */
     public void initializeCurr() {
-        if(event == null) {
-            currChoiceBox.getSelectionModel().selectFirst();
-        }
+        currency = ConfigClient.getCurrency();
         List<String> currencies = new ArrayList<>();
         currencies.add("EUR");
         currencies.add("USD");
         currencies.add("CHF");
         currencies.add("AUD");
         currChoiceBox.setItems(FXCollections.observableArrayList(currencies));
-        if(currencies.contains(expense.getCurrency())){
-            currChoiceBox.getSelectionModel().select(expense.getCurrency());
+        try{
+            amountField.setText("" + convertCurrency());
+            currChoiceBox.getSelectionModel().select(currency);
         }
-        else {
-            currChoiceBox.getSelectionModel().selectFirst();
+        catch (Exception e){
+            amountField.setText("" + expense.getAmount());
+            currChoiceBox.getSelectionModel().select(expense.getCurrency());
         }
     }
 
@@ -376,16 +394,10 @@ public class EditExpenseCtrl{
             switchTextLanguage();
             initializePayer();
             titleField.setText(expense.getTitle());
-            if(currency != null && currency.length() == 3){
-                convertCurrency();
-            }
-            amountField.setText("" + expense.getAmount());
             initializeCurr();
             if(expense.getDateTime() != null){
                 datePicker.setValue(LocalDate.parse(expense.getDateTime()));
             }
-            equally.setAllowIndeterminate(false);
-            onlySome.setAllowIndeterminate(false);
             List<Participant> edited = new ArrayList<>();
             for(Participant p: expense.getParticipants()){
                 edited.add(p);

@@ -1,5 +1,6 @@
 package client.scenes;
 
+import client.utils.ConfigClient;
 import client.utils.LanguageResourceBundle;
 import client.utils.ServerUtils;
 import commons.Event;
@@ -27,6 +28,7 @@ public class AddExpenseCtrl{
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
     private Event event;
+    private Participant participant;
     private Expense expense;
     private String currency;
     private List<Participant> participants;
@@ -46,9 +48,9 @@ public class AddExpenseCtrl{
     @FXML
     private DatePicker datePicker;                  //When?
     @FXML
-    private CheckBox equally;                       //How to split?
+    private RadioButton equally;                       //How to split?
     @FXML
-    private CheckBox onlySome;
+    private RadioButton onlySome;
     @FXML
     private GridPane allGridPane;
     @FXML
@@ -97,6 +99,7 @@ public class AddExpenseCtrl{
      * @param actionEvent to handle
      */
     public void onAddClick(ActionEvent actionEvent) {
+        Event undoEvent = event;
         Expense expense = new Expense();
         expense.setTitle(titleField.getText());
         expense.setPayingParticipant(payerChoiceBox.getSelectionModel().getSelectedItem());
@@ -125,7 +128,12 @@ public class AddExpenseCtrl{
         server.persistEvent(event);
         clearFields();
         event = server.getEvent(event.getId());
-        mainCtrl.showEventOverview(event);
+        if(event != null){
+            mainCtrl.showEventOverview(event);
+        }
+        else{
+            mainCtrl.showEventOverview(undoEvent);
+        }
     }
 
     /**
@@ -172,6 +180,14 @@ public class AddExpenseCtrl{
      */
     public void setParticipants(List<Participant> participants) {
         this.participants = participants;
+    }
+
+    /**
+     * Setter for participant
+     * @param participant to set
+     */
+    public void setParticipant(Participant participant) {
+        this.participant = participant;
     }
 
     /**
@@ -269,6 +285,7 @@ public class AddExpenseCtrl{
      * Initiallizes the currency choice box with the data
      */
     public void initializeCurr() {
+        currency = ConfigClient.getCurrency();
         if(currency == null || currency.length() < 1) {
             currChoiceBox.getSelectionModel().selectFirst();
         }
@@ -317,12 +334,10 @@ public class AddExpenseCtrl{
                 }
             } );
 
-            payerChoiceBox.getSelectionModel().selectFirst();
+            payerChoiceBox.getSelectionModel().select(participant);
             initializeCurr();
             datePicker.setValue(LocalDate.now());
-            equally.setAllowIndeterminate(false);
             equally.setSelected(true);
-            onlySome.setAllowIndeterminate(false);
             onlySome.setSelected(false);
 
             this.participants = new ArrayList<>();

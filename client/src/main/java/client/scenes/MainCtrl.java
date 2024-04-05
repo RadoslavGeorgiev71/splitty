@@ -15,6 +15,7 @@
  */
 package client.scenes;
 
+import client.utils.ConfigClient;
 import commons.Event;
 import commons.Expense;
 import commons.Participant;
@@ -165,13 +166,15 @@ public class MainCtrl {
     /**
      * Switches the scene to the add expense window
      * @param event - takes an event as a parameter for which we add a participant
+     * @param participant - that adds expense
      */
-    public void showAddExpense(Event event) {
+    public void showAddExpense(Event event, Participant participant) {
         primaryStage.setTitle("Add Expense");
         addExpenseCtrl.setEvent(event);
-//        ConfigClient configClient =  new ConfigClient();
-//        configClient.readFromFile("client/src/main/resources/config.txt");
-//        addExpenseCtrl.setCurrency(configClient.getCurrency());
+        ConfigClient configClient =  new ConfigClient();
+        configClient.readFromFile("config.txt");
+        addExpenseCtrl.setCurrency(ConfigClient.getCurrency());
+        addExpenseCtrl.setParticipant(participant);
         addExpenseCtrl.initialize();
         primaryStage.setScene(addexpense);
     }
