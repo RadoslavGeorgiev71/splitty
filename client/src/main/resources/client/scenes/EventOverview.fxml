@@ -19,12 +19,12 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane onKeyPressed="#keyPressed" prefHeight="465.0" prefWidth="341.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.EventOverviewCtrl">
+<AnchorPane onKeyPressed="#keyPressed" prefHeight="561.0" prefWidth="402.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.EventOverviewCtrl">
     <stylesheets>
         <URL value="@/client/styles.css" />
     </stylesheets>
     <children>
-        <VBox layoutY="1.0" prefHeight="389.0" prefWidth="280.0" spacing="10.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="1.0">
+        <VBox layoutY="1.0" prefHeight="562.0" prefWidth="321.0" spacing="10.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="1.0">
             <children>
                 <GridPane prefHeight="30.0" prefWidth="297.0" VBox.vgrow="ALWAYS">
                     <columnConstraints>
@@ -45,8 +45,14 @@
                 <HBox alignment="CENTER_LEFT" prefHeight="28.0" prefWidth="280.0" spacing="10.0">
                     <children>
                         <Text fx:id="overviewParticipantsText" strokeType="OUTSIDE" strokeWidth="0.0" text="Participants" />
-                        <Button fx:id="overviewEditParticipantButton" mnemonicParsing="false" onAction="#onEditParticipantsClick" text="Edit(pen)" />
-                        <Button fx:id="overviewAddParticipantButton" mnemonicParsing="false" onAction="#onAddParticipantClick" text="Add(guy+)" />
+                        <Button fx:id="overviewEditParticipantButton" mnemonicParsing="false" onAction="#onEditParticipantsClick" text="Edit">
+                     <graphic>
+                        <ImageView fx:id="editButtonImageView" fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true" style="-fx-border-width: 0;" />
+                     </graphic></Button>
+                        <Button fx:id="overviewAddParticipantButton" mnemonicParsing="false" onAction="#onAddParticipantClick" text="Add">
+                     <graphic>
+                        <ImageView fx:id="addButtonImageView" fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true" style="-fx-border-width: 0;" />
+                     </graphic></Button>
                     </children>
                 </HBox>
                 <Text fx:id="participatingParticipants" strokeType="OUTSIDE" strokeWidth="0.0" text="Participants list" wrappingWidth="294.787109375" VBox.vgrow="ALWAYS" />
@@ -68,20 +74,20 @@
                     <tabs>
                         <Tab fx:id="tabPaneAll" onSelectionChanged="#tabPaneAllClick" text="All">
                             <content>
-                                <AnchorPane prefHeight="150.0" prefWidth="260.0">
+                                <AnchorPane prefHeight="187.0" prefWidth="362.0">
                                     <children>
-                                        <ScrollPane prefHeight="187.0" prefWidth="301.0">
+                                        <ScrollPane hbarPolicy="NEVER" prefHeight="187.0" prefWidth="362.0" vbarPolicy="ALWAYS">
                                             <content>
-                                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="174.0" prefWidth="296.0">
+                                                <AnchorPane focusTraversable="true" minHeight="0.0" minWidth="0.0" prefHeight="187.0" prefWidth="362.0">
                                                     <children>
-                                                        <GridPane fx:id="tabPaneAllGridPane" layoutX="4.0" layoutY="14.0" prefHeight="25.0" prefWidth="289.0">
+                                                        <GridPane fx:id="tabPaneAllGridPane" layoutX="4.0" layoutY="14.0" prefHeight="25.0" prefWidth="335.0">
                                                             <rowConstraints>
                                                                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                             </rowConstraints>
                                                             <columnConstraints>
-                                                                <ColumnConstraints halignment="LEFT" hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="100.0" />
-                                                                <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="100.0" />
-                                                                <ColumnConstraints halignment="RIGHT" hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="100.0" />
+                                                                <ColumnConstraints halignment="LEFT" hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="85.0" />
+                                                                <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="220.0" />
+                                                                <ColumnConstraints halignment="RIGHT" hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="65.0" />
                                                             </columnConstraints>
                                                         </GridPane>
                                                     </children>
@@ -93,20 +99,20 @@
                         </Tab>
                         <Tab id="FomPersonTab" fx:id="tabPaneFromPerson" onSelectionChanged="#tabPaneFromPersonClick" text="From Person">
                             <content>
-                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                <AnchorPane prefHeight="187.0" prefWidth="362.0">
                                     <children>
-                                        <ScrollPane prefHeight="187.0" prefWidth="301.0">
+                                        <ScrollPane hbarPolicy="NEVER" prefHeight="187.0" prefWidth="362.0" vbarPolicy="ALWAYS">
                                             <content>
-                                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="174.0" prefWidth="296.0">
+                                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="187.0" prefWidth="362.0">
                                                     <children>
-                                                        <GridPane fx:id="tabPaneFromGridPane" layoutX="4.0" layoutY="14.0" prefHeight="25.0" prefWidth="296.0">
+                                                        <GridPane fx:id="tabPaneFromGridPane" layoutX="4.0" layoutY="14.0" prefHeight="25.0" prefWidth="335.0">
                                                             <rowConstraints>
                                                                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                             </rowConstraints>
                                                             <columnConstraints>
-                                                                <ColumnConstraints halignment="LEFT" hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="100.0" />
-                                                                <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="100.0" />
-                                                                <ColumnConstraints halignment="RIGHT" hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="100.0" />
+                                                                <ColumnConstraints halignment="LEFT" hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="85.0" />
+                                                                <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="220.0" />
+                                                                <ColumnConstraints halignment="RIGHT" hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="65.0" />
                                                             </columnConstraints>
                                                         </GridPane>
                                                     </children>
@@ -118,20 +124,20 @@
                         </Tab>
                         <Tab id="IncludingPersonTab" fx:id="tabPaneIncludingPerson" onSelectionChanged="#tabPaneIncludingPersonClick" text="Including Person">
                             <content>
-                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="187.0" prefWidth="362.0">
                                     <children>
-                                        <ScrollPane prefHeight="187.0" prefWidth="301.0">
+                                        <ScrollPane hbarPolicy="NEVER" prefHeight="187.0" prefWidth="362.0" vbarPolicy="ALWAYS">
                                             <content>
-                                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="174.0" prefWidth="296.0">
+                                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="187.0" prefWidth="362.0">
                                                     <children>
-                                                        <GridPane fx:id="tabPaneIncludingGridPane" layoutX="4.0" layoutY="14.0" prefHeight="25.0" prefWidth="296.0">
+                                                        <GridPane fx:id="tabPaneIncludingGridPane" layoutX="4.0" layoutY="14.0" prefHeight="25.0" prefWidth="335.0">
                                                             <rowConstraints>
                                                                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                             </rowConstraints>
                                                             <columnConstraints>
-                                                                <ColumnConstraints halignment="LEFT" hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="100.0" />
-                                                                <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="100.0" />
-                                                                <ColumnConstraints halignment="RIGHT" hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="100.0" />
+                                                                <ColumnConstraints halignment="LEFT" hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="85.0" />
+                                                                <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="220.0" />
+                                                                <ColumnConstraints halignment="RIGHT" hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="65.0" />
                                                             </columnConstraints>
                                                         </GridPane>
                                                     </children>
@@ -146,6 +152,7 @@
                 <GridPane VBox.vgrow="ALWAYS">
                     <columnConstraints>
                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
                         <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                     </columnConstraints>
                     <rowConstraints>
@@ -154,7 +161,20 @@
                     </rowConstraints>
                     <children>
                         <Button fx:id="backButton" mnemonicParsing="false" onAction="#onBackClick" text="Back" GridPane.rowIndex="1" />
-                        <Button fx:id="overviewSettleDebtsButton" mnemonicParsing="false" onAction="#onSettleDebtsClick" text="Settle Debts" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <Button fx:id="overviewSettleDebtsButton" mnemonicParsing="false" onAction="#onSettleDebtsClick" text="Settle Debts" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                  <GridPane GridPane.columnIndex="1" GridPane.rowIndex="1">
+                    <columnConstraints>
+                      <ColumnConstraints halignment="RIGHT" hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
+                      <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="ALWAYS" />
+                    </rowConstraints>
+                     <children>
+                        <Text fx:id="amountText" strokeType="OUTSIDE" strokeWidth="0.0" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS" />
+                        <Label fx:id="amountLabel" text="Amount: " GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS" />
+                     </children>
+                  </GridPane>
                     </children>
                 </GridPane>
             <MenuButton fx:id="languageButton" mnemonicParsing="false" prefHeight="46.0" prefWidth="130.0" styleClass="language-menu-button">
