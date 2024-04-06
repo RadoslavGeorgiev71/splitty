@@ -9,10 +9,11 @@ import commons.Tag;
 import jakarta.inject.Inject;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
+import javafx.scene.paint.Color;
 import javafx.util.StringConverter;
 
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class TagCtrl {
@@ -31,7 +32,20 @@ public class TagCtrl {
     private ChoiceBox<Tag> tagMenu;
     @FXML
     private Label nameLabel;
-
+    @FXML
+    private TextField nameTextField;
+    @FXML
+    private Label colorLabel;
+    @FXML
+    private ColorPicker colorPicker;
+    @FXML
+    private Button addButton;
+    @FXML
+    private Button editButton;
+    @FXML
+    private Button deleteButton;
+    @FXML
+    private Button backButton;
 
     /**
      * Constructor for the controller
@@ -52,7 +66,8 @@ public class TagCtrl {
         if(expense != null) {
             languageResourceBundle = LanguageResourceBundle.getInstance();
             switchTextLanguage();
-            tagMenu.setItems(FXCollections.observableArrayList(server.getTags()));
+            List<Tag> tags = server.getTags();
+            tagMenu.setItems(FXCollections.observableArrayList(tags));
             tagMenu.setConverter(new StringConverter<Tag>() {
                 @Override
                 public String toString(Tag tag) {
@@ -69,8 +84,36 @@ public class TagCtrl {
                 }
             });
             tagMenu.getSelectionModel().selectFirst();
+            nameTextField.setText(tagMenu.getValue().getType());
+            colorPicker.setValue(Color.web(tagMenu.getValue().getColor()));
+            tagMenu.setOnAction(e -> {
+                nameTextField.setText(tagMenu.getValue().getType());
+                colorPicker.setValue(Color.web(tagMenu.getValue().getColor()));
+            });
         }
     }
+
+    @FXML
+    private void onAddTag() {
+
+        if(!nameTextField.getText().isEmpty()) {
+            server.addTag(new Tag(nameTextField.getText(), colorPicker.getValue().toString()));
+            mainCtrl.showTags(event, expense, participant, isAddExpense);
+        }
+        else {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Invalid name");
+            alert.setContentText("Please add a name to the tag before adding it!");
+            // TODO: translate alert
+            alert.showAndWait();
+        }
+    }
+
+    @FXML
+    private void onEditTag() {}
+
+    @FXML
+    private void onDeleteTag() {}
 
     /**
      * Switches the language of the text.

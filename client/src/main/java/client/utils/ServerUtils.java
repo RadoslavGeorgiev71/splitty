@@ -60,6 +60,10 @@ public class ServerUtils {
                 });
     }
 
+    /**
+     * Get all tags
+     * @return - a list of the tags
+     */
     public List<Tag> getTags() {
         return ClientBuilder.newClient(new ClientConfig())
             .target(server).path("api/tags")
@@ -67,6 +71,14 @@ public class ServerUtils {
             .accept(APPLICATION_JSON)
             .get(new GenericType<>() {
             });
+    }
+
+    public Tag addTag(Tag tag) {
+        return ClientBuilder.newClient(new ClientConfig())
+            .target(server).path("api/tags")
+            .request(APPLICATION_JSON)
+            .accept(APPLICATION_JSON)
+            .post(Entity.entity(tag, APPLICATION_JSON), Tag.class);
     }
 
 
