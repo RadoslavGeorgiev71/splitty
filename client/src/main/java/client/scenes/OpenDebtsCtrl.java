@@ -82,7 +82,6 @@ public class OpenDebtsCtrl {
     /**
      * Switches the language of the text.
      */
-
     public void switchTextLanguage(){
         ResourceBundle bundle = languageResourceBundle.getResourceBundle();
 

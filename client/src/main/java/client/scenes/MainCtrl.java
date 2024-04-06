@@ -234,9 +234,13 @@ public class MainCtrl {
     /**
      * Switches the scene to the addEditTag
      */
-    public void showTags(Event event) {
+    public void showTags(Event event, Expense expense,
+                         Participant participant, boolean isAddExpense) {
         primaryStage.setTitle("Tags");
+        tagCtrl.setExpense(expense);
         tagCtrl.setEvent(event);
+        tagCtrl.setParticipant(participant);
+        tagCtrl.setIsExpenseTrue(isAddExpense);
         tagCtrl.initialize();
         primaryStage.setScene(tags);
     }
