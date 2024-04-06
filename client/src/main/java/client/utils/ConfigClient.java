@@ -226,7 +226,7 @@ public class ConfigClient {
                 try (BufferedWriter writer = new
                         BufferedWriter(new FileWriter(configFilePath.toFile()))) {
                     writer.write("serverUrl: http://localhost:8080/\n" +
-                            "email: null\n" +
+                            "email: \n" +
                             "iban: null\n" +
                             "bic: null\n" +
                             "language: en\n" +
