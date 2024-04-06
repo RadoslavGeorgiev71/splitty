@@ -195,18 +195,8 @@ public class StartScreenCtrl {
             Event event = new Event();
             event.setTitle(title);
             event.createInviteCode();
-            if (ConfigClient.getName() != null){
-                Participant participant = new Participant();
-                participant.setName(ConfigClient.getName());
-                if(ConfigClient.getEmail() != null){
-                    participant.setEmail(ConfigClient.getEmail());
-                }
-                if(ConfigClient.getBic() != null){
-                    participant.setBic(ConfigClient.getBic());
-                }
-                if(ConfigClient.getIban() != null){
-                    participant.setIban(ConfigClient.getIban());
-                }
+            if (ConfigClient.getName() != null && !ConfigClient.getName().equals("")){
+                Participant participant = getParticipantInfo();
                 event.addParticipant(participant);
             }
             event = server.addEvent(event);
@@ -218,6 +208,26 @@ public class StartScreenCtrl {
                 clearFields();
             }
         }
+    }
+
+    /**
+     *  Gets the participant information from the config file
+     * @return Participant with the information from the config file
+     */
+
+    private static Participant getParticipantInfo() {
+        Participant participant = new Participant();
+        participant.setName(ConfigClient.getName());
+        if(ConfigClient.getEmail() != null && !ConfigClient.getEmail().equals("")){
+            participant.setEmail(ConfigClient.getEmail());
+        }
+        if(ConfigClient.getBic() != null && !ConfigClient.getBic().equals("")){
+            participant.setBic(ConfigClient.getBic());
+        }
+        if(ConfigClient.getIban() != null && !ConfigClient.getIban().equals("")){
+            participant.setIban(ConfigClient.getIban());
+        }
+        return participant;
     }
 
     /**
