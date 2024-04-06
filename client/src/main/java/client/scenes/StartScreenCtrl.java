@@ -7,6 +7,7 @@ import com.google.inject.Inject;
 
 import client.utils.ServerUtils;
 import commons.Event;
+import commons.Participant;
 import javafx.fxml.FXML;
 import javafx.geometry.Side;
 import javafx.scene.control.*;
@@ -194,6 +195,20 @@ public class StartScreenCtrl {
             Event event = new Event();
             event.setTitle(title);
             event.createInviteCode();
+            if (ConfigClient.getName() != null){
+                Participant participant = new Participant();
+                participant.setName(ConfigClient.getName());
+                if(ConfigClient.getEmail() != null){
+                    participant.setEmail(ConfigClient.getEmail());
+                }
+                if(ConfigClient.getBic() != null){
+                    participant.setBic(ConfigClient.getBic());
+                }
+                if(ConfigClient.getIban() != null){
+                    participant.setIban(ConfigClient.getIban());
+                }
+                event.addParticipant(participant);
+            }
             event = server.addEvent(event);
             if (event != null) {
                 writeEventToConfig(event);
