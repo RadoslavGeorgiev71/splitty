@@ -107,7 +107,7 @@ public class OpenDebtsCtrlTest extends ApplicationTest {
     public void testInitialize() {
         Debt mockDebt = Mockito.mock(Debt.class);
         Participant mockParticipant = Mockito.mock(Participant.class);
-        Mockito.when(mockDebt.getPersonOwed()).thenReturn(mockParticipant);
+//        Mockito.when(mockDebt.getPersonOwed()).thenReturn(mockParticipant);
         Mockito.when(mockDebt.getPersonPaying()).thenReturn(mockParticipant);
         Mockito.when(mockDebt.getAmount()).thenReturn(10.0);
 

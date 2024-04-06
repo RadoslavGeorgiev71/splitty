@@ -78,7 +78,7 @@ public class EventOverviewCtrlTest extends ApplicationTest {
         Mockito.doNothing().when(mockMainCtrl).showInvitation(mockEvent);
         Mockito.doNothing().when(mockMainCtrl).showEditParticipant(mockEvent, mockParticipant);
         Mockito.doNothing().when(mockMainCtrl).showAddParticipant(mockEvent);
-        Mockito.doNothing().when(mockMainCtrl).showAddExpense(mockEvent);
+        Mockito.doNothing().when(mockMainCtrl).showAddExpense(mockEvent, Mockito.any(Participant.class));
         Mockito.doNothing().when(mockMainCtrl).showOpenDebts(mockEvent);
         Mockito.doNothing().when(mockMainCtrl).showStartScreen();
 
@@ -141,7 +141,7 @@ public class EventOverviewCtrlTest extends ApplicationTest {
             eventOverviewCtrl.onAddExpenseClick();
         });
         WaitForAsyncUtils.waitForFxEvents();
-        Mockito.verify(mockMainCtrl).showAddExpense(mockEvent);
+        Mockito.verify(mockMainCtrl).showAddExpense(mockEvent, Mockito.any(Participant.class));
     }
 
     @Test

@@ -152,8 +152,7 @@ public class InvitationCtrl implements Initializable {
     @FXML
     /**
      * Should send invites.
-     */
-    private void sendInvites(){
+     */ void sendInvites(){
         List<String> emails = new ArrayList<>();
         String name = ConfigClient.getName();
         Scanner scanner = new Scanner(emailTextArea.getText());
@@ -171,7 +170,7 @@ public class InvitationCtrl implements Initializable {
     }
 
     @FXML
-    private void backToStart(){
+    void backToStart(){
         resetFields();
         clearEmail();
         mainCtrl.showStartScreen();

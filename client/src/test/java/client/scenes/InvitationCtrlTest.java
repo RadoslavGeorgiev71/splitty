@@ -7,6 +7,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.DialogPane;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -67,12 +69,12 @@ public class InvitationCtrlTest extends ApplicationTest {
         stage.show();
     }
 
-//    @Test
-//    public void testInitialize() {
-//        invitationCtrl.initialize();
-//        assertEquals("testInviteCode", invitationCtrl.getInviteCodeText());
-//        assertEquals("testTitle", invitationCtrl.getEventNameText());
-//    }
+    @Test
+    public void testInitialize() {
+        invitationCtrl.initialize();
+        assertEquals("testInviteCode", invitationCtrl.getInviteCodeText());
+        assertEquals("testTitle", invitationCtrl.getEventNameText());
+    }
 
     @Test
     public void setInviteCodeTextTest(){
@@ -133,5 +135,28 @@ public class InvitationCtrlTest extends ApplicationTest {
 
         FxAssert.verifyThat("#emailTextArea", TextInputControlMatchers.hasText(""));
 
+    }
+
+    @Test
+    public void testKeyPressed_Enter() {
+        KeyEvent keyEvent = new KeyEvent(KeyEvent.KEY_PRESSED, "", "", KeyCode.ENTER, false, false, false, false);
+        WaitForAsyncUtils.asyncFx(() -> invitationCtrl.keyPressed(keyEvent));
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    @Test
+    public void testKeyPressed_Escape() {
+        KeyEvent keyEvent = new KeyEvent(KeyEvent.KEY_PRESSED, "", "", KeyCode.ESCAPE, false, false, false, false);
+        WaitForAsyncUtils.asyncFx(() -> invitationCtrl.keyPressed(keyEvent));
+        WaitForAsyncUtils.waitForFxEvents();
+        Mockito.verify(mainCtrlMock, Mockito.times(1)).showStartScreen();
+    }
+
+    @Test
+    public void testKeyPressed_W_WithControl() {
+        KeyEvent keyEvent = new KeyEvent(KeyEvent.KEY_PRESSED, "", "", KeyCode.W, false, true, false, false);
+        WaitForAsyncUtils.asyncFx(() -> invitationCtrl.keyPressed(keyEvent));
+        WaitForAsyncUtils.waitForFxEvents();
+        Mockito.verify(mainCtrlMock, Mockito.times(1)).closeWindow();
     }
 }
