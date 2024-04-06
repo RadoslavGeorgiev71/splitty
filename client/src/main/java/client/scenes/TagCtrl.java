@@ -5,8 +5,13 @@ import client.utils.ServerUtils;
 import commons.Event;
 import commons.Expense;
 import commons.Participant;
+import commons.Tag;
 import jakarta.inject.Inject;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Label;
+import javafx.util.StringConverter;
 
 import java.util.ResourceBundle;
 
@@ -19,6 +24,13 @@ public class TagCtrl {
     private Expense expense;
     private Participant participant;
     private boolean isAddExpense;
+
+    @FXML
+    private Label tagLabel;
+    @FXML
+    private ChoiceBox<Tag> tagMenu;
+    @FXML
+    private Label nameLabel;
 
 
     /**
@@ -40,6 +52,23 @@ public class TagCtrl {
         if(expense != null) {
             languageResourceBundle = LanguageResourceBundle.getInstance();
             switchTextLanguage();
+            tagMenu.setItems(FXCollections.observableArrayList(server.getTags()));
+            tagMenu.setConverter(new StringConverter<Tag>() {
+                @Override
+                public String toString(Tag tag) {
+                    if(tag != null) {
+                        return tag.getType();
+                    }
+                    else {
+                        return "";
+                    }
+                }
+                @Override
+                public Tag fromString(String s) {
+                    return null;
+                }
+            });
+            tagMenu.getSelectionModel().selectFirst();
         }
     }
 

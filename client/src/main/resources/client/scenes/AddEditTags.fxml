@@ -14,7 +14,7 @@
          <children>
             <Button fx:id="backButton" layoutX="225.0" layoutY="14.0" mnemonicParsing="false" onAction="#backToExpense" text="Back" />
             <Label layoutX="14.0" layoutY="14.0" prefHeight="25.0" prefWidth="27.0" text="Tags" />
-            <ChoiceBox layoutX="56.0" layoutY="14.0" prefHeight="25.0" prefWidth="149.0" />
+            <ChoiceBox fx:id="tagMenu" layoutX="56.0" layoutY="14.0" prefHeight="25.0" prefWidth="149.0" />
             <Label layoutX="14.0" layoutY="63.0" text="Name" />
             <Label layoutX="15.0" layoutY="100.0" text="Color" />
             <TextField layoutX="56.0" layoutY="59.0" />

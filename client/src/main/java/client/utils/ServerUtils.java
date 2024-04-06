@@ -22,13 +22,10 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 
-import commons.Debt;
-import commons.Expense;
+import commons.*;
 import jakarta.ws.rs.ProcessingException;
 //import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.Response;
-import commons.Event;
-import commons.Participant;
 import javafx.scene.control.Alert;
 import org.glassfish.jersey.client.ClientConfig;
 
@@ -61,6 +58,15 @@ public class ServerUtils {
                 .accept(APPLICATION_JSON)
                 .get(new GenericType<>() {
                 });
+    }
+
+    public List<Tag> getTags() {
+        return ClientBuilder.newClient(new ClientConfig())
+            .target(server).path("api/tags")
+            .request(APPLICATION_JSON)
+            .accept(APPLICATION_JSON)
+            .get(new GenericType<>() {
+            });
     }
 
 
