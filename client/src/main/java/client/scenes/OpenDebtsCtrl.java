@@ -236,8 +236,6 @@ public class OpenDebtsCtrl {
         mainCtrl.showEventOverview(event);
     }
 
-
-
     /**
      * Retrieves all debts associated with a certain event
      * @return all debts associated with a given event

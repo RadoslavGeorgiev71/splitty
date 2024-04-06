@@ -88,7 +88,6 @@ public class MainCtrl {
 
         this.primaryStage = primaryStage;
 
-
         this.editParticipantCtrl = editparticipant.getKey();
         this.editparticipant = new Scene(editparticipant.getValue());
 
@@ -235,8 +234,9 @@ public class MainCtrl {
     /**
      * Switches the scene to the addEditTag
      */
-    public void  showTags() {
+    public void showTags(Event event) {
         primaryStage.setTitle("Tags");
+        tagCtrl.setEvent(event);
         tagCtrl.initialize();
         primaryStage.setScene(tags);
     }

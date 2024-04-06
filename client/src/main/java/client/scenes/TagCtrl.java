@@ -6,6 +6,8 @@ import commons.Event;
 import commons.Tag;
 import jakarta.inject.Inject;
 
+import java.util.ResourceBundle;
+
 public class TagCtrl {
 
     private final ServerUtils server;
@@ -32,7 +34,19 @@ public class TagCtrl {
     public void initialize() {
         if(event != null) {
             languageResourceBundle = LanguageResourceBundle.getInstance();
-            // switchTextLanguage();
+            switchTextLanguage();
         }
+    }
+
+    public void switchTextLanguage() {
+        ResourceBundle bundle = languageResourceBundle.getResourceBundle();
+    }
+
+    /**
+     * Sets the current event for which we retrieve debts
+     * @param event - the event for which are the debts
+     */
+    public void setEvent(Event event){
+        this.event = event;
     }
 }

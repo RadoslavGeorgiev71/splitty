@@ -103,7 +103,7 @@ public class AddExpenseCtrl{
      * @param actionEvent -
      */
     public void onTagsClick(ActionEvent actionEvent) {
-        mainCtrl.showTags();
+        mainCtrl.showTags(event);
     }
 
     /**
