@@ -13,13 +13,14 @@ public class Expense {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     private String title;
-    @ManyToOne(cascade = CascadeType.PERSIST)
-    private Participant payingParticipant; // should probably use id of
-    // participant instead since we are not using entity for participant yet i will change later
+    @ManyToOne//(cascade = CascadeType.PERSIST) //keep
+    private Participant payingParticipant;
     private double amount;
     private String currency;
-    @OneToMany(cascade=CascadeType.ALL)
+    @ManyToMany//(cascade=CascadeType.ALL) //keep
     private List<Participant> participants;
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Debt> debts;
     private String dateTime;
 
     /**
@@ -32,6 +33,7 @@ public class Expense {
         this.amount = 0.0d;
         this.currency = "EUR";
         this.participants = new ArrayList<>();
+        this.debts = new ArrayList<>();
         this.dateTime = "";
     }
 
@@ -47,6 +49,7 @@ public class Expense {
         this.amount = 0.0d;
         this.currency = "EUR";
         this.participants = new ArrayList<>();
+        this.debts = new ArrayList<>();
         this.dateTime = "";
     }
 
@@ -64,6 +67,7 @@ public class Expense {
         this.amount = amount;
         this.currency = "EUR";
         this.participants = participants;
+        this.debts = new ArrayList<>();
         this.dateTime = "";
     }
 
@@ -83,6 +87,7 @@ public class Expense {
         this.amount = amount;
         this.currency = currency;
         this.participants = participants;
+        this.debts = new ArrayList<>();
         this.dateTime = dateTime;
     }
 
@@ -192,6 +197,30 @@ public class Expense {
      */
     public void delParticipant(Participant participant){
         participants.remove(participant);
+    }
+
+    /**
+     * Adds a debt to the expense
+     * @param debt - the debts to be added
+     */
+    public void add(Debt debt) {
+        this.debts.add(debt);
+    }
+
+    /**
+     * Returns the debts associated with the Expense
+     * @return - the debts of the expense
+     */
+    public List<Debt> getDebts() {
+        return debts;
+    }
+
+    /**
+     * Set the debts of the expense
+     * @param debts - the debts to be set
+     */
+    public void setDebts(List<Debt> debts) {
+        this.debts = debts;
     }
 
     /**

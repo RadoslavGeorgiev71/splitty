@@ -23,11 +23,13 @@ import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 
 import commons.Debt;
+import commons.Expense;
 import jakarta.ws.rs.ProcessingException;
-import jakarta.ws.rs.WebApplicationException;
+//import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.Response;
 import commons.Event;
 import commons.Participant;
+import javafx.scene.control.Alert;
 import org.glassfish.jersey.client.ClientConfig;
 
 import jakarta.ws.rs.client.ClientBuilder;
@@ -61,13 +63,13 @@ public class ServerUtils {
                 });
     }
 
+
     /**
      * Adds debt to the database
      *
      * @param debt the debt to add
      * @return the debt added
      */
-
     public Debt addDebt(Debt debt) {
         return ClientBuilder.newClient(new ClientConfig())
                 .target(server).path("api/debts")
@@ -98,15 +100,22 @@ public class ServerUtils {
      * @return the event with the specified id
      */
     public Event getEvent(long id) {
-        Response response = ClientBuilder.newClient(new ClientConfig())
-                .target(server).path("/api/events/id/" + id)
-                .request(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .get();
-        if (response.getStatus() == Response.Status.OK.getStatusCode()) {
-            return response.readEntity(Event.class);
-        } else {
-            throw new WebApplicationException("Event not found" + response.getStatus());
+        try{
+            Response response = ClientBuilder.newClient(new ClientConfig())
+                    .target(server).path("/api/events/id/" + id)
+                    .request(APPLICATION_JSON)
+                    .accept(APPLICATION_JSON)
+                    .get();
+            if (response.getStatus() == Response.Status.OK.getStatusCode()) {
+                return response.readEntity(Event.class);
+            } else {
+                showAlert();
+                return  null;
+            }
+        }
+        catch(ProcessingException e){
+            showAlert();
+            return null;
         }
     }
 
@@ -128,12 +137,13 @@ public class ServerUtils {
             if (response.getStatus() == Response.Status.CREATED.getStatusCode()) {
                 return response.readEntity(Event.class);
             } else {
+                showAlert();
                 return null;
             }
         }catch (ProcessingException e){
+            showAlert();
             return null;
         }
-
     }
 
     /**
@@ -158,9 +168,9 @@ public class ServerUtils {
                 return  null;
             }
         }catch (ProcessingException e){
+            showAlert(inviteCode);
             return null;
         }
-
     }
 
     /**
@@ -186,11 +196,16 @@ public class ServerUtils {
      */
 
     public Response deleteParticipant(Participant participant) {
-        return ClientBuilder.newClient(new ClientConfig())
-                .target(server).path("api/participants/" + participant.getId())
-                .request(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .delete();
+        try{
+            return ClientBuilder.newClient(new ClientConfig())
+                    .target(server).path("api/participants/" + participant.getId())
+                    .request(APPLICATION_JSON)
+                    .accept(APPLICATION_JSON)
+                    .delete();
+        }
+        catch(ProcessingException e){
+            return null;
+        }
     }
 
     /**
@@ -216,11 +231,17 @@ public class ServerUtils {
      */
     public Event persistEvent(Event event) {
         Entity<Event> entity = Entity.entity(event, APPLICATION_JSON);
-        return ClientBuilder.newClient(new ClientConfig())
-                .target(server).path("api/events/persist/" + event.getId())
-                .request(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .put(entity, Event.class);
+        try{
+            return ClientBuilder.newClient(new ClientConfig())
+                    .target(server).path("api/events/persist/" + event.getId())
+                    .request(APPLICATION_JSON)
+                    .accept(APPLICATION_JSON)
+                    .put(entity, Event.class);
+        }
+        catch(ProcessingException e) {
+            showAlert();
+            return null;
+        }
     }
 
     private static final ExecutorService EXEC = Executors.newSingleThreadExecutor();
@@ -233,10 +254,10 @@ public class ServerUtils {
         EXEC.submit(() -> {
             while(!Thread.interrupted()) {
                 Response res = ClientBuilder.newClient(new ClientConfig())
-                    .target(server).path("api/events/update")
-                    .request(APPLICATION_JSON)
-                    .accept(APPLICATION_JSON)
-                    .get(Response.class);
+                        .target(server).path("api/events/update")
+                        .request(APPLICATION_JSON)
+                        .accept(APPLICATION_JSON)
+                        .get(Response.class);
 
                 if(res.getStatus() == 204) {
                     continue;
@@ -260,16 +281,207 @@ public class ServerUtils {
      * @return true if the emails were sent successfully
      */
     public boolean sendInvites(List<String> emails, Event event, String creatorname) {
-        Response response = ClientBuilder.newClient(new ClientConfig())
-                .target(server).path("/api/email/" + event.getInviteCode())
-                .queryParam("creatorName", creatorname)
-                .request(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .post(Entity.json(emails));
-        if (response.getStatus() == Response.Status.OK.getStatusCode()) {
-            return true;
-        } else {
+        try{
+            Response response = ClientBuilder.newClient(new ClientConfig())
+                    .target(server).path("/api/email/" + event.getInviteCode())
+                    .queryParam("creatorName", creatorname)
+                    .request(APPLICATION_JSON)
+                    .accept(APPLICATION_JSON)
+                    .post(Entity.json(emails));
+            if (response.getStatus() == Response.Status.OK.getStatusCode()) {
+                return true;
+            } else {
+                showAlert();
+                return false;
+            }
+        }
+        catch(ProcessingException e){
+            showAlert();
             return false;
         }
+
+    }
+
+    /**
+     * Deletes an expense from the server
+     *
+     * @param eventId - id
+     * @param expense - the expense to delete
+     * @return the response from the server
+     */
+    public Response deleteExpense(long eventId, Expense expense) {
+        Entity<Expense> entity = Entity.entity(expense, APPLICATION_JSON);
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(server).path("api/expenses/remove/" + eventId)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .put(entity);
+    }
+
+    /**
+     * Deletes an expense from the server
+     *
+     * @param expense - the expense to delete
+     * @return the response from the server
+     */
+    public Response deleteExpense(Expense expense) {
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(server).path("api/expenses/" + expense.getId())
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .delete();
+    }
+
+    /**
+     * Adds an expense to the server
+     *
+     * @param expense - the expense to add
+     * @return the response from the server
+     */
+    public Expense addExpense(Expense expense) {
+        try{
+            expense.setId(1000);
+            Entity<Expense> entity = Entity.entity(expense, APPLICATION_JSON);
+            Response response = ClientBuilder.newClient(new ClientConfig())
+                            .target(server).path("api/expenses")
+                            .request(APPLICATION_JSON)
+                            .accept(APPLICATION_JSON)
+                            .post(entity);
+            if (response.getStatus() == Response.Status.CREATED.getStatusCode()) {
+                return response.readEntity(Expense.class);
+            }
+            return null;
+        }
+        catch (ProcessingException e){
+            return null;
+        }
+    }
+
+    /**
+     * Adds an expense to the server
+     *
+     * @param eventId - where to add
+     * @param expense - the expense to add
+     * @return the response from the server
+     */
+    public Expense addExpense(long eventId, Expense expense) {
+        try{
+            expense.setId(1000);
+            Response response = ClientBuilder.newClient(new ClientConfig())
+                    .target(server).path("api/expenses/event/" + eventId)
+                    .request(APPLICATION_JSON)
+                    .accept(APPLICATION_JSON)
+                    .post(Entity.json(expense));
+            if (response.getStatus() == Response.Status.CREATED.getStatusCode()) {
+                return response.readEntity(Expense.class);
+            } else {
+                return null;
+            }
+        }catch (ProcessingException e){
+            return null;
+        }
+    }
+
+    /**
+     * List of expense to the server
+     *
+     * @param eventId - event
+     * @return the response from the server
+     */
+    public List<Expense> getExpense(long eventId) {
+        Response response = ClientBuilder.newClient(new ClientConfig())
+                .target(server).path("api/expenses/event/" + eventId)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get();
+        //return response.readEntity(List<Expense>.class);
+        return null;
+    }
+
+    /**
+     * Persists an expense
+     *
+     * @param eventId
+     * @param expense - the expense to persist
+     * @return the persisted expense
+     */
+    public Expense updateExpense(long eventId, Expense expense) {
+        Entity<Expense> entity = Entity.entity(expense, APPLICATION_JSON);
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(server).path("api/expenses/event/" + eventId)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .put(entity, Expense.class);
+    }
+
+    /**
+     * Persists an expense
+     *
+     * @param expense - the expense to persist
+     * @return the persisted expense
+     */
+    public Expense persistExpense(Expense expense) {
+        Entity<Expense> entity = Entity.entity(expense, APPLICATION_JSON);
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(server).path("api/expenses/id/" + expense.getId())
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .put(entity, Expense.class);
+    }
+
+    /**
+     * This should give converted currency
+     *
+     * @param date - the date it is looked for
+     * @param from currency
+     * @param to currency
+     * @return the event with the specified id
+     */
+    public Double convertRate(String date, String from, String to) {
+        String key = "488b2c548074f3e5d9e15ba3013a152d";
+        String url = "http://data.fixer.io/api/" + date;
+        url += "?access_key=" + key+ "&base=" + from + "&symbols=" + to;
+        Response response = ClientBuilder.newClient(new ClientConfig())
+                .target(url)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get();
+        if (response.getStatus() == Response.Status.OK.getStatusCode()) {
+            Object res = response.readEntity(Object.class);
+            String rate = res.toString();
+            rate = rate.split(to+"=")[1].split("}")[0];
+            return Double.parseDouble(rate);
+        } else {
+            showAlert();
+            return null;
+        }
+    }
+
+    /**
+     * Show a pop up window with an alert when the client cannot connect
+     * to the server
+     */
+    public void showAlert(){
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText("Error: Unable to connect to the server");
+        alert.setContentText("Please make sure that the URL is " +
+                "correct and that the server is running");
+        alert.showAndWait();
+    }
+
+    /**
+     * Show a pop up window with an alert when the client cannot connect
+     * to the server
+     * @param inviteCode that caused the problem
+     */
+    public void showAlert(String inviteCode){
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText("Error: Unable to connect to the server or " +
+                "event with invite code: " + inviteCode + " does not exists");
+        alert.setContentText("Please make sure that the URL and invite code are " +
+                "correct and that the server is running");
+        alert.showAndWait();
     }
 }

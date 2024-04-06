@@ -112,6 +112,30 @@ class ExpenseTest {
     }
 
     @Test
+    void testAddDebt() {
+        Debt debt = new Debt(a, b, 100);
+        exp1.add(debt);
+        assertEquals(exp1.getDebts(), List.of(debt));
+    }
+
+    @Test
+    void testGetDebts() {
+        Debt debt = new Debt(a, b, 100);
+        exp1.setDebts(List.of(debt));
+        assertEquals(exp1.getDebts(), List.of(debt));
+    }
+
+    @Test
+    void testSetDebts() {
+        Debt debt = new Debt(a, b, 100);
+        exp1.setDebts(List.of(debt));
+        assertEquals(exp1.getDebts(), List.of(debt));
+        Debt debt2 = new Debt(b, a, 50);
+        exp1.setDebts(List.of(debt2, debt));
+        assertEquals(exp1.getDebts(), List.of(debt2, debt));
+    }
+
+    @Test
     void getDateTime() {
         assertEquals("2/25/2024", exp1.getDateTime());
     }

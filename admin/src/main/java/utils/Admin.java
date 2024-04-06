@@ -115,6 +115,7 @@ public class Admin{
                     .request(APPLICATION_JSON) //
                     .post(Entity.entity(password, APPLICATION_JSON));
             boolean isAuthenticated = res.getStatus() == Response.Status.OK.getStatusCode();
+            connect("ws://localhost:8080/websocket");
             return isAuthenticated;
         } catch (ProcessingException e) {
             return false;
@@ -126,11 +127,16 @@ public class Admin{
      * @return List<Event> with all events in the server
      */
     public List<Event> getEvents(){
-        return ClientBuilder.newClient(new ClientConfig()) //
-                .target(server).path("api/events") //
-                .request(APPLICATION_JSON) //
-                .accept(APPLICATION_JSON) //
-                .get(new GenericType<List<Event>>() {});
+        try {
+            return ClientBuilder.newClient(new ClientConfig()) //
+                    .target(server).path("api/events") //
+                    .request(APPLICATION_JSON) //
+                    .accept(APPLICATION_JSON) //
+                    .get(new GenericType<List<Event>>() {});
+        } catch (ProcessingException e) {
+            showalert();
+            return new ArrayList<Event>();
+        }
     }
 
 
@@ -221,7 +227,7 @@ public class Admin{
      * @param event that causes the problem
      */
     public void showalert(Event event){
-        Alert alert = new Alert(Alert.AlertType.WARNING);
+        Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("JSON Import");
         alert.setHeaderText("Error");
         alert.setContentText("Event with id:  " + event.getId() +
@@ -229,6 +235,20 @@ public class Admin{
                 "is already an event with this id or invite code in the database");
         alert.showAndWait();
     }
+
+    /**
+     * Method that shows a warning to the user everytime
+     * they try to import an event that is already in the database
+     */
+    public void showalert(){
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Server Unavailable");
+        alert.setHeaderText("Error");
+        alert.setContentText("Unable to connect to server. " +
+                "Check the url of the server or try again later");
+        alert.showAndWait();
+    }
+
 
 
 

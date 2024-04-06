@@ -181,6 +181,28 @@ public class EventTest {
     }
 
     @Test
+    void getSettledDebts() {
+        Debt debt = new Debt(p1, p2, 100);
+        event1.addSettledDebt(debt);
+        assertEquals(event1.getSettledDebts(), List.of(debt));
+    }
+
+    @Test
+    void setSettledDebts() {
+        Debt debt = new Debt(p1, p2, 100);
+        event1.setSettledDebts(List.of(debt));
+        assertEquals(event1.getSettledDebts(), List.of(debt));
+    }
+
+    @Test
+    void addSettledDebt() {
+        Debt debt = new Debt(p1, p2, 100);
+        assertEquals(event1.getSettledDebts(), new ArrayList<>());
+        event1.addSettledDebt(debt);
+        assertEquals(event1.getSettledDebts(), List.of(debt));
+    }
+
+    @Test
     void setDateTime() {
         event1.setDateTime("test");
         assertEquals("test", event1.getDateTime());

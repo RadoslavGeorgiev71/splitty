@@ -11,7 +11,6 @@ import server.Repositories.TestEventRepository;
 import server.database.DebtRepository;
 import server.database.EventRepository;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -24,7 +23,7 @@ public class DebtServiceTest {
     private DebtService sut;
 
     @BeforeEach
-    void DebtServiceSetUp() {
+    void debtServiceSetUp() {
         debtRepo = new TestDebtRepository();
         eventRepo = new TestEventRepository();
         sut =  new DebtService(debtRepo, eventRepo);
@@ -73,29 +72,29 @@ public class DebtServiceTest {
         Debt debt5 = new Debt(a, c, 15);
         Debt debt6 = new Debt(d, c, 15);
         Debt debt7 = new Debt(c, d, 35);
-        debtRepo.save(debt1);
-        debtRepo.save(debt2);
-        debtRepo.save(debt3);
-        debtRepo.save(debt4);
-        debtRepo.save(debt5);
-        debtRepo.save(debt6);
-        debtRepo.save(debt7);
         Event event = new Event();
+        event.addSettledDebt(debt1);
+        event.addSettledDebt(debt2);
+        event.addSettledDebt(debt3);
+        event.addSettledDebt(debt4);
+        event.addSettledDebt(debt5);
+        event.addSettledDebt(debt6);
+        event.addSettledDebt(debt7);
         event.addParticipant(a);
         event.addParticipant(b);
         event.addParticipant(c);
         event.addParticipant(d);
         eventRepo.save(event);
         List<Debt> paymentInstructions = sut.getPaymentInstructions(event.getId());
-        Debt instruction1 = new Debt(b, d, 55);
-        Debt instruction2 = new Debt(a, d, 10);
-        Debt instruction3 = new Debt(c, d, 5);
+        Debt instruction1 = new Debt(d, b, 55);
+        Debt instruction2 = new Debt(d, a, 10);
+        Debt instruction3 = new Debt(d, c, 5);
         List<Debt> instructions = List.of(instruction1, instruction2, instruction3);
         boolean equal;
         for(Debt instruction : instructions) {
             equal = false;
             for(Debt debt : paymentInstructions) {
-                if(debt.getPersonOwed().equals(instruction.getPersonOwed())
+                if(debt.getPersonOwing().equals(instruction.getPersonOwing())
                 && debt.getAmount() == instruction.getAmount()
                 && debt.getPersonPaying().equals(instruction.getPersonPaying())) {
                     equal = true;
