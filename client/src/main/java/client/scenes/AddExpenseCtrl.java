@@ -72,6 +72,9 @@ public class AddExpenseCtrl{
     private Label addExpenseHow;
     @FXML
     private Label addExpenseType;
+    @FXML
+    private Button tagButton;
+
 
     /**
      * Constructor for AddExpenseCtrl
@@ -92,6 +95,15 @@ public class AddExpenseCtrl{
     public void onAbortClick(ActionEvent actionEvent) {
         clearFields();
         mainCtrl.showEventOverview(event);
+    }
+
+    /**
+     * Opens the tag scene
+     * when the tag button is clicked
+     * @param actionEvent -
+     */
+    public void onTagsClick(ActionEvent actionEvent) {
+        mainCtrl.showTags();
     }
 
     /**

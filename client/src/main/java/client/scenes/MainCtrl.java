@@ -56,6 +56,9 @@ public class MainCtrl {
     private UserSettingsCtrl userSettingsCtrl;
     private Scene usersettings;
 
+    private TagCtrl tagCtrl;
+    private Scene tags;
+
     /**
      * Initializes stage
      * @param primaryStage
@@ -68,6 +71,7 @@ public class MainCtrl {
      * @param startscreen
      * @param invitation
      * @param usersettings
+     * @param tags
      */
     public void initialize(Stage primaryStage,
                            Pair<EditParticipantCtrl, Parent> editparticipant,
@@ -78,7 +82,8 @@ public class MainCtrl {
                            Pair<OpenDebtsCtrl, Parent> opendebts,
                            Pair<StartScreenCtrl, Parent> startscreen,
                            Pair<InvitationCtrl, Parent> invitation,
-                           Pair<UserSettingsCtrl, Parent> usersettings
+                           Pair<UserSettingsCtrl, Parent> usersettings,
+                           Pair<TagCtrl, Parent> tags
                            ) {
 
         this.primaryStage = primaryStage;
@@ -110,6 +115,9 @@ public class MainCtrl {
 
         this.userSettingsCtrl = usersettings.getKey();
         this.usersettings = new Scene(usersettings.getValue());
+
+        this.tagCtrl = tags.getKey();
+        this.tags = new Scene(tags.getValue());
 
         showStartScreen();
         primaryStage.show();
@@ -192,7 +200,6 @@ public class MainCtrl {
         editExpenseCtrl.initialize();
     }
 
-
     /**
      * Switches the scene to the open debts window
      * @param event - takes an event as a parameter for which we show the open debts
@@ -223,6 +230,15 @@ public class MainCtrl {
         primaryStage.setTitle("User Settings");
         userSettingsCtrl.initialize();
         primaryStage.setScene(usersettings);
+    }
+
+    /**
+     * Switches the scene to the addEditTag
+     */
+    public void  showTags() {
+        primaryStage.setTitle("Tags");
+        tagCtrl.initialize();
+        primaryStage.setScene(tags);
     }
 
     /**

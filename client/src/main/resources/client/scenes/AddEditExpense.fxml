@@ -119,7 +119,7 @@
                <children>
                       <Label fx:id="addExpenseType" layoutX="14.0" layoutY="11.0" text="Expense Type" />
                       <TextField fx:id="tags" layoutX="96.0" layoutY="6.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#keyPressed" prefHeight="26.0" prefWidth="94.0" />
-                  <Button fx:id="tagButton" layoutX="204.0" layoutY="5.0" mnemonicParsing="false" text="Tags" />
+                  <Button fx:id="tagButton" layoutX="204.0" layoutY="5.0" mnemonicParsing="false" onAction="#onTagsCLick" text="Tags" />
                </children>
                <VBox.margin>
                   <Insets bottom="10.0" />
