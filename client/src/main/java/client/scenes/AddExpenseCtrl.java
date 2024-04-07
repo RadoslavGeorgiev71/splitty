@@ -375,4 +375,14 @@ public class AddExpenseCtrl{
         equally.setText(bundle.getString("addExpenseEqually"));
 
     }
+
+    //For testing
+
+    /**
+     * Getter for participants
+     * @return participants
+     */
+    public List<Participant> getParticipants(){
+        return participants;
+    }
 }
