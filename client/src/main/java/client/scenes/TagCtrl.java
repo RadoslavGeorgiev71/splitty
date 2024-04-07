@@ -65,6 +65,14 @@ public class TagCtrl {
     }
 
     /**
+     * Sets the tag on focus
+     * @param tagOnFocus - the tag to be set on focus
+     */
+    public void setTagOnFocus(Tag tagOnFocus) {
+        this.tagOnFocus = tagOnFocus;
+    }
+
+    /**
      * Initializes the addEditTag scene
      */
     public void initialize() {
@@ -110,9 +118,25 @@ public class TagCtrl {
         }
     }
 
+    /**
+     * Selects the current tag for the expense
+     */
     @FXML
     private void onSelectTag() {
-
+        if(tagOnFocus == null) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("No tag");
+            alert.setContentText("Please provide a tag to be selected!");
+            // TODO: translate alert
+            alert.showAndWait();
+            return;
+        }
+        if(this.isAddExpense) {
+            mainCtrl.showAddExpenseWithTag(event, participant, tagOnFocus);
+        }
+        else {
+            mainCtrl.showEditExpenseWithTag(event, expense, tagOnFocus);
+        }
     }
 
     /**
@@ -137,7 +161,7 @@ public class TagCtrl {
             alert.setContentText("Tag has bee added successfully!");
             // TODO: translate alert
             alert.showAndWait();
-            mainCtrl.showTags(event, expense, participant, isAddExpense);
+            mainCtrl.showTags(event, expense, participant, isAddExpense, tagOnFocus);
         }
         else {
             Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -172,7 +196,7 @@ public class TagCtrl {
             return;
         }
         if(tagOnFocus.getType().equals(nameTextField.getText()) &&
-            tagOnFocus.getColor().toString().equals(tagOnFocus.getColor())) {
+            tagOnFocus.getColor().equals(colorPicker.getValue().toString())) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("No changes");
             alert.setContentText("No changes provided for the tag!");
@@ -183,13 +207,14 @@ public class TagCtrl {
         if (!nameTextField.getText().isEmpty()) {
             tagOnFocus.setType(nameTextField.getText());
             tagOnFocus.setColor(colorPicker.getValue().toString());
-            tagOnFocus = server.updateTag(tagOnFocus);
+            Tag updatedTag = server.updateTag(tagOnFocus);
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Successful update");
             alert.setContentText("Tag has bee edited successfully!");
             // TODO: translate alert
             alert.showAndWait();
-            mainCtrl.showTags(event, expense, participant, isAddExpense);
+            mainCtrl.showTags(event, expense, participant, isAddExpense, tagOnFocus);
+            tagOnFocus = updatedTag;
         } else {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Invalid name");
@@ -220,7 +245,7 @@ public class TagCtrl {
             if(response == ButtonType.OK) {
                 server.deleteTag(tagOnFocus);
                 tagOnFocus = null;
-                mainCtrl.showTags(event, expense, participant, isAddExpense);
+                mainCtrl.showTags(event, expense, participant, isAddExpense, tagOnFocus);
             }
         });
     }

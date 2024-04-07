@@ -19,6 +19,7 @@ import client.utils.ConfigClient;
 import commons.Event;
 import commons.Expense;
 import commons.Participant;
+import commons.Tag;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -170,6 +171,25 @@ public class MainCtrl {
         primaryStage.setScene(eventoverview);
     }
 
+
+    /**
+     * Switches the scene to the add expense window
+     * @param event - takes an event as a parameter for which we add a participant
+     * @param participant - that adds expense
+     * @param tag - the tag to be set
+     */
+    public void showAddExpenseWithTag(Event event, Participant participant, Tag tag) {
+        primaryStage.setTitle("Add Expense");
+        addExpenseCtrl.setEvent(event);
+        ConfigClient configClient =  new ConfigClient();
+        configClient.readFromFile("config.txt");
+        addExpenseCtrl.setCurrency(ConfigClient.getCurrency());
+        addExpenseCtrl.setParticipant(participant);
+        editExpenseCtrl.setTag(tag);
+        addExpenseCtrl.initialize();
+        primaryStage.setScene(addexpense);
+    }
+
     /**
      * Switches the scene to the add expense window
      * @param event - takes an event as a parameter for which we add a participant
@@ -196,6 +216,21 @@ public class MainCtrl {
         primaryStage.setScene(editexpense);
         editExpenseCtrl.setEvent(event);
         editExpenseCtrl.setExpense(expense);
+        editExpenseCtrl.initialize();
+    }
+
+    /**
+     * Switches the scene to the edit participant window
+     * @param event takes an event as a parameter for which we edit an expense
+     * @param expense takes the expense as a parameter to edit
+     * @param tag - the tag to be set
+     */
+    public void showEditExpenseWithTag(Event event, Expense expense, Tag tag) {
+        primaryStage.setTitle("Edit Expense");
+        primaryStage.setScene(editexpense);
+        editExpenseCtrl.setEvent(event);
+        editExpenseCtrl.setExpense(expense);
+        editExpenseCtrl.setTag(tag);
         editExpenseCtrl.initialize();
     }
 
@@ -235,12 +270,13 @@ public class MainCtrl {
      * Switches the scene to the addEditTag
      */
     public void showTags(Event event, Expense expense,
-                         Participant participant, boolean isAddExpense) {
+                         Participant participant, boolean isAddExpense, Tag tag) {
         primaryStage.setTitle("Tags");
         tagCtrl.setExpense(expense);
         tagCtrl.setEvent(event);
         tagCtrl.setParticipant(participant);
         tagCtrl.setIsExpenseTrue(isAddExpense);
+        tagCtrl.setTagOnFocus(tag);
         tagCtrl.initialize();
         primaryStage.setScene(tags);
     }

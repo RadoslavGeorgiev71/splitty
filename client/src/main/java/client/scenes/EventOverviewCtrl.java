@@ -164,7 +164,7 @@ public class EventOverviewCtrl {
 
     @FXML
     public void onEditExpenseClick(Expense expense) {
-        mainCtrl.showEditExpense(this.event, expense);
+        mainCtrl.showEditExpenseWithTag(this.event, expense, expense.getTag());
     }
 
     /**

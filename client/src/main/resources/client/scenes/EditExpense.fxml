@@ -118,8 +118,8 @@
             <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="38.0" prefWidth="259.0" style="-fx-border-color: black; -fx-border-width: 0.25px;">
                <children>
                   <Label fx:id="editExpenseType" layoutX="14.0" layoutY="11.0" text="Expense Type" />
-                  <TextField fx:id="tags" layoutX="96.0" layoutY="6.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#keyPressed" prefHeight="26.0" prefWidth="94.0" />
                   <Button fx:id="tagButton" layoutX="204.0" layoutY="5.0" mnemonicParsing="false" onAction="#onTagsClick" text="Tags" />
+                  <Label fx:id="tagLabel" layoutX="122.0" layoutY="11.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" text="No tag" />
                </children>
                <VBox.margin>
                   <Insets bottom="10.0" />

@@ -3,19 +3,19 @@ package client.scenes;
 import client.utils.ConfigClient;
 import client.utils.LanguageResourceBundle;
 import client.utils.ServerUtils;
-import commons.Debt;
-import commons.Event;
-import commons.Expense;
-import commons.Participant;
+import commons.*;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
 import com.google.inject.Inject;
+import javafx.scene.layout.Background;
 import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.util.StringConverter;
 
@@ -33,7 +33,7 @@ public class EditExpenseCtrl{
     private Expense expense;
     private String currency;
     private List<Participant> participants;
-
+    private Tag tag;
 
     private LanguageResourceBundle languageResourceBundle;
 
@@ -56,7 +56,7 @@ public class EditExpenseCtrl{
     @FXML
     private GridPane allGridPane;
     @FXML
-    private TextField tags;                         //Expense Type
+    private Label tagLabel;                         //Expense Type
     @FXML
     private Button expenseSaveButton;
     @FXML
@@ -75,8 +75,6 @@ public class EditExpenseCtrl{
     private Label editExpenseHow;
     @FXML
     private Label editExpenseType;
-    @FXML
-    private Button tagButton;
 
     /**
      * Constructor for EditExpenseCtrl
@@ -105,7 +103,7 @@ public class EditExpenseCtrl{
      * @param actionEvent -
      */
     public void onTagsClick(ActionEvent actionEvent) {
-        mainCtrl.showTags(event, expense, null, false);
+        mainCtrl.showTags(event, expense, null, false, tag);
     }
 
     /**
@@ -148,6 +146,7 @@ public class EditExpenseCtrl{
             expense.add(debt);
             server.addDebt(debt);
         }
+        expense.setTag(tag);
         //server.updateExpense(event.getId(), expense);
         //server.persistExpense(expense);
         clearFields();
@@ -206,7 +205,6 @@ public class EditExpenseCtrl{
         equally.setSelected(true);
         onlySome.setSelected(false);
         allGridPane.getChildren().clear();
-        tags.clear();
     }
 
     /**
@@ -239,6 +237,14 @@ public class EditExpenseCtrl{
      */
     public void setParticipants(List<Participant> participants) {
         this.participants = participants;
+    }
+
+    /**
+     * Setter for tag
+     * @param tag - the tag to be set
+     */
+    public void setTag(Tag tag) {
+        this.tag = tag;
     }
 
 
@@ -275,7 +281,7 @@ public class EditExpenseCtrl{
     private void moveToNextTextField(TextField currentTextField) {
         // Find the index of the current text field
         int index = -1;
-        TextField[] textFields = {titleField, amountField, tags}; // Add all text fields here
+        TextField[] textFields = {titleField, amountField}; // Add all text fields here
         for (int i = 0; i < textFields.length; i++) {
             if (textFields[i] == currentTextField) {
                 index = i;
@@ -418,7 +424,6 @@ public class EditExpenseCtrl{
      */
     public void initialize() {
         if(event != null){
-
             languageResourceBundle = LanguageResourceBundle.getInstance();
             switchTextLanguage();
             initializePayer();
@@ -439,6 +444,23 @@ public class EditExpenseCtrl{
             else{
                 equally.setSelected(false);
                 onlySome.setSelected(true);
+            }
+            tagLabel.setMinHeight(20);
+            tagLabel.setMinWidth(40);
+            tagLabel.setAlignment(Pos.CENTER);
+            if(tag != null) {
+                tagLabel.setText(tag.getType());
+                tagLabel.setBackground(Background.fill(Color.web(tag.getColor())));
+                if(Color.web(tag.getColor()).getBrightness() < 0.5) {
+                    tagLabel.setStyle("-fx-text-fill: white");
+                }
+                else {
+                    tagLabel.setStyle("-fx-text-fill: black");
+                }
+            }
+            else {
+                tagLabel.setText("No tag");
+                tagLabel.setStyle("-fx-background-color: #F9F9F9");
             }
             onlySomeChecked();
         }
