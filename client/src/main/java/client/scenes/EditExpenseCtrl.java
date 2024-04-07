@@ -386,10 +386,10 @@ public class EditExpenseCtrl{
             int i = 0;
             String name = expense.getPayingParticipant().getName();
             List<Participant> people = event.getParticipants();
-            while (i < people.size() && people.get(i).getName() != name) {
+            while (i < people.size() && !people.get(i).getName().equals(name)) {
                 i++;
             }
-            if (i < event.getParticipants().size()) {
+            if (i <= event.getParticipants().size()) {
                 payerChoiceBox.getSelectionModel().select(i);
             } else {
                 payerChoiceBox.getSelectionModel().selectFirst();

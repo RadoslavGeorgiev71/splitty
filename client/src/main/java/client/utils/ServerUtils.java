@@ -596,5 +596,7 @@ public class ServerUtils {
     }
 
 
-
+    public void stop() {
+        EXEC.shutdownNow();
+    }
 }
