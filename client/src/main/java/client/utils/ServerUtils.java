@@ -101,6 +101,19 @@ public class ServerUtils {
     }
 
     /**
+     * Deletes a tag
+     * @param tag - the tag to be deleted
+     * @return the response from the server
+     */
+    public Response deleteTag(Tag tag) {
+        return ClientBuilder.newClient(new ClientConfig())
+            .target(server).path("api/tags/" + tag.getId())
+            .request(APPLICATION_JSON)
+            .accept(APPLICATION_JSON)
+            .delete();
+    }
+
+    /**
      * Adds debt to the database
      *
      * @param debt the debt to add

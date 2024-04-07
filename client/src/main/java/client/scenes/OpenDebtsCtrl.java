@@ -188,7 +188,6 @@ public class OpenDebtsCtrl {
         if (debt.getPersonOwing().getEmail() != "") {
             text += "Email configured: ";
             size += 20;
-            //TODO: add the email button
         } else {
             text += "Email not configured.";
             size += 20;

@@ -72,7 +72,7 @@ public class TagCtrl {
             languageResourceBundle = LanguageResourceBundle.getInstance();
             switchTextLanguage();
             tags = server.getTags();
-            if(tagOnFocus == null) {
+            if(tagOnFocus == null && !tags.isEmpty()) {
                 tagOnFocus = tags.getFirst();
             }
             tagMenu.setItems(FXCollections.observableArrayList(tags));
@@ -92,8 +92,14 @@ public class TagCtrl {
                 }
             });
             tagMenu.setValue(tagOnFocus);
-            nameTextField.setText(tagOnFocus.getType());
-            colorPicker.setValue(Color.web(tagOnFocus.getColor()));
+            if(tagOnFocus != null) {
+                nameTextField.setText(tagOnFocus.getType());
+                colorPicker.setValue(Color.web(tagOnFocus.getColor()));
+            }
+            else {
+                nameTextField.setText("");
+                colorPicker.setValue(Color.web("#FFFFFF"));
+            }
             tagMenu.setOnAction(e -> {
                 if(tagMenu.getValue() != null) {
                     tagOnFocus = tagMenu.getValue();
@@ -147,12 +153,29 @@ public class TagCtrl {
      */
     @FXML
     private void onEditTag() {
+        if(tagOnFocus == null) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("No tag");
+            alert.setContentText("Please first add a tag before editing!");
+            // TODO: translate alert
+            alert.showAndWait();
+            return;
+        }
         if(tags.stream().map(Tag::getType)
             .toList().contains(nameTextField.getText()) &&
             !tagOnFocus.getType().equals(nameTextField.getText())) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Invalid name");
             alert.setContentText("The tag name you provided already exists!");
+            // TODO: translate alert
+            alert.showAndWait();
+            return;
+        }
+        if(tagOnFocus.getType().equals(nameTextField.getText()) &&
+            tagOnFocus.getColor().toString().equals(tagOnFocus.getColor())) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("No changes");
+            alert.setContentText("No changes provided for the tag!");
             // TODO: translate alert
             alert.showAndWait();
             return;
@@ -176,8 +199,31 @@ public class TagCtrl {
         }
     }
 
+    /**
+     * Deletes a tag
+     */
     @FXML
-    private void onDeleteTag() {}
+    private void onDeleteTag() {
+        if(tagOnFocus == null) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("No tag");
+            alert.setContentText("No provided tag to be deleted!");
+            // TODO: translate alert
+            alert.showAndWait();
+            return;
+        }
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Confirmation on deletion");
+        alert.setContentText("Are you sure you want to delete this tag?");
+        // TODO: translate the alert
+        alert.showAndWait().ifPresent(response -> {
+            if(response == ButtonType.OK) {
+                server.deleteTag(tagOnFocus);
+                tagOnFocus = null;
+                mainCtrl.showTags(event, expense, participant, isAddExpense);
+            }
+        });
+    }
 
     /**
      * Switches the language of the text.
