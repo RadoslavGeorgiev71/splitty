@@ -101,9 +101,6 @@ public class EventOverviewCtrl {
     @FXML
     private Text amountText;
 
-    private static Path iconsFolderPath =
-            Paths.get("client/src/main/resources/client/images/icons/").toAbsolutePath();
-
     private TextField titleTextField;
 
     private Event event;
@@ -166,7 +163,7 @@ public class EventOverviewCtrl {
 
     @FXML
     public void onAddExpenseClick() {
-        if (event.getParticipants().size() <= 1) {
+        if(event.getParticipants().size() <= 1) {
             ResourceBundle bundle = languageResourceBundle.getResourceBundle();
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Error");
@@ -179,6 +176,7 @@ public class EventOverviewCtrl {
             Participant p = participantsMenu.getValue();
             mainCtrl.showAddExpense(this.event, p);
         }
+
     }
 
     /**
@@ -215,6 +213,33 @@ public class EventOverviewCtrl {
             mainCtrl.showStartScreen();
         }
 
+    }
+
+    /**
+     * Sets the icon of the chosen button.
+     * @param iconName
+     * @param button
+     */
+    @FXML
+    public void setIcon(String iconName, Button button) {
+        String iconsPath = "src/main/resources/client/images/icons/";
+
+        // Append the file name to the path
+        String filePath = iconsPath + iconName;
+
+        // Load the image
+        Image image = new Image("file:" + filePath);
+
+        // Create an ImageView to display the image
+        ImageView imageView = new ImageView();
+
+        // Set the default image
+        imageView.setImage(image);
+
+        // Set the size of the image
+        imageView.setFitWidth(15); // Set width to 100 pixels
+        imageView.setFitHeight(15); // Set height to 100 pixels
+        button.setGraphic(imageView);
     }
 
     /**
@@ -266,9 +291,10 @@ public class EventOverviewCtrl {
         double amount = 0;
         if (event != null) {
             for (int i = 0; i < event.getExpenses().size(); i++) {
+                System.out.println("test");
                 Expense expense = foreignCurrency(event.getExpenses().get(i));
                 amount += expense.getAmount();
-                visualizeExpense(expense, i);
+                visualizeExpense(tabPaneAllGridPane, expense, i);
             }
             fromPersonTabName();
             includingPersonTabName();
@@ -286,6 +312,7 @@ public class EventOverviewCtrl {
         tabPaneFromGridPane.setVgap(10);
         tabPaneFromGridPane.setHgap(10);
         double amount = 0;
+        int j = 0;
         if (event != null) {
             for (int i = 0; i < event.getExpenses().size(); i++) {
                 Expense expense = foreignCurrency(event.getExpenses().get(i));
@@ -293,7 +320,7 @@ public class EventOverviewCtrl {
                 if (payingParticipant.equals(participantsMenu.
                         getSelectionModel().getSelectedItem())) {
                     amount += expense.getAmount();
-                    visualizeExpense(expense, i);
+                    visualizeExpense(tabPaneFromGridPane, expense, j++);
                 }
             }
             fromPersonTabName();
@@ -312,13 +339,14 @@ public class EventOverviewCtrl {
         tabPaneIncludingGridPane.setVgap(10);
         tabPaneIncludingGridPane.setHgap(10);
         double amount = 0;
+        int j = 0;
         if (event != null) {
             for (int i = 0; i < event.getExpenses().size(); i++) {
                 Participant participant = participantsMenu.getSelectionModel().getSelectedItem();
                 Expense expense = foreignCurrency(event.getExpenses().get(i));
                 if (expense.getParticipants().contains(participant)) {
                     amount += expense.getAmount();
-                    visualizeExpense(expense, i);
+                    visualizeExpense(tabPaneIncludingGridPane, expense, j++);
                 }
             }
             fromPersonTabName();
@@ -333,7 +361,7 @@ public class EventOverviewCtrl {
      * @param i
      */
 
-    private void visualizeExpense(Expense expense, int i) {
+    private void visualizeExpense(GridPane gridPane, Expense expense, int i) {
         Label dateLabel = new Label(expense.getDateTime());
         Label nameLabel = new Label(expense.getActivity());
         nameLabel.setWrapText(true); // Wrap text to prevent truncation
@@ -346,12 +374,12 @@ public class EventOverviewCtrl {
         GridPane.setFillWidth(dateLabel, true);
         GridPane.setFillWidth(nameLabel, true);
 
-        tabPaneIncludingGridPane.add(dateLabel, 0, 0);
-        tabPaneIncludingGridPane.add(nameLabel, 1, 0);
-        tabPaneIncludingGridPane.add(editButton, 2, i);
+        gridPane.add(dateLabel, 0, i);
+        gridPane.add(nameLabel, 1, i);
+        gridPane.add(editButton, 2, i);
 
         editButton.setOnAction(event -> onEditExpenseClick(expense));
-        setEditIcon(editButton);
+        setIcon("graypencil.png", editButton);
     }
 
     /**
@@ -389,7 +417,7 @@ public class EventOverviewCtrl {
                     getResourceBundle().getString("tabPaneFrom"));
         }
         else {
-            Participant selectedParticipant = (Participant) participantsMenu.getValue();
+            Participant selectedParticipant = participantsMenu.getValue();
             if(selectedParticipant != null) {
                 tabPaneFromPerson.setText(languageResourceBundle.
                         getResourceBundle().getString("tabPaneFrom")
@@ -483,56 +511,6 @@ public class EventOverviewCtrl {
     }
 
     /**
-     * Sets the icon of a button to "edit".
-     * @param button - the button to be changed.
-     */
-    private void setEditIcon(Button button) {
-        String iconsFolderPathString = iconsFolderPath.toString();
-        String graypencil = "\\graypencil.png";
-
-        Path grayPencilPath = Paths.get(iconsFolderPathString + graypencil);
-
-        URI uri = grayPencilPath.toUri();
-
-        String urlStringEdit = uri.toString();
-
-        Image editImage = new Image(urlStringEdit);
-        ImageView editImageView = new ImageView();
-
-        editImageView.setImage(editImage);
-
-        editImageView.setFitWidth(15);
-        editImageView.setFitHeight(15);
-
-        button.setGraphic(editImageView);
-    }
-
-    /**
-     * Sets the icon of a button to "add".
-     * @param button - the button to be changed.
-     */
-    private void setAddIcon(Button button) {
-        String iconsFolderPathString = iconsFolderPath.toString();
-        String addperson = "\\addperson.png";
-
-        Path addPersonPath = Paths.get(iconsFolderPathString + addperson);
-
-        URI uri = addPersonPath.toUri();
-
-        String urlStringAdd = uri.toString();
-
-        Image addImage = new Image(urlStringAdd);
-        ImageView addImageView = new ImageView();
-
-        addImageView.setImage(addImage);
-
-        addImageView.setFitWidth(15);
-        addImageView.setFitHeight(15);
-
-        button.setGraphic(addImageView);
-    }
-
-    /**
      * Initializes the event overview
      */
 
@@ -576,9 +554,6 @@ public class EventOverviewCtrl {
                 includingPersonTabName();
             });
             tabPaneAllClick();
-
-            setEditIcon(overviewEditParticipantButton);
-            setAddIcon(overviewAddParticipantButton);
         }
         
         server.registerEventUpdate(event -> {
@@ -587,6 +562,9 @@ public class EventOverviewCtrl {
                 Platform.runLater(this::initialize);
             }
         });
+
+        setIcon("graypencil.png", overviewEditParticipantButton);
+        setIcon("addperson.png", overviewAddParticipantButton);
     }
 
     /**
