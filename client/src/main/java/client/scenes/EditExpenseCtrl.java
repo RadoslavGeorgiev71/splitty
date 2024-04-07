@@ -106,8 +106,10 @@ public class EditExpenseCtrl{
         Event undoEvent = event;
         expense.setTitle(titleField.getText());
         expense.setPayingParticipant(payerChoiceBox.getSelectionModel().getSelectedItem());
+        saveAsEuro();
         try {
             expense.setAmount(Double.parseDouble(amountField.getText()));
+            expense.setCurrency(currChoiceBox.getSelectionModel().getSelectedItem().toString());
         } catch (NumberFormatException e) {
             Alert alert =  new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Invalid Input");
@@ -117,28 +119,24 @@ public class EditExpenseCtrl{
             alert.showAndWait();
             return;
         }
-        expense.setCurrency(currChoiceBox.getSelectionModel().getSelectedItem().toString());
         if(equally.isSelected() || participants.size() == event.getParticipants().size()){
             expense.setParticipants(event.getParticipants());
         }
         else{
-            expense.setParticipants(participants);
+            if(participants == null || participants.size() == 0){
+                Alert alert =  new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Invalid Input");
+                alert.setHeaderText("Participants cannot be empty");
+                alert.setContentText("You must select " +
+                        "at least 1 participant");
+                alert.showAndWait();
+                return;
+            }
+            else{
+                expense.setParticipants(participants);}
         }
         expense.setDateTime(datePicker.getValue().toString());
-        for(Debt debt : expense.getDebts()) {
-            server.deleteDebt(debt);
-        }
-        for(Participant participant : expense.getParticipants()) {
-            if(participant.equals(expense.getPayingParticipant())) {
-                continue;
-            }
-            Debt debt = new Debt(expense.getPayingParticipant(), participant,
-                expense.getAmount() / (expense.getParticipants().size()));
-            expense.add(debt);
-            server.addDebt(debt);
-        }
-        //server.updateExpense(event.getId(), expense);
-        //server.persistExpense(expense);
+        saveDebts(expense);
         clearFields();
         server.persistEvent(event);
         event = server.getEvent(event.getId());
@@ -147,6 +145,24 @@ public class EditExpenseCtrl{
         }
         else{
             mainCtrl.showEventOverview(undoEvent);
+        }
+    }
+
+    /**
+     * @param expense
+     */
+    public void saveDebts(Expense expense){
+        for(Debt debt : expense.getDebts()) {
+            //server.deleteDebt(debt);
+        }
+        for(Participant participant : expense.getParticipants()) {
+            if(participant.equals(expense.getPayingParticipant())) {
+                continue;
+            }
+            Debt debt = new Debt(expense.getPayingParticipant(), participant,
+                    expense.getAmount() / (expense.getParticipants().size()));
+            //expense.add(debt);
+            //server.addDebt(debt);
         }
     }
 
@@ -164,7 +180,7 @@ public class EditExpenseCtrl{
                     this.expense.getTitle() + "?");
 
             for(Debt debt : expense.getDebts()) {
-                server.deleteDebt(debt);
+                //server.deleteDebt(debt);
             }
 
             if (alert.showAndWait().get() == ButtonType.OK){
@@ -341,6 +357,24 @@ public class EditExpenseCtrl{
     }
 
     /**
+     *  converted currency to save to server as EUR
+     */
+    public void saveAsEuro(){
+        boolean yes = false;
+        if(!yes){
+            return;
+        }
+        Double res = Double.parseDouble(amountField.getText());
+        res *= server.convertRate(datePicker.getValue().toString(),
+                currChoiceBox.getSelectionModel().getSelectedItem().toString(),
+                "EUR");
+        DecimalFormat df = new DecimalFormat("#.##");
+        res = Double.valueOf(df.format(res));
+        expense.setAmount(res);
+        expense.setCurrency("EUR");
+    }
+
+    /**
      * Initiallizes the payer choice box with the data
      */
     public void initializePayer() {
@@ -367,16 +401,8 @@ public class EditExpenseCtrl{
                 }
             });
             int i = 0;
-            String name = expense.getPayingParticipant().getName();
-            List<Participant> people = event.getParticipants();
-            while (i < people.size() && people.get(i).getName() != name) {
-                i++;
-            }
-            if (i < event.getParticipants().size()) {
-                payerChoiceBox.getSelectionModel().select(i);
-            } else {
-                payerChoiceBox.getSelectionModel().selectFirst();
-            }
+            Participant name = expense.getPayingParticipant();
+            payerChoiceBox.getSelectionModel().select(name);
         }
     }
 
