@@ -173,7 +173,7 @@ public class EditExpenseCtrl{
                     this.expense.getTitle() + "?");
 
             for(Debt debt : expense.getDebts()) {
-                server.deleteDebt(debt);
+                //server.deleteDebt(debt);
             }
 
             if (alert.showAndWait().get() == ButtonType.OK){

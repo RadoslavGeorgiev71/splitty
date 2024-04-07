@@ -3,6 +3,7 @@ package client.scenes;
 import client.utils.LanguageResourceBundle;
 import client.utils.ServerUtils;
 import commons.Event;
+import commons.Expense;
 import commons.Participant;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -12,6 +13,7 @@ import javafx.scene.input.KeyEvent;
 
 import com.google.inject.Inject;
 
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class EditParticipantCtrl {
@@ -203,6 +205,18 @@ public class EditParticipantCtrl {
             if (alert.showAndWait().get() == ButtonType.OK){
                 Event undoEvent = event;
                 event.removeParticipant(participant);
+                for(int i=0; i < event.getExpenses().size(); i++){
+                    Expense e = event.getExpenses().get(i);
+                    if(e.getPayingParticipant().equals(participant)){
+                        event.removeExpense(e);
+                        i--;
+                    }
+                    else if(e.getParticipants().contains(participant)){
+                        List<Participant> updatedExpenses = e.getParticipants();
+                        updatedExpenses.remove(participant);
+                        e.setParticipants(updatedExpenses);
+                    }
+                }
                 server.persistEvent(event);
                 server.deleteParticipant(participant);
                 event = server.getEvent(event.getId());
