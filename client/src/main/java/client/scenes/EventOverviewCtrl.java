@@ -11,6 +11,7 @@ import commons.Participant;
 import commons.Tag;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.geometry.Side;
 import javafx.scene.control.*;
 
@@ -180,6 +181,14 @@ public class EventOverviewCtrl {
     }
 
     /**
+     * Opens the statistics page for the event
+     */
+    @FXML
+    public void onStatisticsOpen() {
+
+    }
+
+    /**
      * Method to be executed when back button is clicked
      */
 
@@ -278,18 +287,19 @@ public class EventOverviewCtrl {
     private Label getTagLabel(int i) {
         Tag tag = event.getExpenses().get(i).getTag();
         Label tagLabel = new Label();
-        tagLabel.setMinHeight(20);
-        tagLabel.setMinWidth(40);
         if(tag != null) {
             tagLabel = new Label(tag.getType());
             tagLabel.setBackground(Background.fill(Color.web(tag.getColor())));
             if(Color.web(tag.getColor()).getBrightness() < 0.5) {
-                tagLabel.setStyle("-fx-text-fill: white");
+                tagLabel.setStyle("-fx-text-fill: white; -fx-border-color: black");
             }
             else {
-                tagLabel.setStyle("-fx-text-fill: black");
+                tagLabel.setStyle("-fx-text-fill: black; -fx-border-color: black");
             }
         }
+        tagLabel.setMinHeight(20);
+        tagLabel.setMinWidth(80);
+        tagLabel.setAlignment(Pos.CENTER);
         return tagLabel;
     }
 
