@@ -504,7 +504,7 @@ public class EventOverviewCtrl {
             participatingParticipants();
             fromPersonTabName();
             includingPersonTabName();
-            participantsMenu.setOnAction(event -> {
+            participantsMenu.setOnAction(e -> {
                 fromPersonTabName();
                 includingPersonTabName();
             });

@@ -36,6 +36,12 @@ public class TagService {
         if (tag.getType() == null || tag.getColor() == null) {
             return null;
         }
+        List<Tag> allTags = tagRepo.findAll();
+        if(allTags.stream().map(x -> x.getType()).
+            toList().contains(tag.getType())) {
+            return allTags.stream().filter(x -> x.getType().equals(tag.getType()))
+                .findFirst().get();
+        }
         return tagRepo.save(tag);
     }
 

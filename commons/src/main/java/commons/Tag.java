@@ -26,10 +26,18 @@ public class Tag {
     }
 
     /**
-     *  Empty contructor
+     *  Empty constructor
      */
     public Tag() {
         // empty
+    }
+
+    /**
+     * Getter for id
+     * @return the id
+     */
+    public long getId() {
+        return id;
     }
 
     /**
@@ -66,28 +74,25 @@ public class Tag {
 
     /**
      * Equals method for tag
-     * @param o - the object to compare with
+     * @param o - the object we compare with
      * @return true if the objects are equal,
      * false otherwise
      */
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
         Tag tag = (Tag) o;
-        return Objects.equals(type, tag.type) && Objects.equals(color, tag.color);
+        return id == tag.id && Objects.equals(type, tag.type) &&
+            Objects.equals(color, tag.color);
     }
 
     /**
-     * HashCode method for Tag
-     * @return the hashCode of the tag
+     * Hash methode for tag
+     * @return the hash code
      */
     @Override
     public int hashCode() {
-        return Objects.hash(type, color);
+        return Objects.hash(id, type, color);
     }
 }

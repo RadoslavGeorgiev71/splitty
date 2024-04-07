@@ -18,6 +18,9 @@ public class TagController {
      */
     public TagController(TagService tagService) {
         this.tagService = tagService;
+        tagService.add(new Tag("food", "#93C47D"));
+        tagService.add(new Tag("entrance fees", "#4A86E8"));
+        tagService.add(new Tag("travel", "#E06666"));
     }
 
     /**

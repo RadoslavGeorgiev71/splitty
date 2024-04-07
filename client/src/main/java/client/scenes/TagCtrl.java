@@ -13,6 +13,7 @@ import javafx.scene.control.*;
 import javafx.scene.paint.Color;
 import javafx.util.StringConverter;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -25,6 +26,8 @@ public class TagCtrl {
     private Expense expense;
     private Participant participant;
     private boolean isAddExpense;
+    private List<Tag> tags;
+    private Tag tagOnFocus;
 
     @FXML
     private Label tagLabel;
@@ -63,15 +66,18 @@ public class TagCtrl {
      * Initializes the addEditTag scene
      */
     public void initialize() {
-        if(expense != null) {
+        if(event != null) {
             languageResourceBundle = LanguageResourceBundle.getInstance();
             switchTextLanguage();
-            List<Tag> tags = server.getTags();
+            tags = server.getTags();
+            if(tagOnFocus == null) {
+                tagOnFocus = tags.getFirst();
+            }
             tagMenu.setItems(FXCollections.observableArrayList(tags));
             tagMenu.setConverter(new StringConverter<Tag>() {
                 @Override
                 public String toString(Tag tag) {
-                    if(tag != null) {
+                    if (tag != null) {
                         return tag.getType();
                     }
                     else {
@@ -83,21 +89,32 @@ public class TagCtrl {
                     return null;
                 }
             });
-            tagMenu.getSelectionModel().selectFirst();
-            nameTextField.setText(tagMenu.getValue().getType());
-            colorPicker.setValue(Color.web(tagMenu.getValue().getColor()));
+            tagMenu.setValue(tagOnFocus);
+            nameTextField.setText(tagOnFocus.getType());
+            colorPicker.setValue(Color.web(tagOnFocus.getColor()));
             tagMenu.setOnAction(e -> {
-                nameTextField.setText(tagMenu.getValue().getType());
-                colorPicker.setValue(Color.web(tagMenu.getValue().getColor()));
+                if(tagMenu.getValue() != null) {
+                    tagOnFocus = tagMenu.getValue();
+                    nameTextField.setText(tagOnFocus.getType());
+                    colorPicker.setValue(Color.web(tagOnFocus.getColor()));
+                }
             });
         }
     }
 
     @FXML
     private void onAddTag() {
-
+        if(tags.stream().map(Tag::getType)
+            .toList().contains(nameTextField.getText())) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Invalid name");
+            alert.setContentText("The tag name you provided already exists!");
+            // TODO: translate alert
+            alert.showAndWait();
+            return;
+        }
         if(!nameTextField.getText().isEmpty()) {
-            server.addTag(new Tag(nameTextField.getText(), colorPicker.getValue().toString()));
+            tagOnFocus = server.addTag(new Tag(nameTextField.getText(), colorPicker.getValue().toString()));
             mainCtrl.showTags(event, expense, participant, isAddExpense);
         }
         else {
