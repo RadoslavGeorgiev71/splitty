@@ -19,6 +19,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import javafx.util.StringConverter;
 
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -102,10 +103,18 @@ public class AddExpenseCtrl{
     public void onAddClick(ActionEvent actionEvent) {
         Event undoEvent = event;
         Expense expense = new Expense();
+        boolean saveEur = false;
         expense.setTitle(titleField.getText());
         expense.setPayingParticipant(payerChoiceBox.getSelectionModel().getSelectedItem());
         try {
-            expense.setAmount(Double.parseDouble(amountField.getText()));
+            if(saveEur){
+                expense.setAmount(saveAsEuro());
+                expense.setCurrency("EUR");
+            }
+            else {
+                expense.setAmount(Double.parseDouble(amountField.getText()));
+                expense.setCurrency(currChoiceBox.getSelectionModel().getSelectedItem().toString());
+            }
         } catch (NumberFormatException e) {
             Alert alert =  new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Invalid Input");
@@ -115,7 +124,6 @@ public class AddExpenseCtrl{
             alert.showAndWait();
             return;
         }
-        expense.setCurrency(currChoiceBox.getSelectionModel().getSelectedItem().toString());
         if(equally.isSelected() || participants.size() == event.getParticipants().size()){
             expense.setParticipants(event.getParticipants());
         }
@@ -320,6 +328,20 @@ public class AddExpenseCtrl{
         else {
             currChoiceBox.getSelectionModel().selectFirst();
         }
+    }
+
+    /**
+     *  converted currency to save to server as EUR
+     * @return converted amount
+     */
+    public Double saveAsEuro(){
+        Double res = Double.parseDouble(amountField.getText());
+        res *= server.convertRate(datePicker.getValue().toString(),
+                currChoiceBox.getSelectionModel().getSelectedItem().toString(),
+                "EUR");
+        DecimalFormat df = new DecimalFormat("#.##");
+        res = Double.valueOf(df.format(res));
+        return res;
     }
 
     /**

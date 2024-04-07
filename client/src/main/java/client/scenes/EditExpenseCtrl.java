@@ -104,10 +104,18 @@ public class EditExpenseCtrl{
      */
     public void onSaveClick(ActionEvent actionEvent) {
         Event undoEvent = event;
+        boolean saveEur = false;
         expense.setTitle(titleField.getText());
         expense.setPayingParticipant(payerChoiceBox.getSelectionModel().getSelectedItem());
         try {
-            expense.setAmount(Double.parseDouble(amountField.getText()));
+            if(saveEur){
+                expense.setAmount(saveAsEuro());
+                expense.setCurrency("EUR");
+            }
+            else {
+                expense.setAmount(Double.parseDouble(amountField.getText()));
+                expense.setCurrency(currChoiceBox.getSelectionModel().getSelectedItem().toString());
+            }
         } catch (NumberFormatException e) {
             Alert alert =  new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Invalid Input");
@@ -117,7 +125,6 @@ public class EditExpenseCtrl{
             alert.showAndWait();
             return;
         }
-        expense.setCurrency(currChoiceBox.getSelectionModel().getSelectedItem().toString());
         if(equally.isSelected() || participants.size() == event.getParticipants().size()){
             expense.setParticipants(event.getParticipants());
         }
@@ -350,6 +357,20 @@ public class EditExpenseCtrl{
     }
 
     /**
+     *  converted currency to save to server as EUR
+     * @return converted amount
+     */
+    public Double saveAsEuro(){
+        Double res = Double.parseDouble(amountField.getText());
+        res *= server.convertRate(datePicker.getValue().toString(),
+                currChoiceBox.getSelectionModel().getSelectedItem().toString(),
+                "EUR");
+        DecimalFormat df = new DecimalFormat("#.##");
+        res = Double.valueOf(df.format(res));
+        return res;
+    }
+
+    /**
      * Initiallizes the payer choice box with the data
      */
     public void initializePayer() {
@@ -376,16 +397,8 @@ public class EditExpenseCtrl{
                 }
             });
             int i = 0;
-            String name = expense.getPayingParticipant().getName();
-            List<Participant> people = event.getParticipants();
-            while (i < people.size() && people.get(i).getName() != name) {
-                i++;
-            }
-            if (i < event.getParticipants().size()) {
-                payerChoiceBox.getSelectionModel().select(i);
-            } else {
-                payerChoiceBox.getSelectionModel().selectFirst();
-            }
+            Participant name = expense.getPayingParticipant();
+            payerChoiceBox.getSelectionModel().select(name);
         }
     }
 
