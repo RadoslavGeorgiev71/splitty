@@ -19,9 +19,10 @@
             <Label fx:id="colorLabel" layoutX="15.0" layoutY="100.0" text="Color" />
             <TextField fx:id="nameTextField" layoutX="56.0" layoutY="59.0" />
             <ColorPicker fx:id="colorPicker" layoutX="80.0" layoutY="96.0" />
-            <Button fx:id="addButton" layoutX="21.0" layoutY="141.0" mnemonicParsing="false" onAction="#onAddTag" prefHeight="25.0" prefWidth="40.0" text="Add" />
-            <Button fx:id="editButton" layoutX="93.0" layoutY="141.0" mnemonicParsing="false" onAction="#onEditTag" text="Edit" />
-            <Button fx:id="deleteButton" layoutX="154.0" layoutY="141.0" mnemonicParsing="false" onAction="#onDeleteTag" text="Delete" />
+            <Button fx:id="addButton" layoutX="111.0" layoutY="141.0" mnemonicParsing="false" onAction="#onAddTag" prefHeight="25.0" prefWidth="40.0" text="Add" />
+            <Button fx:id="editButton" layoutX="165.0" layoutY="141.0" mnemonicParsing="false" onAction="#onEditTag" text="Edit" />
+            <Button fx:id="deleteButton" layoutX="214.0" layoutY="141.0" mnemonicParsing="false" onAction="#onDeleteTag" text="Delete" />
+            <Button fx:id="selectButton" layoutX="17.0" layoutY="141.0" mnemonicParsing="false" onAction="#onSelectTag" text="Select" />
          </children>
       </Pane>
    </children>

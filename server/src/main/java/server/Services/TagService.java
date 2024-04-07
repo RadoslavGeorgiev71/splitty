@@ -46,6 +46,19 @@ public class TagService {
     }
 
     /**
+     * Updates a tag
+     * @param tag - the updated tag
+     * @return the updated tag
+     */
+    public Tag update(Tag tag) {
+        if (tag.getType() == null || tag.getColor() == null ||
+            !tagRepo.existsById(tag.getId())) {
+            return null;
+        }
+        return tagRepo.save(tag);
+    }
+
+    /**
      * Deletes a tag by given id
      * @param id - the id of the tag we delete
      * @return the tag if it was deleted successfully,

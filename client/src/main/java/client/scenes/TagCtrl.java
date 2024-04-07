@@ -42,6 +42,8 @@ public class TagCtrl {
     @FXML
     private ColorPicker colorPicker;
     @FXML
+    private Button selectButton;
+    @FXML
     private Button addButton;
     @FXML
     private Button editButton;
@@ -103,6 +105,14 @@ public class TagCtrl {
     }
 
     @FXML
+    private void onSelectTag() {
+
+    }
+
+    /**
+     * Adds a tag to the server and refreshes the tag scene
+     */
+    @FXML
     private void onAddTag() {
         if(tags.stream().map(Tag::getType)
             .toList().contains(nameTextField.getText())) {
@@ -114,7 +124,13 @@ public class TagCtrl {
             return;
         }
         if(!nameTextField.getText().isEmpty()) {
-            tagOnFocus = server.addTag(new Tag(nameTextField.getText(), colorPicker.getValue().toString()));
+            tagOnFocus =
+                server.addTag(new Tag(nameTextField.getText(), colorPicker.getValue().toString()));
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Successful addition");
+            alert.setContentText("Tag has bee added successfully!");
+            // TODO: translate alert
+            alert.showAndWait();
             mainCtrl.showTags(event, expense, participant, isAddExpense);
         }
         else {
@@ -126,8 +142,39 @@ public class TagCtrl {
         }
     }
 
+    /**
+     * Updates a tag
+     */
     @FXML
-    private void onEditTag() {}
+    private void onEditTag() {
+        if(tags.stream().map(Tag::getType)
+            .toList().contains(nameTextField.getText()) &&
+            !tagOnFocus.getType().equals(nameTextField.getText())) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Invalid name");
+            alert.setContentText("The tag name you provided already exists!");
+            // TODO: translate alert
+            alert.showAndWait();
+            return;
+        }
+        if (!nameTextField.getText().isEmpty()) {
+            tagOnFocus.setType(nameTextField.getText());
+            tagOnFocus.setColor(colorPicker.getValue().toString());
+            tagOnFocus = server.updateTag(tagOnFocus);
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Successful update");
+            alert.setContentText("Tag has bee edited successfully!");
+            // TODO: translate alert
+            alert.showAndWait();
+            mainCtrl.showTags(event, expense, participant, isAddExpense);
+        } else {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Invalid name");
+            alert.setContentText("Please add a name to the tag before updating it!");
+            // TODO: translate alert
+            alert.showAndWait();
+        }
+    }
 
     @FXML
     private void onDeleteTag() {}

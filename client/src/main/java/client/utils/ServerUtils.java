@@ -27,6 +27,7 @@ import jakarta.ws.rs.ProcessingException;
 //import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.Response;
 import javafx.scene.control.Alert;
+import org.checkerframework.checker.units.qual.C;
 import org.glassfish.jersey.client.ClientConfig;
 
 import jakarta.ws.rs.client.ClientBuilder;
@@ -73,14 +74,31 @@ public class ServerUtils {
             });
     }
 
+    /**
+     * Adds a new tag
+     * @param tag - the tag to be added
+     * @return the new tag
+     */
     public Tag addTag(Tag tag) {
         return ClientBuilder.newClient(new ClientConfig())
-            .target(server).path("api/tags")
+            .target(server).path("api/tags/add")
             .request(APPLICATION_JSON)
             .accept(APPLICATION_JSON)
             .post(Entity.entity(tag, APPLICATION_JSON), Tag.class);
     }
 
+    /**
+     * Updates a tag
+     * @param tag - the version of the tag
+     * @return the tag
+     */
+    public Tag updateTag(Tag tag) {
+        return ClientBuilder.newClient(new ClientConfig())
+            .target(server).path("api/tags/update")
+            .request(APPLICATION_JSON)
+            .accept(APPLICATION_JSON)
+            .post(Entity.entity(tag, APPLICATION_JSON), Tag.class);
+    }
 
     /**
      * Adds debt to the database
