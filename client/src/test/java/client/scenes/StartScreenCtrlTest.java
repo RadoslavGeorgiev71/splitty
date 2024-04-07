@@ -8,6 +8,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -20,7 +21,7 @@ import java.util.ArrayList;
 
 public class StartScreenCtrlTest extends ApplicationTest {
     ServerUtils mockServer = Mockito.mock(ServerUtils.class);
-    ConfigClient mockConfig = Mockito.mock(ConfigClient.class);
+    ConfigClient mockConfig = new ConfigClient();
     MainCtrl mockMainCtrl = Mockito.mock(MainCtrl.class);
 
     private StartScreenCtrl startScreenCtrl;
@@ -45,8 +46,7 @@ public class StartScreenCtrlTest extends ApplicationTest {
 
 
         startScreenCtrl = new StartScreenCtrl(mockServer, mockMainCtrl);
-        startScreenCtrl.setConfig(mockConfig);
-        Mockito.when(mockConfig.readFromFile(Mockito.anyString())).thenReturn(mockConfig);
+        //Mockito.when(mockConfig.readFromFile(Mockito.anyString())).thenReturn(mockConfig);
 
 
         Mockito.doNothing().when(mockMainCtrl).showInvitation(Mockito.any(Event.class));
@@ -71,6 +71,7 @@ public class StartScreenCtrlTest extends ApplicationTest {
 
     @Test
     public void testClearFields() {
+        mockConfig.setRecentEvents("");
         WaitForAsyncUtils.waitForFxEvents();
 
         clickOn("#newEventText");
@@ -82,6 +83,7 @@ public class StartScreenCtrlTest extends ApplicationTest {
 
     @Test
     public void testCreateEvent() {
+        mockConfig.setRecentEvents("");
         WaitForAsyncUtils.waitForFxEvents();
 
         String eventTitle = "Test Event";
@@ -94,16 +96,18 @@ public class StartScreenCtrlTest extends ApplicationTest {
 
     @Test
     public void testJoinEvent() {
+        mockConfig.setRecentEvents("");
         String inviteCode = "testInviteCode";
         clickOn("#joinEventText");
         write(inviteCode);
         clickOn("#joinEventButton");
-        Mockito.verify(mockServer).getEventByCode(inviteCode);
+        Mockito.verify(mockServer, Mockito.times(2)).getEventByCode(inviteCode);
         Mockito.verify(mockMainCtrl).showEventOverview(Mockito.any(Event.class));
     }
 
     @Test
     public void testOnSettingsClick() {
+        mockConfig.setRecentEvents("");
         WaitForAsyncUtils.waitForFxEvents();
 
         clickOn("#settingsButton");
@@ -112,39 +116,42 @@ public class StartScreenCtrlTest extends ApplicationTest {
 
     @Test
     public void testInitialize() {
+        mockConfig.setRecentEvents("");
         WaitForAsyncUtils.waitForFxEvents();
         Platform.runLater(() -> {
             startScreenCtrl.initialize();
         });
     }
 
-//    @Test
-//    public void testDeleteEventFromConfig() {
-//        String inviteCode = "testInviteCode";
-//        String recentEvents = "testInviteCode, anotherInviteCode";
-//        Mockito.when(mockConfig.getRecentEvents()).thenReturn(recentEvents);
-//
-//        startScreenCtrl.deleteEventFromConfig(inviteCode);
-//
-//        Mockito.verify(mockConfig).setRecentEvents("anotherInviteCode");
-//        Mockito.verify(mockConfig).writeToFile(Mockito.anyString(), Mockito.any(String[].class), Mockito.any(String[].class));
-//
-//        Mockito.when(mockConfig.getRecentEvents()).thenReturn("");
-//        Mockito.verify(mockConfig).setRecentEvents(Mockito.anyString());
-//
-//        Mockito.when(mockConfig.getRecentEvents()).thenReturn("");
-//        Mockito.verify(mockConfig).setRecentEvents(Mockito.anyString());
-//    }
-
     @Test
     public void testKeyPressedCreateEvent() {
+        mockConfig.setRecentEvents("");
         clickOn("#newEventText").write("Test Event");
         clickOn("#newEventText").push(KeyCode.ENTER);
     }
 
     @Test
     public void testKeyPressedJoinEvent() {
+        mockConfig.setRecentEvents("");
         clickOn("#joinEventText").write("testInviteCode");
         clickOn("#joinEventText").push(KeyCode.ENTER);
+    }
+
+    @Test
+    public void testCtrlW(){
+        mockConfig.setRecentEvents("");
+        KeyEvent keyEvent = new KeyEvent(KeyEvent.KEY_PRESSED, "", "", KeyCode.W, false, true, false, false);
+        WaitForAsyncUtils.asyncFx(() -> startScreenCtrl.keyPressed(keyEvent));
+        WaitForAsyncUtils.waitForFxEvents();
+        Mockito.verify(mockMainCtrl, Mockito.times(1)).closeWindow();
+    }
+
+    @Test
+    public void deleteEventFromConfig(){
+        mockConfig.setRecentEvents("testInviteCode");
+        WaitForAsyncUtils.waitForFxEvents();
+        Platform.runLater(() -> {
+            startScreenCtrl.deleteEventFromConfig("testInviteCode");
+        });
     }
 }
