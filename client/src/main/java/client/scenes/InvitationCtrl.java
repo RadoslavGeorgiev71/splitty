@@ -14,6 +14,7 @@ import java.util.ResourceBundle;
 import java.util.Scanner;
 
 import commons.Event;
+import commons.Participant;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
@@ -165,9 +166,25 @@ public class InvitationCtrl implements Initializable {
             alert.setTitle("Success");
             alert.setHeaderText("Invitation emails were sent successfully");
             alert.showAndWait();
+            for(String email : emails){
+                addParticipant(email);
+            }
             clearEmail();
         }
 
+    }
+
+    private void addParticipant(String email) {
+        Event undoEvent = event;
+        Participant participant = new Participant();
+        participant.setName(email.substring(0, email.indexOf("@")));
+        participant.setEmail(email);
+        event.addParticipant(participant);
+        server.persistEvent(event);
+        event = server.getEvent(event.getId());
+        if(event == null){
+            event = undoEvent;
+        }
     }
 
     @FXML

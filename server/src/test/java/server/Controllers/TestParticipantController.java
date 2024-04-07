@@ -107,4 +107,6 @@ public class TestParticipantController {
         assertEquals(response.getStatusCode(), HttpStatus.NOT_FOUND);
         assertEquals(response.getBody(), "No participant by id");
     }
+
+
 }
