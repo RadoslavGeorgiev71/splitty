@@ -60,6 +60,9 @@ public class MainCtrl {
     private TagCtrl tagCtrl;
     private Scene tags;
 
+    private StatisticsCtrl statisticsCtrl;
+    private Scene statistics;
+
     /**
      * Initializes stage
      * @param primaryStage
@@ -84,7 +87,8 @@ public class MainCtrl {
                            Pair<StartScreenCtrl, Parent> startscreen,
                            Pair<InvitationCtrl, Parent> invitation,
                            Pair<UserSettingsCtrl, Parent> usersettings,
-                           Pair<TagCtrl, Parent> tags
+                           Pair<TagCtrl, Parent> tags,
+                           Pair<StatisticsCtrl, Parent> statistics
                            ) {
 
         this.primaryStage = primaryStage;
@@ -118,6 +122,9 @@ public class MainCtrl {
 
         this.tagCtrl = tags.getKey();
         this.tags = new Scene(tags.getValue());
+
+        this.statisticsCtrl = statistics.getKey();
+        this.statistics = new Scene(statistics.getValue());
 
         showStartScreen();
         primaryStage.show();
@@ -279,6 +286,17 @@ public class MainCtrl {
         tagCtrl.setTagOnFocus(tag);
         tagCtrl.initialize();
         primaryStage.setScene(tags);
+    }
+
+    /**
+     * Switches to the statistics scene
+     * @param event - the event for the statistics
+     */
+    public void showStatistics(Event event) {
+        primaryStage.setTitle("Statistics");
+        statisticsCtrl.setEvent(event);
+        statisticsCtrl.initialize();
+        primaryStage.setScene(statistics);
     }
 
     /**

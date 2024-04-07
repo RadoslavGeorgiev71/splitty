@@ -39,5 +39,6 @@ public class MyModule implements Module {
         binder.bind(StartScreenCtrl.class).in(Scopes.SINGLETON);
         binder.bind(UserSettingsCtrl.class).in(Scopes.SINGLETON);
         binder.bind(TagCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(StatisticsCtrl.class).in(Scopes.SINGLETON);
     }
 }

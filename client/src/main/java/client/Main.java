@@ -79,11 +79,12 @@ public class Main extends Application {
         var addedittags = FXML.load(TagCtrl.class, "client", "scenes", "AddEditTags.fxml");
         var usersettings = FXML.load(
                 UserSettingsCtrl.class, "client", "scenes", "UserSettings.fxml");
+        var statistics = FXML.load(StatisticsCtrl.class, "client", "scenes", "Statistics.fxml");
 
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
         mainCtrl.initialize(primaryStage, editparticipant,
                 addparticipant, eventoverview, addexpense, editexpense,
-                opendebts, startscreen, invitation, usersettings, addedittags);
+                opendebts, startscreen, invitation, usersettings, addedittags, statistics);
 
         primaryStage.setOnCloseRequest(e -> {
             eventoverview.getKey().stop();

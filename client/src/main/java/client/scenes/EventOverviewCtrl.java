@@ -185,7 +185,7 @@ public class EventOverviewCtrl {
      */
     @FXML
     public void onStatisticsOpen() {
-
+        mainCtrl.showStatistics(event);
     }
 
     /**
