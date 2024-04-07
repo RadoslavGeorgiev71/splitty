@@ -158,7 +158,7 @@ public class EventOverviewCtrl {
     @FXML
     public void onAddExpenseClick() {
         Participant p = participantsMenu.getValue();
-        mainCtrl.showAddExpense(this.event, p);
+        mainCtrl.showAddExpenseWithTag(this.event, p, null);
     }
 
     /**
@@ -185,7 +185,15 @@ public class EventOverviewCtrl {
      */
     @FXML
     public void onStatisticsOpen() {
-        mainCtrl.showStatistics(event);
+        if(event.getExpenses().isEmpty()) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("No expenses");
+            alert.setContentText("There are no expenses to be made statistics of!");
+            alert.showAndWait();
+        }
+        else {
+            mainCtrl.showStatistics(event);
+        }
     }
 
     /**
