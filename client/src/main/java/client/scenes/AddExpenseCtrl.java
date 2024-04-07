@@ -140,8 +140,8 @@ public class AddExpenseCtrl{
             }
             Debt debt = new Debt(expense.getPayingParticipant(), participant,
                 expense.getAmount() / (expense.getParticipants().size()));
-            expense.add(debt);
-            server.addDebt(debt);
+            //expense.add(debt);
+            //server.addDebt(debt);
         }
         event.addExpense(expense);
         server.persistEvent(event);

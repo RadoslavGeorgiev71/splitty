@@ -135,7 +135,7 @@ public class EditExpenseCtrl{
         }
         expense.setDateTime(datePicker.getValue().toString());
         for(Debt debt : expense.getDebts()) {
-            server.deleteDebt(debt);
+            //server.deleteDebt(debt);
         }
         for(Participant participant : expense.getParticipants()) {
             if(participant.equals(expense.getPayingParticipant())) {
@@ -143,8 +143,8 @@ public class EditExpenseCtrl{
             }
             Debt debt = new Debt(expense.getPayingParticipant(), participant,
                 expense.getAmount() / (expense.getParticipants().size()));
-            expense.add(debt);
-            server.addDebt(debt);
+            //expense.add(debt);
+            //server.addDebt(debt);
         }
         //server.updateExpense(event.getId(), expense);
         //server.persistExpense(expense);
