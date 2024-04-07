@@ -393,6 +393,29 @@ public class EventOverviewCtrl {
     }
 
     /**
+     * Populates the Participant Menu with the participants of the event
+     */
+    @FXML
+    public void populateParticipantMenu() {
+        participantsMenu.setItems(FXCollections.observableArrayList(event.getParticipants()));
+        participantsMenu.setConverter(new StringConverter<Participant>() {
+            @Override
+            public String toString(Participant participant) {
+                if (participant != null) {
+                    return participant.getName();
+                }
+                else {
+                    return "";
+                }
+            }
+            @Override
+            public Participant fromString(String string) {
+                return null;
+            }
+        } );
+    }
+
+    /**
      * Sets the event
      * @param event
      */
@@ -527,22 +550,8 @@ public class EventOverviewCtrl {
             if(event == null){
                 mainCtrl.showStartScreen();
             }
-            participantsMenu.setItems(FXCollections.observableArrayList(event.getParticipants()));
-            participantsMenu.setConverter(new StringConverter<Participant>() {
-                @Override
-                public String toString(Participant participant) {
-                    if (participant != null) {
-                        return participant.getName();
-                    }
-                    else {
-                        return "";
-                    }
-                }
-                @Override
-                public Participant fromString(String string) {
-                    return null;
-                }
-            } );
+
+            populateParticipantMenu();
 
             participantsMenu.getSelectionModel().selectFirst();
             eventTitleLabel.setText(event.getTitle());
