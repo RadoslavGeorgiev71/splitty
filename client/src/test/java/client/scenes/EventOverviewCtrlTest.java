@@ -10,10 +10,11 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.DialogPane;
+import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
@@ -24,8 +25,9 @@ import org.testfx.util.WaitForAsyncUtils;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.BeforeAll;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class EventOverviewCtrlTest extends ApplicationTest {
     ServerUtils mockServer;
@@ -69,16 +71,19 @@ public class EventOverviewCtrlTest extends ApplicationTest {
 
         mockExpense = new Expense();
         mockExpense.setAmount(100);
-        mockExpense.setParticipants(mockEvent.getParticipants());
+        mockExpense.setParticipants(new ArrayList<>());
+        mockExpense.addParticipant(mockParticipant);
         mockExpense.setTitle("testExpense");
         mockExpense.setDateTime("2024-03-31");
         mockExpense.setPayingParticipant(mockParticipant);
-        mockEvent.addExpense(mockExpense);
+        System.out.println(mockExpense.getPayingParticipant().getName());
+        //mockEvent.addExpense(mockExpense);
 
         Mockito.doNothing().when(mockMainCtrl).showInvitation(mockEvent);
         Mockito.doNothing().when(mockMainCtrl).showEditParticipant(mockEvent, mockParticipant);
         Mockito.doNothing().when(mockMainCtrl).showAddParticipant(mockEvent);
-        Mockito.doNothing().when(mockMainCtrl).showAddExpense(mockEvent, Mockito.any(Participant.class));
+        Mockito.when(mockServer.getEvent(Mockito.any(long.class))).thenReturn(mockEvent);
+        //Mockito.doNothing().when(mockMainCtrl).showAddExpense(mockEvent);
         Mockito.doNothing().when(mockMainCtrl).showOpenDebts(mockEvent);
         Mockito.doNothing().when(mockMainCtrl).showStartScreen();
 
@@ -141,7 +146,7 @@ public class EventOverviewCtrlTest extends ApplicationTest {
             eventOverviewCtrl.onAddExpenseClick();
         });
         WaitForAsyncUtils.waitForFxEvents();
-        Mockito.verify(mockMainCtrl).showAddExpense(mockEvent, Mockito.any(Participant.class));
+        Mockito.verify(mockMainCtrl).showAddExpense(mockEvent, mockParticipant);
     }
 
     @Test
@@ -210,23 +215,23 @@ public class EventOverviewCtrlTest extends ApplicationTest {
         assertEquals(numExpenses, tabPaneAllGridPane.getChildren().size() / 3);
     }
 
-//    @Test
-//    public void testEditParticipantEmpty(){
-//        mockEvent.setParticipants(new ArrayList<>());
-//        Platform.runLater(() -> {
-//            eventOverviewCtrl.onEditParticipantsClick();
-//        });
-//        WaitForAsyncUtils.waitForFxEvents();
-//
-//        interact(() -> {
-//            DialogPane dialogPane = lookup(".dialog-pane").queryAs(DialogPane.class);
-//            Button okButton = (Button) dialogPane.lookupButton(ButtonType.OK);
-//            okButton.fire();
-//        });
-//
-//        WaitForAsyncUtils.waitForFxEvents();
-//        Mockito.verify(mockMainCtrl).showEventOverview(mockEvent);
-//    }
+    @Test
+    public void testEditParticipantEmpty(){
+        mockEvent.setParticipants(new ArrayList<>());
+        Platform.runLater(() -> {
+            eventOverviewCtrl.onEditParticipantsClick();
+        });
+        WaitForAsyncUtils.waitForFxEvents();
+
+        interact(() -> {
+            DialogPane dialogPane = lookup(".dialog-pane").queryAs(DialogPane.class);
+            Button okButton = (Button) dialogPane.lookupButton(ButtonType.OK);
+            okButton.fire();
+        });
+
+        WaitForAsyncUtils.waitForFxEvents();
+        Mockito.verify(mockMainCtrl).showEventOverview(mockEvent);
+    }
 
     @Test
     public void fromPersonTabNameEmpty(){
@@ -245,4 +250,41 @@ public class EventOverviewCtrlTest extends ApplicationTest {
         });
         WaitForAsyncUtils.waitForFxEvents();
     }
+
+    @Test
+    public void testEditTitleAndSaveTitle() {
+        Platform.runLater(() -> {
+            eventOverviewCtrl.editTitle(new MouseEvent(MouseEvent.MOUSE_CLICKED, 0,
+                    0, 0, 0, MouseButton.PRIMARY, 1, true, true, true, true,
+                    true, true, true, true, true, true, null));
+        });
+
+        WaitForAsyncUtils.waitForFxEvents();
+
+        TextField titleTextField = lookup(".text-field").queryAs(TextField.class);
+
+        assertNotNull(titleTextField);
+        assertTrue(titleTextField.isVisible());
+
+        Platform.runLater(() -> {
+            titleTextField.setText("New Title");
+            titleTextField.fireEvent(new KeyEvent(KeyEvent.KEY_PRESSED, "", "", KeyCode.ENTER, false, false, false, false));
+        });
+
+        WaitForAsyncUtils.waitForFxEvents();
+
+        assertEquals("New Title", mockEvent.getTitle());
+
+        Label eventTitleLabel = lookup(".label").queryAs(Label.class);
+        assertEquals("New Title", eventTitleLabel.getText());
+    }
+
+    @Test
+    public void testKeyPressed_W_WithControl() {
+        KeyEvent keyEvent = new KeyEvent(KeyEvent.KEY_PRESSED, "", "", KeyCode.W, false, true, false, false);
+        WaitForAsyncUtils.asyncFx(() -> eventOverviewCtrl.keyPressed(keyEvent));
+        WaitForAsyncUtils.waitForFxEvents();
+        Mockito.verify(mockMainCtrl, Mockito.times(1)).closeWindow();
+    }
+
 }

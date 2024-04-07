@@ -6,6 +6,7 @@ import commons.Participant;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -13,6 +14,8 @@ import org.mockito.Mockito;
 import org.testfx.framework.junit5.ApplicationTest;
 
 import java.util.ArrayList;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 public class AddParticipantCtrlTest extends ApplicationTest {
@@ -81,20 +84,29 @@ public class AddParticipantCtrlTest extends ApplicationTest {
         Mockito.verify(serverMock).persistEvent(Mockito.any(Event.class));
         Mockito.verify(mainCtrlMock).showEventOverview(Mockito.any(Event.class));
     }
-
-//    @Test
-//    public void testKeyPressed(){
-//        clickOn("#nameField").push(javafx.scene.input.KeyCode.ENTER);
-//        Mockito.verify(serverMock).persistEvent(Mockito.any(Event.class));
-//        Mockito.verify(mainCtrlMock).showEventOverview(Mockito.any(Event.class));
-//
-//        clickOn("#nameField").push(javafx.scene.input.KeyCode.ESCAPE);
-//        Mockito.verify(mainCtrlMock, Mockito.times(2)).showEventOverview(Mockito.any(Event.class));
-//
-//    }
-
     @Test
     public void testInitialize(){
         addParticipantCtrl.initialize();
+    }
+
+    @Test
+    public void testKeyPressed() {
+        press(KeyCode.CONTROL).press(KeyCode.W).release(KeyCode.W).release(KeyCode.CONTROL);
+        Mockito.verify(mainCtrlMock, Mockito.times(2)).closeWindow();
+
+        Mockito.reset(mainCtrlMock);
+
+        press(KeyCode.CONTROL).press(KeyCode.S).release(KeyCode.S).release(KeyCode.CONTROL);
+        Mockito.verify(mainCtrlMock, Mockito.times(2)).showEventOverview(Mockito.any(Event.class));
+
+        Mockito.reset(mainCtrlMock);
+
+        press(KeyCode.ESCAPE);
+        Mockito.verify(mainCtrlMock, Mockito.times(2)).showEventOverview(Mockito.any(Event.class));
+
+        Mockito.reset(mainCtrlMock);
+
+        clickOn("#nameField");
+        press(KeyCode.TAB);
     }
 }

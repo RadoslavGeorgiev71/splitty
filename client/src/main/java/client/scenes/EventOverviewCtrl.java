@@ -510,7 +510,7 @@ public class EventOverviewCtrl {
             });
             tabPaneAllClick();
         }
-        
+
         server.registerEventUpdate(event -> {
             if(this.event.getId() == event.getId()) {
                 this.event = server.getEvent(event.getId());
