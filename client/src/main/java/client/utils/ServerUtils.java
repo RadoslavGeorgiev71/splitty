@@ -551,6 +551,9 @@ public class ServerUtils {
         String key = "488b2c548074f3e5d9e15ba3013a152d";
         String url = "http://data.fixer.io/api/" + date;
         url += "?access_key=" + key+ "&base=" + from + "&symbols=" + to;
+        String key2 = "";
+        String url2 = "https://free.currconv.com/api/v7/convert?q="+
+                from + "_" + to + "&compact=ultra&date=" + date + "&apiKey=" + key2;
         Response response = ClientBuilder.newClient(new ClientConfig())
                 .target(url)
                 .request(APPLICATION_JSON)
