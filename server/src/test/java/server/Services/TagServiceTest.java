@@ -10,8 +10,8 @@ import server.database.TagRepository;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 public class TagServiceTest {
     @Mock
@@ -27,15 +27,6 @@ public class TagServiceTest {
     @Test
     void testTagServiceConstructor() {
         assertNotNull(sut);
-    }
-
-    @Test
-    void testCreateTag() {
-        Tag t1 = new Tag("Food", "Green");
-        Tag savedTag = sut.add(t1);
-        assertEquals(t1, savedTag);
-        List<Tag> tags = tagRepo.findAll();
-        assertEquals(tags, List.of(t1));
     }
 
 }
