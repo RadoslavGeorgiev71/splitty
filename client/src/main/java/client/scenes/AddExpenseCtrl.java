@@ -4,7 +4,6 @@ import client.utils.ConfigClient;
 import client.utils.LanguageResourceBundle;
 import client.utils.ServerUtils;
 import commons.*;
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -108,6 +107,9 @@ public class AddExpenseCtrl{
         mainCtrl.showTags(event, expense, participant, true, tag);
     }
 
+    /**
+     * Removes a tag from the expense
+     */
     public void onTagRemove() {
         tag = null;
         tagLabel.setText("No tag");
@@ -385,23 +387,30 @@ public class AddExpenseCtrl{
             closeIcon.setGlyphName("TIMES");
             closeIcon.setSize("8");
             removeTagButton.setGraphic(closeIcon);
-            if(tag != null) {
-                tagLabel.setText(tag.getType());
-                tagLabel.setBackground(Background.fill(Color.web(tag.getColor())));
-                if(Color.web(tag.getColor()).getBrightness() < 0.5) {
-                    tagLabel.setStyle("-fx-text-fill: white");
-                }
-                else {
-                    tagLabel.setStyle("-fx-text-fill: black");
-                }
-                removeTagButton.setVisible(true);
+            extracted();
+            this.participants = new ArrayList<>();
+        }
+    }
+
+    /**
+     * Configures the tag label and remove button
+     */
+    private void extracted() {
+        if(tag != null) {
+            tagLabel.setText(tag.getType());
+            tagLabel.setBackground(Background.fill(Color.web(tag.getColor())));
+            if(Color.web(tag.getColor()).getBrightness() < 0.5) {
+                tagLabel.setStyle("-fx-text-fill: white");
             }
             else {
-                tagLabel.setText("No tag");
-                tagLabel.setStyle("-fx-background-color: #F9F9F9");
-                removeTagButton.setVisible(false);
+                tagLabel.setStyle("-fx-text-fill: black");
             }
-            this.participants = new ArrayList<>();
+            removeTagButton.setVisible(true);
+        }
+        else {
+            tagLabel.setText("No tag");
+            tagLabel.setStyle("-fx-background-color: #F9F9F9");
+            removeTagButton.setVisible(false);
         }
     }
 

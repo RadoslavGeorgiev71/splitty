@@ -109,6 +109,9 @@ public class EditExpenseCtrl{
         mainCtrl.showTags(event, expense, null, false, tag);
     }
 
+    /**
+     * removes the tag from the expense
+     */
     public void onTagRemove() {
         tag = null;
         tagLabel.setText("No tag");
@@ -455,30 +458,37 @@ public class EditExpenseCtrl{
                 equally.setSelected(false);
                 onlySome.setSelected(true);
             }
-            tagLabel.setMinHeight(20);
-            tagLabel.setMinWidth(40);
-            tagLabel.setAlignment(Pos.CENTER);
-            FontAwesomeIconView closeIcon = new FontAwesomeIconView();
-            closeIcon.setGlyphName("TIMES");
-            closeIcon.setSize("8");
-            removeTagButton.setGraphic(closeIcon);
-            if(tag != null) {
-                tagLabel.setText(tag.getType());
-                tagLabel.setBackground(Background.fill(Color.web(tag.getColor())));
-                if(Color.web(tag.getColor()).getBrightness() < 0.5) {
-                    tagLabel.setStyle("-fx-text-fill: white");
-                }
-                else {
-                    tagLabel.setStyle("-fx-text-fill: black");
-                }
-                removeTagButton.setVisible(true);
+            configureTagElements();
+            onlySomeChecked();
+        }
+    }
+
+    /**
+     * Configures the tag label and remove button
+     */
+    private void configureTagElements() {
+        tagLabel.setMinHeight(20);
+        tagLabel.setMinWidth(40);
+        tagLabel.setAlignment(Pos.CENTER);
+        FontAwesomeIconView closeIcon = new FontAwesomeIconView();
+        closeIcon.setGlyphName("TIMES");
+        closeIcon.setSize("8");
+        removeTagButton.setGraphic(closeIcon);
+        if(tag != null) {
+            tagLabel.setText(tag.getType());
+            tagLabel.setBackground(Background.fill(Color.web(tag.getColor())));
+            if(Color.web(tag.getColor()).getBrightness() < 0.5) {
+                tagLabel.setStyle("-fx-text-fill: white");
             }
             else {
-                tagLabel.setText("No tag");
-                tagLabel.setStyle("-fx-background-color: #F9F9F9");
-                removeTagButton.setVisible(false);
+                tagLabel.setStyle("-fx-text-fill: black");
             }
-            onlySomeChecked();
+            removeTagButton.setVisible(true);
+        }
+        else {
+            tagLabel.setText("No tag");
+            tagLabel.setStyle("-fx-background-color: #F9F9F9");
+            removeTagButton.setVisible(false);
         }
     }
 

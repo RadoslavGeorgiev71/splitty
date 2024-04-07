@@ -13,7 +13,6 @@ import javafx.scene.control.*;
 import javafx.scene.paint.Color;
 import javafx.util.StringConverter;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -283,6 +282,8 @@ public class TagCtrl {
 
     /**
      * Set whether the previous scene was addExpense
+     * @param isAddExpense - whether the previous scene
+     * was AddExpense
      */
     public void setIsExpenseTrue(boolean isAddExpense) {
         this.isAddExpense = isAddExpense;

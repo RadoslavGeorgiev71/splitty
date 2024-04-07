@@ -27,7 +27,6 @@ import jakarta.ws.rs.ProcessingException;
 //import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.Response;
 import javafx.scene.control.Alert;
-import org.checkerframework.checker.units.qual.C;
 import org.glassfish.jersey.client.ClientConfig;
 
 import jakarta.ws.rs.client.ClientBuilder;
@@ -598,7 +597,9 @@ public class ServerUtils {
         alert.showAndWait();
     }
 
-
+    /**
+     * Stops the client thread
+     */
     public void stop() {
         EXEC.shutdownNow();
     }

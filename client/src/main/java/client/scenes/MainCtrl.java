@@ -76,6 +76,7 @@ public class MainCtrl {
      * @param invitation
      * @param usersettings
      * @param tags
+     * @param statistics
      */
     public void initialize(Stage primaryStage,
                            Pair<EditParticipantCtrl, Parent> editparticipant,
@@ -274,7 +275,12 @@ public class MainCtrl {
     }
 
     /**
-     * Switches the scene to the addEditTag
+     * Switches the scene to add/edit tag
+     * @param event
+     * @param expense
+     * @param participant
+     * @param isAddExpense
+     * @param tag
      */
     public void showTags(Event event, Expense expense,
                          Participant participant, boolean isAddExpense, Tag tag) {

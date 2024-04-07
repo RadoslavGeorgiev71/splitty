@@ -5,7 +5,6 @@ import commons.Event;
 import commons.Expense;
 import commons.Tag;
 import jakarta.inject.Inject;
-import jakarta.ws.rs.client.Entity;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -48,25 +47,9 @@ public class StatisticsCtrl {
         if(this.event != null) {
             // TODO: configure right currency
             totalCostLabel.setText("Total Cost of Event: " +
-            String.format("%.2f", event.getExpenses()
-                .stream().mapToDouble(Expense::getAmount).sum()) + "$");
-            Map<Tag, Double> distribution = new HashMap<>();
-            Tag otherTag = new Tag("others", "0xffffffff");
-            distribution.put(otherTag, 0.0);
-            for(Expense expense : event.getExpenses()) {
-                if(expense.getTag() == null || expense.getTag().getType().equals("others")) {
-                    distribution.put(otherTag, distribution.get(otherTag) + expense.getAmount());
-                }
-                else {
-                    if(!distribution.containsKey(expense.getTag())) {
-                        distribution.put(expense.getTag(), expense.getAmount());
-                    }
-                    else {
-                        distribution.put(expense.getTag(),
-                            distribution.get(expense.getTag()) + expense.getAmount());
-                    }
-                }
-            }
+                String.format("%.2f", event.getExpenses()
+                    .stream().mapToDouble(Expense::getAmount).sum()) + "$");
+            Map<Tag, Double> distribution = getMoneyPerTag();
             ObservableList<PieChart.Data> data = FXCollections.observableArrayList();
             for(Tag tag : distribution.keySet()) {
                 PieChart.Data section = new PieChart.Data(tag.getType(), distribution.get(tag));
@@ -80,6 +63,32 @@ public class StatisticsCtrl {
                         colorToHex(Color.web(tags.get(i).getColor())));
             }
         }
+    }
+
+    /**
+     * Retrieves the amount per tag
+     * @return - hashmap with the tags
+     * and their corresponding amount
+     */
+    private Map<Tag, Double> getMoneyPerTag() {
+        Map<Tag, Double> distribution = new HashMap<>();
+        Tag otherTag = new Tag("others", "0xffffffff");
+        distribution.put(otherTag, 0.0);
+        for(Expense expense : event.getExpenses()) {
+            if(expense.getTag() == null || expense.getTag().getType().equals("others")) {
+                distribution.put(otherTag, distribution.get(otherTag) + expense.getAmount());
+            }
+            else {
+                if(!distribution.containsKey(expense.getTag())) {
+                    distribution.put(expense.getTag(), expense.getAmount());
+                }
+                else {
+                    distribution.put(expense.getTag(),
+                        distribution.get(expense.getTag()) + expense.getAmount());
+                }
+            }
+        }
+        return distribution;
     }
 
     /**

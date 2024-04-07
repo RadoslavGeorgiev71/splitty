@@ -605,6 +605,9 @@ public class EventOverviewCtrl {
         }
     }
 
+    /**
+     * Stop the thread
+     */
     public void stop() {
         server.stop();
     }
