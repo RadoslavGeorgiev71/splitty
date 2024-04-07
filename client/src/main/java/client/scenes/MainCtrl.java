@@ -185,7 +185,7 @@ public class MainCtrl {
         configClient.readFromFile("config.txt");
         addExpenseCtrl.setCurrency(ConfigClient.getCurrency());
         addExpenseCtrl.setParticipant(participant);
-        editExpenseCtrl.setTag(tag);
+        addExpenseCtrl.setTag(tag);
         addExpenseCtrl.initialize();
         primaryStage.setScene(addexpense);
     }

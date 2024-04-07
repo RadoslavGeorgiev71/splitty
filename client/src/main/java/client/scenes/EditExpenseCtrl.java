@@ -4,6 +4,7 @@ import client.utils.ConfigClient;
 import client.utils.LanguageResourceBundle;
 import client.utils.ServerUtils;
 import commons.*;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -75,6 +76,8 @@ public class EditExpenseCtrl{
     private Label editExpenseHow;
     @FXML
     private Label editExpenseType;
+    @FXML
+    private Button removeTagButton;
 
     /**
      * Constructor for EditExpenseCtrl
@@ -104,6 +107,13 @@ public class EditExpenseCtrl{
      */
     public void onTagsClick(ActionEvent actionEvent) {
         mainCtrl.showTags(event, expense, null, false, tag);
+    }
+
+    public void onTagRemove() {
+        tag = null;
+        tagLabel.setText("No tag");
+        tagLabel.setStyle("-fx-background-color: #F9F9F9");
+        removeTagButton.setVisible(false);
     }
 
     /**
@@ -448,6 +458,10 @@ public class EditExpenseCtrl{
             tagLabel.setMinHeight(20);
             tagLabel.setMinWidth(40);
             tagLabel.setAlignment(Pos.CENTER);
+            FontAwesomeIconView closeIcon = new FontAwesomeIconView();
+            closeIcon.setGlyphName("TIMES");
+            closeIcon.setSize("8");
+            removeTagButton.setGraphic(closeIcon);
             if(tag != null) {
                 tagLabel.setText(tag.getType());
                 tagLabel.setBackground(Background.fill(Color.web(tag.getColor())));
@@ -457,10 +471,12 @@ public class EditExpenseCtrl{
                 else {
                     tagLabel.setStyle("-fx-text-fill: black");
                 }
+                removeTagButton.setVisible(true);
             }
             else {
                 tagLabel.setText("No tag");
                 tagLabel.setStyle("-fx-background-color: #F9F9F9");
+                removeTagButton.setVisible(false);
             }
             onlySomeChecked();
         }
