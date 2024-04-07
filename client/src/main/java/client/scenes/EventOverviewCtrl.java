@@ -28,13 +28,10 @@ import javafx.collections.FXCollections;
 
 import javafx.event.ActionEvent;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.text.DecimalFormat;
 import java.util.ResourceBundle;
 
 import javafx.scene.control.MenuButton;
-import java.net.URI;
 
 public class EventOverviewCtrl {
 
