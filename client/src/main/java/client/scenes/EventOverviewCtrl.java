@@ -10,6 +10,7 @@ import commons.Expense;
 import commons.Participant;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.geometry.Side;
 import javafx.scene.control.*;
 
@@ -20,6 +21,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
 import javafx.scene.text.Text;
 import javafx.util.StringConverter;
 import javafx.collections.FXCollections;
@@ -291,7 +293,6 @@ public class EventOverviewCtrl {
         double amount = 0;
         if (event != null) {
             for (int i = 0; i < event.getExpenses().size(); i++) {
-                System.out.println("test");
                 Expense expense = foreignCurrency(event.getExpenses().get(i));
                 amount += expense.getAmount();
                 visualizeExpense(tabPaneAllGridPane, expense, i);
@@ -357,6 +358,7 @@ public class EventOverviewCtrl {
 
     /**
      * Sets the Grid Pane with the necessary expense info
+     * @param gridPane
      * @param expense
      * @param i
      */
@@ -364,15 +366,15 @@ public class EventOverviewCtrl {
     private void visualizeExpense(GridPane gridPane, Expense expense, int i) {
         Label dateLabel = new Label(expense.getDateTime());
         Label nameLabel = new Label(expense.getActivity());
-        nameLabel.setWrapText(true); // Wrap text to prevent truncation
         Button editButton = new Button();
+        gridPane.setVgrow(editButton, Priority.ALWAYS); // Allow label to grow vertically
 
-        // Set fixed column widths
-        dateLabel.setMaxWidth(Double.MAX_VALUE);
-        nameLabel.setMaxWidth(Double.MAX_VALUE);
-
-        GridPane.setFillWidth(dateLabel, true);
-        GridPane.setFillWidth(nameLabel, true);
+        dateLabel.setWrapText(true); // Wrap text to prevent truncation
+        nameLabel.setWrapText(true); // Wrap text to prevent truncation
+        nameLabel.setMaxHeight(Double.MAX_VALUE); // Allow label to grow vertically
+        nameLabel.setMaxWidth(Double.MAX_VALUE); // Allow label to grow horizontally
+        gridPane.setVgrow(nameLabel, Priority.ALWAYS); // Allow label to grow vertically
+        gridPane.setMargin(dateLabel, new Insets(0, 0, 0, 10));
 
         gridPane.add(dateLabel, 0, i);
         gridPane.add(nameLabel, 1, i);
@@ -389,7 +391,8 @@ public class EventOverviewCtrl {
 
     @FXML
     public void setAmount(double amount) {
-        amountText.setText("Currency" + amount);
+        // Will add the currency later
+        amountText.setText("Amount: " + amount);
     }
 
     /**
@@ -552,6 +555,8 @@ public class EventOverviewCtrl {
             participantsMenu.setOnAction(event -> {
                 fromPersonTabName();
                 includingPersonTabName();
+                tabPaneAllClick();
+                tabPaneIncludingPersonClick();
             });
             tabPaneAllClick();
         }
