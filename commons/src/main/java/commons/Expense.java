@@ -19,10 +19,10 @@ public class Expense {
     private String currency;
     @ManyToMany//(cascade=CascadeType.ALL) //keep
     private List<Participant> participants;
-    @OneToMany//(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Debt> debts;
     private String dateTime;
-    @OneToOne
+    @ManyToOne
     private Tag tag;
 
     /**
