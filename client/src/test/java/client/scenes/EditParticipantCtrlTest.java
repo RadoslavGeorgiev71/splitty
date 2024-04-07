@@ -11,6 +11,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.DialogPane;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -22,6 +24,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeAll;
+import org.testfx.util.WaitForAsyncUtils;
 
 public class EditParticipantCtrlTest extends ApplicationTest {
     ServerUtils serverMock;
@@ -68,6 +71,7 @@ public class EditParticipantCtrlTest extends ApplicationTest {
         editParticipantCtrl.setEvent(mockEvent);
         editParticipantCtrl.setParticipant(participant);
 
+        Mockito.when(serverMock.getEvent(Mockito.anyLong())).thenReturn(mockEvent);
         Mockito.doNothing().when(mainCtrlMock).showEventOverview(mockEvent);
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/client/scenes/EditParticipant.fxml"));
@@ -163,15 +167,53 @@ public class EditParticipantCtrlTest extends ApplicationTest {
 
     }
 
-//    @Test
-//    public void keyPressedTest(){
-//        editParticipantCtrl.setEvent(mockEvent);
-//        clickOn("#nameField").push(javafx.scene.input.KeyCode.ENTER);
-//        Mockito.verify(serverMock).persistEvent(Mockito.any(Event.class));
-//        Mockito.verify(mainCtrlMock).showEventOverview(Mockito.any(Event.class));
-//
-//        clickOn("#nameField").push(javafx.scene.input.KeyCode.ESCAPE);
-//        Mockito.verify(mainCtrlMock, Mockito.times(2)).showEventOverview(Mockito.any(Event.class));
-//    }
+    @Test
+    public void testKeyPressed() {
+        KeyEvent keyEvent = new KeyEvent(KeyEvent.KEY_PRESSED, "", "", KeyCode.W, false, true, false, false);
+        WaitForAsyncUtils.asyncFx(() -> editParticipantCtrl.keyPressed(keyEvent));
+        WaitForAsyncUtils.waitForFxEvents();
+        Mockito.verify(mainCtrlMock, Mockito.times(1)).closeWindow();
+
+        Mockito.reset(mainCtrlMock);
+
+        KeyEvent keyEvent2 = new KeyEvent(KeyEvent.KEY_PRESSED, "", "", KeyCode.S, false, true, false, false);
+        WaitForAsyncUtils.asyncFx(() -> editParticipantCtrl.keyPressed(keyEvent2));
+        WaitForAsyncUtils.waitForFxEvents();
+
+        Mockito.reset(mainCtrlMock);
+
+        KeyEvent keyEvent3 = new KeyEvent(KeyEvent.KEY_PRESSED, "", "", KeyCode.ESCAPE, false, false, false, false);
+        WaitForAsyncUtils.asyncFx(() -> editParticipantCtrl.keyPressed(keyEvent3));
+        WaitForAsyncUtils.waitForFxEvents();
+        Mockito.reset(mainCtrlMock);
+
+        TextField nameField = lookup("#nameField").queryAs(TextField.class);
+        clickOn(nameField);
+
+        KeyEvent keyEvent4 = new KeyEvent(nameField, nameField, KeyEvent.KEY_PRESSED, "", "", KeyCode.TAB, false, false, false, false);
+        WaitForAsyncUtils.asyncFx(() -> editParticipantCtrl.keyPressed(keyEvent4));
+        WaitForAsyncUtils.waitForFxEvents();
+        Mockito.reset(mainCtrlMock);
+    }
+
+    @Test
+    public void testRemoveParticipant(){
+        Participant participant = new Participant();
+        participant.setName("Test1");
+        participant.setIban("Test1");
+        participant.setBic("Test1");
+        participant.setEmail("Test1");
+        editParticipantCtrl.setParticipant(participant);
+
+        clickOn("#removeParticipantButton");
+
+        interact(() -> {
+            DialogPane dialogPane = lookup(".dialog-pane").query();
+            Button okButton = (Button) dialogPane.lookupButton(ButtonType.OK);
+            clickOn(okButton);
+        });
+
+        Mockito.verify(serverMock, Mockito.times(1)).persistEvent(mockEvent);
+    }
 }
 
