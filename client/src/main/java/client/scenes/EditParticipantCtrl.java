@@ -205,18 +205,7 @@ public class EditParticipantCtrl {
             if (alert.showAndWait().get() == ButtonType.OK){
                 Event undoEvent = event;
                 event.removeParticipant(participant);
-                for(int i=0; i < event.getExpenses().size(); i++){
-                    Expense e = event.getExpenses().get(i);
-                    if(e.getPayingParticipant().equals(participant)){
-                        event.removeExpense(e);
-                        i--;
-                    }
-                    else if(e.getParticipants().contains(participant)){
-                        List<Participant> updatedExpenses = e.getParticipants();
-                        updatedExpenses.remove(participant);
-                        e.setParticipants(updatedExpenses);
-                    }
-                }
+                updateExpenses();
                 server.persistEvent(event);
                 server.deleteParticipant(participant);
                 event = server.getEvent(event.getId());
@@ -229,5 +218,23 @@ public class EditParticipantCtrl {
             }
         }
 
+    }
+
+    /**
+     * update expenses after participant removal
+     */
+    public void updateExpenses(){
+        for(int i=0; i < event.getExpenses().size(); i++){
+            Expense e = event.getExpenses().get(i);
+            if(e.getPayingParticipant().equals(participant)){
+                event.removeExpense(e);
+                i--;
+            }
+            else if(e.getParticipants().contains(participant)){
+                List<Participant> updatedExpenses = e.getParticipants();
+                updatedExpenses.remove(participant);
+                e.setParticipants(updatedExpenses);
+            }
+        }
     }
 }

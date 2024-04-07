@@ -131,7 +131,8 @@ public class AddExpenseCtrl{
                 alert.showAndWait();
                 return;
             }
-            else {expense.setParticipants(participants);}
+            else {
+                expense.setParticipants(participants);}
         }
         expense.setDateTime(datePicker.getValue().toString());
         addDebts(expense);
