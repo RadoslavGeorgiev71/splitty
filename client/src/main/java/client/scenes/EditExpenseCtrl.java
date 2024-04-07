@@ -122,7 +122,16 @@ public class EditExpenseCtrl{
             expense.setParticipants(event.getParticipants());
         }
         else{
-            expense.setParticipants(participants);
+            if(participants == null || participants.size() == 0){
+                Alert alert =  new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Invalid Input");
+                alert.setHeaderText("Participants cannot be empty");
+                alert.setContentText("You must select " +
+                        "at least 1 participant");
+                alert.showAndWait();
+                return;
+            }
+            else expense.setParticipants(participants);
         }
         expense.setDateTime(datePicker.getValue().toString());
         for(Debt debt : expense.getDebts()) {

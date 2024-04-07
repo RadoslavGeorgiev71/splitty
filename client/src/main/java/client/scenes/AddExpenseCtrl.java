@@ -120,7 +120,16 @@ public class AddExpenseCtrl{
             expense.setParticipants(event.getParticipants());
         }
         else{
-            expense.setParticipants(participants);
+            if(participants == null || participants.size() == 0){
+                Alert alert =  new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Invalid Input");
+                alert.setHeaderText("Participants cannot be empty");
+                alert.setContentText("You must select " +
+                        "at least 1 participant");
+                alert.showAndWait();
+                return;
+            }
+            else expense.setParticipants(participants);
         }
         expense.setDateTime(datePicker.getValue().toString());
         //Expense newExpense = server.addExpense(event.getId(), expense);
