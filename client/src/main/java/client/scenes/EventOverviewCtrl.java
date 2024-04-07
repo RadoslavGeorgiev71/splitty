@@ -367,14 +367,14 @@ public class EventOverviewCtrl {
         Label dateLabel = new Label(expense.getDateTime());
         Label nameLabel = new Label(expense.getActivity());
         Button editButton = new Button();
-        gridPane.setVgrow(editButton, Priority.ALWAYS); // Allow label to grow vertically
+        GridPane.setVgrow(editButton, Priority.ALWAYS); // Allow label to grow vertically
 
         dateLabel.setWrapText(true); // Wrap text to prevent truncation
         nameLabel.setWrapText(true); // Wrap text to prevent truncation
         nameLabel.setMaxHeight(Double.MAX_VALUE); // Allow label to grow vertically
         nameLabel.setMaxWidth(Double.MAX_VALUE); // Allow label to grow horizontally
-        gridPane.setVgrow(nameLabel, Priority.ALWAYS); // Allow label to grow vertically
-        gridPane.setMargin(dateLabel, new Insets(0, 0, 0, 10));
+        GridPane.setVgrow(nameLabel, Priority.ALWAYS); // Allow label to grow vertically
+        GridPane.setMargin(dateLabel, new Insets(0, 0, 0, 10));
 
         gridPane.add(dateLabel, 0, i);
         gridPane.add(nameLabel, 1, i);
