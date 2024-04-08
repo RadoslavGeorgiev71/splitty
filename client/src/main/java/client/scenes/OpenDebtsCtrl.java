@@ -203,7 +203,7 @@ public class OpenDebtsCtrl {
      * Shows an alert message for confirmation of settling(deleting) the debt
      * @param debt - the debt to be settled(removed)
      */
-    private void removeDebt(Debt debt) {
+    void removeDebt(Debt debt) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         ResourceBundle bundle = languageResourceBundle.getResourceBundle();
         alert.setTitle(bundle.getString("removeDebtAlertTitleText"));
@@ -232,7 +232,7 @@ public class OpenDebtsCtrl {
      * The method for going to the previous page(Event overview)
      */
     @FXML
-    private void backToEvent() {
+    void backToEvent() {
         mainCtrl.showEventOverview(event);
     }
 
