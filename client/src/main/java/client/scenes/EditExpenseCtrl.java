@@ -453,4 +453,14 @@ public class EditExpenseCtrl{
         equally.setText(bundle.getString("editExpenseEqually"));
         onlySome.setText(bundle.getString("editExpenseOnlySome"));
     }
+
+    //For testing
+
+    /**
+     * Getter for participant list
+     * @return participants
+     */
+    public List<Participant> getParticipants() {
+        return participants;
+    }
 }

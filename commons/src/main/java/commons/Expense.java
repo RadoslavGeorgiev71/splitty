@@ -243,6 +243,9 @@ public class Expense {
      */
     @JsonIgnore
     public String getActivity() {
+        if (this.payingParticipant == null){
+            return "No payer";
+        }
         return this.payingParticipant.getName() + " paid " + this.getAmount() +
                 " " + this.currency + " for " + this.getTitle();
     }

@@ -4,6 +4,7 @@ import client.utils.ServerUtils;
 import commons.Event;
 import commons.Expense;
 import commons.Participant;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -25,14 +26,16 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class AddExpenseCtrlTest extends ApplicationTest {
+public class EditExpenseCtrlTest extends ApplicationTest {
 
     ServerUtils serverMock;
     MainCtrl mainCtrlMock;
     Event mockEvent;
     Participant mockParticipant;
     Participant mockParticipant2;
-    private AddExpenseCtrl addExpenseCtrl;
+
+    Expense mockExpense;
+    private EditExpenseCtrl editExpenseCtrl;
 
     @BeforeAll
     public static void setupSpec() throws Exception {
@@ -60,6 +63,16 @@ public class AddExpenseCtrlTest extends ApplicationTest {
         mockParticipant2.setIban("Test2");
         mockParticipant2.setBic("Test2");
 
+        mockExpense = new Expense();
+        mockExpense.setTitle("Test");
+        mockExpense.setPayingParticipant(mockParticipant);
+        mockExpense.setParticipants(new ArrayList<>());
+        mockExpense.addParticipant(mockParticipant);
+        mockExpense.addParticipant(mockParticipant2);
+        mockExpense.setAmount(10);
+        mockExpense.setCurrency("EUR");
+        mockExpense.setDateTime("2020-04-01");
+
 
         mockEvent = new Event();
         mockEvent.setTitle("Test");
@@ -67,19 +80,21 @@ public class AddExpenseCtrlTest extends ApplicationTest {
         mockEvent.addParticipant(mockParticipant);
         mockEvent.addParticipant(mockParticipant2);
         mockEvent.setExpenses(new ArrayList<>());
+        mockEvent.addExpense(mockExpense);
         mockEvent.setInviteCode("testInviteCode");
 
-        addExpenseCtrl = new AddExpenseCtrl(serverMock, mainCtrlMock);
-        addExpenseCtrl.setEvent(mockEvent);
+        editExpenseCtrl = new EditExpenseCtrl(serverMock, mainCtrlMock);
+        editExpenseCtrl.setEvent(mockEvent);
+        editExpenseCtrl.setExpense(mockExpense);
 
         Mockito.doNothing().when(mainCtrlMock).showEventOverview(Mockito.any(Event.class));
         Mockito.when(serverMock.persistEvent(Mockito.any(Event.class))).thenReturn(mockEvent);
         Mockito.when(serverMock.getEvent(Mockito.anyLong())).thenReturn(mockEvent);
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/client/scenes/AddEditExpense.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/client/scenes/EditExpense.fxml"));
         loader.setControllerFactory(type -> {
-            if (type == AddExpenseCtrl.class) {
-                return addExpenseCtrl;
+            if (type == EditExpenseCtrl.class) {
+                return editExpenseCtrl;
             } else {
                 return null;
             }
@@ -98,7 +113,7 @@ public class AddExpenseCtrlTest extends ApplicationTest {
     }
 
     @Test
-    public void testOnAddClick() {
+    public void testOnSaveClick() {
         interact(() -> {
             TextField titleField = lookup("#titleField").queryAs(TextField.class);
             titleField.setText("Test");
@@ -106,7 +121,7 @@ public class AddExpenseCtrlTest extends ApplicationTest {
             TextField amountField = lookup("#amountField").queryAs(TextField.class);
             amountField.setText("10");
 
-            ChoiceBox payerChoiceBox = lookup("#payerChoiceBox").queryAs(ChoiceBox.class);
+            ChoiceBox payerChoiceBox = lookup("#currChoiceBox").queryAs(ChoiceBox.class);
             payerChoiceBox.getSelectionModel().select(0);
 
             DatePicker datePicker = lookup("#datePicker").queryAs(DatePicker.class);
@@ -118,8 +133,8 @@ public class AddExpenseCtrlTest extends ApplicationTest {
             TextField tags = lookup("#tags").queryAs(TextField.class);
             tags.setText("Test");
 
-            Button expenseAddButton = lookup("#expenseAddButton").queryAs(Button.class);
-            expenseAddButton.fire();
+            Button expenseSaveButton = lookup("#expenseSaveButton").queryAs(Button.class);
+            expenseSaveButton.fire();
 
             Mockito.verify(serverMock).persistEvent(Mockito.any(Event.class));
             Mockito.verify(mainCtrlMock).showEventOverview(Mockito.any(Event.class));
@@ -127,36 +142,7 @@ public class AddExpenseCtrlTest extends ApplicationTest {
     }
 
     @Test
-    public void testKeyPressed() {
-        KeyEvent keyEvent = new KeyEvent(KeyEvent.KEY_PRESSED, "", "", KeyCode.W, false, true, false, false);
-        WaitForAsyncUtils.asyncFx(() -> addExpenseCtrl.keyPressed(keyEvent));
-        WaitForAsyncUtils.waitForFxEvents();
-        Mockito.verify(mainCtrlMock, Mockito.times(1)).closeWindow();
-
-        Mockito.reset(mainCtrlMock);
-
-        KeyEvent keyEvent2 = new KeyEvent(KeyEvent.KEY_PRESSED, "", "", KeyCode.S, false, true, false, false);
-        WaitForAsyncUtils.asyncFx(() -> addExpenseCtrl.keyPressed(keyEvent2));
-        WaitForAsyncUtils.waitForFxEvents();
-
-        Mockito.reset(mainCtrlMock);
-
-        KeyEvent keyEvent3 = new KeyEvent(KeyEvent.KEY_PRESSED, "", "", KeyCode.ESCAPE, false, false, false, false);
-        WaitForAsyncUtils.asyncFx(() -> addExpenseCtrl.keyPressed(keyEvent3));
-        WaitForAsyncUtils.waitForFxEvents();
-        Mockito.reset(mainCtrlMock);
-
-        TextField titleField = lookup("#titleField").queryAs(TextField.class);
-        clickOn(titleField);
-
-        KeyEvent keyEvent4 = new KeyEvent(titleField, titleField, KeyEvent.KEY_PRESSED, "", "", KeyCode.TAB, false, false, false, false);
-        WaitForAsyncUtils.asyncFx(() -> addExpenseCtrl.keyPressed(keyEvent4));
-        WaitForAsyncUtils.waitForFxEvents();
-        Mockito.reset(mainCtrlMock);
-    }
-
-    @Test
-    public void testOnAddClickOnlySome() {
+    public void testOnSaveClickOnlySome() {
         interact(() -> {
             TextField titleField = lookup("#titleField").queryAs(TextField.class);
             titleField.setText("Test");
@@ -164,7 +150,7 @@ public class AddExpenseCtrlTest extends ApplicationTest {
             TextField amountField = lookup("#amountField").queryAs(TextField.class);
             amountField.setText("10");
 
-            ChoiceBox payerChoiceBox = lookup("#payerChoiceBox").queryAs(ChoiceBox.class);
+            ChoiceBox payerChoiceBox = lookup("#currChoiceBox").queryAs(ChoiceBox.class);
             payerChoiceBox.getSelectionModel().select(0);
 
             DatePicker datePicker = lookup("#datePicker").queryAs(DatePicker.class);
@@ -177,12 +163,57 @@ public class AddExpenseCtrlTest extends ApplicationTest {
             TextField tags = lookup("#tags").queryAs(TextField.class);
             tags.setText("Test");
 
-            Button expenseAddButton = lookup("#expenseAddButton").queryAs(Button.class);
-            expenseAddButton.fire();
+            Button expenseSaveButton = lookup("#expenseSaveButton").queryAs(Button.class);
+            expenseSaveButton.fire();
 
             Mockito.verify(serverMock).persistEvent(Mockito.any(Event.class));
             Mockito.verify(mainCtrlMock).showEventOverview(Mockito.any(Event.class));
         });
+    }
+
+    @Test
+    public void testOnDeleteClick() {
+        Platform.runLater(() -> {
+            editExpenseCtrl.onDeleteClick(new ActionEvent());
+        });
+        WaitForAsyncUtils.waitForFxEvents();
+        interact(() -> {
+            DialogPane dialogPane = lookup(".dialog-pane").queryAs(DialogPane.class);
+            Button okButton = (Button) dialogPane.lookupButton(ButtonType.OK);
+            okButton.fire();
+        });
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    @Test
+    public void testKeyPressed() {
+        KeyEvent keyEvent = new KeyEvent(KeyEvent.KEY_PRESSED, "", "", KeyCode.W, false, true, false, false);
+        interact(() -> editExpenseCtrl.keyPressed(keyEvent));
+        Mockito.verify(mainCtrlMock).closeWindow();
+        WaitForAsyncUtils.waitForFxEvents();
+
+        KeyEvent keyEvent2 = new KeyEvent(KeyEvent.KEY_PRESSED, "", "", KeyCode.ESCAPE, false, false, false, false);
+        interact(() -> editExpenseCtrl.keyPressed(keyEvent2));
+        Mockito.verify(mainCtrlMock).showEventOverview(Mockito.any(Event.class));
+        WaitForAsyncUtils.waitForFxEvents();
+
+        KeyEvent keyEvent3 = new KeyEvent(KeyEvent.KEY_PRESSED, "", "", KeyCode.ESCAPE, false, false, false, false);
+        interact(() -> editExpenseCtrl.keyPressed(keyEvent3));
+        Mockito.verify(mainCtrlMock, Mockito.times(2)).showEventOverview(Mockito.any(Event.class));
+        WaitForAsyncUtils.waitForFxEvents();
+        Mockito.reset(mainCtrlMock);
+
+
+
+        TextField titleField = lookup("#titleField").queryAs(TextField.class);
+        clickOn(titleField);
+
+        KeyEvent keyEvent4 = new KeyEvent(titleField, titleField, KeyEvent.KEY_PRESSED, "", "", KeyCode.TAB, false, false, false, false);
+        WaitForAsyncUtils.asyncFx(() -> editExpenseCtrl.keyPressed(keyEvent4));
+        WaitForAsyncUtils.waitForFxEvents();
+        Mockito.reset(mainCtrlMock);
+
+
     }
 
     @Test
@@ -192,19 +223,18 @@ public class AddExpenseCtrlTest extends ApplicationTest {
         List<Participant> list = new ArrayList<>();
         list.add(participant);
 
-        addExpenseCtrl.setParticipants(list);
+        editExpenseCtrl.setParticipants(list);
 
-        interact(() -> addExpenseCtrl.addRemoveParticipant(participant));
+        interact(() -> editExpenseCtrl.addRemoveParticipant(participant));
 
-        assertFalse(addExpenseCtrl.getParticipants().contains(participant));
+        assertFalse(editExpenseCtrl.getParticipants().contains(participant));
 
-        interact(() -> addExpenseCtrl.addRemoveParticipant(participant));
+        interact(() -> editExpenseCtrl.addRemoveParticipant(participant));
 
-        assertTrue(addExpenseCtrl.getParticipants().contains(participant));
+        assertTrue(editExpenseCtrl.getParticipants().contains(participant));
 
-        addExpenseCtrl.setParticipant(participant);
-        addExpenseCtrl.setCurrency("EUR");
-        addExpenseCtrl.setExpense(new Expense());
+        editExpenseCtrl.setParticipants(list);
+        editExpenseCtrl.setCurrency("EUR");
+        editExpenseCtrl.setExpense(new Expense());
     }
-
 }

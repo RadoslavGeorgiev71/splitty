@@ -24,6 +24,7 @@ import org.testfx.util.WaitForAsyncUtils;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.jupiter.api.BeforeAll;
 
@@ -55,9 +56,7 @@ public class EventOverviewCtrlTest extends ApplicationTest {
         mockConfig = Mockito.mock(ConfigClient.class);
         mockMainCtrl = Mockito.mock(MainCtrl.class);
 
-        mockEvent = new Event();
-        mockEvent.setTitle("Test");
-        mockEvent.setParticipants(new ArrayList<>());
+        List<Expense> list = new ArrayList<>();
 
         mockParticipant = new Participant();
         mockParticipant.setName("testParticipant");
@@ -65,19 +64,24 @@ public class EventOverviewCtrlTest extends ApplicationTest {
         mockParticipant.setIban("testIban");
         mockParticipant.setEmail("testEmail");
 
-        mockEvent.addParticipant(mockParticipant);
-        mockEvent.setExpenses(new ArrayList<>());
-        mockEvent.setInviteCode("testInviteCode");
+
 
         mockExpense = new Expense();
-        mockExpense.setAmount(100);
+        mockExpense.setTitle("Test");
+        mockExpense.setPayingParticipant(mockParticipant);
         mockExpense.setParticipants(new ArrayList<>());
         mockExpense.addParticipant(mockParticipant);
-        mockExpense.setTitle("testExpense");
-        mockExpense.setDateTime("2024-03-31");
-        mockExpense.setPayingParticipant(mockParticipant);
-        System.out.println(mockExpense.getPayingParticipant().getName());
-        //mockEvent.addExpense(mockExpense);
+        mockExpense.setAmount(10);
+        mockExpense.setCurrency("EUR");
+        mockExpense.setDateTime("2020-04-01");
+        list.add(mockExpense);
+
+        mockEvent = new Event();
+        mockEvent.setTitle("Test");
+        mockEvent.setParticipants(new ArrayList<>());
+        mockEvent.addParticipant(mockParticipant);
+        mockEvent.setExpenses(list);
+        mockEvent.setInviteCode("testInviteCode");
 
         Mockito.doNothing().when(mockMainCtrl).showInvitation(mockEvent);
         Mockito.doNothing().when(mockMainCtrl).showEditParticipant(mockEvent, mockParticipant);
@@ -285,6 +289,82 @@ public class EventOverviewCtrlTest extends ApplicationTest {
         WaitForAsyncUtils.asyncFx(() -> eventOverviewCtrl.keyPressed(keyEvent));
         WaitForAsyncUtils.waitForFxEvents();
         Mockito.verify(mockMainCtrl, Mockito.times(1)).closeWindow();
+    }
+
+    @Test
+    public void testTabPaneIncludingPersonClick() throws Exception {
+        Field participantsMenuField = EventOverviewCtrl.class.getDeclaredField("participantsMenu");
+        Field tabPaneIncludingGridPaneField = EventOverviewCtrl.class.getDeclaredField("tabPaneIncludingGridPane");
+
+        participantsMenuField.setAccessible(true);
+        tabPaneIncludingGridPaneField.setAccessible(true);
+
+        ChoiceBox participantsMenu = (ChoiceBox) participantsMenuField.get(eventOverviewCtrl);
+        GridPane tabPaneIncludingGridPane = (GridPane) tabPaneIncludingGridPaneField.get(eventOverviewCtrl);
+
+        Participant selectedParticipant = mockEvent.getParticipants().get(0);
+        Platform.runLater(() -> {
+            participantsMenu.getSelectionModel().select(selectedParticipant);
+        });
+        WaitForAsyncUtils.waitForFxEvents();
+
+        Platform.runLater(() -> {
+            eventOverviewCtrl.tabPaneIncludingPersonClick();
+        });
+        WaitForAsyncUtils.waitForFxEvents();
+
+        int numExpenses = (int) mockEvent.getExpenses().stream()
+                .filter(expense -> expense.getParticipants().contains(selectedParticipant))
+                .count();
+        assertEquals(numExpenses, tabPaneIncludingGridPane.getChildren().size() / 3);
+    }
+
+    @Test
+    public void testConvertCurrency(){
+        Platform.runLater(() -> {
+            eventOverviewCtrl.convertCurrency(mockExpense);
+        });
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    @Test
+    public void testForeignCurrency() {
+        mockExpense.setCurrency("USD");
+        ConfigClient mockConfig = new ConfigClient();
+        mockConfig.setCurrency("EUR");
+
+        Expense convertedExpense = eventOverviewCtrl.foreignCurrency(mockExpense);
+
+        assertEquals(ConfigClient.getCurrency(), convertedExpense.getCurrency());
+
+        double expectedAmount = mockExpense.getAmount() * mockServer.convertRate(mockExpense.getDateTime(), mockExpense.getCurrency(), ConfigClient.getCurrency());
+        assertEquals(expectedAmount, convertedExpense.getAmount(), 0.01);
+
+        assertEquals(mockExpense.getTitle(), convertedExpense.getTitle());
+        assertEquals(mockExpense.getPayingParticipant(), convertedExpense.getPayingParticipant());
+    }
+
+    @Test
+    public void changeTitleEmpty(){
+        Platform.runLater(() -> {
+            eventOverviewCtrl.editTitle(new MouseEvent(MouseEvent.MOUSE_CLICKED, 0,
+                    0, 0, 0, MouseButton.PRIMARY, 1, true, true, true, true,
+                    true, true, true, true, true, true, null));
+        });
+
+        WaitForAsyncUtils.waitForFxEvents();
+
+        TextField titleTextField = lookup(".text-field").queryAs(TextField.class);
+
+        assertNotNull(titleTextField);
+        assertTrue(titleTextField.isVisible());
+
+        Platform.runLater(() -> {
+            titleTextField.setText("");
+            titleTextField.fireEvent(new KeyEvent(KeyEvent.KEY_PRESSED, "", "", KeyCode.ENTER, false, false, false, false));
+        });
+
+        WaitForAsyncUtils.waitForFxEvents();
     }
 
 }
