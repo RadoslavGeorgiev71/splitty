@@ -22,13 +22,10 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 
-import commons.Debt;
-import commons.Expense;
+import commons.*;
 import jakarta.ws.rs.ProcessingException;
 //import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.Response;
-import commons.Event;
-import commons.Participant;
 import javafx.scene.control.Alert;
 import org.glassfish.jersey.client.ClientConfig;
 
@@ -63,6 +60,57 @@ public class ServerUtils {
                 });
     }
 
+    /**
+     * Get all tags
+     * @return - a list of the tags
+     */
+    public List<Tag> getTags() {
+        return ClientBuilder.newClient(new ClientConfig())
+            .target(server).path("api/tags")
+            .request(APPLICATION_JSON)
+            .accept(APPLICATION_JSON)
+            .get(new GenericType<>() {
+            });
+    }
+
+    /**
+     * Adds a new tag
+     * @param tag - the tag to be added
+     * @return the new tag
+     */
+    public Tag addTag(Tag tag) {
+        return ClientBuilder.newClient(new ClientConfig())
+            .target(server).path("api/tags/add")
+            .request(APPLICATION_JSON)
+            .accept(APPLICATION_JSON)
+            .post(Entity.entity(tag, APPLICATION_JSON), Tag.class);
+    }
+
+    /**
+     * Updates a tag
+     * @param tag - the version of the tag
+     * @return the tag
+     */
+    public Tag updateTag(Tag tag) {
+        return ClientBuilder.newClient(new ClientConfig())
+            .target(server).path("api/tags/update")
+            .request(APPLICATION_JSON)
+            .accept(APPLICATION_JSON)
+            .post(Entity.entity(tag, APPLICATION_JSON), Tag.class);
+    }
+
+    /**
+     * Deletes a tag
+     * @param tag - the tag to be deleted
+     * @return the response from the server
+     */
+    public Response deleteTag(Tag tag) {
+        return ClientBuilder.newClient(new ClientConfig())
+            .target(server).path("api/tags/" + tag.getId())
+            .request(APPLICATION_JSON)
+            .accept(APPLICATION_JSON)
+            .delete();
+    }
 
     /**
      * Adds debt to the database
@@ -285,6 +333,7 @@ public class ServerUtils {
             Response response = ClientBuilder.newClient(new ClientConfig())
                     .target(server).path("/api/email/" + event.getInviteCode())
                     .queryParam("creatorName", creatorname)
+                    .queryParam("creatorEmail", ConfigClient.getEmail())
                     .request(APPLICATION_JSON)
                     .accept(APPLICATION_JSON)
                     .post(Entity.json(emails));
@@ -302,6 +351,66 @@ public class ServerUtils {
 
     }
 
+    /**
+     * Sends a default email to the user to check
+     * if the credentials are correct
+     * @return boolean
+     */
+    public boolean sendDefault() {
+        try{
+            Participant participant = new Participant(0, ConfigClient.getName(),
+                    ConfigClient.getEmail(), ConfigClient.getIban(), ConfigClient.getBic());
+            Response response = ClientBuilder.newClient(new ClientConfig())
+                    .target(server).path("/api/email/default")
+                    .request(APPLICATION_JSON)
+                    .accept(APPLICATION_JSON)
+                    .post(Entity.json(participant));
+            if (response.getStatus() == Response.Status.OK.getStatusCode()) {
+                return true;
+            } else {
+                showAlert();
+                return false;
+            }
+        }
+        catch(ProcessingException e){
+            showAlert();
+            return false;
+        }
+    }
+
+    /**
+     * Method to send a remainder email to the person who has to pay a debt
+     *
+     * @param participant the participant of the person who will receive the money
+     * @param amount amount that has to be paid
+     * @param email email of the person who has to pay
+     * @param eventTitle title of the event in which the expense is in
+     * @return boolena
+     */
+    public boolean sendRemainder(Participant participant, double amount,
+                                 String email, String eventTitle) {
+        try{
+            Response response = ClientBuilder.newClient(new ClientConfig())
+                    .target(server).path("/api/email/")
+                    .queryParam("creatorEmail", ConfigClient.getEmail())
+                    .queryParam("amount", amount)
+                    .queryParam("email", email)
+                    .queryParam("eventTitle", eventTitle)
+                    .request(APPLICATION_JSON)
+                    .accept(APPLICATION_JSON)
+                    .post(Entity.json(participant));
+            if (response.getStatus() == Response.Status.OK.getStatusCode()) {
+                return true;
+            } else {
+                showAlert();
+                return false;
+            }
+        }
+        catch(ProcessingException e){
+            showAlert();
+            return false;
+        }
+    }
     /**
      * Deletes an expense from the server
      *
@@ -441,6 +550,9 @@ public class ServerUtils {
         String key = "488b2c548074f3e5d9e15ba3013a152d";
         String url = "http://data.fixer.io/api/" + date;
         url += "?access_key=" + key+ "&base=" + from + "&symbols=" + to;
+        String key2 = "";
+        String url2 = "https://free.currconv.com/api/v7/convert?q="+
+                from + "_" + to + "&compact=ultra&date=" + date + "&apiKey=" + key2;
         Response response = ClientBuilder.newClient(new ClientConfig())
                 .target(url)
                 .request(APPLICATION_JSON)
@@ -466,7 +578,7 @@ public class ServerUtils {
         alert.setTitle("Error");
         alert.setHeaderText("Error: Unable to connect to the server");
         alert.setContentText("Please make sure that the URL is " +
-                "correct and that the server is running");
+                "correct, that the server is running and that your email credentials are correct");
         alert.showAndWait();
     }
 
@@ -481,7 +593,14 @@ public class ServerUtils {
         alert.setHeaderText("Error: Unable to connect to the server or " +
                 "event with invite code: " + inviteCode + " does not exists");
         alert.setContentText("Please make sure that the URL and invite code are " +
-                "correct and that the server is running");
+                "correct, that the server is running and that your email credentials are correct");
         alert.showAndWait();
+    }
+
+    /**
+     * Stops the client thread
+     */
+    public void stop() {
+        EXEC.shutdownNow();
     }
 }

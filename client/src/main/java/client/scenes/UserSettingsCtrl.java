@@ -5,11 +5,9 @@ import client.utils.LanguageResourceBundle;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
@@ -59,6 +57,8 @@ public class UserSettingsCtrl {
 
     @FXML
     private Button onConfirmClick;
+    @FXML
+    private Button sendDefault;
 
     @FXML
     private TextField nameField;
@@ -170,6 +170,7 @@ public class UserSettingsCtrl {
         currencyLabel.setText(bundle.getString("settingsCurrencyLabel"));
         serverLabel.setText(bundle.getString("settingsURLLabel"));
         cancelButton.setText(bundle.getString("settingsCancelButton"));
+        sendDefault.setText(bundle.getString("settingsSendDefault"));
         onConfirmClick.setText(bundle.getString("settingsConfirmButton"));
         settingsTitle.setText(bundle.getString("settingsTitle"));
     }
@@ -232,4 +233,28 @@ public class UserSettingsCtrl {
         }
     }
 
+    /**
+     * Sends a default email to the user to check if the
+     * credentials are correctly set
+     * @param actionEvent
+     */
+    public void sendDefault(ActionEvent actionEvent) {
+        if(emailField.getText() != null){
+            if(server.sendDefault()){
+                ResourceBundle bundle = languageResourceBundle.getResourceBundle();
+                Alert alert =  new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle(bundle.getString("settingsAlertInfoTitleText"));
+                alert.setHeaderText(bundle.getString("settingsAlertInfoHeaderText"));
+                alert.showAndWait();
+            }
+        }
+        else{
+            ResourceBundle bundle = languageResourceBundle.getResourceBundle();
+            Alert alert =  new Alert(Alert.AlertType.WARNING);
+            alert.setTitle(bundle.getString("settingsAlertTitleText"));
+            alert.setHeaderText(bundle.getString("settingsAlertHeaderText"));
+            alert.setContentText(bundle.getString("settingsAlertContentText"));
+            alert.showAndWait();
+        }
+    }
 }

@@ -3,19 +3,20 @@ package client.scenes;
 import client.utils.ConfigClient;
 import client.utils.LanguageResourceBundle;
 import client.utils.ServerUtils;
-import commons.Debt;
-import commons.Event;
-import commons.Expense;
-import commons.Participant;
+import commons.*;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
 import com.google.inject.Inject;
+import javafx.scene.layout.Background;
 import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.util.StringConverter;
 
@@ -33,6 +34,7 @@ public class AddExpenseCtrl{
     private Expense expense;
     private String currency;
     private List<Participant> participants;
+    private Tag tag;
 
     private LanguageResourceBundle languageResourceBundle;
 
@@ -55,7 +57,7 @@ public class AddExpenseCtrl{
     @FXML
     private GridPane allGridPane;
     @FXML
-    private TextField tags;                         //Expense Type
+    private Label tagLabel;                         //Expense Type
     @FXML
     private Button expenseAddButton;
     @FXML
@@ -72,6 +74,8 @@ public class AddExpenseCtrl{
     private Label addExpenseHow;
     @FXML
     private Label addExpenseType;
+    @FXML
+    private Button removeTagButton;
 
     /**
      * Constructor for AddExpenseCtrl
@@ -92,6 +96,25 @@ public class AddExpenseCtrl{
     public void onAbortClick(ActionEvent actionEvent) {
         clearFields();
         mainCtrl.showEventOverview(event);
+    }
+
+    /**
+     * Opens the tag scene
+     * when the tag button is clicked
+     * @param actionEvent -
+     */
+    public void onTagsClick(ActionEvent actionEvent) {
+        mainCtrl.showTags(event, expense, participant, true, tag);
+    }
+
+    /**
+     * Removes a tag from the expense
+     */
+    public void onTagRemove() {
+        tag = null;
+        tagLabel.setText("No tag");
+        tagLabel.setStyle("-fx-background-color: #F9F9F9");
+        removeTagButton.setVisible(false);
     }
 
     /**
@@ -134,6 +157,7 @@ public class AddExpenseCtrl{
             expense.add(debt);
             server.addDebt(debt);
         }
+        expense.setTag(tag);
         event.addExpense(expense);
         server.persistEvent(event);
         clearFields();
@@ -157,7 +181,6 @@ public class AddExpenseCtrl{
         equally.setSelected(true);
         onlySome.setSelected(false);
         allGridPane.getChildren().clear();
-        tags.clear();
     }
 
     /**
@@ -201,6 +224,14 @@ public class AddExpenseCtrl{
     }
 
     /**
+     * Setter for tag
+     * @param tag - the tag to be set
+     */
+    public void setTag(Tag tag) {
+        this.tag = tag;
+    }
+
+    /**
      * Handles the key event pressed
      * @param e the KeyEvent to handle
      */
@@ -233,7 +264,7 @@ public class AddExpenseCtrl{
     private void moveToNextTextField(TextField currentTextField) {
         // Find the index of the current text field
         int index = -1;
-        TextField[] textFields = {titleField, amountField, tags}; // Add all text fields here
+        TextField[] textFields = {titleField, amountField}; // Add all text fields here
         for (int i = 0; i < textFields.length; i++) {
             if (textFields[i] == currentTextField) {
                 index = i;
@@ -349,8 +380,37 @@ public class AddExpenseCtrl{
             datePicker.setValue(LocalDate.now());
             equally.setSelected(true);
             onlySome.setSelected(false);
-
+            tagLabel.setMinHeight(20);
+            tagLabel.setMinWidth(40);
+            tagLabel.setAlignment(Pos.CENTER);
+            FontAwesomeIconView closeIcon = new FontAwesomeIconView();
+            closeIcon.setGlyphName("TIMES");
+            closeIcon.setSize("8");
+            removeTagButton.setGraphic(closeIcon);
+            extracted();
             this.participants = new ArrayList<>();
+        }
+    }
+
+    /**
+     * Configures the tag label and remove button
+     */
+    private void extracted() {
+        if(tag != null) {
+            tagLabel.setText(tag.getType());
+            tagLabel.setBackground(Background.fill(Color.web(tag.getColor())));
+            if(Color.web(tag.getColor()).getBrightness() < 0.5) {
+                tagLabel.setStyle("-fx-text-fill: white");
+            }
+            else {
+                tagLabel.setStyle("-fx-text-fill: black");
+            }
+            removeTagButton.setVisible(true);
+        }
+        else {
+            tagLabel.setText("No tag");
+            tagLabel.setStyle("-fx-background-color: #F9F9F9");
+            removeTagButton.setVisible(false);
         }
     }
 
