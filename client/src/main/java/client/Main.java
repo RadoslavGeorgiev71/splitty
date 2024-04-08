@@ -60,7 +60,7 @@ public class Main extends Application {
      */
     @Override
     public void start(Stage primaryStage) throws IOException {
-        configClient =  new ConfigClient();
+        configClient = new ConfigClient();
         configClient.readFromFile("config.txt");
 
         var editparticipant = FXML.load(EditParticipantCtrl.class, "client",
@@ -76,16 +76,18 @@ public class Main extends Application {
         var opendebts = FXML.load(OpenDebtsCtrl.class, "client", "scenes", "OpenDebts.fxml");
         var startscreen = FXML.load(StartScreenCtrl.class, "client", "scenes", "StartScreen.fxml");
         var invitation = FXML.load(InvitationCtrl.class, "client", "scenes", "Invitation.fxml");
+        var addedittags = FXML.load(TagCtrl.class, "client", "scenes", "AddEditTags.fxml");
         var usersettings = FXML.load(
                 UserSettingsCtrl.class, "client", "scenes", "UserSettings.fxml");
+        var statistics = FXML.load(StatisticsCtrl.class, "client", "scenes", "Statistics.fxml");
 
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
         mainCtrl.initialize(primaryStage, editparticipant,
                 addparticipant, eventoverview, addexpense, editexpense,
-                opendebts, startscreen, invitation, usersettings);
+                opendebts, startscreen, invitation, usersettings, addedittags, statistics);
 
-//        primaryStage.setOnCloseRequest(e -> {
-//            eventoverview.getKey().stop();
-//        });
+        primaryStage.setOnCloseRequest(e -> {
+            eventoverview.getKey().stop();
+        });
     }
 }
