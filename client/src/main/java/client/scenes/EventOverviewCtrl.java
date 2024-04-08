@@ -71,19 +71,19 @@ public class EventOverviewCtrl {
     private Button overviewSettleDebtsButton;
 
     @FXML
-    private Tab tabPaneAll;
-
-    @FXML
     private ChoiceBox<Participant> participantsMenu;
-
-    @FXML
-    private GridPane tabPaneAllGridPane;
 
     @FXML
     private Text participatingParticipants;
 
     @FXML
     private Label eventTitleLabel;
+
+    @FXML
+    private Tab tabPaneAll;
+
+    @FXML
+    private GridPane tabPaneAllGridPane;
 
     @FXML
     private Tab tabPaneFromPerson;
@@ -360,26 +360,52 @@ public class EventOverviewCtrl {
      * @param i
      */
 
+    @FXML
     private void visualizeExpense(GridPane gridPane, Expense expense, int i) {
         Label dateLabel = new Label(expense.getDateTime());
-        Label nameLabel = new Label(expense.getActivity());
+        Label infoLabel = new Label(expense.getActivity());
         Button editButton = new Button();
         GridPane.setVgrow(editButton, Priority.ALWAYS); // Allow label to grow vertically
 
+        Text participantsText = new Text(); // Create a Text node for participants
+        participantsText.setText(setParticipantsText(expense));
+
         dateLabel.setWrapText(true); // Wrap text to prevent truncation
-        nameLabel.setWrapText(true); // Wrap text to prevent truncation
-        nameLabel.setMaxHeight(Double.MAX_VALUE); // Allow label to grow vertically
-        nameLabel.setMaxWidth(Double.MAX_VALUE); // Allow label to grow horizontally
-        GridPane.setVgrow(nameLabel, Priority.ALWAYS); // Allow label to grow vertically
+        infoLabel.setWrapText(true); // Wrap text to prevent truncation
+        infoLabel.setMaxHeight(Double.MAX_VALUE); // Allow label to grow vertically
+        infoLabel.setMaxWidth(Double.MAX_VALUE); // Allow label to grow horizontally
+        GridPane.setVgrow(infoLabel, Priority.ALWAYS); // Allow label to grow vertically
         GridPane.setMargin(dateLabel, new Insets(0, 0, 0, 10));
 
+        GridPane innerPane = new GridPane(); // Create a new instance of innerPane
+        innerPane.add(infoLabel, 0, 0); // Add infoLabel to innerPane at column 0, row 0
+        innerPane.add(participantsText, 0, 1); // Add participantsText to innerPane at column 0, row 1
+
         gridPane.add(dateLabel, 0, i);
-        gridPane.add(nameLabel, 1, i);
+        gridPane.add(innerPane, 1, i); // Add innerPane to gridPane at column 1
         gridPane.add(editButton, 2, i);
 
         editButton.setOnAction(event -> onEditExpenseClick(expense));
         setIcon("graypencil.png", editButton);
     }
+
+
+    public String setParticipantsText(Expense expense) {
+        if(expense.getParticipants().equals(event.getParticipants())) {
+            return "(all)";
+        }
+        String participantsText = "(";
+        for(int i = 0; i < expense.getParticipants().size(); i++) {
+            participantsText += expense.getParticipants().get(i).getName();
+            if(i != expense.getParticipants().size() - 1) {
+                participantsText += ", ";
+            }
+            else {
+                participantsText += ")";
+            }
+        }
+        return participantsText;
+    };
 
     /**
      * Sets the amount (in the set currency)
