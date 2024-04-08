@@ -28,13 +28,7 @@ import javafx.collections.FXCollections;
 
 import javafx.event.ActionEvent;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
-import java.net.URISyntaxException;
 import java.net.URL;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.text.DecimalFormat;
 import java.util.ResourceBundle;
 
