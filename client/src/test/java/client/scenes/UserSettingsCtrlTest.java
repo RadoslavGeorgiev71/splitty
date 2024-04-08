@@ -3,9 +3,13 @@ package client.scenes;
 import client.utils.ConfigClient;
 import client.utils.ServerUtils;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.DialogPane;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -119,10 +123,6 @@ public class UserSettingsCtrlTest extends ApplicationTest {
 
     @Test
     public void testInitializeAllBranchesNonNull() throws Exception {
-//        Mockito.when(configClientMock.getName()).thenReturn("Test name");
-//        Mockito.when(configClientMock.getEmail()).thenReturn("Test email");
-//        Mockito.when(configClientMock.getIban()).thenReturn("Test iban");
-//        Mockito.when(configClientMock.getBic()).thenReturn("Test bic");
         configClientMock.setName("Test name");
         configClientMock.setEmail("Test email");
         configClientMock.setIban("Test iban");
@@ -177,10 +177,50 @@ public class UserSettingsCtrlTest extends ApplicationTest {
         WaitForAsyncUtils.waitForFxEvents();
     }
 
-//    @Test
-//    public void testKeyPressed_Tab() {
-//        KeyEvent keyEvent = new KeyEvent(KeyEvent.KEY_PRESSED, "", "", KeyCode.TAB, false, false, false, false);
-//        WaitForAsyncUtils.asyncFx(() -> userSettingsCtrl.keyPressed(keyEvent));
-//        WaitForAsyncUtils.waitForFxEvents();
-//    }
+    @Test
+    public void testSendDefault() {
+        Mockito.when(serverMock.sendDefault()).thenReturn(true);
+        Platform.runLater(() -> {
+            TextField emailField = lookup("#emailField").queryAs(TextField.class);
+            emailField.setText("Test");
+        });
+        WaitForAsyncUtils.waitForFxEvents();
+
+        Platform.runLater(() -> userSettingsCtrl.sendDefault(new ActionEvent()));
+        WaitForAsyncUtils.waitForFxEvents();
+
+        Platform.runLater(() -> {
+            DialogPane dialogPane = lookup(".dialog-pane").queryAs(DialogPane.class);
+            Button okButton = (Button) dialogPane.lookupButton(ButtonType.OK);
+            okButton.fire();
+        });
+        WaitForAsyncUtils.waitForFxEvents();
+
+        Platform.runLater(() -> {
+            TextField emailField = lookup("#emailField").queryAs(TextField.class);
+            emailField.setText(null);
+        });
+
+        WaitForAsyncUtils.waitForFxEvents();
+
+        Platform.runLater(() -> userSettingsCtrl.sendDefault(new ActionEvent()));
+        WaitForAsyncUtils.waitForFxEvents();
+
+        Platform.runLater(() -> {
+            DialogPane dialogPane = lookup(".dialog-pane").queryAs(DialogPane.class);
+            Button okButton = (Button) dialogPane.lookupButton(ButtonType.OK);
+            okButton.fire();
+        });
+        WaitForAsyncUtils.waitForFxEvents();
+
+    }
+
+    @Test
+    public void testKeyPressed_Tab() {
+        TextField nameField = lookup("#nameField").queryAs(TextField.class);
+        clickOn(nameField);
+        KeyEvent keyEvent = new KeyEvent(nameField, nameField, KeyEvent.KEY_PRESSED, "", "", KeyCode.TAB, false, false, false, false);
+        WaitForAsyncUtils.asyncFx(() -> userSettingsCtrl.keyPressed(keyEvent));
+        WaitForAsyncUtils.waitForFxEvents();
+    }
 }

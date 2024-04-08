@@ -11,7 +11,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -173,6 +172,10 @@ public class AddExpenseCtrlTest extends ApplicationTest {
             RadioButton onlySome = lookup("#onlySome").queryAs(RadioButton.class);
             onlySome.setSelected(true);
             onlySome.getOnAction().handle(new ActionEvent());
+
+            List<Participant> participants = new ArrayList<>();
+            participants.add(mockParticipant);
+            addExpenseCtrl.setParticipants(participants);
 
             TextField tags = lookup("#tags").queryAs(TextField.class);
             tags.setText("Test");

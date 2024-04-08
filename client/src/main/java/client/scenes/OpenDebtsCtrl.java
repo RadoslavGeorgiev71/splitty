@@ -1,5 +1,6 @@
 package client.scenes;
 
+import client.utils.ConfigClient;
 import client.utils.LanguageResourceBundle;
 import client.utils.ServerUtils;
 import commons.Debt;
@@ -111,7 +112,8 @@ public class OpenDebtsCtrl {
         GridPane.setValignment(envelopeIcons[i], javafx.geometry.VPos.TOP);
         GridPane.setHalignment(envelopeIcons[i], javafx.geometry.HPos.LEFT);
         Tooltip toolTipEnvelope = new Tooltip("Email available!");
-        if(debts.get(i).getPersonOwing().getEmail() == "") {
+        if(debts.get(i).getPersonPaying().getEmail() == "" || ConfigClient.getEmail() == null
+            || ConfigClient.getEmail().equals("")) {
             envelopeIcons[i].setFill(Color.GREY);
             toolTipEnvelope.setText("Email NOT available!");
         }
@@ -172,6 +174,7 @@ public class OpenDebtsCtrl {
     private Label generateExpandableLabel(Debt debt) {
         String text = "";
         int size = 0;
+        Label label = new Label();
         if (debt.getPersonOwing().getBic() != ""
             && debt.getPersonOwing().getIban() != "") {
             text += "Bank information available,\n" +
@@ -186,17 +189,43 @@ public class OpenDebtsCtrl {
         }
         text += "\n\n";
         size += 20;
-        if (debt.getPersonOwing().getEmail() != "") {
+        if (debt.getPersonPaying().getEmail() != "" && ConfigClient.getEmail() != null
+                && !ConfigClient.getEmail().equals("")) {
             text += "Email configured: ";
             size += 20;
-            //TODO: add the email button
+            Hyperlink hyperlink = new Hyperlink("Send\nremainder");
+            hyperlink.setOnAction(event -> {
+                sendEmail(debt);
+            });
+            label.setGraphic(hyperlink);
         } else {
             text += "Email not configured.";
             size += 20;
         }
-        Label label = new Label(text);
+        label.setText(text);
         label.setStyle("-fx-min-height: " + size);
         return label;
+    }
+
+    private void sendEmail(Debt debt) {
+        if(server.sendRemainder(debt.getPersonOwing(), debt.getAmount(),
+                debt.getPersonPaying().getEmail(),
+                event.getTitle())){
+            ResourceBundle bundle = languageResourceBundle.getResourceBundle();
+            Alert alert =  new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle(bundle.getString("openDebtsAlertInfoTitleText"));
+            alert.setHeaderText(bundle.getString("openDebtsAlertInfoHeaderText"));
+            alert.showAndWait();
+        }
+        else{
+            ResourceBundle bundle = languageResourceBundle.getResourceBundle();
+            Alert alert =  new Alert(Alert.AlertType.WARNING);
+            alert.setTitle(bundle.getString("openDebtsAlertTitleText"));
+            alert.setHeaderText(bundle.getString("openDebtsAlertHeaderText"));
+            alert.setContentText(bundle.getString("openDebtsAlertContentText"));
+            alert.showAndWait();
+        }
+
     }
 
     /**

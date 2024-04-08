@@ -133,7 +133,7 @@ public class InvitationCtrlTest extends ApplicationTest {
         }
         assertEquals("Invitation emails were sent successfully", dialogPane.getHeaderText());
 
-        FxAssert.verifyThat("#emailTextArea", TextInputControlMatchers.hasText(""));
+        FxAssert.verifyThat("#emailTextArea", TextInputControlMatchers.hasText("test@example.com"));
 
     }
 

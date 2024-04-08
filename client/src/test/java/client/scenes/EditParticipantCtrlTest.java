@@ -22,7 +22,6 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeAll;
 import org.testfx.util.WaitForAsyncUtils;
 
@@ -109,22 +108,6 @@ public class EditParticipantCtrlTest extends ApplicationTest {
         clickOn("#participantCancelButton");
         Mockito.verify(mainCtrlMock).showEventOverview(Mockito.any(Event.class));
     }
-
-//    @Test
-//    public void testRemoveParticipant() {
-//        clickOn("#removeParticipantButton");
-//
-//        interact(() -> {
-//            DialogPane dialogPane = lookup(".dialog-pane").query();
-//
-//            Button okButton = (Button) dialogPane.lookupButton(ButtonType.OK);
-//
-//            clickOn(okButton);
-//        });
-//
-//        Mockito.verify(serverMock, Mockito.times(1)).persistEvent(Mockito.any(Event.class));
-//        assertTrue(mockEvent.getParticipants().isEmpty());
-//    }
 
     @Test
     public void testRemoveEmptyParticipant(){
