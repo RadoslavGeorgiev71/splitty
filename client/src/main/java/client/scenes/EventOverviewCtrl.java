@@ -377,9 +377,9 @@ public class EventOverviewCtrl {
         GridPane.setVgrow(infoLabel, Priority.ALWAYS); // Allow label to grow vertically
         GridPane.setMargin(dateLabel, new Insets(0, 0, 0, 10));
 
-        GridPane innerPane = new GridPane(); // Create a new instance of innerPane
-        innerPane.add(infoLabel, 0, 0); // Add infoLabel to innerPane at column 0, row 0
-        innerPane.add(participantsText, 0, 1); // Add participantsText to innerPane at column 0, row 1
+        GridPane innerPane = new GridPane();
+        innerPane.add(infoLabel, 0, 0);
+        innerPane.add(participantsText, 0, 1);
 
         gridPane.add(dateLabel, 0, i);
         gridPane.add(innerPane, 1, i); // Add innerPane to gridPane at column 1
@@ -390,6 +390,12 @@ public class EventOverviewCtrl {
     }
 
 
+    /**
+     * Sets the text to display which participants are
+     * participating in an expense.
+     * @param expense
+     * @return
+     */
     public String setParticipantsText(Expense expense) {
         if(expense.getParticipants().equals(event.getParticipants())) {
             return "(all)";
