@@ -28,6 +28,13 @@ import javafx.collections.FXCollections;
 
 import javafx.event.ActionEvent;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.DecimalFormat;
 import java.util.ResourceBundle;
 
@@ -103,6 +110,8 @@ public class EventOverviewCtrl {
     private TextField titleTextField;
 
     private Event event;
+
+    private String iconPath = "client/images/icons/";
 
     /**
      *
@@ -221,13 +230,14 @@ public class EventOverviewCtrl {
      */
     @FXML
     public void setIcon(String iconName, Button button) {
-        String iconsPath = "src/main/resources/client/images/icons/";
-
-        // Append the file name to the path
-        String filePath = iconsPath + iconName;
+        String path = iconPath + iconName;
+        URL url = LanguageButtonUtils.class.getClassLoader().getResource(path);
+        if (url == null) {
+            throw new RuntimeException("Resources folder not found");
+        }
 
         // Load the image
-        Image image = new Image("file:" + filePath);
+        Image image = new Image(String.valueOf(url));
 
         // Create an ImageView to display the image
         ImageView imageView = new ImageView();
@@ -394,7 +404,7 @@ public class EventOverviewCtrl {
      * Sets the text to display which participants are
      * participating in an expense.
      * @param expense
-     * @return
+     * @return a string of participants.
      */
     public String setParticipantsText(Expense expense) {
         if(expense.getParticipants().equals(event.getParticipants())) {
