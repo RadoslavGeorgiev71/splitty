@@ -411,7 +411,7 @@ public class EventOverviewCtrl {
     @FXML
     private void visualizeExpense(GridPane gridPane, Expense expense, int i) {
         Label dateLabel = new Label(expense.getDateTime());
-        Label infoLabel = new Label(expense.getActivity());
+        Label infoLabel = new Label(infoLabelText(expense));
         Button editButton = new Button();
         Label tagLabel = getTagLabel(i);
         GridPane.setVgrow(editButton, Priority.ALWAYS); // Allow label to grow vertically
@@ -437,6 +437,18 @@ public class EventOverviewCtrl {
 
         editButton.setOnAction(event -> onEditExpenseClick(expense));
         setIcon("graypencil.png", editButton);
+    }
+
+    public String infoLabelText(Expense expense) {
+        String[] activity = expense.getActivity();
+        String infoLabelText = activity[0] + " ";
+        infoLabelText += languageResourceBundle.getResourceBundle().getString("paid");
+        infoLabelText += " " + activity[1] + " ";
+        infoLabelText += activity[2] + " ";
+        infoLabelText += languageResourceBundle.getResourceBundle().getString("for");
+        infoLabelText += " " + activity[3] + " ";
+
+        return infoLabelText;
     }
 
 
