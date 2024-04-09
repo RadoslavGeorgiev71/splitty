@@ -1,6 +1,5 @@
 package commons;
 
-import commons.Participant;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -19,13 +18,19 @@ public class ParticipantTest {
     }
 
     @Test
-    void testConstructorWIthName() {
+    void testConstructorWithName() {
         assertNotNull(p1);
     }
 
     @Test
-    void textConstructor() {
+    void testConstructor() {
         assertNotNull(p2);
+    }
+
+    @Test
+    void testEmptyContructor() {
+        Participant p4 = new Participant();
+        assertNotNull(p4);
     }
 
     @Test

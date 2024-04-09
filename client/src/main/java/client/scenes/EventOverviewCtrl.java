@@ -11,16 +11,20 @@ import commons.Participant;
 import commons.Tag;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.Side;
 import javafx.scene.control.*;
 
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.util.StringConverter;
@@ -28,8 +32,11 @@ import javafx.collections.FXCollections;
 
 import javafx.event.ActionEvent;
 
+import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.ResourceBundle;
+
+import javafx.scene.control.MenuButton;
 
 public class EventOverviewCtrl {
 
@@ -69,19 +76,19 @@ public class EventOverviewCtrl {
     private Button overviewSettleDebtsButton;
 
     @FXML
-    private Tab tabPaneAll;
-
-    @FXML
     private ChoiceBox<Participant> participantsMenu;
-
-    @FXML
-    private GridPane tabPaneAllGridPane;
 
     @FXML
     private Text participatingParticipants;
 
     @FXML
     private Label eventTitleLabel;
+
+    @FXML
+    private Tab tabPaneAll;
+
+    @FXML
+    private GridPane tabPaneAllGridPane;
 
     @FXML
     private Tab tabPaneFromPerson;
@@ -95,9 +102,14 @@ public class EventOverviewCtrl {
     @FXML
     private GridPane tabPaneIncludingGridPane;
 
+    @FXML
+    private Text amountText;
+
     private TextField titleTextField;
 
     private Event event;
+
+    private String iconPath = "client/images/icons/";
 
     /**
      *
@@ -157,8 +169,19 @@ public class EventOverviewCtrl {
 
     @FXML
     public void onAddExpenseClick() {
-        Participant p = participantsMenu.getValue();
-        mainCtrl.showAddExpenseWithTag(this.event, p, null);
+        if(event.getParticipants().size() <= 1) {
+            ResourceBundle bundle = languageResourceBundle.getResourceBundle();
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Error");
+            alert.setHeaderText(bundle.getString("eventNotEnoughParticipants"));
+            if (alert.showAndWait().get() == ButtonType.OK){
+                mainCtrl.showEventOverview(this.event);
+            }
+        }
+        else {
+            Participant p = participantsMenu.getValue();
+            mainCtrl.showAddExpenseWithTag(this.event, p, null);
+        }
     }
 
     /**
@@ -214,6 +237,34 @@ public class EventOverviewCtrl {
     }
 
     /**
+     * Sets the icon of the chosen button.
+     * @param iconName
+     * @param button
+     */
+    @FXML
+    public void setIcon(String iconName, Button button) {
+        String path = iconPath + iconName;
+        URL url = LanguageButtonUtils.class.getClassLoader().getResource(path);
+        if (url == null) {
+            throw new RuntimeException("Resources folder not found");
+        }
+
+        // Load the image
+        Image image = new Image(String.valueOf(url));
+
+        // Create an ImageView to display the image
+        ImageView imageView = new ImageView();
+
+        // Set the default image
+        imageView.setImage(image);
+
+        // Set the size of the image
+        imageView.setFitWidth(15); // Set width to 100 pixels
+        imageView.setFitHeight(15); // Set height to 100 pixels
+        button.setGraphic(imageView);
+    }
+
+    /**
      *  converted currency
      * @param expense to convert
      * @return converted amount
@@ -259,31 +310,16 @@ public class EventOverviewCtrl {
         tabPaneAllGridPane.getChildren().clear();
         tabPaneAllGridPane.setVgap(10);
         tabPaneAllGridPane.setHgap(10);
+        double amount = 0;
         if (event != null) {
             for (int i = 0; i < event.getExpenses().size(); i++) {
-                Expense show = foreignCurrency(event.getExpenses().get(i));
-                Label dateLabel = new Label(event.getExpenses().get(i).getDateTime());
-                Label nameLabel = new Label(show.getActivity());
-                nameLabel.setWrapText(true); // Wrap text to prevent truncation
-                Label tagLabel = getTagLabel(i);
-                Button editButton = new Button("Edit");
-
-                // Set fixed column widths
-                dateLabel.setMaxWidth(Double.MAX_VALUE);
-                nameLabel.setMaxWidth(Double.MAX_VALUE);
-
-                GridPane.setFillWidth(dateLabel, true);
-                GridPane.setFillWidth(nameLabel, true);
-
-                tabPaneAllGridPane.add(dateLabel, 0, i);
-                tabPaneAllGridPane.add(nameLabel, 1, i);
-                tabPaneAllGridPane.add(tagLabel, 2, i);
-                tabPaneAllGridPane.add(editButton, 3, i);
-
-                Expense expense = event.getExpenses().get(i);
-                editButton.setOnAction(event -> onEditExpenseClick(expense));
+                Expense expense = foreignCurrency(event.getExpenses().get(i));
+                amount += expense.getAmount();
+                visualizeExpense(tabPaneAllGridPane, expense, i);
             }
             fromPersonTabName();
+            includingPersonTabName();
+            setAmount(amount);
         }
     }
 
@@ -320,35 +356,21 @@ public class EventOverviewCtrl {
         tabPaneFromGridPane.getChildren().clear();
         tabPaneFromGridPane.setVgap(10);
         tabPaneFromGridPane.setHgap(10);
+        double amount = 0;
+        int j = 0;
         if (event != null) {
-            int j = 0;
             for (int i = 0; i < event.getExpenses().size(); i++) {
-                Participant participant = event.getExpenses().get(i).getPayingParticipant();
-                if (participant.equals(participantsMenu.
+                Expense expense = foreignCurrency(event.getExpenses().get(i));
+                Participant payingParticipant = expense.getPayingParticipant();
+                if (payingParticipant.equals(participantsMenu.
                         getSelectionModel().getSelectedItem())) {
-                    Expense show = foreignCurrency(event.getExpenses().get(i));
-                    Label dateLabel = new Label(event.getExpenses().get(i).getDateTime());
-                    Label nameLabel = new Label(show.getActivity());
-                    nameLabel.setWrapText(true); // Wrap text to prevent truncation
-                    Label tagLabel = getTagLabel(j);
-                    Button editButton = new Button("Edit");
-
-                    // Set fixed column widths
-                    dateLabel.setMaxWidth(Double.MAX_VALUE);
-                    nameLabel.setMaxWidth(Double.MAX_VALUE);
-
-                    GridPane.setFillWidth(dateLabel, true);
-                    GridPane.setFillWidth(nameLabel, true);
-
-                    tabPaneFromGridPane.add(dateLabel, 0, j);
-                    tabPaneFromGridPane.add(nameLabel, 1, j);
-                    tabPaneFromGridPane.add(tagLabel, 2, j);
-                    tabPaneFromGridPane.add(editButton, 3, j++);
-
-                    Expense expensei = event.getExpenses().get(i);
-                    editButton.setOnAction(event -> onEditExpenseClick(expensei));                
+                    amount += expense.getAmount();
+                    visualizeExpense(tabPaneFromGridPane, expense, j++);
                 }
             }
+            fromPersonTabName();
+            includingPersonTabName();
+            setAmount(amount);
         }
     }
 
@@ -359,43 +381,119 @@ public class EventOverviewCtrl {
     @FXML
     public void tabPaneIncludingPersonClick() {
         tabPaneIncludingGridPane.getChildren().clear();
-        tabPaneIncludingGridPane.getChildren().clear();
         tabPaneIncludingGridPane.setVgap(10);
         tabPaneIncludingGridPane.setHgap(10);
+        double amount = 0;
+        int j = 0;
         if (event != null) {
-            int j = 0;
             for (int i = 0; i < event.getExpenses().size(); i++) {
-                Participant participant = (Participant) participantsMenu.
-                        getSelectionModel().getSelectedItem();
-                if (event.getExpenses().get(i).getParticipants().contains(participant)) {
-                    Expense show = foreignCurrency(event.getExpenses().get(i));
-                    Label dateLabel = new Label(event.getExpenses().get(i).getDateTime());
-                    Label nameLabel = new Label(show.getActivity());
-                    nameLabel.setWrapText(true); // Wrap text to prevent truncation
-                    Label tagLabel = getTagLabel(j);
-                    Button editButton = new Button("Edit");
-
-                    editButton.setOnAction(event -> {
-                        //maintCtrl.showEditExpense(event.getExpenses().get(i))
-                    });
-
-                    // Set fixed column widths
-                    dateLabel.setMaxWidth(Double.MAX_VALUE);
-                    nameLabel.setMaxWidth(Double.MAX_VALUE);
-
-                    GridPane.setFillWidth(dateLabel, true);
-                    GridPane.setFillWidth(nameLabel, true);
-
-                    tabPaneIncludingGridPane.add(dateLabel, 0, j);
-                    tabPaneIncludingGridPane.add(nameLabel, 1, j);
-                    tabPaneIncludingGridPane.add(tagLabel, 2, j);
-                    tabPaneIncludingGridPane.add(editButton, 3, j++);
-
-                    Expense expensei = event.getExpenses().get(i);
-                    editButton.setOnAction(event -> onEditExpenseClick(expensei));
+                Participant participant = participantsMenu.getSelectionModel().getSelectedItem();
+                Expense expense = foreignCurrency(event.getExpenses().get(i));
+                if (expense.getParticipants().contains(participant)) {
+                    amount += expense.getAmount();
+                    visualizeExpense(tabPaneIncludingGridPane, expense, j++);
                 }
             }
+            fromPersonTabName();
+            includingPersonTabName();
+            setAmount(amount);
         }
+    }
+
+    /**
+     * Sets the Grid Pane with the necessary expense info
+     * @param gridPane
+     * @param expense
+     * @param i
+     */
+
+    @FXML
+    private void visualizeExpense(GridPane gridPane, Expense expense, int i) {
+        Label dateLabel = new Label(expense.getDateTime());
+        Label infoLabel = new Label(expense.getActivity());
+        Button editButton = new Button();
+        Label tagLabel = getTagLabel(i);
+        GridPane.setVgrow(editButton, Priority.ALWAYS); // Allow label to grow vertically
+
+        Text participantsText = new Text(); // Create a Text node for participants
+        participantsText.setText(setParticipantsText(expense));
+
+        dateLabel.setWrapText(true); // Wrap text to prevent truncation
+        infoLabel.setWrapText(true); // Wrap text to prevent truncation
+        infoLabel.setMaxHeight(Double.MAX_VALUE); // Allow label to grow vertically
+        infoLabel.setMaxWidth(Double.MAX_VALUE); // Allow label to grow horizontally
+        GridPane.setVgrow(infoLabel, Priority.ALWAYS); // Allow label to grow vertically
+        GridPane.setMargin(dateLabel, new Insets(0, 0, 0, 10));
+
+        GridPane innerPane = new GridPane();
+        innerPane.add(infoLabel, 0, 0);
+        innerPane.add(participantsText, 0, 1);
+
+        gridPane.add(dateLabel, 0, i);
+        gridPane.add(innerPane, 1, i); // Add innerPane to gridPane at column 1
+        tabPaneAllGridPane.add(tagLabel, 3, i);
+        gridPane.add(editButton, 4, i);
+
+        editButton.setOnAction(event -> onEditExpenseClick(expense));
+        setIcon("graypencil.png", editButton);
+    }
+
+
+    /**
+     * Sets the text to display which participants are
+     * participating in an expense.
+     * @param expense
+     * @return a string of participants.
+     */
+    public String setParticipantsText(Expense expense) {
+        if(expense.getParticipants().equals(event.getParticipants())) {
+            return "(all)";
+        }
+        String participantsText = "(";
+        for(int i = 0; i < expense.getParticipants().size(); i++) {
+            participantsText += expense.getParticipants().get(i).getName();
+            if(i != expense.getParticipants().size() - 1) {
+                participantsText += ", ";
+            }
+            else {
+                participantsText += ")";
+            }
+        }
+        return participantsText;
+    };
+
+    /**
+     * Sets the amount (in the set currency)
+     * @param amount
+     */
+
+    @FXML
+    public void setAmount(double amount) {
+        // Will add the currency later
+        amountText.setText("Amount: " + amount);
+    }
+
+    /**
+     * Populates the Participant Menu with the participants of the event
+     */
+    @FXML
+    public void populateParticipantMenu() {
+        participantsMenu.setItems(FXCollections.observableArrayList(event.getParticipants()));
+        participantsMenu.setConverter(new StringConverter<Participant>() {
+            @Override
+            public String toString(Participant participant) {
+                if (participant != null) {
+                    return participant.getName();
+                }
+                else {
+                    return "";
+                }
+            }
+            @Override
+            public Participant fromString(String string) {
+                return null;
+            }
+        } );
     }
 
     /**
@@ -423,7 +521,7 @@ public class EventOverviewCtrl {
                     getResourceBundle().getString("tabPaneFrom"));
         }
         else {
-            Participant selectedParticipant = (Participant) participantsMenu.getValue();
+            Participant selectedParticipant = participantsMenu.getValue();
             if(selectedParticipant != null) {
                 tabPaneFromPerson.setText(languageResourceBundle.
                         getResourceBundle().getString("tabPaneFrom")
@@ -533,22 +631,8 @@ public class EventOverviewCtrl {
             if(event == null){
                 mainCtrl.showStartScreen();
             }
-            participantsMenu.setItems(FXCollections.observableArrayList(event.getParticipants()));
-            participantsMenu.setConverter(new StringConverter<Participant>() {
-                @Override
-                public String toString(Participant participant) {
-                    if (participant != null) {
-                        return participant.getName();
-                    }
-                    else {
-                        return "";
-                    }
-                }
-                @Override
-                public Participant fromString(String string) {
-                    return null;
-                }
-            } );
+
+            populateParticipantMenu();
 
             participantsMenu.getSelectionModel().selectFirst();
             eventTitleLabel.setText(event.getTitle());
@@ -558,6 +642,8 @@ public class EventOverviewCtrl {
             participantsMenu.setOnAction(e -> {
                 fromPersonTabName();
                 includingPersonTabName();
+                tabPaneAllClick();
+                tabPaneIncludingPersonClick();
             });
             tabPaneAllClick();
         }
@@ -568,6 +654,9 @@ public class EventOverviewCtrl {
                 Platform.runLater(this::initialize);
             }
         });
+
+        setIcon("graypencil.png", overviewEditParticipantButton);
+        setIcon("addperson.png", overviewAddParticipantButton);
     }
 
     /**

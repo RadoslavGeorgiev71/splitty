@@ -26,17 +26,17 @@
     <children>
         <VBox layoutY="1.0" prefHeight="389.0" prefWidth="280.0" spacing="10.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="1.0">
             <children>
-                <GridPane prefHeight="30.0" prefWidth="297.0" VBox.vgrow="ALWAYS">
+                <GridPane prefHeight="0.0" prefWidth="385.0" VBox.vgrow="ALWAYS">
                     <columnConstraints>
                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                         <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                     </columnConstraints>
                     <rowConstraints>
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="1.0" prefHeight="10.0" vgrow="ALWAYS" />
                     </rowConstraints>
                     <children>
                         <Button fx:id="sendInvitesButton" mnemonicParsing="false" onAction="#onSendInvites" text="Send Invites" GridPane.columnIndex="1" />
-                        <Label fx:id="eventTitleLabel" onMouseClicked="#editTitle" text="Label">
+                        <Label fx:id="eventTitleLabel" onMouseClicked="#editTitle" text="Event name">
                             <cursor>
                                 <Cursor fx:constant="TEXT" />
                             </cursor></Label>
@@ -45,18 +45,18 @@
                 <HBox alignment="CENTER_LEFT" prefHeight="28.0" prefWidth="280.0" spacing="10.0">
                     <children>
                         <Text fx:id="overviewParticipantsText" strokeType="OUTSIDE" strokeWidth="0.0" text="Participants" />
-                        <Button fx:id="overviewEditParticipantButton" mnemonicParsing="false" onAction="#onEditParticipantsClick" text="Edit(pen)" />
-                        <Button fx:id="overviewAddParticipantButton" mnemonicParsing="false" onAction="#onAddParticipantClick" text="Add(guy+)" />
+                        <Button fx:id="overviewEditParticipantButton" mnemonicParsing="false" onAction="#onEditParticipantsClick" text="Edit" />
+                        <Button fx:id="overviewAddParticipantButton" mnemonicParsing="false" onAction="#onAddParticipantClick" text="Add" />
                     </children>
                 </HBox>
                 <Text fx:id="participatingParticipants" strokeType="OUTSIDE" strokeWidth="0.0" text="Participants list" wrappingWidth="294.787109375" VBox.vgrow="ALWAYS" />
-                <GridPane prefHeight="39.0" prefWidth="280.0" VBox.vgrow="ALWAYS">
+                <GridPane prefHeight="10.0" prefWidth="280.0" VBox.vgrow="ALWAYS">
                     <columnConstraints>
                         <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                         <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                     </columnConstraints>
                     <rowConstraints>
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="20.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                     <children>
                         <ChoiceBox fx:id="participantsMenu" prefWidth="150.0" />
@@ -64,7 +64,7 @@
                     </children>
                 </GridPane>
                 <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Expenses" VBox.vgrow="ALWAYS" />
-                <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
+                <TabPane prefHeight="200.0" prefWidth="385.0" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
                     <tabs>
                         <Tab fx:id="tabPaneAll" onSelectionChanged="#tabPaneAllClick" text="All">
                      <content>
@@ -172,7 +172,7 @@
                         </Tab>
                         <Tab id="IncludingPersonTab" fx:id="tabPaneIncludingPerson" onSelectionChanged="#tabPaneIncludingPersonClick" text="Including Person">
                             <content>
-                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                <AnchorPane prefHeight="210.0" prefWidth="385.0">
                                     <children>
                                         <ScrollPane prefHeight="187.0" prefWidth="436.0">
                                             <content>
@@ -201,7 +201,8 @@
                 <GridPane prefHeight="129.0" prefWidth="436.0" VBox.vgrow="ALWAYS">
                     <columnConstraints>
                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                        <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                     </columnConstraints>
                     <rowConstraints>
                         <RowConstraints />
