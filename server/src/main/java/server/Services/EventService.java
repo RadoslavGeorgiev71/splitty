@@ -1,9 +1,6 @@
 package server.Services;
 
-import commons.Debt;
-import commons.Event;
-import commons.Expense;
-import commons.Participant;
+import commons.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import server.database.EventRepository;
@@ -124,15 +121,6 @@ public class EventService {
         for(Debt debt : debts){
             debtRepo.deleteById(debt.getId());
         }
-//        debts = debtRepo.findAll();
-//        for(Participant participant : participants){
-//            debts = debts.stream().filter(x -> x.getPersonPaying().getId() == participant.getId()
-//      || x.getPersonOwing().getId() == participant.getId()).collect(Collectors.toList());
-//            for(Debt debt : debts){
-//                debtRepo.deleteById(debt.getId());
-//            }
-//            debts = debtRepo.findAll();
-//        }
         for(Participant participant: participants){
             participantRepo.deleteById(participant.getId());
         }
@@ -158,4 +146,59 @@ public class EventService {
     }
 
 
+    /**
+     * Method that is called when the admin wants to import an event
+     * It gets an event as a parameter
+     * and imports it into the database
+     * @param e event to import
+     * @return the imported/created event
+     */
+    @Transactional
+    public Event importEvent(Event e) {
+        Event newEvent = new Event();
+        newEvent.setTitle(e.getTitle());
+        newEvent.setInviteCode(e.getInviteCode());
+        newEvent.setDateTime(e.getDateTime());
+        newEvent = eventRepo.save(newEvent);
+        for(Participant participant : e.getParticipants()){
+            Long oldid = participant.getId();
+            newEvent.addParticipant(participant);
+            eventRepo.save(newEvent);
+            participant.setId(newEvent.getParticipants().getLast().getId());
+            changePId(e, participant.getId(), oldid);
+        }
+        for(Expense expense : e.getExpenses()){
+            expense.setTag(new Tag(expense.getTag().getType(), expense.getTag().getColor()));
+        }
+        newEvent.setExpenses(e.getExpenses());
+        newEvent.setSettledDebts(e.getSettledDebts());
+        eventRepo.save(newEvent);
+        return newEvent;
+    }
+
+    private void changePId(Event e, Long id, Long oldid) {
+        for(Expense expense : e.getExpenses()){
+            changeDebts(expense.getDebts(), id, oldid);
+            if(expense.getPayingParticipant().getId() == oldid){
+                expense.getPayingParticipant().setId(id);
+            }
+            for(Participant participant : expense.getParticipants()){
+                if(participant.getId() == oldid){
+                    participant.setId(id);
+                }
+            }
+        }
+        changeDebts(e.getSettledDebts(), id, oldid);
+    }
+
+    private void changeDebts(List<Debt> debts, Long id, Long oldid){
+        for(Debt debt : debts){
+            if(debt.getPersonOwing().getId() == oldid){
+                debt.getPersonOwing().setId(id);
+            }
+            if( debt.getPersonPaying().getId() == oldid){
+                debt.getPersonPaying().setId(id);
+            }
+        }
+    }
 }

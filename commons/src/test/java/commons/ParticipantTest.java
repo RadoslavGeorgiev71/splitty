@@ -62,8 +62,9 @@ public class ParticipantTest {
 
     @Test
     void testSetId() {
-        p1.setId(8);
-        assertEquals(8, p1.getId());
+        long id = 8;
+        p1.setId(id);
+        assertEquals(id, p1.getId());
     }
 
     @Test

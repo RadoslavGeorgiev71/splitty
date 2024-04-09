@@ -62,8 +62,9 @@ class DebtTest {
 
     @Test
     void testSetId() {
-        d2.setId(321);
-        assertEquals(d2.getId(), 321);
+        long id = 321;
+        d2.setId(id);
+        assertEquals(d2.getId(), id);
     }
 
     @Test

@@ -137,7 +137,7 @@ public class TestDebtController {
         Participant p1 = new Participant("Bob");
         Participant p2 = new Participant("Ana");
         Debt debt = new Debt(p1, p2, 100);
-        debtService.add(debt);
+        debt = debtService.add(debt);
         ResponseEntity<String> response = sut.delete(debt.getId());
         assertEquals(response.getBody(), "Successful delete");
     }
@@ -153,7 +153,7 @@ public class TestDebtController {
         Participant p1 = new Participant("Bob");
         Participant p2 = new Participant("Ana");
         Debt debt = new Debt(p1, p2, 100);
-        debtService.add(debt);
+        debt = debtService.add(debt);
         ResponseEntity<Debt> response = sut.getById(debt.getId());
         assertEquals(response.getBody(), debt);
     }

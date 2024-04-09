@@ -155,8 +155,8 @@ public class EventController {
     @MessageMapping("/events")
     @SendTo("/topic/events")
     public Event addEvent(Event e){
-        createEvent(e);
-        return e;
+        Event newEvent = eventService.importEvent(e);
+        return newEvent;
     }
 
     /**
