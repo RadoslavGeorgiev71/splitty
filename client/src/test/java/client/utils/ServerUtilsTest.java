@@ -116,6 +116,15 @@ class ServerUtilsTest {
 
     @Test
     void addParticipant() {
+        Participant p = new Participant();
+        p.setName("Gogu");
+        Participant res = server.addParticipant(p).readEntity(Participant.class);
+        assertEquals(p.getName(), res.getName());
+
+        event = server.addEvent(event);
+        event.addParticipant(res);
+        event = server.persistEvent(event);
+        assertTrue(event.getParticipants().contains(res));
     }
 
     @Test
