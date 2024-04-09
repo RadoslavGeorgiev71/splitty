@@ -230,7 +230,7 @@ public class EditExpenseCtrl{
                 Event undoEvent = event;
                 event.removeExpense(expense);
                 server.persistEvent(event);
-                //server.deleteExpense(expense);
+                server.deleteExpense(expense);
                 //server.deleteExpense(event.getId(), expense);
                 event = server.getEvent(event.getId());
                 if(event != null){
