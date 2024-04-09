@@ -162,6 +162,13 @@ public class DebtService {
             return null;
         }
         Debt debt = debtRepo.findById(id).get();
+        Event event = eventRepo.findAll().stream()
+            .filter(x -> x.getParticipants().contains(debt.getPersonOwing()))
+            .toList().getFirst();
+        event.getSettledDebts().remove(debt);
+        for(Expense expense : event.getExpenses()) {
+            expense.getDebts().remove(debt);
+        }
         debtRepo.deleteById(id);
         return debt;
     }

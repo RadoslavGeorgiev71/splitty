@@ -179,6 +179,7 @@ public class EditExpenseCtrl{
         for(Debt debt : expense.getDebts()) {
             server.deleteDebt(debt);
         }
+        expense.setDebts(new ArrayList<>());
         for(Participant participant : expense.getParticipants()) {
             if(participant.equals(expense.getPayingParticipant())) {
                 continue;
@@ -186,7 +187,7 @@ public class EditExpenseCtrl{
             Debt debt = new Debt(expense.getPayingParticipant(), participant,
                     expense.getAmount() / (expense.getParticipants().size()));
             expense.add(debt);
-            server.addDebt(debt);
+//            server.addDebt(debt);
         }
     }
 

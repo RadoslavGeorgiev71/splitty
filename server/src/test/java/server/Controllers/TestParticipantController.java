@@ -28,7 +28,7 @@ public class TestParticipantController {
     @BeforeEach
     void participantControllerSetUp() {
         participantRepo = new TestParticipantRepository();
-        participantService = new ParticipantService(participantRepo, null, null);
+        participantService = new ParticipantService(participantRepo, null, null, null);
         sut = new ParticipantController(participantService);
     }
 

@@ -21,7 +21,7 @@ public class ParticipantServiceTest {
     public void setup() {
         MockitoAnnotations.initMocks(this);
         participantRepo = new TestParticipantRepository();
-        sut = new ParticipantService(participantRepo, null, null);
+        sut = new ParticipantService(participantRepo, null, null, null);
     }
 
 
