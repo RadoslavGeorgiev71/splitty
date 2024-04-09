@@ -431,8 +431,8 @@ public class EventOverviewCtrl {
 
         gridPane.add(dateLabel, 0, i);
         gridPane.add(innerPane, 1, i); // Add innerPane to gridPane at column 1
-        tabPaneAllGridPane.add(tagLabel, 3, i);
-        gridPane.add(editButton, 4, i);
+        gridPane.add(tagLabel, 2, i);
+        gridPane.add(editButton, 3, i);
 
         editButton.setOnAction(event -> onEditExpenseClick(expense));
         setIcon("graypencil.png", editButton);
