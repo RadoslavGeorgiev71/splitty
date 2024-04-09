@@ -224,6 +224,7 @@ public class MainCtrl {
         primaryStage.setScene(editexpense);
         editExpenseCtrl.setEvent(event);
         editExpenseCtrl.setExpense(expense);
+        editExpenseCtrl.setTag(expense.getTag());
         editExpenseCtrl.initialize();
     }
 
