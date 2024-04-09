@@ -1,9 +1,13 @@
 package client.utils;
 
 import commons.*;
+import jakarta.ws.rs.client.Invocation;
+import jakarta.ws.rs.client.WebTarget;
 import jakarta.ws.rs.core.Response;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +16,19 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ServerUtilsTest {
 
-    public ServerUtils server = new ServerUtils();
+    @Mock
+    WebTarget mockWebTarget;
+
+    @Mock
+    Invocation.Builder mockBuilder;
+
+    @Mock
+    Response mockResponse;
+    @Mock
+    StompSession mockStompSession;
+
+    public ServerUtils server;
+    public ConfigClient configClient;
     public Event event;
     public Participant participant;
     public Participant participant2;
@@ -20,6 +36,10 @@ class ServerUtilsTest {
 
     @BeforeEach
     void ini() {
+        MockitoAnnotations.initMocks(this);
+        server = new ServerUtils();
+
+
         event = new Event();
         event.setTitle("Test");
         event.createInviteCode();
