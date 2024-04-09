@@ -57,7 +57,7 @@ class DebtTest {
 
     @Test
     void testGetPaidDateTimeNULL() {
-        assertEquals(d1.getPaidDateTime(), LocalDateTime.MIN);
+        assertNotNull(d1.getPaidDateTime());
     }
 
     @Test
@@ -93,15 +93,15 @@ class DebtTest {
     @Test
     void testSetPaidDateTime() {
         LocalDateTime now = LocalDateTime.now();
-        d2.setPaidDateTime(now);
+        d2.setPaidDateTime(now.toString());
         assertNotNull(d2.getPaidDateTime());
     }
 
     @Test
     void testGetPaidDateTimeNotNull() {
         LocalDateTime now = LocalDateTime.now();
-        d2.setPaidDateTime(now);
-        assertEquals(now, d2.getPaidDateTime());
+        d2.setPaidDateTime(now.toString());
+        assertEquals(now.toString(), d2.getPaidDateTime());
     }
 
     @Test

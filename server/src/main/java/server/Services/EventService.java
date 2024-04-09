@@ -1,8 +1,16 @@
 package server.Services;
 
+import commons.Debt;
 import commons.Event;
+import commons.Expense;
+import commons.Participant;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import server.database.EventRepository;
+
+import server.database.DebtRepository;
+import server.database.ExpenseRepository;
+import server.database.ParticipantRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -11,13 +19,23 @@ import java.util.Optional;
 @Service
 public class EventService {
     private final EventRepository eventRepo;
+    private final ParticipantRepository participantRepo;
+    private final DebtRepository debtRepo;
+    private final ExpenseRepository expenseRepo;
 
     /**
      * Constructor for EventService
      * @param eventRepo - the repository for events
+     * @param participantRepo - the repository for participants
+     * @param debtRepo - the repository for debts
+     * @param expenseRepo - the repository for expenses
      */
-    public EventService(EventRepository eventRepo) {
+    public EventService(EventRepository eventRepo,ParticipantRepository participantRepo,
+                        DebtRepository debtRepo, ExpenseRepository expenseRepo ) {
         this.eventRepo = eventRepo;
+        this.participantRepo = participantRepo;
+        this.expenseRepo = expenseRepo;
+        this.debtRepo = debtRepo;
     }
 
     /**
@@ -81,8 +99,46 @@ public class EventService {
      * Method to delete an event by id
      * @param id of event
      */
+    @Transactional
     public void deleteById(long id){
+        Optional<Event> optional = eventRepo.findById(id);
+        Event event = optional.get();
+        List<Participant> participants = event.getParticipants();
+        List<Expense> expenses = event.getExpenses();
+        List<Debt> debts = event.getSettledDebts();
+        event.setSettledDebts(null);
+        event.setExpenses(null);
+        event.setParticipants(null);
+        eventRepo.save(event);
+        eventRepo.flush();
         eventRepo.deleteById(id);
+        for(Expense expense : expenses){
+            List<Debt> debts1 = expense.getDebts();
+            expense.setDebts(null);
+            expenseRepo.save(expense);
+            expenseRepo.deleteById(expense.getId());
+            for(Debt debt: debts1){
+                debtRepo.deleteById(debt.getId());
+            }
+        }
+        for(Debt debt : debts){
+            debtRepo.deleteById(debt.getId());
+        }
+//        debts = debtRepo.findAll();
+//        for(Participant participant : participants){
+//            debts = debts.stream().filter(x -> x.getPersonPaying().getId() == participant.getId()
+//      || x.getPersonOwing().getId() == participant.getId()).collect(Collectors.toList());
+//            for(Debt debt : debts){
+//                debtRepo.deleteById(debt.getId());
+//            }
+//            debts = debtRepo.findAll();
+//        }
+        for(Participant participant: participants){
+            participantRepo.deleteById(participant.getId());
+        }
+        participantRepo.flush();
+        expenseRepo.flush();
+        debtRepo.flush();
     }
 
     /**
