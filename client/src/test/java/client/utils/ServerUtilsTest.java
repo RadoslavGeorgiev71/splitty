@@ -1,8 +1,7 @@
 package client.utils;
 
-import commons.Event;
-import commons.Expense;
-import commons.Participant;
+import commons.*;
+import jakarta.ws.rs.core.Response;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -35,6 +34,9 @@ class ServerUtilsTest {
         expense.setAmount(10);
         expense.setCurrency("EUR");
         expense.setPayingParticipant(participant);
+        expense.setDateTime("2004-08-12");
+        expense.setDebts(new ArrayList<>());
+        expense.setTag(new Tag("","#FFFFFF"));
 
         List<Participant> participants = new ArrayList<>();
         participants.add(participant);
@@ -47,8 +49,8 @@ class ServerUtilsTest {
 
     @Test
     void setURL() {
-        ServerUtils.setURL("http://localhost:8080/");
-        //assertEquals("http://localhost:8081/", server.server);
+        ServerUtils.setURL("http://localhost:8081/");
+        //assertEquals("http://localhost:8081/", server);
     }
 
     @Test
@@ -73,10 +75,27 @@ class ServerUtilsTest {
 
     @Test
     void addDebt() {
+        event = server.addEvent(event);
+        participant = event.getParticipants().get(0);
+        participant2 = event.getParticipants().get(1);
+        Debt debt = new Debt(participant, participant2, 10);
+
+        Debt res = server.addDebt(debt);
+        assertEquals(debt.getAmount(), res.getAmount());
+        assertEquals(debt.getPersonOwing(), res.getPersonOwing());
+        assertEquals(debt.getPersonPaying(), res.getPersonPaying());
     }
 
     @Test
-    void deleteDebt() {
+    void deleteDebt() {event = server.addEvent(event);
+        participant = event.getParticipants().get(0);
+        participant2 = event.getParticipants().get(1);
+        Debt debt = new Debt(participant, participant2, 10);
+
+        Debt res = server.addDebt(debt);
+        assertEquals(debt.getAmount(), res.getAmount());
+        Response response = server.deleteDebt(res);
+        assertEquals(200, response.getStatus());
     }
 
     @Test
@@ -98,33 +117,58 @@ class ServerUtilsTest {
 
     @Test
     void getEventByCode() {
-//        Event event = new Event();
-//        event.setTitle("Test");
-//        event.createInviteCode();
-//        event = server.addEvent(event);
-//        Event res = server.getEventByCode(event.getInviteCode());
-//        assertEquals(event, res);
+        Event event = new Event();
+        event.setTitle("Test");
+        event.createInviteCode();
+        event = server.addEvent(event);
+        Event res = server.getEventByCode(event.getInviteCode());
+        assertEquals(event, res);
     }
 
     @Test
     void persistParticipant() {
+        event = server.addEvent(event);
+        Participant participant = event.getParticipants().get(0);
+
+        participant.setName("Cornel");
+        Participant res = server.persistParticipant(participant);
+        event = server.persistEvent(event);
+        assertEquals(res, participant);
+        assertTrue(event.getParticipants().contains(participant));
+        assertEquals(2, event.getParticipants().size());
     }
 
     @Test
     void deleteParticipant() {
+        event = server.addEvent(event);
+        participant = event.getParticipants().get(0);
+        participant2 = event.getParticipants().get(1);
+        event = server.getEvent(event.getId());
+        assertEquals(2, event.getParticipants().size());
+
+        event.removeParticipant(participant);
+        event = server.persistEvent(event);
+        assertEquals(1, event.getParticipants().size());
+        assertFalse(event.getParticipants().contains(participant));
+
+        Response res = server.deleteParticipant(participant2);
+        //assertEquals(200, res.getStatus());
+        //assertEquals(0, event.getParticipants());
     }
 
     @Test
     void addParticipant() {
         Participant p = new Participant();
         p.setName("Gogu");
-        Participant res = server.addParticipant(p).readEntity(Participant.class);
+        Response response = server.addParticipant(p);
+        Participant res = response.readEntity(Participant.class);
         assertEquals(p.getName(), res.getName());
 
         event = server.addEvent(event);
         event.addParticipant(res);
         event = server.persistEvent(event);
         assertTrue(event.getParticipants().contains(res));
+        assertTrue(200 <= response.getStatus() && 300 > response.getStatus());
     }
 
     @Test
@@ -141,14 +185,33 @@ class ServerUtilsTest {
 
     @Test
     void sendInvites() {
+        event = server.addEvent(event);
+        List<String> emails = new ArrayList<>();
+        emails.add("maria.c.burlacu@gmail.com");
+        ConfigClient configClient = new ConfigClient();
+        configClient.setEmail("mariaciprianaburlacu@gmail.com");
+        assertTrue(server.sendInvites(emails, event, "Maria"));
     }
 
     @Test
     void sendDefault() {
+        event = server.addEvent(event);
+        ConfigClient configClient = new ConfigClient();
+        configClient.setName("Maria");
+        configClient.setEmail("maria.c.burlacu@gmail.com");
+        assertTrue(server.sendDefault());
     }
 
     @Test
     void sendRemainder() {
+        event = server.addEvent(event);
+        ConfigClient configClient = new ConfigClient();
+        configClient.setName("Maria");
+        configClient.setEmail("mariaciprianaburlacu@gmail.com");
+        Participant participant1 = new Participant("Maria");
+        participant1.setEmail("maria.c.burlacu@gmail.com");
+        assertTrue(server.sendRemainder(participant1, 10,
+                participant1.getEmail(), event.getTitle()));
     }
 
     @Test
@@ -162,9 +225,10 @@ class ServerUtilsTest {
     @Test
     void addExpense() {
         event = server.addEvent(event);
+        expense.setParticipants(event.getParticipants());
         event.addExpense(expense);
-        Event res = server.persistEvent(event);
-        assertEquals(event, res);
+        event = server.persistEvent(event);
+        assertTrue(event.getParticipants().contains(expense));
     }
 
     @Test
