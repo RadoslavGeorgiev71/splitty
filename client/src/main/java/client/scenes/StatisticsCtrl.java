@@ -10,6 +10,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.Label;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 
 import java.util.HashMap;
@@ -22,8 +23,12 @@ public class StatisticsCtrl {
     private final MainCtrl mainCtrl;
     private Event event;
 
+
     @FXML
     private Label totalCostLabel;
+
+    @FXML
+    private AnchorPane pane;
 
     @FXML
     private PieChart pieChart;
@@ -50,18 +55,23 @@ public class StatisticsCtrl {
                 String.format("%.2f", event.getExpenses()
                     .stream().mapToDouble(Expense::getAmount).sum()) + "$");
             Map<Tag, Double> distribution = getMoneyPerTag();
+            pane.getChildren().remove(pieChart);
+            pieChart = new PieChart();
+            pane.getChildren().add(pieChart);
             ObservableList<PieChart.Data> data = FXCollections.observableArrayList();
+            pieChart.setData(data);
             for(Tag tag : distribution.keySet()) {
                 PieChart.Data section = new PieChart.Data(tag.getType(), distribution.get(tag));
                 data.add(section);
             }
-            pieChart.setData(data);
             List<Tag> tags = distribution.keySet().stream().toList();
             for(int i = 0; i < pieChart.getData().size(); i++) {
                 pieChart.getData().get(i).getNode()
                     .setStyle("-fx-pie-color: " +
                         colorToHex(Color.web(tags.get(i).getColor())));
             }
+            pieChart.setPadding(new javafx.geometry.Insets(0, 0, 100, 0));
+            pieChart.setLayoutY(60);
         }
     }
 
