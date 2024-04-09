@@ -220,15 +220,15 @@ public class StartScreenCtrl {
         Participant participant = new Participant();
         participant.setName(ConfigClient.getName());
         if(ConfigClient.getEmail() != null && !ConfigClient.getEmail().equals("")
-        && !ConfigClient.getEmail().equals("null")){
+            && !ConfigClient.getEmail().equals("null")){
             participant.setEmail(ConfigClient.getEmail());
         }
         if(ConfigClient.getBic() != null && !ConfigClient.getBic().equals("")
-        && !ConfigClient.getBic().equals("null")){
+            && !ConfigClient.getBic().equals("null")){
             participant.setBic(ConfigClient.getBic());
         }
         if(ConfigClient.getIban() != null && !ConfigClient.getIban().equals("")
-        && !ConfigClient.getIban().equals("null")){
+            && !ConfigClient.getIban().equals("null")){
             participant.setIban(ConfigClient.getIban());
         }
         return participant;
