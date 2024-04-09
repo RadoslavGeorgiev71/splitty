@@ -8,6 +8,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import server.Repositories.TestEventRepository;
 import server.Repositories.TestExpenseRepository;
 import server.Services.EventService;
@@ -130,4 +132,5 @@ class TestExpenseController {
         List<Expense> eventsSaved = sut.getAll();
         assertEquals(eventsSaved.get(0).getTitle(), "e2");
     }
+
 }
