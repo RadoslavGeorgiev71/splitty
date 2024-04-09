@@ -47,6 +47,10 @@ public class ParticipantTest {
         assertEquals("alice@gmail.com", p2.getEmail());
     }
     @Test
+    void testGetEmailNull() {
+        assertNull(p1.getEmail());
+    }
+    @Test
     void testGetIBAN() {
         assertEquals("NHJ201", p2.getIban());
     }

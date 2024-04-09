@@ -148,7 +148,12 @@ class ExpenseTest {
 
     @Test
     void getActivity() {
-        assertEquals("Ana paid 100.0 EUR for party", exp1.getActivity());
+        String[] activity = new String[4];
+        activity[0] = exp1.getPayingParticipant().getName();
+        activity[1] = String.valueOf(exp1.getAmount());
+        activity[2] = exp1.getCurrency();
+        activity[3] = exp1.getTitle();
+        assertArrayEquals(activity, exp1.getActivity());
     }
 
     @Test

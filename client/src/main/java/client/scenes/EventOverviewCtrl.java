@@ -27,6 +27,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.util.StringConverter;
 import javafx.collections.FXCollections;
 
@@ -210,8 +211,10 @@ public class EventOverviewCtrl {
     public void onStatisticsOpen() {
         if(event.getExpenses().isEmpty()) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("No expenses");
-            alert.setContentText("There are no expenses to be made statistics of!");
+            alert.setTitle(languageResourceBundle.getResourceBundle()
+                    .getString("noExpensesTitle"));
+            alert.setContentText(languageResourceBundle.getResourceBundle()
+                    .getString("noExpensesContent"));
             alert.showAndWait();
         }
         else {
@@ -302,28 +305,6 @@ public class EventOverviewCtrl {
     }
 
     /**
-     * Method to be executed when delete event button is clicked
-     */
-
-    @FXML
-    public void tabPaneAllClick() {
-        tabPaneAllGridPane.getChildren().clear();
-        tabPaneAllGridPane.setVgap(10);
-        tabPaneAllGridPane.setHgap(10);
-        double amount = 0;
-        if (event != null) {
-            for (int i = 0; i < event.getExpenses().size(); i++) {
-                Expense expense = foreignCurrency(event.getExpenses().get(i));
-                amount += expense.getAmount();
-                visualizeExpense(tabPaneAllGridPane, expense, i);
-            }
-            fromPersonTabName();
-            includingPersonTabName();
-            setAmount(amount);
-        }
-    }
-
-    /**
      * Get a label for the tag
      * @param i - the number of the row
      * @return the label
@@ -348,6 +329,28 @@ public class EventOverviewCtrl {
     }
 
     /**
+     * Method to be executed when delete event button is clicked
+     */
+
+    @FXML
+    public void tabPaneAllClick() {
+        tabPaneAllGridPane.getChildren().clear();
+        tabPaneAllGridPane.setVgap(10);
+        tabPaneAllGridPane.setHgap(10);
+        double amount = 0;
+        if (event != null) {
+            for (int i = 0; i < event.getExpenses().size(); i++) {
+                Expense expense = foreignCurrency(event.getExpenses().get(i));
+                amount += foreignCurrency(expense).getAmount();
+                visualizeExpense(tabPaneAllGridPane, expense, i);
+            }
+            fromPersonTabName();
+            includingPersonTabName();
+            setAmountText(amount);
+        }
+    }
+
+    /**
      * Method to be executed when tabPaneFromPerson is clicked
      */
 
@@ -364,13 +367,13 @@ public class EventOverviewCtrl {
                 Participant payingParticipant = expense.getPayingParticipant();
                 if (payingParticipant.equals(participantsMenu.
                         getSelectionModel().getSelectedItem())) {
-                    amount += expense.getAmount();
+                    amount += foreignCurrency(expense).getAmount();
                     visualizeExpense(tabPaneFromGridPane, expense, j++);
                 }
             }
             fromPersonTabName();
             includingPersonTabName();
-            setAmount(amount);
+            setAmountText(amount);
         }
     }
 
@@ -390,13 +393,13 @@ public class EventOverviewCtrl {
                 Participant participant = participantsMenu.getSelectionModel().getSelectedItem();
                 Expense expense = foreignCurrency(event.getExpenses().get(i));
                 if (expense.getParticipants().contains(participant)) {
-                    amount += expense.getAmount();
+                    amount += foreignCurrency(expense).getAmount();
                     visualizeExpense(tabPaneIncludingGridPane, expense, j++);
                 }
             }
             fromPersonTabName();
             includingPersonTabName();
-            setAmount(amount);
+            setAmountText(amount);
         }
     }
 
@@ -410,7 +413,7 @@ public class EventOverviewCtrl {
     @FXML
     private void visualizeExpense(GridPane gridPane, Expense expense, int i) {
         Label dateLabel = new Label(expense.getDateTime());
-        Label infoLabel = new Label(expense.getActivity());
+        Label infoLabel = new Label(infoLabelText(expense));
         Button editButton = new Button();
         Label tagLabel = getTagLabel(i);
         GridPane.setVgrow(editButton, Priority.ALWAYS); // Allow label to grow vertically
@@ -436,6 +439,23 @@ public class EventOverviewCtrl {
 
         editButton.setOnAction(event -> onEditExpenseClick(expense));
         setIcon("graypencil.png", editButton);
+    }
+
+    /**
+     * Creates a string containing the activity of the expense
+     * @param expense
+     * @return the activity of the expense
+     */
+    public String infoLabelText(Expense expense) {
+        String[] activity = expense.getActivity();
+        String infoLabelText = activity[0] + " ";
+        infoLabelText += languageResourceBundle.getResourceBundle().getString("paid");
+        infoLabelText += " " + activity[1] + " ";
+        infoLabelText += activity[2] + " ";
+        infoLabelText += languageResourceBundle.getResourceBundle().getString("for");
+        infoLabelText += " " + activity[3] + " ";
+
+        return infoLabelText;
     }
 
 
@@ -468,9 +488,11 @@ public class EventOverviewCtrl {
      */
 
     @FXML
-    public void setAmount(double amount) {
+    public void setAmountText(double amount) {
         // Will add the currency later
-        amountText.setText("Amount: " + amount);
+        amountText.setTextAlignment(TextAlignment.CENTER);
+        amountText.setText(languageResourceBundle.getResourceBundle().getString("amountText")
+                + ConfigClient.getCurrency() + amount);
     }
 
     /**
