@@ -10,8 +10,10 @@ import server.database.EventRepository;
 import server.database.ExpenseRepository;
 import server.database.ParticipantRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 @Service
 public class ParticipantService {
@@ -83,8 +85,8 @@ public class ParticipantService {
             Participant participant = participantRepo.findById(participantId).get();
             Event event = eventRepo.findAll().stream()
                 .filter(x -> x.getParticipants().contains(participant)).toList().getFirst();
-            List<Expense> expenses = event.getExpenses();
-            List<Debt> debtsToDelete = event.getSettledDebts();
+            List<Expense> expenses = new ArrayList<>(event.getExpenses());
+            List<Debt> debtsToDelete = new ArrayList<>(event.getSettledDebts());
             for(Expense expense : expenses) {
                 debtsToDelete.addAll(expense.getDebts());
             }
@@ -92,20 +94,25 @@ public class ParticipantService {
                 .filter(x -> x.getPersonPaying().equals(participant) ||
                     x.getPersonOwing().equals(participant)).toList();
 
-            for(int i = 0; i < expenses.size(); i++) {
-                expenses.get(i).getDebts().removeAll(debtsToDelete);
-                expenses.get(i).getParticipants().remove(participant);
-                if(expenses.get(i).getPayingParticipant().equals(participant)) {
-                    expenseRepo.delete(expenses.get(i));
+            for (Expense expense : expenses) {
+                expense.getDebts().removeAll(debtsToDelete);
+                expense.getParticipants().remove(participant);
+                if (expense.getPayingParticipant().equals(participant)) {
+                    event.removeExpense(expense);
+                    event = eventRepo.save(event);
+                    expenseRepo.delete(expense);
                 }
-                expenseRepo.save(expenses.get((i)));
+                else {
+                    expenseRepo.save(expense);
+                }
             }
-            event.getSettledDebts().removeAll(debtsToDelete);
-            eventRepo.save(event);
             for(Debt debt : debtsToDelete) {
                 debtRepo.deleteById(debt.getId());
             }
+            event.getSettledDebts().removeAll(debtsToDelete);
+            event.getParticipants().remove(participant);
             participantRepo.deleteById(participantId);
+            eventRepo.save(event);
             return true;
         } else {
             return false;

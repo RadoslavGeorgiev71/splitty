@@ -229,10 +229,10 @@ public class EditExpenseCtrl{
             if (alert.showAndWait().get() == ButtonType.OK){
                 Event undoEvent = event;
                 event.removeExpense(expense);
-                server.persistEvent(event);
                 server.deleteExpense(expense);
                 //server.deleteExpense(event.getId(), expense);
                 event = server.getEvent(event.getId());
+                server.persistEvent(event);
                 if(event != null){
                     mainCtrl.showEventOverview(event);
                 }
