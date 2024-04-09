@@ -148,7 +148,7 @@ public class EventController {
     }
 
     /**
-     * Route for JSON inport
+     * Route for JSON import
      * @param e event that was imported
      * @return event that has been added to DB
      */

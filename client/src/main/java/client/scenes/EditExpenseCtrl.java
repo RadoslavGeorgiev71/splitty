@@ -159,7 +159,7 @@ public class EditExpenseCtrl{
                 expense.setParticipants(participants);}
         }
         expense.setDateTime(datePicker.getValue().toString());
-        saveDebts(expense);
+        //saveDebts(expense);
         expense.setTag(tag);
         clearFields();
         server.persistEvent(event);

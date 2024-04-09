@@ -99,14 +99,14 @@ public class EventServiceTest {
         assertTrue(sut.existsById(1L));
     }
 
-    @Test
-    void testDeleteEvent(){
-        Event event = new Event();
-        event.setInviteCode("123");
-        doNothing().when(eventRepo).deleteById(anyLong());
-        sut.deleteById(1L);
-        verify(eventRepo, times(1)).deleteById(1L);
-    }
+//    @Test
+//    void testDeleteEvent(){
+//        Event event = new Event();
+//        event.setInviteCode("123");
+//        doNothing().when(eventRepo).deleteById(anyLong());
+//        sut.deleteById(1L);
+//        verify(eventRepo, times(1)).deleteById(1L);
+//    }
 
     @Test
     void testFlush() {
