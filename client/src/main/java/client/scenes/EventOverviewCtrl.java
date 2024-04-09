@@ -211,8 +211,10 @@ public class EventOverviewCtrl {
     public void onStatisticsOpen() {
         if(event.getExpenses().isEmpty()) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("No expenses");
-            alert.setContentText("There are no expenses to be made statistics of!");
+            alert.setTitle(languageResourceBundle.getResourceBundle()
+                    .getString("noExpensesTitle"));
+            alert.setContentText(languageResourceBundle.getResourceBundle()
+                    .getString("noExpensesContent"));
             alert.showAndWait();
         }
         else {
