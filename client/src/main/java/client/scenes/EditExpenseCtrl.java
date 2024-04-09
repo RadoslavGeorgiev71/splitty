@@ -3,19 +3,20 @@ package client.scenes;
 import client.utils.ConfigClient;
 import client.utils.LanguageResourceBundle;
 import client.utils.ServerUtils;
-import commons.Debt;
-import commons.Event;
-import commons.Expense;
-import commons.Participant;
+import commons.*;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
 import com.google.inject.Inject;
+import javafx.scene.layout.Background;
 import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.util.StringConverter;
 
@@ -33,7 +34,7 @@ public class EditExpenseCtrl{
     private Expense expense;
     private String currency;
     private List<Participant> participants;
-
+    private Tag tag;
 
     private LanguageResourceBundle languageResourceBundle;
 
@@ -56,7 +57,7 @@ public class EditExpenseCtrl{
     @FXML
     private GridPane allGridPane;
     @FXML
-    private TextField tags;                         //Expense Type
+    private Label tagLabel;                         //Expense Type
     @FXML
     private Button expenseSaveButton;
     @FXML
@@ -75,6 +76,8 @@ public class EditExpenseCtrl{
     private Label editExpenseHow;
     @FXML
     private Label editExpenseType;
+    @FXML
+    private Button removeTagButton;
 
     /**
      * Constructor for EditExpenseCtrl
@@ -98,6 +101,25 @@ public class EditExpenseCtrl{
     }
 
     /**
+     * Opens the tag scene
+     * when the tag button is clicked
+     * @param actionEvent -
+     */
+    public void onTagsClick(ActionEvent actionEvent) {
+        mainCtrl.showTags(event, expense, null, false, tag);
+    }
+
+    /**
+     * removes the tag from the expense
+     */
+    public void onTagRemove() {
+        tag = null;
+        tagLabel.setText("No tag");
+        tagLabel.setStyle("-fx-background-color: #F9F9F9");
+        removeTagButton.setVisible(false);
+    }
+
+    /**
      * Controller class for the ok button
      * Sends back to Overview Event window back with the participant altered
      * @param actionEvent to handle
@@ -106,10 +128,8 @@ public class EditExpenseCtrl{
         Event undoEvent = event;
         expense.setTitle(titleField.getText());
         expense.setPayingParticipant(payerChoiceBox.getSelectionModel().getSelectedItem());
-        saveAsEuro();
         try {
             expense.setAmount(Double.parseDouble(amountField.getText()));
-            expense.setCurrency(currChoiceBox.getSelectionModel().getSelectedItem().toString());
         } catch (NumberFormatException e) {
             Alert alert =  new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Invalid Input");
@@ -119,24 +139,29 @@ public class EditExpenseCtrl{
             alert.showAndWait();
             return;
         }
+        expense.setCurrency(currChoiceBox.getSelectionModel().getSelectedItem().toString());
         if(equally.isSelected() || participants.size() == event.getParticipants().size()){
             expense.setParticipants(event.getParticipants());
         }
         else{
-            if(participants == null || participants.size() == 0){
-                Alert alert =  new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Invalid Input");
-                alert.setHeaderText("Participants cannot be empty");
-                alert.setContentText("You must select " +
-                        "at least 1 participant");
-                alert.showAndWait();
-                return;
-            }
-            else{
-                expense.setParticipants(participants);}
+            expense.setParticipants(participants);
         }
         expense.setDateTime(datePicker.getValue().toString());
-        saveDebts(expense);
+        for(Debt debt : expense.getDebts()) {
+            server.deleteDebt(debt);
+        }
+        for(Participant participant : expense.getParticipants()) {
+            if(participant.equals(expense.getPayingParticipant())) {
+                continue;
+            }
+            Debt debt = new Debt(expense.getPayingParticipant(), participant,
+                expense.getAmount() / (expense.getParticipants().size()));
+            expense.add(debt);
+            server.addDebt(debt);
+        }
+        expense.setTag(tag);
+        //server.updateExpense(event.getId(), expense);
+        //server.persistExpense(expense);
         clearFields();
         server.persistEvent(event);
         event = server.getEvent(event.getId());
@@ -145,24 +170,6 @@ public class EditExpenseCtrl{
         }
         else{
             mainCtrl.showEventOverview(undoEvent);
-        }
-    }
-
-    /**
-     * @param expense
-     */
-    public void saveDebts(Expense expense){
-        for(Debt debt : expense.getDebts()) {
-            //server.deleteDebt(debt);
-        }
-        for(Participant participant : expense.getParticipants()) {
-            if(participant.equals(expense.getPayingParticipant())) {
-                continue;
-            }
-            Debt debt = new Debt(expense.getPayingParticipant(), participant,
-                    expense.getAmount() / (expense.getParticipants().size()));
-            //expense.add(debt);
-            //server.addDebt(debt);
         }
     }
 
@@ -180,7 +187,7 @@ public class EditExpenseCtrl{
                     this.expense.getTitle() + "?");
 
             for(Debt debt : expense.getDebts()) {
-                //server.deleteDebt(debt);
+                server.deleteDebt(debt);
             }
 
             if (alert.showAndWait().get() == ButtonType.OK){
@@ -211,7 +218,6 @@ public class EditExpenseCtrl{
         equally.setSelected(true);
         onlySome.setSelected(false);
         allGridPane.getChildren().clear();
-        tags.clear();
     }
 
     /**
@@ -244,6 +250,14 @@ public class EditExpenseCtrl{
      */
     public void setParticipants(List<Participant> participants) {
         this.participants = participants;
+    }
+
+    /**
+     * Setter for tag
+     * @param tag - the tag to be set
+     */
+    public void setTag(Tag tag) {
+        this.tag = tag;
     }
 
 
@@ -280,7 +294,7 @@ public class EditExpenseCtrl{
     private void moveToNextTextField(TextField currentTextField) {
         // Find the index of the current text field
         int index = -1;
-        TextField[] textFields = {titleField, amountField, tags}; // Add all text fields here
+        TextField[] textFields = {titleField, amountField}; // Add all text fields here
         for (int i = 0; i < textFields.length; i++) {
             if (textFields[i] == currentTextField) {
                 index = i;
@@ -357,24 +371,6 @@ public class EditExpenseCtrl{
     }
 
     /**
-     *  converted currency to save to server as EUR
-     */
-    public void saveAsEuro(){
-        boolean yes = false;
-        if(!yes){
-            return;
-        }
-        Double res = Double.parseDouble(amountField.getText());
-        res *= server.convertRate(datePicker.getValue().toString(),
-                currChoiceBox.getSelectionModel().getSelectedItem().toString(),
-                "EUR");
-        DecimalFormat df = new DecimalFormat("#.##");
-        res = Double.valueOf(df.format(res));
-        expense.setAmount(res);
-        expense.setCurrency("EUR");
-    }
-
-    /**
      * Initiallizes the payer choice box with the data
      */
     public void initializePayer() {
@@ -401,8 +397,16 @@ public class EditExpenseCtrl{
                 }
             });
             int i = 0;
-            Participant name = expense.getPayingParticipant();
-            payerChoiceBox.getSelectionModel().select(name);
+            String name = expense.getPayingParticipant().getName();
+            List<Participant> people = event.getParticipants();
+            while (i < people.size() && !people.get(i).getName().equals(name)) {
+                i++;
+            }
+            if (i <= event.getParticipants().size()) {
+                payerChoiceBox.getSelectionModel().select(i);
+            } else {
+                payerChoiceBox.getSelectionModel().selectFirst();
+            }
         }
     }
 
@@ -433,7 +437,6 @@ public class EditExpenseCtrl{
      */
     public void initialize() {
         if(event != null){
-
             languageResourceBundle = LanguageResourceBundle.getInstance();
             switchTextLanguage();
             initializePayer();
@@ -455,7 +458,37 @@ public class EditExpenseCtrl{
                 equally.setSelected(false);
                 onlySome.setSelected(true);
             }
+            configureTagElements();
             onlySomeChecked();
+        }
+    }
+
+    /**
+     * Configures the tag label and remove button
+     */
+    private void configureTagElements() {
+        tagLabel.setMinHeight(20);
+        tagLabel.setMinWidth(40);
+        tagLabel.setAlignment(Pos.CENTER);
+        FontAwesomeIconView closeIcon = new FontAwesomeIconView();
+        closeIcon.setGlyphName("TIMES");
+        closeIcon.setSize("8");
+        removeTagButton.setGraphic(closeIcon);
+        if(tag != null) {
+            tagLabel.setText(tag.getType());
+            tagLabel.setBackground(Background.fill(Color.web(tag.getColor())));
+            if(Color.web(tag.getColor()).getBrightness() < 0.5) {
+                tagLabel.setStyle("-fx-text-fill: white");
+            }
+            else {
+                tagLabel.setStyle("-fx-text-fill: black");
+            }
+            removeTagButton.setVisible(true);
+        }
+        else {
+            tagLabel.setText("No tag");
+            tagLabel.setStyle("-fx-background-color: #F9F9F9");
+            removeTagButton.setVisible(false);
         }
     }
 

@@ -19,6 +19,7 @@ import client.utils.ConfigClient;
 import commons.Event;
 import commons.Expense;
 import commons.Participant;
+import commons.Tag;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -56,6 +57,12 @@ public class MainCtrl {
     private UserSettingsCtrl userSettingsCtrl;
     private Scene usersettings;
 
+    private TagCtrl tagCtrl;
+    private Scene tags;
+
+    private StatisticsCtrl statisticsCtrl;
+    private Scene statistics;
+
     /**
      * Initializes stage
      * @param primaryStage
@@ -68,6 +75,8 @@ public class MainCtrl {
      * @param startscreen
      * @param invitation
      * @param usersettings
+     * @param tags
+     * @param statistics
      */
     public void initialize(Stage primaryStage,
                            Pair<EditParticipantCtrl, Parent> editparticipant,
@@ -78,11 +87,12 @@ public class MainCtrl {
                            Pair<OpenDebtsCtrl, Parent> opendebts,
                            Pair<StartScreenCtrl, Parent> startscreen,
                            Pair<InvitationCtrl, Parent> invitation,
-                           Pair<UserSettingsCtrl, Parent> usersettings
+                           Pair<UserSettingsCtrl, Parent> usersettings,
+                           Pair<TagCtrl, Parent> tags,
+                           Pair<StatisticsCtrl, Parent> statistics
                            ) {
 
         this.primaryStage = primaryStage;
-
 
         this.editParticipantCtrl = editparticipant.getKey();
         this.editparticipant = new Scene(editparticipant.getValue());
@@ -110,6 +120,12 @@ public class MainCtrl {
 
         this.userSettingsCtrl = usersettings.getKey();
         this.usersettings = new Scene(usersettings.getValue());
+
+        this.tagCtrl = tags.getKey();
+        this.tags = new Scene(tags.getValue());
+
+        this.statisticsCtrl = statistics.getKey();
+        this.statistics = new Scene(statistics.getValue());
 
         showStartScreen();
         primaryStage.show();
@@ -163,6 +179,25 @@ public class MainCtrl {
         primaryStage.setScene(eventoverview);
     }
 
+
+    /**
+     * Switches the scene to the add expense window
+     * @param event - takes an event as a parameter for which we add a participant
+     * @param participant - that adds expense
+     * @param tag - the tag to be set
+     */
+    public void showAddExpenseWithTag(Event event, Participant participant, Tag tag) {
+        primaryStage.setTitle("Add Expense");
+        addExpenseCtrl.setEvent(event);
+        ConfigClient configClient =  new ConfigClient();
+        configClient.readFromFile("config.txt");
+        addExpenseCtrl.setCurrency(ConfigClient.getCurrency());
+        addExpenseCtrl.setParticipant(participant);
+        addExpenseCtrl.setTag(tag);
+        addExpenseCtrl.initialize();
+        primaryStage.setScene(addexpense);
+    }
+
     /**
      * Switches the scene to the add expense window
      * @param event - takes an event as a parameter for which we add a participant
@@ -192,6 +227,20 @@ public class MainCtrl {
         editExpenseCtrl.initialize();
     }
 
+    /**
+     * Switches the scene to the edit participant window
+     * @param event takes an event as a parameter for which we edit an expense
+     * @param expense takes the expense as a parameter to edit
+     * @param tag - the tag to be set
+     */
+    public void showEditExpenseWithTag(Event event, Expense expense, Tag tag) {
+        primaryStage.setTitle("Edit Expense");
+        primaryStage.setScene(editexpense);
+        editExpenseCtrl.setEvent(event);
+        editExpenseCtrl.setExpense(expense);
+        editExpenseCtrl.setTag(tag);
+        editExpenseCtrl.initialize();
+    }
 
     /**
      * Switches the scene to the open debts window
@@ -223,6 +272,37 @@ public class MainCtrl {
         primaryStage.setTitle("User Settings");
         userSettingsCtrl.initialize();
         primaryStage.setScene(usersettings);
+    }
+
+    /**
+     * Switches the scene to add/edit tag
+     * @param event
+     * @param expense
+     * @param participant
+     * @param isAddExpense
+     * @param tag
+     */
+    public void showTags(Event event, Expense expense,
+                         Participant participant, boolean isAddExpense, Tag tag) {
+        primaryStage.setTitle("Tags");
+        tagCtrl.setExpense(expense);
+        tagCtrl.setEvent(event);
+        tagCtrl.setParticipant(participant);
+        tagCtrl.setIsExpenseTrue(isAddExpense);
+        tagCtrl.setTagOnFocus(tag);
+        tagCtrl.initialize();
+        primaryStage.setScene(tags);
+    }
+
+    /**
+     * Switches to the statistics scene
+     * @param event - the event for the statistics
+     */
+    public void showStatistics(Event event) {
+        primaryStage.setTitle("Statistics");
+        statisticsCtrl.setEvent(event);
+        statisticsCtrl.initialize();
+        primaryStage.setScene(statistics);
     }
 
     /**

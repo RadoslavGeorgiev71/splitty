@@ -11,13 +11,14 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane onKeyPressed="#keyPressed" prefHeight="400.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.EditExpenseCtrl">
+<AnchorPane onKeyPressed="#keyPressed" prefHeight="404.0" prefWidth="301.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.EditExpenseCtrl">
     <children>
         <VBox layoutY="1.0" prefHeight="389.0" prefWidth="280.0" spacing="10.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="1.0">
             <children>
@@ -102,7 +103,7 @@
                   <RadioButton fx:id="onlySome" mnemonicParsing="false" onAction="#onlySomeChecked" text="Only Some" toggleGroup="$split" GridPane.columnIndex="2" />
                </children>
             </GridPane>
-                <Pane prefHeight="200.0" prefWidth="200.0">
+                <Pane prefHeight="95.0" prefWidth="259.0">
                     <children>
                         <GridPane fx:id="allGridPane" layoutY="9.0" prefHeight="10.0" prefWidth="260.0">
                             <rowConstraints>
@@ -115,8 +116,25 @@
                         </GridPane>
                     </children>
                 </Pane>
-                <Label fx:id="editExpenseType" text="Expense Type" />
-                <TextField fx:id="tags" onKeyPressed="#keyPressed" />
+            <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="38.0" prefWidth="259.0" style="-fx-border-color: black; -fx-border-width: 0.25px;">
+               <children>
+                  <Label fx:id="editExpenseType" layoutX="14.0" layoutY="11.0" text="Expense Type" />
+                  <Button fx:id="tagButton" layoutX="204.0" layoutY="5.0" mnemonicParsing="false" onAction="#onTagsClick" text="Tags" />
+                  <HBox alignment="CENTER" layoutX="92.0" layoutY="10.0" prefHeight="19.0" prefWidth="104.0">
+                     <children>
+                        <Label fx:id="tagLabel" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" text="No tag" />
+                        <Button fx:id="removeTagButton" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onTagRemove" prefHeight="17.0" prefWidth="16.0">
+                           <HBox.margin>
+                              <Insets left="5.0" />
+                           </HBox.margin>
+                        </Button>
+                     </children>
+                  </HBox>
+               </children>
+               <VBox.margin>
+                  <Insets bottom="10.0" />
+               </VBox.margin>
+            </Pane>
                 <GridPane alignment="TOP_RIGHT">
                     <columnConstraints>
                         <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="81.5" minWidth="10.0" prefWidth="68.5" />

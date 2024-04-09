@@ -8,16 +8,20 @@ import com.google.inject.Inject;
 import commons.Event;
 import commons.Expense;
 import commons.Participant;
+import commons.Tag;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.geometry.Side;
 import javafx.scene.control.*;
 
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Background;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.util.StringConverter;
 import javafx.collections.FXCollections;
@@ -154,7 +158,7 @@ public class EventOverviewCtrl {
     @FXML
     public void onAddExpenseClick() {
         Participant p = participantsMenu.getValue();
-        mainCtrl.showAddExpense(this.event, p);
+        mainCtrl.showAddExpenseWithTag(this.event, p, null);
     }
 
     /**
@@ -164,7 +168,7 @@ public class EventOverviewCtrl {
 
     @FXML
     public void onEditExpenseClick(Expense expense) {
-        mainCtrl.showEditExpense(this.event, expense);
+        mainCtrl.showEditExpenseWithTag(this.event, expense, expense.getTag());
     }
 
     /**
@@ -174,6 +178,22 @@ public class EventOverviewCtrl {
     @FXML
     public void onSettleDebtsClick() {
         mainCtrl.showOpenDebts(event);
+    }
+
+    /**
+     * Opens the statistics page for the event
+     */
+    @FXML
+    public void onStatisticsOpen() {
+        if(event.getExpenses().isEmpty()) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("No expenses");
+            alert.setContentText("There are no expenses to be made statistics of!");
+            alert.showAndWait();
+        }
+        else {
+            mainCtrl.showStatistics(event);
+        }
     }
 
     /**
@@ -245,6 +265,7 @@ public class EventOverviewCtrl {
                 Label dateLabel = new Label(event.getExpenses().get(i).getDateTime());
                 Label nameLabel = new Label(show.getActivity());
                 nameLabel.setWrapText(true); // Wrap text to prevent truncation
+                Label tagLabel = getTagLabel(i);
                 Button editButton = new Button("Edit");
 
                 // Set fixed column widths
@@ -256,13 +277,38 @@ public class EventOverviewCtrl {
 
                 tabPaneAllGridPane.add(dateLabel, 0, i);
                 tabPaneAllGridPane.add(nameLabel, 1, i);
-                tabPaneAllGridPane.add(editButton, 2, i);
+                tabPaneAllGridPane.add(tagLabel, 2, i);
+                tabPaneAllGridPane.add(editButton, 3, i);
 
                 Expense expense = event.getExpenses().get(i);
                 editButton.setOnAction(event -> onEditExpenseClick(expense));
             }
             fromPersonTabName();
         }
+    }
+
+    /**
+     * Get a label for the tag
+     * @param i - the number of the row
+     * @return the label
+     */
+    private Label getTagLabel(int i) {
+        Tag tag = event.getExpenses().get(i).getTag();
+        Label tagLabel = new Label();
+        if(tag != null) {
+            tagLabel = new Label(tag.getType());
+            tagLabel.setBackground(Background.fill(Color.web(tag.getColor())));
+            if(Color.web(tag.getColor()).getBrightness() < 0.5) {
+                tagLabel.setStyle("-fx-text-fill: white; -fx-border-color: black");
+            }
+            else {
+                tagLabel.setStyle("-fx-text-fill: black; -fx-border-color: black");
+            }
+        }
+        tagLabel.setMinHeight(20);
+        tagLabel.setMinWidth(80);
+        tagLabel.setAlignment(Pos.CENTER);
+        return tagLabel;
     }
 
     /**
@@ -284,6 +330,7 @@ public class EventOverviewCtrl {
                     Label dateLabel = new Label(event.getExpenses().get(i).getDateTime());
                     Label nameLabel = new Label(show.getActivity());
                     nameLabel.setWrapText(true); // Wrap text to prevent truncation
+                    Label tagLabel = getTagLabel(j);
                     Button editButton = new Button("Edit");
 
                     // Set fixed column widths
@@ -295,10 +342,12 @@ public class EventOverviewCtrl {
 
                     tabPaneFromGridPane.add(dateLabel, 0, j);
                     tabPaneFromGridPane.add(nameLabel, 1, j);
-                    tabPaneFromGridPane.add(editButton, 2, j++);
+                    tabPaneFromGridPane.add(tagLabel, 2, j);
+                    tabPaneFromGridPane.add(editButton, 3, j++);
 
                     Expense expensei = event.getExpenses().get(i);
-                    editButton.setOnAction(event -> onEditExpenseClick(expensei));                }
+                    editButton.setOnAction(event -> onEditExpenseClick(expensei));                
+                }
             }
         }
     }
@@ -323,6 +372,7 @@ public class EventOverviewCtrl {
                     Label dateLabel = new Label(event.getExpenses().get(i).getDateTime());
                     Label nameLabel = new Label(show.getActivity());
                     nameLabel.setWrapText(true); // Wrap text to prevent truncation
+                    Label tagLabel = getTagLabel(j);
                     Button editButton = new Button("Edit");
 
                     editButton.setOnAction(event -> {
@@ -338,7 +388,8 @@ public class EventOverviewCtrl {
 
                     tabPaneIncludingGridPane.add(dateLabel, 0, j);
                     tabPaneIncludingGridPane.add(nameLabel, 1, j);
-                    tabPaneIncludingGridPane.add(editButton, 2, j++);
+                    tabPaneIncludingGridPane.add(tagLabel, 2, j);
+                    tabPaneIncludingGridPane.add(editButton, 3, j++);
 
                     Expense expensei = event.getExpenses().get(i);
                     editButton.setOnAction(event -> onEditExpenseClick(expensei));
@@ -504,7 +555,7 @@ public class EventOverviewCtrl {
             participatingParticipants();
             fromPersonTabName();
             includingPersonTabName();
-            participantsMenu.setOnAction(event -> {
+            participantsMenu.setOnAction(e -> {
                 fromPersonTabName();
                 includingPersonTabName();
             });
@@ -552,5 +603,12 @@ public class EventOverviewCtrl {
             default:
                 break;
         }
+    }
+
+    /**
+     * Stop the thread
+     */
+    public void stop() {
+        server.stop();
     }
 }
