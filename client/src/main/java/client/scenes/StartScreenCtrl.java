@@ -195,7 +195,8 @@ public class StartScreenCtrl {
             Event event = new Event();
             event.setTitle(title);
             event.createInviteCode();
-            if (ConfigClient.getName() != null && !ConfigClient.getName().equals("")){
+            if (ConfigClient.getName() != null && !ConfigClient.getName().equals("") &&
+                    !ConfigClient.getName().equals("null")){
                 Participant participant = getParticipantInfo();
                 event.addParticipant(participant);
             }
@@ -218,13 +219,16 @@ public class StartScreenCtrl {
     private static Participant getParticipantInfo() {
         Participant participant = new Participant();
         participant.setName(ConfigClient.getName());
-        if(ConfigClient.getEmail() != null && !ConfigClient.getEmail().equals("")){
+        if(ConfigClient.getEmail() != null && !ConfigClient.getEmail().equals("")
+            && !ConfigClient.getEmail().equals("null")){
             participant.setEmail(ConfigClient.getEmail());
         }
-        if(ConfigClient.getBic() != null && !ConfigClient.getBic().equals("")){
+        if(ConfigClient.getBic() != null && !ConfigClient.getBic().equals("")
+            && !ConfigClient.getBic().equals("null")){
             participant.setBic(ConfigClient.getBic());
         }
-        if(ConfigClient.getIban() != null && !ConfigClient.getIban().equals("")){
+        if(ConfigClient.getIban() != null && !ConfigClient.getIban().equals("")
+            && !ConfigClient.getIban().equals("null")){
             participant.setIban(ConfigClient.getIban());
         }
         return participant;

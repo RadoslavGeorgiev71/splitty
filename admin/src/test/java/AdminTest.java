@@ -85,7 +85,8 @@ class AdminTest {
                         .withPath("/api/admin/")
         ).respond(
                 HttpResponse.response()
-                        .withStatusCode(200)
+                        .withStatusCode(400)
+                        .withDelay(TimeUnit.SECONDS, 10) //simulate timeout which leads to processing error
         );
         boolean result = admin.generatePassword();
         assertFalse(result);
@@ -104,7 +105,7 @@ class AdminTest {
                         .withPath("/api/admin/")
         ).respond(
                 HttpResponse.response()
-                        .withStatusCode(200)
+                        .withStatusCode(400)
                         .withDelay(TimeUnit.SECONDS, 10) //simulate timeout which leads to processing error
         );
         boolean result = admin.login("random");

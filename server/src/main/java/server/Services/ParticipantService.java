@@ -108,4 +108,11 @@ public class ParticipantService {
         Optional<Participant> participantOptional = participantRepo.findById(participantId);
         return participantOptional;
     }
+
+    /**
+     * Method to flush the participant repository
+     */
+    public void flush() {
+        participantRepo.flush();
+    }
 }

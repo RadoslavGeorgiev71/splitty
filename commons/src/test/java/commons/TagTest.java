@@ -69,4 +69,9 @@ public class TagTest {
     void testHashCode() {
         assertEquals(t2.hashCode(), t3.hashCode());
     }
+
+    @Test
+    void getId() {
+        assertNotNull(t1.getId());
+    }
 }

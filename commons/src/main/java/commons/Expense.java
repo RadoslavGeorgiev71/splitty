@@ -260,9 +260,13 @@ public class Expense {
      * @return activity
      */
     @JsonIgnore
-    public String getActivity() {
-        return this.payingParticipant.getName() + " paid " + this.getAmount() +
-                " " + this.currency + " for " + this.getTitle();
+    public String[] getActivity() {
+        String[] activity = new String[4];
+        activity[0] = this.payingParticipant.getName();
+        activity[1] = String.valueOf(this.getAmount());
+        activity[2] = this.getCurrency();
+        activity[3] = this.getTitle();
+        return activity;
     }
 
     /**
