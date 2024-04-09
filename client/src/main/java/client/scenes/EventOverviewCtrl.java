@@ -472,7 +472,8 @@ public class EventOverviewCtrl {
     public void setAmountText(double amount) {
         // Will add the currency later
         amountText.setTextAlignment(TextAlignment.CENTER);
-        amountText.setText("Amount: " + ConfigClient.getCurrency() + amount);
+        amountText.setText(languageResourceBundle.getResourceBundle().getString("amountText")
+                + ConfigClient.getCurrency() + amount);
     }
 
     /**
