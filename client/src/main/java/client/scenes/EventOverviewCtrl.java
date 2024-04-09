@@ -439,6 +439,11 @@ public class EventOverviewCtrl {
         setIcon("graypencil.png", editButton);
     }
 
+    /**
+     * Creates a string containing the activity of the expense
+     * @param expense
+     * @return the activity of the expense
+     */
     public String infoLabelText(Expense expense) {
         String[] activity = expense.getActivity();
         String infoLabelText = activity[0] + " ";
