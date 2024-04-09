@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import server.Repositories.TestParticipantRepository;
 import server.Services.ParticipantService;
 import server.api.ParticipantController;
+import server.database.DebtRepository;
 import server.database.ParticipantRepository;
 
 import java.util.ArrayList;
@@ -27,7 +28,7 @@ public class TestParticipantController {
     @BeforeEach
     void participantControllerSetUp() {
         participantRepo = new TestParticipantRepository();
-        participantService = new ParticipantService(participantRepo);
+        participantService = new ParticipantService(participantRepo, null, null);
         sut = new ParticipantController(participantService);
     }
 
