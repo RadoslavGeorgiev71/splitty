@@ -497,6 +497,9 @@ public class EditExpenseCtrl{
         setAllIcons();
     }
 
+    /**
+     * Sets all the icons to their respective buttons
+     */
     public void setAllIcons() {
         setIcon("trashicon.png", expenseDeleteButton);
         setIcon("saveicon.png", expenseSaveButton);
