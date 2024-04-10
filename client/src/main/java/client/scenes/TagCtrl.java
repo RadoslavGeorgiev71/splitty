@@ -241,7 +241,17 @@ public class TagCtrl {
         alert.setContentText("Are you sure you want to delete this tag?");
         // TODO: translate the alert
         alert.showAndWait().ifPresent(response -> {
-            if(response == ButtonType.OK) {
+            if (response == ButtonType.OK) {
+//                for (Expense currExpense : event.getExpenses()) {
+//                    if (currExpense.getTag().equals(tagOnFocus)) {
+//                        currExpense.setTag(null);
+//                    }
+//                }
+                if(expense != null && expense.getTag() != null &&
+                    expense.getTag().equals(tagOnFocus)) {
+                    expense.setTag(null);
+                }
+                event = server.persistEvent(event);
                 server.deleteTag(tagOnFocus);
                 tagOnFocus = null;
                 mainCtrl.showTags(event, expense, participant, isAddExpense, tagOnFocus);

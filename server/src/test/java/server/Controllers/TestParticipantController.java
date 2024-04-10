@@ -1,14 +1,21 @@
 package server.Controllers;
 
+import commons.Event;
 import commons.Participant;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import server.Repositories.TestDebtRepository;
+import server.Repositories.TestEventRepository;
+import server.Repositories.TestExpenseRepository;
 import server.Repositories.TestParticipantRepository;
 import server.Services.ParticipantService;
 import server.api.ParticipantController;
+import server.database.DebtRepository;
+import server.database.EventRepository;
+import server.database.ExpenseRepository;
 import server.database.ParticipantRepository;
 
 import java.util.ArrayList;
@@ -22,12 +29,22 @@ public class TestParticipantController {
     private ParticipantRepository participantRepo;
     @Mock
     private ParticipantService participantService;
+    @Mock
+    private DebtRepository debtRepo;
+    @Mock
+    private ExpenseRepository expenseRepo;
+    @Mock
+    private EventRepository eventRepo;
     private ParticipantController sut;
 
     @BeforeEach
     void participantControllerSetUp() {
         participantRepo = new TestParticipantRepository();
-        participantService = new ParticipantService(participantRepo);
+        debtRepo = new TestDebtRepository();
+        expenseRepo = new TestExpenseRepository();
+        eventRepo = new TestEventRepository();
+        participantService = new ParticipantService(participantRepo, debtRepo,
+            expenseRepo, eventRepo);
         sut = new ParticipantController(participantService);
     }
 
@@ -78,7 +95,10 @@ public class TestParticipantController {
 
     @Test
     void testDelete() {
+        Event event = new Event();
         Participant p1 = new Participant("Ana");
+        event.addParticipant(p1);
+        eventRepo.save(event);
         Participant participantSaved = participantService.create(p1);
         ResponseEntity<?> response = sut.delete(participantSaved.getId());
         assertEquals(response.getStatusCode(), HttpStatus.OK);

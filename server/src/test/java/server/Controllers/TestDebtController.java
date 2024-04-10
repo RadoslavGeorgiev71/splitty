@@ -3,6 +3,7 @@ package server.Controllers;
 
 import commons.Debt;
 import commons.Event;
+import commons.Expense;
 import commons.Participant;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -134,10 +135,19 @@ public class TestDebtController {
 
     @Test
     void testDelete() {
+        Event event = new Event();
         Participant p1 = new Participant("Bob");
         Participant p2 = new Participant("Ana");
+        event.addParticipant(p1);
+        event.addParticipant(p2);
+        Expense expense = new Expense();
+        expense.setPayingParticipant(p1);
+        expense.setPayingParticipant(p2);
         Debt debt = new Debt(p1, p2, 100);
-        debt = debtService.add(debt);
+        expense.add(debt);
+        event.addExpense(expense);
+        eventRepo.save(event);
+        debtService.add(debt);
         ResponseEntity<String> response = sut.delete(debt.getId());
         assertEquals(response.getBody(), "Successful delete");
     }
