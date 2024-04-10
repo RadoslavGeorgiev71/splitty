@@ -76,9 +76,8 @@ public class AddParticipantCtrl {
         participant.setBic(bicField.getText());
         //server.addParticipant(participant);
         event.addParticipant(participant);
-        server.persistEvent(event);
         clearFields();
-        event = server.getEvent(event.getId());
+        event = server.persistEvent(event);
         if(event != null){
             mainCtrl.showEventOverview(event);
         }

@@ -70,7 +70,7 @@ public class EventService {
      * Method to update an event
      * @param id The id of the event to be updated
      * @param updatedEvent The already updated event object
-     * @return A event object which reflects the one that was just persisted
+     * @return an event object which reflects the one that was just persisted
      */
     public Event update(long id, Event updatedEvent){
         Optional<Event> existingEvent = eventRepo.findById(id);

@@ -183,7 +183,7 @@ public class AddExpenseCtrl{
             Debt debt = new Debt(expense.getPayingParticipant(), participant,
                     expense.getAmount() / (expense.getParticipants().size()));
             expense.add(debt);
-            //server.addDebt(debt);
+//            server.addDebt(debt);
         }
     }
 
@@ -422,7 +422,7 @@ public class AddExpenseCtrl{
             closeIcon.setGlyphName("TIMES");
             closeIcon.setSize("8");
             removeTagButton.setGraphic(closeIcon);
-            extracted();
+            configureTagInformation();
             this.participants = new ArrayList<>();
         }
     }
@@ -430,7 +430,7 @@ public class AddExpenseCtrl{
     /**
      * Configures the tag label and remove button
      */
-    private void extracted() {
+    private void configureTagInformation() {
         if(tag != null) {
             tagLabel.setText(tag.getType());
             tagLabel.setBackground(Background.fill(Color.web(tag.getColor())));

@@ -179,6 +179,7 @@ public class EditExpenseCtrl{
         for(Debt debt : expense.getDebts()) {
             server.deleteDebt(debt);
         }
+        expense.setDebts(new ArrayList<>());
         for(Participant participant : expense.getParticipants()) {
             if(participant.equals(expense.getPayingParticipant())) {
                 continue;
@@ -186,7 +187,7 @@ public class EditExpenseCtrl{
             Debt debt = new Debt(expense.getPayingParticipant(), participant,
                     expense.getAmount() / (expense.getParticipants().size()));
             expense.add(debt);
-            server.addDebt(debt);
+//            server.addDebt(debt);
         }
     }
 
@@ -228,10 +229,10 @@ public class EditExpenseCtrl{
             if (alert.showAndWait().get() == ButtonType.OK){
                 Event undoEvent = event;
                 event.removeExpense(expense);
-                server.persistEvent(event);
-                //server.deleteExpense(expense);
+                server.deleteExpense(expense);
                 //server.deleteExpense(event.getId(), expense);
                 event = server.getEvent(event.getId());
+                server.persistEvent(event);
                 if(event != null){
                     mainCtrl.showEventOverview(event);
                 }
