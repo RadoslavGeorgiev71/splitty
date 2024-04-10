@@ -19,7 +19,7 @@ public class Debt {
     private Participant personOwing;
     private double amount;
     private boolean paid;
-    private LocalDateTime paidDateTime;
+    private String paidDateTime;
 
     /**
      * Empty constructor for the class
@@ -104,9 +104,9 @@ public class Debt {
      * The getter will instead return LocalDateTime.MIN to avoid
      * NullPointerException
      */
-    public LocalDateTime getPaidDateTime() {
+    public String getPaidDateTime() {
         if (paidDateTime == null) {
-            return LocalDateTime.MIN;
+            return LocalDateTime.now().toString();
         }
         return paidDateTime;
     }
@@ -155,7 +155,7 @@ public class Debt {
      * Setter for paidDateTime
      * @param paidDateTime Set the time at which the debt was paid
      */
-    public void setPaidDateTime(LocalDateTime paidDateTime) {
+    public void setPaidDateTime(String paidDateTime) {
         this.paidDateTime = paidDateTime;
     }
 

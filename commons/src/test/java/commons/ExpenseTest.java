@@ -209,4 +209,22 @@ class ExpenseTest {
         exp4.setCurrency("CHF");
         assertEquals(exp4.getCurrency(), "CHF");
     }
+
+    @Test
+    void getTag() {
+        Expense exp4 = new Expense("party", a, 100, "EUR", list, "2/25/2024");
+        Tag t = new Tag("tag" , "tag green");
+        exp4.setTag(t);
+        assertNotNull(exp4.getTag());
+        assertEquals(t, exp4.getTag());
+    }
+
+    @Test
+    void setTag() {
+        Expense exp4 = new Expense("party", a, 100, "EUR", list, "2/25/2024");
+        Tag t = new Tag("tag" , "tag green");
+        exp4.setTag(t);
+        assertNotNull(exp4.getTag());
+        assertEquals(t, exp4.getTag());
+    }
 }

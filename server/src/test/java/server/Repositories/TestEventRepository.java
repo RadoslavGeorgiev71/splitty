@@ -150,7 +150,7 @@ public class TestEventRepository implements EventRepository {
      */
     @Override
     public <S extends Event> List<S> findAll(Example<S> example) {
-        return null;
+        return (List<S>) events;
     }
 
     /**
@@ -240,7 +240,7 @@ public class TestEventRepository implements EventRepository {
      */
     @Override
     public List<Event> findAll() {
-        return null;
+        return events;
     }
 
     /**

@@ -21,7 +21,7 @@ public class TagServiceTest {
     @BeforeEach
     void TagServiceSetUp() {
         tagRepo = new TestTagRepository();
-        sut = new TagService(tagRepo);
+        sut = new TagService(tagRepo, null, null);
     }
 
     @Test

@@ -147,7 +147,7 @@ public class ExpenseController {
      * @return "Successful delete" response
      * if delete was successful, "Bad request" otherwise
      */
-    @DeleteMapping(path = {"/id/{id}"})
+    @DeleteMapping(path = {"/{id}"})
     public ResponseEntity<?> delete(@PathVariable("id") long id) {
         if (!expenseService.existsById(id)) {
             return ResponseEntity.badRequest().build();

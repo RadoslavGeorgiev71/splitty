@@ -209,10 +209,10 @@ public class EditParticipantCtrl {
             if (alert.showAndWait().get() == ButtonType.OK){
                 Event undoEvent = event;
                 event.removeParticipant(participant);
-                updateExpenses();
-                server.persistEvent(event);
                 server.deleteParticipant(participant);
+                updateExpenses();
                 event = server.getEvent(event.getId());
+                server.persistEvent(event);
                 if(event != null){
                     mainCtrl.showEventOverview(event);
                 }

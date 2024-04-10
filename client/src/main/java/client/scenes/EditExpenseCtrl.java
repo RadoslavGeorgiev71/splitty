@@ -136,6 +136,8 @@ public class EditExpenseCtrl{
         expense.setPayingParticipant(payerChoiceBox.getSelectionModel().getSelectedItem());
         try {
             expense.setAmount(Double.parseDouble(amountField.getText()));
+            expense.setCurrency(currChoiceBox.getSelectionModel().getSelectedItem().toString());
+            saveAsEuro();
         } catch (NumberFormatException e) {
             Alert alert =  new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Invalid Input");
@@ -150,24 +152,21 @@ public class EditExpenseCtrl{
             expense.setParticipants(event.getParticipants());
         }
         else{
-            expense.setParticipants(participants);
+            if(participants == null || participants.size() == 0){
+                Alert alert =  new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Invalid Input");
+                alert.setHeaderText("Participants cannot be empty");
+                alert.setContentText("You must select " +
+                        "at least 1 participant");
+                alert.showAndWait();
+                return;
+            }
+            else{
+                expense.setParticipants(participants);}
         }
         expense.setDateTime(datePicker.getValue().toString());
-        for(Debt debt : expense.getDebts()) {
-            server.deleteDebt(debt);
-        }
-        for(Participant participant : expense.getParticipants()) {
-            if(participant.equals(expense.getPayingParticipant())) {
-                continue;
-            }
-            Debt debt = new Debt(expense.getPayingParticipant(), participant,
-                expense.getAmount() / (expense.getParticipants().size()));
-            expense.add(debt);
-            server.addDebt(debt);
-        }
+        //saveDebts(expense);
         expense.setTag(tag);
-        //server.updateExpense(event.getId(), expense);
-        //server.persistExpense(expense);
         clearFields();
         server.persistEvent(event);
         event = server.getEvent(event.getId());
@@ -177,6 +176,43 @@ public class EditExpenseCtrl{
         else{
             mainCtrl.showEventOverview(undoEvent);
         }
+    }
+
+    /**
+     * @param expense
+     */
+    public void saveDebts(Expense expense){
+        for(Debt debt : expense.getDebts()) {
+            server.deleteDebt(debt);
+        }
+        expense.setDebts(new ArrayList<>());
+        for(Participant participant : expense.getParticipants()) {
+            if(participant.equals(expense.getPayingParticipant())) {
+                continue;
+            }
+            Debt debt = new Debt(expense.getPayingParticipant(), participant,
+                    expense.getAmount() / (expense.getParticipants().size()));
+            expense.add(debt);
+//            server.addDebt(debt);
+        }
+    }
+
+    /**
+     *  converted currency to save to server as EUR
+     */
+    public void saveAsEuro(){
+        boolean yes = false;
+        if(!yes){
+            return;
+        }
+        Double res = Double.parseDouble(amountField.getText());
+        res *= server.convertRate(datePicker.getValue().toString(),
+                currChoiceBox.getSelectionModel().getSelectedItem().toString(),
+                "EUR");
+        DecimalFormat df = new DecimalFormat("#.##");
+        res = Double.valueOf(df.format(res));
+        expense.setAmount(res);
+        expense.setCurrency("EUR");
     }
 
     /**
@@ -199,10 +235,10 @@ public class EditExpenseCtrl{
             if (alert.showAndWait().get() == ButtonType.OK){
                 Event undoEvent = event;
                 event.removeExpense(expense);
-                server.persistEvent(event);
-                //server.deleteExpense(expense);
+                server.deleteExpense(expense);
                 //server.deleteExpense(event.getId(), expense);
                 event = server.getEvent(event.getId());
+                server.persistEvent(event);
                 if(event != null){
                     mainCtrl.showEventOverview(event);
                 }
