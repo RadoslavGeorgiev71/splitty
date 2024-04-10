@@ -4,11 +4,7 @@ import commons.*;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import server.database.EventRepository;
-
-import server.database.DebtRepository;
-import server.database.ExpenseRepository;
-import server.database.ParticipantRepository;
+import server.database.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,6 +16,7 @@ public class EventService {
     private final ParticipantRepository participantRepo;
     private final DebtRepository debtRepo;
     private final ExpenseRepository expenseRepo;
+    private final TagRepository tagRepo;
 
     /**
      * Constructor for EventService
@@ -27,13 +24,16 @@ public class EventService {
      * @param participantRepo - the repository for participants
      * @param debtRepo - the repository for debts
      * @param expenseRepo - the repository for expenses
+     * @param tagRepo - the repository for tags
      */
     public EventService(EventRepository eventRepo,ParticipantRepository participantRepo,
-                        DebtRepository debtRepo, ExpenseRepository expenseRepo ) {
+                        DebtRepository debtRepo, ExpenseRepository expenseRepo,
+                        TagRepository tagRepo ) {
         this.eventRepo = eventRepo;
         this.participantRepo = participantRepo;
         this.expenseRepo = expenseRepo;
         this.debtRepo = debtRepo;
+        this.tagRepo = tagRepo;
     }
 
     /**
@@ -155,29 +155,28 @@ public class EventService {
      * @return the imported/created event
      */
     @Transactional
-    public Event importEvent(Event e) throws DataIntegrityViolationException {
+    public Event importEvent(Event e) {
         Event newEvent = new Event();
         newEvent.setTitle(e.getTitle());
         newEvent.setInviteCode(e.getInviteCode());
         newEvent.setDateTime(e.getDateTime());
         newEvent = eventRepo.save(newEvent);
         for(Participant participant : e.getParticipants()){
-            if(participantRepo.findById(participant.getId()) != null){
+            if(participantRepo.findById(participant.getId()).isPresent()){
                 throw new DataIntegrityViolationException("Participant with id "
                         + participant.getId() + " already exists event cannot be imported" );
             }
             Long oldid = participant.getId();
-            System.out.println(oldid);
             newEvent.addParticipant(participant);
             eventRepo.save(newEvent);
             participant.setId(newEvent.getParticipants().getLast().getId());
-            System.out.println(participant.getId());
             changePId(e, participant.getId(), oldid);
         }
         for(Expense expense : e.getExpenses()){
             if(expense.getTag() != null) {
-                expense.setTag(new Tag(expense.getTag().getType(), expense.getTag().getColor()));
+                expense.setTag(tagRepo.save(expense.getTag()));
             }
+            expense = expenseRepo.save(expense);
         }
         newEvent.setExpenses(e.getExpenses());
         newEvent.setSettledDebts(e.getSettledDebts());

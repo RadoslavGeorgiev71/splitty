@@ -1,7 +1,7 @@
 package server.api;
 
 import commons.Event;
-import org.springframework.dao.DataIntegrityViolationException;
+//import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -156,13 +156,8 @@ public class EventController {
     @MessageMapping("/events")
     @SendTo("/topic/events")
     public Event addEvent(Event e){
-        try{
-            Event newEvent = eventService.importEvent(e);
-            return newEvent;
-        }
-        catch(DataIntegrityViolationException exception){
-            return null;
-        }
+        Event newEvent = eventService.importEvent(e);
+        return newEvent;
     }
 
     /**

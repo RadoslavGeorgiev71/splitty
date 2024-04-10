@@ -22,7 +22,7 @@ public class Expense {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Debt> debts;
     private String dateTime;
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     private Tag tag;
 
     /**
