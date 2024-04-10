@@ -1,11 +1,18 @@
 package server.Services;
 
+import commons.Event;
 import commons.Participant;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import server.Repositories.TestDebtRepository;
+import server.Repositories.TestEventRepository;
+import server.Repositories.TestExpenseRepository;
 import server.Repositories.TestParticipantRepository;
+import server.database.DebtRepository;
+import server.database.EventRepository;
+import server.database.ExpenseRepository;
 import server.database.ParticipantRepository;
 import java.util.List;
 import java.util.Optional;
@@ -15,13 +22,23 @@ public class ParticipantServiceTest {
 
     @Mock
     private ParticipantRepository participantRepo;
+    @Mock
+    private DebtRepository debtRepo;
+    @Mock
+    private ExpenseRepository expenseRepo;
+    @Mock
+    private EventRepository eventRepo;
     private ParticipantService sut;
 
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
         participantRepo = new TestParticipantRepository();
-        sut = new ParticipantService(participantRepo, null, null, null);
+        debtRepo = new TestDebtRepository();
+        expenseRepo = new TestExpenseRepository();
+        eventRepo = new TestEventRepository();
+        sut = new ParticipantService(participantRepo, debtRepo,
+            expenseRepo, eventRepo);
     }
 
 
@@ -71,8 +88,11 @@ public class ParticipantServiceTest {
 
     @Test
     void testDelete() {
+        Event event = new Event();
         Participant p1 = new Participant("Bob");
+        event.addParticipant(p1);
         Participant participantSaved = participantRepo.save(p1);
+        eventRepo.save(event);
         assertTrue(sut.delete(participantSaved.getId()));
         assertFalse(sut.delete(participantSaved.getId()));
     }

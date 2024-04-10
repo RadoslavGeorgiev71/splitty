@@ -2,6 +2,7 @@ package server.Services;
 
 import commons.Debt;
 import commons.Event;
+import commons.Expense;
 import commons.Participant;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -128,7 +129,18 @@ public class DebtServiceTest {
 
     @Test
     void testDeleteDebt() {
+        Event event = new Event();
+        Participant p1 = new Participant("Bob");
+        Participant p2 = new Participant("Ana");
+        event.addParticipant(p1);
+        event.addParticipant(p2);
+        Expense expense = new Expense();
+        expense.setPayingParticipant(p1);
+        expense.setPayingParticipant(p2);
         Debt debt = new Debt(new Participant("Ana"), new Participant("Bob"), 50);
+        expense.add(debt);
+        event.addExpense(expense);
+        eventRepo.save(event);
         List<Debt> debts = debtRepo.findAll();
         assertFalse(debts.contains(debt));
         debtRepo.save(debt);
