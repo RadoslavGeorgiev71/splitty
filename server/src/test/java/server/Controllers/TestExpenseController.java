@@ -2,11 +2,9 @@ package server.Controllers;
 
 import commons.Expense;
 import commons.Event;
-import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import server.Repositories.TestDebtRepository;

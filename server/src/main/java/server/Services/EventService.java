@@ -1,6 +1,7 @@
 package server.Services;
 
 import commons.*;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import server.database.EventRepository;
@@ -154,21 +155,29 @@ public class EventService {
      * @return the imported/created event
      */
     @Transactional
-    public Event importEvent(Event e) {
+    public Event importEvent(Event e) throws DataIntegrityViolationException {
         Event newEvent = new Event();
         newEvent.setTitle(e.getTitle());
         newEvent.setInviteCode(e.getInviteCode());
         newEvent.setDateTime(e.getDateTime());
         newEvent = eventRepo.save(newEvent);
         for(Participant participant : e.getParticipants()){
+            if(participantRepo.findById(participant.getId()) != null){
+                throw new DataIntegrityViolationException("Participant with id "
+                        + participant.getId() + " already exists event cannot be imported" );
+            }
             Long oldid = participant.getId();
+            System.out.println(oldid);
             newEvent.addParticipant(participant);
             eventRepo.save(newEvent);
             participant.setId(newEvent.getParticipants().getLast().getId());
+            System.out.println(participant.getId());
             changePId(e, participant.getId(), oldid);
         }
         for(Expense expense : e.getExpenses()){
-            expense.setTag(new Tag(expense.getTag().getType(), expense.getTag().getColor()));
+            if(expense.getTag() != null) {
+                expense.setTag(new Tag(expense.getTag().getType(), expense.getTag().getColor()));
+            }
         }
         newEvent.setExpenses(e.getExpenses());
         newEvent.setSettledDebts(e.getSettledDebts());

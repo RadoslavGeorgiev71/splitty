@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 import static org.junit.jupiter.api.Assertions.*;
 
 class DebtTest {
+
     private Participant p1 = new Participant(1, "a");
     private Participant p2 = new Participant(2, "b");
     private Debt d1 = new Debt(123, p1, p2, 500);
