@@ -110,8 +110,6 @@ public class EventOverviewCtrl {
 
     private Event event;
 
-    private String iconPath = "client/images/icons/";
-
     /**
      *
      * @param server
@@ -246,24 +244,22 @@ public class EventOverviewCtrl {
      */
     @FXML
     public void setIcon(String iconName, Button button) {
-        String path = iconPath + iconName;
+        String path = "client/images/icons/" + iconName;
         URL url = LanguageButtonUtils.class.getClassLoader().getResource(path);
         if (url == null) {
             throw new RuntimeException("Resources folder not found");
         }
 
-        // Load the image
         Image image = new Image(String.valueOf(url));
 
-        // Create an ImageView to display the image
         ImageView imageView = new ImageView();
-
-        // Set the default image
         imageView.setImage(image);
+        imageView.setPreserveRatio(true);
+        imageView.setSmooth(true);
+        imageView.setCache(true);
 
-        // Set the size of the image
-        imageView.setFitWidth(15); // Set width to 100 pixels
-        imageView.setFitHeight(15); // Set height to 100 pixels
+        imageView.setFitWidth(15);
+        imageView.setFitHeight(15);
         button.setGraphic(imageView);
     }
 
