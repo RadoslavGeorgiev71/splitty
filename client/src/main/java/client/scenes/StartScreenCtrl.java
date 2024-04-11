@@ -87,7 +87,10 @@ public class StartScreenCtrl {
 
         languageButton.getItems().clear();
 
+        config.uniqueRecentEvents();
+
         config = config.readFromFile("config.txt");
+
 
         String language = config.getLanguage();
         if (language != null) {
@@ -282,7 +285,7 @@ public class StartScreenCtrl {
         if (config.getRecentEvents() == null || config.getRecentEvents().equals("")) {
             config.setRecentEvents(event.getInviteCode());
         }else {
-            config.setRecentEvents(config.getRecentEvents() + ", " + event.getInviteCode());
+            config.setRecentEvents(event.getInviteCode() + ", " + config.getRecentEvents());
         }
         String[] contents = {config.getServerUrl(), config.getEmail(),
                 config.getIban(), config.getBic(),
