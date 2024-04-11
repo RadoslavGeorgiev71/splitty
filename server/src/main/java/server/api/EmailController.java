@@ -3,7 +3,6 @@ package server.api;
 
 import commons.Event;
 import commons.Participant;
-import jakarta.mail.internet.AddressException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -69,12 +68,12 @@ public class EmailController {
                     emailService.sendEmail(email, eventOptional.get().getTitle()
                                     + " ( " + inviteCode + " ) - Splitty",
                             body, creatorEmail);
+                    return ResponseEntity.ok(HttpStatus.OK);
                 }
-                catch(AddressException e){
-                    return ResponseEntity.ok(HttpStatus.BAD_REQUEST);
+                catch(Exception e){
+                    return  ResponseEntity.badRequest().body("Email not valid");
                 }
             }
-            return ResponseEntity.ok(HttpStatus.OK);
         }
         return ResponseEntity.ok(HttpStatus.BAD_REQUEST);
     }
@@ -97,14 +96,13 @@ public class EmailController {
             try{
                 emailService.sendEmail(participant.getEmail(), "Default Email",
                         body, participant.getEmail());
+                return ResponseEntity.ok(HttpStatus.OK);
             }
-            catch (AddressException e){
-                return ResponseEntity.ok(HttpStatus.BAD_REQUEST);
+            catch (Exception e) {
+                return  ResponseEntity.badRequest().body("Email not valid");
             }
-
-            return ResponseEntity.ok(HttpStatus.OK);
         }
-        return ResponseEntity.ok(HttpStatus.BAD_REQUEST);
+        return ResponseEntity.badRequest().body("Email not valid");
     }
 
 
@@ -131,11 +129,11 @@ public class EmailController {
         try {
             emailService.sendEmail(email, "Remainder - " + eventTitle,
                     body, creatorEmail);
+            return ResponseEntity.ok(HttpStatus.OK);
         }
-        catch(AddressException e){
-            return ResponseEntity.ok(HttpStatus.BAD_REQUEST);
+        catch(Exception e){
+            return  ResponseEntity.badRequest().body("Email not valid");
         }
-        return ResponseEntity.ok(HttpStatus.OK);
     }
 
 
