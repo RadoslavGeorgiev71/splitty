@@ -530,7 +530,7 @@ public class EditExpenseCtrl{
             onlySomeChecked();
         }
 
-        setAllIcons();
+        //setAllIcons();
     }
 
     /**
