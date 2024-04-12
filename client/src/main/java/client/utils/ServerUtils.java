@@ -449,7 +449,7 @@ public class ServerUtils {
      */
     public Expense addExpense(Expense expense) {
         try{
-            expense.setId(1000);
+            //expense.setId(1000);
             Entity<Expense> entity = Entity.entity(expense, APPLICATION_JSON);
             Response response = ClientBuilder.newClient(new ClientConfig())
                             .target(server).path("api/expenses")
@@ -475,7 +475,7 @@ public class ServerUtils {
      */
     public Expense addExpense(long eventId, Expense expense) {
         try{
-            expense.setId(1000);
+            //expense.setId(1000);
             Response response = ClientBuilder.newClient(new ClientConfig())
                     .target(server).path("api/expenses/event/" + eventId)
                     .request(APPLICATION_JSON)

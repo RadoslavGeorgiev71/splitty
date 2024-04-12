@@ -12,9 +12,10 @@ public class ParticipantTest {
     private Participant p3;
     @BeforeEach
     void testBasis() {
+        long id = 5;
         p1 = new Participant("Bob");
-        p2 = new Participant(5, "Alice", "alice@gmail.com", "NHJ201", "12345");
-        p3 = new Participant(5, "Alice", "alice@gmail.com", "NHJ201", "12345");
+        p2 = new Participant(id, "Alice", "alice@gmail.com", "NHJ201", "12345");
+        p3 = new Participant(id, "Alice", "alice@gmail.com", "NHJ201", "12345");
     }
 
     @Test
@@ -62,8 +63,9 @@ public class ParticipantTest {
 
     @Test
     void testSetId() {
-        p1.setId(8);
-        assertEquals(8, p1.getId());
+        long id = 8;
+        p1.setId(id);
+        assertEquals(id, p1.getId());
     }
 
     @Test

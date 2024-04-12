@@ -65,7 +65,7 @@ public class DebtService {
 
                 settleTransaction(participantsDebts, mostOwed, amount, mostOwing, participants);
 
-                result.add(new Debt(0, mostOwing, mostOwed, amount));
+                result.add(new Debt( mostOwing, mostOwed, amount));
             }
             return result;
         }

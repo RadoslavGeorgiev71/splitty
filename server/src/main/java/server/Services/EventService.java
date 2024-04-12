@@ -1,16 +1,10 @@
 package server.Services;
 
-import commons.Debt;
-import commons.Event;
-import commons.Expense;
-import commons.Participant;
+import commons.*;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import server.database.EventRepository;
-
-import server.database.DebtRepository;
-import server.database.ExpenseRepository;
-import server.database.ParticipantRepository;
+import server.database.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,6 +16,7 @@ public class EventService {
     private final ParticipantRepository participantRepo;
     private final DebtRepository debtRepo;
     private final ExpenseRepository expenseRepo;
+    private final TagRepository tagRepo;
 
     /**
      * Constructor for EventService
@@ -29,13 +24,16 @@ public class EventService {
      * @param participantRepo - the repository for participants
      * @param debtRepo - the repository for debts
      * @param expenseRepo - the repository for expenses
+     * @param tagRepo - the repository for tags
      */
     public EventService(EventRepository eventRepo,ParticipantRepository participantRepo,
-                        DebtRepository debtRepo, ExpenseRepository expenseRepo ) {
+                        DebtRepository debtRepo, ExpenseRepository expenseRepo,
+                        TagRepository tagRepo ) {
         this.eventRepo = eventRepo;
         this.participantRepo = participantRepo;
         this.expenseRepo = expenseRepo;
         this.debtRepo = debtRepo;
+        this.tagRepo = tagRepo;
     }
 
     /**
@@ -124,15 +122,6 @@ public class EventService {
         for(Debt debt : debts){
             debtRepo.deleteById(debt.getId());
         }
-//        debts = debtRepo.findAll();
-//        for(Participant participant : participants){
-//            debts = debts.stream().filter(x -> x.getPersonPaying().getId() == participant.getId()
-//      || x.getPersonOwing().getId() == participant.getId()).collect(Collectors.toList());
-//            for(Debt debt : debts){
-//                debtRepo.deleteById(debt.getId());
-//            }
-//            debts = debtRepo.findAll();
-//        }
         for(Participant participant: participants){
             participantRepo.deleteById(participant.getId());
         }
@@ -158,4 +147,66 @@ public class EventService {
     }
 
 
+    /**
+     * Method that is called when the admin wants to import an event
+     * It gets an event as a parameter
+     * and imports it into the database
+     * @param e event to import
+     * @return the imported/created event
+     */
+    @Transactional
+    public Event importEvent(Event e) {
+        Event newEvent = new Event();
+        newEvent.setTitle(e.getTitle());
+        newEvent.setInviteCode(e.getInviteCode());
+        newEvent.setDateTime(e.getDateTime());
+        newEvent = eventRepo.save(newEvent);
+        for(Participant participant : e.getParticipants()){
+            if(participantRepo.findById(participant.getId()).isPresent()){
+                throw new DataIntegrityViolationException("Participant with id "
+                        + participant.getId() + " already exists event cannot be imported" );
+            }
+            Long oldid = participant.getId();
+            newEvent.addParticipant(participant);
+            eventRepo.save(newEvent);
+            participant.setId(newEvent.getParticipants().getLast().getId());
+            changePId(e, participant.getId(), oldid);
+        }
+        for(Expense expense : e.getExpenses()){
+            if(expense.getTag() != null) {
+                expense.setTag(tagRepo.save(expense.getTag()));
+            }
+            expense = expenseRepo.save(expense);
+        }
+        newEvent.setExpenses(e.getExpenses());
+        newEvent.setSettledDebts(e.getSettledDebts());
+        eventRepo.save(newEvent);
+        return newEvent;
+    }
+
+    private void changePId(Event e, Long id, Long oldid) {
+        for(Expense expense : e.getExpenses()){
+            changeDebts(expense.getDebts(), id, oldid);
+            if(expense.getPayingParticipant().getId() == oldid){
+                expense.getPayingParticipant().setId(id);
+            }
+            for(Participant participant : expense.getParticipants()){
+                if(participant.getId() == oldid){
+                    participant.setId(id);
+                }
+            }
+        }
+        changeDebts(e.getSettledDebts(), id, oldid);
+    }
+
+    private void changeDebts(List<Debt> debts, Long id, Long oldid){
+        for(Debt debt : debts){
+            if(debt.getPersonOwing().getId() == oldid){
+                debt.getPersonOwing().setId(id);
+            }
+            if( debt.getPersonPaying().getId() == oldid){
+                debt.getPersonPaying().setId(id);
+            }
+        }
+    }
 }

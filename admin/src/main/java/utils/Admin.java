@@ -293,7 +293,6 @@ public class Admin{
             public Type getPayloadType(StompHeaders headers) {
                 return Event.class;
             }
-
             @Override
             public void handleFrame(StompHeaders headers, Object payload) {
                 consumer.accept((Event) payload);
@@ -312,7 +311,6 @@ public class Admin{
             public Type getPayloadType(StompHeaders headers) {
                 return Event.class;
             }
-
             @Override
             public void handleFrame(StompHeaders headers, Object payload) {
                 consumer.accept((Event) payload);
@@ -327,5 +325,15 @@ public class Admin{
      */
     public void send(String dest, Object o) {
         session.send(dest, o);
+//        StompSession.Receiptable receiptable = session.send(dest, o);
+//        Event event = (Event) receiptable.
+//        if(event == null){
+//            Alert alert = new Alert(Alert.AlertType.ERROR);
+//            alert.setTitle("Error");
+//            alert.setHeaderText("Error during importing the event");
+//            alert.setContentText("The event you are trying to import possibly overwrites " +
+//                    "data already in the database thus could not be imported");
+//            alert.showAndWait();
+//        }
     }
 }
