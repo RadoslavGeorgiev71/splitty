@@ -584,7 +584,7 @@ public class ServerUtils {
             if (response.getStatus() == Response.Status.OK.getStatusCode()) {
                 Object res = response.readEntity(Object.class);
                 String rate = res.toString();
-                rate = rate.split(to+"=")[1].split("}")[0];
+                //rate = rate.split(to+"=")[1].split("}")[0];
                 Files.write( Paths.get(path), rate.getBytes(),
                         StandardOpenOption.WRITE, StandardOpenOption.CREATE);
                 return Double.parseDouble(rate);
