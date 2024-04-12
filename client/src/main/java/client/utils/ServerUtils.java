@@ -17,6 +17,9 @@ package client.utils;
 
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
+import java.io.*;
+import java.nio.charset.Charset;
+import java.nio.file.*;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -556,26 +559,39 @@ public class ServerUtils {
      * @param to currency
      * @return the event with the specified id
      */
-    public Double convertRate(String date, String from, String to) {
-        String key = "488b2c548074f3e5d9e15ba3013a152d";
-        String url = "http://data.fixer.io/api/" + date;
-        url += "?access_key=" + key+ "&base=" + from + "&symbols=" + to;
-        String key2 = "";
-        String url2 = "https://free.currconv.com/api/v7/convert?q="+
-                from + "_" + to + "&compact=ultra&date=" + date + "&apiKey=" + key2;
-        Response response = ClientBuilder.newClient(new ClientConfig())
-                .target(url)
-                .request(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .get();
-        if (response.getStatus() == Response.Status.OK.getStatusCode()) {
-            Object res = response.readEntity(Object.class);
-            String rate = res.toString();
-            rate = rate.split(to+"=")[1].split("}")[0];
-            return Double.parseDouble(rate);
-        } else {
-            showAlert();
-            return null;
+    public Double convertRate(String date, String from, String to) throws IOException {
+        String path = "client/src/main/resources/rates/"+ date +"/"
+                + from + "/" + to + ".txt";
+        try{
+            File file = new File(path);
+            BufferedReader br = new BufferedReader(new FileReader(file));
+            String st = br.readLine();
+            Double res = Double.parseDouble(st);
+            return res;
+        } catch (Exception e) {
+
+            String key = "488b2c548074f3e5d9e15ba3013a152d";
+            String url = "http://data.fixer.io/api/" + date;
+            url += "?access_key=" + key+ "&base=" + from + "&symbols=" + to;
+            String key2 = "";
+            String url2 = "https://free.currconv.com/api/v7/convert?q="+
+                    from + "_" + to + "&compact=ultra&date=" + date + "&apiKey=" + key2;
+            Response response = ClientBuilder.newClient(new ClientConfig())
+                    .target(url)
+                    .request(APPLICATION_JSON)
+                    .accept(APPLICATION_JSON)
+                    .get();
+            if (response.getStatus() == Response.Status.OK.getStatusCode()) {
+                Object res = response.readEntity(Object.class);
+                String rate = res.toString();
+                rate = rate.split(to+"=")[1].split("}")[0];
+                Files.write( Paths.get(path), rate.getBytes(),
+                        StandardOpenOption.WRITE, StandardOpenOption.CREATE);
+                return Double.parseDouble(rate);
+            } else {
+                showAlert();
+                return null;
+            }
         }
     }
 

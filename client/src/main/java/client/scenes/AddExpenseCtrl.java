@@ -23,6 +23,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.util.StringConverter;
 
+import java.io.IOException;
 import java.net.URL;
 import java.text.DecimalFormat;
 import java.time.LocalDate;
@@ -136,7 +137,7 @@ public class AddExpenseCtrl{
             expense.setAmount(Double.parseDouble(amountField.getText()));
             expense.setCurrency(currChoiceBox.getSelectionModel().getSelectedItem().toString());
             saveAsEuro();
-        } catch (NumberFormatException e) {
+        } catch (Exception e) {
             Alert alert =  new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Invalid Input");
             alert.setHeaderText("Amount is not a number");
@@ -194,7 +195,7 @@ public class AddExpenseCtrl{
     /**
      *  converted currency to save to server as EUR
      */
-    public void saveAsEuro(){
+    public void saveAsEuro() throws IOException {
         boolean yes = false;
         if(!yes){
             return;

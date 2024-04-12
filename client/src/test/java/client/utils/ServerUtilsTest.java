@@ -270,6 +270,7 @@ class ServerUtilsTest {
 
     @Test
     void convertRate() {
+        server.convertRate("2023-08-12", "EUR", "USD");
     }
 
     @Test
