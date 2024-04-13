@@ -1,5 +1,6 @@
 package server.Repositories;
 
+import commons.Debt;
 import commons.Tag;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
@@ -235,7 +236,10 @@ public class TestTagRepository implements TagRepository {
      */
     @Override
     public <S extends Tag> S save(S entity) {
-        return null;
+        calledMethods.add("save");
+        tags.remove(entity);
+        tags.add(entity);
+        return entity;
     }
 
     /**
@@ -256,7 +260,12 @@ public class TestTagRepository implements TagRepository {
      */
     @Override
     public Optional<Tag> findById(Long aLong) {
-        return Optional.empty();
+        calledMethods.add("findById");
+        List<Tag> rightTags =  tags.stream().filter(x -> x.getId() == aLong).toList();
+        if (rightTags.isEmpty()) {
+            return Optional.empty();
+        }
+        return Optional.of(rightTags.getFirst());
     }
 
     /**
@@ -266,7 +275,14 @@ public class TestTagRepository implements TagRepository {
      */
     @Override
     public boolean existsById(Long aLong) {
-        return false;
+        calledMethods.add("existsById");
+        List<Tag> matchingTags = tags.stream().filter(x -> x.getId() == aLong).toList();
+        if(matchingTags.size() == 1) {
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 
     /**
@@ -275,7 +291,8 @@ public class TestTagRepository implements TagRepository {
      */
     @Override
     public List<Tag> findAll() {
-        return null;
+        calledMethods.add("findAll");
+        return tags;
     }
 
     /**
@@ -303,7 +320,8 @@ public class TestTagRepository implements TagRepository {
      */
     @Override
     public void deleteById(Long aLong) {
-
+        calledMethods.add("deleteById");
+        tags = tags.stream().filter(x -> x.getId() != aLong).toList();
     }
 
     /**

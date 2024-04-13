@@ -5,6 +5,7 @@ import commons.Event;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
+import java.util.*;
 
 public interface EventRepository extends JpaRepository<Event, Long> {
     /**
@@ -13,4 +14,6 @@ public interface EventRepository extends JpaRepository<Event, Long> {
      * @return the event with the invite code
      */
     Optional<Event> findByInviteCode(String inviteCode);
+
+    List<String> getCalledMethods();
 }
