@@ -168,7 +168,6 @@ public class StartScreenCtrl {
      * Switches the text language.
      */
     public void switchTextLanguage() {
-
         ResourceBundle bundle = languageResourceBundle.getResourceBundle();
         settingsButton.setText(bundle.getString("settingsButtonText"));
         newEventStaticText.setText(bundle.getString("newEventStaticText"));
@@ -176,6 +175,8 @@ public class StartScreenCtrl {
         recentEventsText.setText(bundle.getString("recentEventsText"));
         createEventButton.setText(bundle.getString("createEventButton"));
         joinEventButton.setText(bundle.getString("joinEventButton"));
+        joinEventText.setPromptText(bundle.getString("emptyInviteCodeAlert"));
+        newEventText.setPromptText(bundle.getString("emptyTitleAlert"));
     }
 
     /**

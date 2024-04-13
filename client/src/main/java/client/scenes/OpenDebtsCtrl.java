@@ -102,14 +102,12 @@ public class OpenDebtsCtrl {
     private void visualizeDebt(int i) {
         textFlows[i] = generateTextFlow(debts.get(i));
         textFlows[i].setStyle("-fx-max-height: 30");
-
         titledPanes[i] = new TitledPane();
         titledPanes[i].setGraphic(textFlows[i]);
         titledPanes[i].setAnimated(true);
         titledPanes[i].setExpanded(false);
         titledPanes[i].setContent(generateExpandableLabel(debts.get(i)));
         gridPane.add(titledPanes[i], 0, i, 1, 1);
-
         envelopeIcons[i] = new FontAwesomeIconView();
         envelopeIcons[i].setGlyphName("ENVELOPE");
         envelopeIcons[i].setSize("15");
@@ -131,8 +129,12 @@ public class OpenDebtsCtrl {
         GridPane.setValignment(bankIcons[i], javafx.geometry.VPos.TOP);
         GridPane.setHalignment(bankIcons[i], javafx.geometry.HPos.LEFT);
         Tooltip toolTipBank = new Tooltip("Bank information available!");
-        if (debts.get(i).getPersonOwing().getBic() == "" ||
-            debts.get(i).getPersonOwing().getIban() == "") {
+        if (debts.get(i).getPersonOwing().getBic() == ""
+                || debts.get(i).getPersonOwing().getBic() == "null" ||
+                debts.get(i).getPersonOwing().getBic() == null
+                || debts.get(i).getPersonOwing().getIban() == "null" ||
+                debts.get(i).getPersonOwing().getIban() == null
+                || debts.get(i).getPersonOwing().getIban() == "") {
             bankIcons[i].setFill(Color.GREY);
             toolTipBank.setText("Bank information NOT available!");
         }
@@ -179,10 +181,13 @@ public class OpenDebtsCtrl {
         String text = "";
         int size = 0;
         Label label = new Label();
-        if (debt.getPersonOwing().getBic() != ""
-            && debt.getPersonOwing().getIban() != "") {
+        if (debt.getPersonOwing().getBic() != "" && debt.getPersonOwing().getBic() != "null" &&
+                debt.getPersonOwing().getBic() != null
+                && debt.getPersonOwing().getIban() != "null" &&
+                debt.getPersonOwing().getIban() != null
+                && debt.getPersonOwing().getIban() != "") {
             text += "Bank information available,\n" +
-                " transfer the money to:\n" +
+                "transfer the money to:\n" +
                 "Account Holder: " + debt.getPersonOwing().getName() + "\n" +
                 "IBAN: " + debt.getPersonOwing().getIban() + "\n" +
                 "BIC: " + debt.getPersonOwing().getBic();
@@ -212,24 +217,26 @@ public class OpenDebtsCtrl {
     }
 
     private void sendEmail(Debt debt) {
-        if(server.sendRemainder(debt.getPersonOwing(), debt.getAmount(),
+        Boolean response = server.sendRemainder(debt.getPersonOwing(), debt.getAmount(),
                 debt.getPersonPaying().getEmail(),
-                event.getTitle())){
-            ResourceBundle bundle = languageResourceBundle.getResourceBundle();
-            Alert alert =  new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle(bundle.getString("openDebtsAlertInfoTitleText"));
-            alert.setHeaderText(bundle.getString("openDebtsAlertInfoHeaderText"));
-            alert.showAndWait();
+                event.getTitle());
+        if(response != null){
+            if(response){
+                ResourceBundle bundle = languageResourceBundle.getResourceBundle();
+                Alert alert =  new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle(bundle.getString("openDebtsAlertInfoTitleText"));
+                alert.setHeaderText(bundle.getString("openDebtsAlertInfoHeaderText"));
+                alert.showAndWait();
+            }
+            else{
+                ResourceBundle bundle = languageResourceBundle.getResourceBundle();
+                Alert alert =  new Alert(Alert.AlertType.WARNING);
+                alert.setTitle(bundle.getString("openDebtsAlertTitleText"));
+                alert.setHeaderText(bundle.getString("openDebtsAlertHeaderText"));
+                alert.setContentText(bundle.getString("openDebtsAlertContentText"));
+                alert.showAndWait();
+            }
         }
-        else{
-            ResourceBundle bundle = languageResourceBundle.getResourceBundle();
-            Alert alert =  new Alert(Alert.AlertType.WARNING);
-            alert.setTitle(bundle.getString("openDebtsAlertTitleText"));
-            alert.setHeaderText(bundle.getString("openDebtsAlertHeaderText"));
-            alert.setContentText(bundle.getString("openDebtsAlertContentText"));
-            alert.showAndWait();
-        }
-
     }
 
     /**
