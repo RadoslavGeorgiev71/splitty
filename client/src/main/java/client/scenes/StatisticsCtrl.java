@@ -31,8 +31,8 @@ public class StatisticsCtrl {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
     private Event event;
-    private LanguageResourceBundle languageResourceBundle;
 
+    private LanguageResourceBundle languageResourceBundle;
 
     @FXML
     private Label totalCostLabel;
@@ -64,6 +64,7 @@ public class StatisticsCtrl {
     public void initialize() {
         if(this.event != null) {
             // TODO: configure right currency
+            languageResourceBundle = LanguageResourceBundle.getInstance();
             totalCostLabel.setText(
                     languageResourceBundle.getResourceBundle().getString("totalCostLabel") +
                     String.format("%.2f", event.getExpenses().stream().mapToDouble(
@@ -86,8 +87,8 @@ public class StatisticsCtrl {
             }
             pieChart.setPadding(new javafx.geometry.Insets(0, 0, 100, 0));
             pieChart.setLayoutY(60);
+            switchLanguage();
         }
-        switchLanguage();
     }
 
     /**
