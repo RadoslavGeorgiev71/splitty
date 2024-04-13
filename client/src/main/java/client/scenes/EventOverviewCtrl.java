@@ -109,6 +109,9 @@ public class EventOverviewCtrl {
     @FXML
     private Text amountText;
 
+    @FXML
+    private ImageView titleEditImage;
+
     private TextField titleTextField;
 
     private Event event;
@@ -264,6 +267,18 @@ public class EventOverviewCtrl {
         imageView.setFitWidth(15);
         imageView.setFitHeight(15);
         button.setGraphic(imageView);
+    }
+
+    @FXML
+    public void setImage(String iconName, ImageView imageView) {
+        String path = "client/images/icons/" + iconName;
+        URL url = LanguageButtonUtils.class.getClassLoader().getResource(path);
+        if(url == null) {
+            throw new RuntimeException("Resources folder not found");
+        }
+
+        Image image = new Image(String.valueOf(url));
+        imageView.setImage(image);
     }
 
     /**
@@ -596,6 +611,8 @@ public class EventOverviewCtrl {
     public void editTitle(MouseEvent mouseEvent) {
         titleTextField = new TextField();
         titleTextField.setText(eventTitleLabel.getText());
+//        titleTextField.setPrefWidth(eventTitleLabel.getWidth());
+//        titleTextField.setPrefHeight(eventTitleLabel.getHeight());
         titleTextField.setPrefWidth(eventTitleLabel.getWidth());
         titleTextField.setPrefHeight(eventTitleLabel.getHeight());
 
@@ -680,6 +697,7 @@ public class EventOverviewCtrl {
 
         setIcon("graypencil.png", overviewEditParticipantButton);
         setIcon("addperson.png", overviewAddParticipantButton);
+        setImage("graypencil.png", titleEditImage);
     }
 
     /**
