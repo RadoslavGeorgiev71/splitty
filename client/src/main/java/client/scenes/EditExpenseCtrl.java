@@ -150,7 +150,8 @@ public class EditExpenseCtrl{
             return;
         }
         expense.setCurrency(currChoiceBox.getSelectionModel().getSelectedItem().toString());
-        if(!testing && (equally.isSelected() || participants.size() == event.getParticipants().size())){
+        if(!testing && (equally.isSelected()
+                || participants.size() == event.getParticipants().size())){
             expense.setParticipants(event.getParticipants());
         }
         else{
@@ -614,6 +615,10 @@ public class EditExpenseCtrl{
         return participants;
     }
 
+    /**
+     * Set testing
+     * @param testing - testing
+     */
     public void setTesting(boolean testing) {
         this.testing = testing;
     }

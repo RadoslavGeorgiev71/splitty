@@ -32,7 +32,7 @@ import java.util.ResourceBundle;
 
 public class AddExpenseCtrl{
 
-    public boolean testing = false;
+    private boolean testing = false;
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
