@@ -338,7 +338,7 @@ public class EventOverviewCtrl {
         if (event != null) {
             for (int i = 0; i < event.getExpenses().size(); i++) {
                 Expense expense = foreignCurrency(event.getExpenses().get(i));
-                amount += foreignCurrency(expense).getAmount();
+                amount += expense.getAmount();
                 visualizeExpense(tabPaneAllGridPane, expense, i);
             }
             fromPersonTabName();
@@ -364,7 +364,7 @@ public class EventOverviewCtrl {
                 Participant payingParticipant = expense.getPayingParticipant();
                 if (payingParticipant.equals(participantsMenu.
                         getSelectionModel().getSelectedItem())) {
-                    amount += foreignCurrency(expense).getAmount();
+                    amount += expense.getAmount();
                     visualizeExpense(tabPaneFromGridPane, expense, j++);
                 }
             }
@@ -390,7 +390,7 @@ public class EventOverviewCtrl {
                 Participant participant = participantsMenu.getSelectionModel().getSelectedItem();
                 Expense expense = foreignCurrency(event.getExpenses().get(i));
                 if (expense.getParticipants().contains(participant)) {
-                    amount += foreignCurrency(expense).getAmount();
+                    amount += expense.getAmount();
                     visualizeExpense(tabPaneIncludingGridPane, expense, j++);
                 }
             }
