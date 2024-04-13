@@ -572,18 +572,20 @@ public class ServerUtils {
             myReader.close();
             return Double.parseDouble(data);
         } catch (Exception e) {
-            String key = "9d7c841c1d6fc2550e303bf6045e761a";
+            String key = "af59b256521aa37eb850";
             String url = "http://data.fixer.io/api/" + date;
             url += "?access_key=" + key+ "&base=" + from + "&symbols=" + to;
+            String url2 = "https://free.currconv.com/api/v7/convert?q="+ from + "_"+ to +
+                    "&compact=ultra&date="+ date +"&apiKey="+ key;
             Response response = ClientBuilder.newClient(new ClientConfig())
-                    .target(url)
+                    .target(url2)
                     .request(APPLICATION_JSON)
                     .accept(APPLICATION_JSON)
                     .get();
             if (response.getStatus() == Response.Status.OK.getStatusCode()) {
                 String rate = response.readEntity(Object.class).toString();
-                if(rate.contains(to+"=")){
-                    rate = rate.split(to+"=")[1].split("}")[0];}
+                if(rate.contains(to)){
+                    rate = rate.split("=")[2].split("}")[0];}
                 File fDate = new File(Paths.get("src/main/resources/rates/"+ date)
                         .toAbsolutePath().toString());
                 File fFrom = new File(Paths.get("src/main/resources/rates/"+
