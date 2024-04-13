@@ -660,7 +660,9 @@ public class EventOverviewCtrl {
             participantsMenu.setOnAction(e -> {
                 fromPersonTabName();
                 includingPersonTabName();
+
                 tabPaneAllClick();
+                tabPaneFromPersonClick();
                 tabPaneIncludingPersonClick();
             });
             tabPaneAllClick();
