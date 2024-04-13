@@ -342,4 +342,5 @@ public class TagCtrl {
         imageView.setFitHeight(20);
         button.setGraphic(imageView);
     }
+
 }
