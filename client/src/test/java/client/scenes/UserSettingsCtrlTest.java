@@ -54,7 +54,7 @@ public class UserSettingsCtrlTest extends ApplicationTest {
         configClientMock.setIban("");
         configClientMock.setBic("");
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/client/scenes/userSettings.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/client/scenes/UserSettings.fxml"));
         loader.setControllerFactory(type -> {
             if (type == UserSettingsCtrl.class) {
                 return userSettingsCtrl;
