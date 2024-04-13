@@ -276,25 +276,6 @@ class ServerUtilsTest {
     @Test
     void convertRate() throws IOException {
         //server.convertRate("2023-08-12", "EUR", "USD");
-        String date = "2023-08-12";
-        String from = "EUR";
-        String to = "USD";
-        String path = "client/src/main/resources/rates/"+ date +"/"
-                + from + "/" + to + ".txt";
-        Path filePath = Paths.get(path).toAbsolutePath();
-
-        try {
-            File myObj = new File(path);
-            Scanner myReader = new Scanner(myObj);
-            while (myReader.hasNextLine()) {
-                String data = myReader.nextLine();
-                System.out.println(data);
-            }
-            myReader.close();
-        } catch (FileNotFoundException e) {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
-        }
     }
 
     @Test

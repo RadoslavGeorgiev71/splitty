@@ -21,6 +21,7 @@ import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.file.*;
 import java.util.List;
+import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
@@ -560,34 +561,56 @@ public class ServerUtils {
      * @return the event with the specified id
      */
     public Double convertRate(String date, String from, String to) throws IOException {
-        String path = "client/src/main/resources/rates/"+ date +"/"
+        String path = "src/main/resources/rates/"+ date +"/"
                 + from + "/" + to + ".txt";
+        Path filePath = Paths.get(path).toAbsolutePath();
+
         try{
-            File file = new File(path);
-            BufferedReader br = new BufferedReader(new FileReader(file));
-            String st = br.readLine();
-            Double res = Double.parseDouble(st);
-            return res;
+            File myObj = new File(filePath.toString());
+            Scanner myReader = new Scanner(myObj);
+            String data = "";
+            if (myReader.hasNextLine()) {
+                data = myReader.nextLine();
+            }
+            myReader.close();
+            return Double.parseDouble(data);
         } catch (Exception e) {
 
             String key = "488b2c548074f3e5d9e15ba3013a152d";
             String url = "http://data.fixer.io/api/" + date;
             url += "?access_key=" + key+ "&base=" + from + "&symbols=" + to;
-            String key2 = "";
-            String url2 = "https://free.currconv.com/api/v7/convert?q="+
-                    from + "_" + to + "&compact=ultra&date=" + date + "&apiKey=" + key2;
+//            String key2 = "";
+//            String url2 = "https://free.currconv.com/api/v7/convert?q="+
+//                    from + "_" + to + "&compact=ultra&date=" + date + "&apiKey=" + key2;
+            String url3 = "api/expenses/date/"+ date + "/rate/"+from+"/"+to;
             Response response = ClientBuilder.newClient(new ClientConfig())
                     .target(url)
+//                    .target(server).path(url3)
                     .request(APPLICATION_JSON)
                     .accept(APPLICATION_JSON)
                     .get();
             if (response.getStatus() == Response.Status.OK.getStatusCode()) {
                 Object res = response.readEntity(Object.class);
                 String rate = res.toString();
-                //rate = rate.split(to+"=")[1].split("}")[0];
-                Files.write( Paths.get(path), rate.getBytes(),
-                        StandardOpenOption.WRITE, StandardOpenOption.CREATE);
-                return Double.parseDouble(rate);
+                if(rate.contains(to+"=")){
+                    rate = rate.split(to+"=")[1].split("}")[0];
+                }
+                File fDate = new File(Paths.get("src/main/resources/rates/"+ date).toAbsolutePath().toString());
+                File fFrom = new File(Paths.get("src/main/resources/rates/"+ date + "/" + from).toAbsolutePath().toString());
+                File myObj = new File(filePath.toString());
+                boolean d = fDate.mkdir();
+                boolean f = fFrom.mkdir();
+                if(myObj.createNewFile()){
+                    FileWriter myWriter = new FileWriter(filePath.toString());
+                    myWriter.write(rate);
+                    myWriter.close();
+                }
+                try{
+                    return Double.parseDouble(rate);
+                }
+                catch (Exception e1){
+                    return 1.0d;
+                }
             } else {
                 showAlert();
                 return null;
