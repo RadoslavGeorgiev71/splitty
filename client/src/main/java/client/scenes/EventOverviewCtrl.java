@@ -269,6 +269,11 @@ public class EventOverviewCtrl {
         button.setGraphic(imageView);
     }
 
+    /**
+     * Sets the image
+     * @param iconName
+     * @param imageView
+     */
     @FXML
     public void setImage(String iconName, ImageView imageView) {
         String path = "client/images/icons/" + iconName;
