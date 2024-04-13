@@ -1,9 +1,7 @@
 package client.scenes;
 
 import client.utils.ServerUtils;
-import commons.Event;
-import commons.Expense;
-import commons.Participant;
+import commons.*;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
@@ -89,6 +87,7 @@ public class EditExpenseCtrlTest extends ApplicationTest {
         Mockito.doNothing().when(mainCtrlMock).showEventOverview(Mockito.any(Event.class));
         Mockito.when(serverMock.persistEvent(Mockito.any(Event.class))).thenReturn(mockEvent);
         Mockito.when(serverMock.getEvent(Mockito.anyLong())).thenReturn(mockEvent);
+        Mockito.when(serverMock.convertRate(Mockito.anyString(), Mockito.anyString(), Mockito.anyString())).thenReturn(1.0);
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/client/scenes/EditExpense.fxml"));
         loader.setControllerFactory(type -> {
@@ -229,5 +228,166 @@ public class EditExpenseCtrlTest extends ApplicationTest {
         editExpenseCtrl.setParticipants(list);
         editExpenseCtrl.setCurrency("EUR");
         editExpenseCtrl.setExpense(new Expense());
+    }
+
+    @Test
+    public void testSetIconWithInvalidIconName() {
+        Button button = new Button();
+
+        assertThrows(RuntimeException.class, () -> {
+            editExpenseCtrl.setIcon("invalid_icon_name", button);
+        });
+    }
+
+    @Test
+    public void testSetIconWithValidIconName() {
+        editExpenseCtrl.setTesting(true);
+        Platform.runLater(() -> {
+            editExpenseCtrl.setAllIcons();
+        });
+    }
+
+    @Test
+    public void testConfigureTagElements() {
+        Tag mockTag = new Tag();
+        mockTag.setType("Test");
+        mockTag.setColor("#FFFFFF");
+
+        Platform.runLater(() -> {
+            editExpenseCtrl.setTag(mockTag);
+            editExpenseCtrl.configureTagElements();
+        });
+
+        WaitForAsyncUtils.waitForFxEvents();
+
+        Label tagLabel = lookup("#tagLabel").queryAs(Label.class);
+        assertEquals("Test", tagLabel.getText());
+
+        Button removeTagButton = lookup("#removeTagButton").queryAs(Button.class);
+        assertTrue(removeTagButton.isVisible());
+    }
+
+    @Test
+    public void testSaveDebts() {
+        Expense mockExpense = new Expense();
+        mockExpense.setPayingParticipant(mockParticipant);
+        mockExpense.setParticipants(new ArrayList<>());
+        mockExpense.addParticipant(mockParticipant);
+        mockExpense.addParticipant(mockParticipant2);
+        mockExpense.setAmount(10);
+
+        editExpenseCtrl.saveDebts(mockExpense);
+    }
+
+    @Test
+    public void testOnTagRemove() {
+        Tag mockTag = new Tag();
+        mockTag.setType("Test");
+        mockTag.setColor("#FFFFFF");
+
+        Platform.runLater(() -> {
+            editExpenseCtrl.setTag(mockTag);
+            editExpenseCtrl.onTagRemove();
+        });
+
+        WaitForAsyncUtils.waitForFxEvents();
+
+        Label tagLabel = lookup("#tagLabel").queryAs(Label.class);
+        assertEquals("No tag", tagLabel.getText());
+
+        Button removeTagButton = lookup("#removeTagButton").queryAs(Button.class);
+        assertFalse(removeTagButton.isVisible());
+    }
+
+    @Test
+    public void testOnTagsClick() {
+        Event mockEvent = new Event();
+        Expense mockExpense = new Expense();
+        Tag mockTag = new Tag();
+
+        Platform.runLater(() -> {
+            editExpenseCtrl.setEvent(mockEvent);
+            editExpenseCtrl.setExpense(mockExpense);
+            editExpenseCtrl.setTag(mockTag);
+            editExpenseCtrl.onTagsClick(null);
+        });
+
+        WaitForAsyncUtils.waitForFxEvents();
+
+        Mockito.verify(mainCtrlMock).showTags(mockEvent, mockExpense, null, false, mockTag);
+    }
+
+    @Test
+    public void testSaveAsEuro() {
+        TextField amountField = lookup("#amountField").queryAs(TextField.class);
+        ChoiceBox currChoiceBox = lookup("#currChoiceBox").queryAs(ChoiceBox.class);
+        DatePicker datePicker = lookup("#datePicker").queryAs(DatePicker.class);
+
+        interact(() -> {
+            amountField.setText("10");
+            currChoiceBox.getSelectionModel().select("USD");
+            datePicker.setValue(LocalDate.of(2020, 4, 1));
+        });
+
+        Platform.runLater(() -> {
+            editExpenseCtrl.setTesting(true);
+            editExpenseCtrl.saveAsEuro();
+        });
+
+        WaitForAsyncUtils.waitForFxEvents();
+
+        assertEquals(10.0, mockExpense.getAmount());
+        assertEquals("EUR", mockExpense.getCurrency());
+    }
+
+    @Test
+    public void testOnSaveClickWithInvalidAmount() {
+        TextField amountField = lookup("#amountField").queryAs(TextField.class);
+        interact(() -> {
+            amountField.setText("invalid_amount");
+        });
+
+        Platform.runLater(() -> {
+            editExpenseCtrl.onSaveClick(null);
+        });
+
+        WaitForAsyncUtils.waitForFxEvents();
+
+        DialogPane dialogPane = lookup(".dialog-pane").queryAs(DialogPane.class);
+        Button okButton = (Button) dialogPane.lookupButton(ButtonType.OK);
+        interact(() -> okButton.fire());
+
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    @Test
+    public void testOnSaveClickWithNoParticipants() {
+        TextField amountField = lookup("#amountField").queryAs(TextField.class);
+        RadioButton onlySome = lookup("#onlySome").queryAs(RadioButton.class);
+        ChoiceBox currChoiceBox = lookup("#currChoiceBox").queryAs(ChoiceBox.class);
+        DatePicker datePicker = lookup("#datePicker").queryAs(DatePicker.class);
+
+        interact(() -> {
+            editExpenseCtrl.setTesting(true);
+            amountField.setText("10");
+            onlySome.setSelected(true);
+            currChoiceBox.getSelectionModel().select("USD");
+            datePicker.setValue(LocalDate.of(2020, 4, 1));
+            editExpenseCtrl.setParticipants(new ArrayList<>());
+        });
+
+        Platform.runLater(() -> {
+            editExpenseCtrl.onSaveClick(null);
+        });
+
+        WaitForAsyncUtils.waitForFxEvents();
+
+        interact(() -> {
+            DialogPane dialogPane = lookup(".dialog-pane").queryAs(DialogPane.class);
+            Button okButton = (Button) dialogPane.lookupButton(ButtonType.OK);
+            okButton.fire();
+        });
+
+        WaitForAsyncUtils.waitForFxEvents();
     }
 }

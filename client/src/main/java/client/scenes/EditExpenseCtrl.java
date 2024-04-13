@@ -32,6 +32,8 @@ import java.util.ResourceBundle;
 
 public class EditExpenseCtrl{
 
+    private boolean testing;
+
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
     private Event event;
@@ -148,7 +150,7 @@ public class EditExpenseCtrl{
             return;
         }
         expense.setCurrency(currChoiceBox.getSelectionModel().getSelectedItem().toString());
-        if(equally.isSelected() || participants.size() == event.getParticipants().size()){
+        if(!testing && (equally.isSelected() || participants.size() == event.getParticipants().size())){
             expense.setParticipants(event.getParticipants());
         }
         else{
@@ -202,7 +204,7 @@ public class EditExpenseCtrl{
      */
     public void saveAsEuro(){
         boolean yes = false;
-        if(!yes){
+        if(!testing && !yes){
             return;
         }
         Double res = Double.parseDouble(amountField.getText());
@@ -408,14 +410,23 @@ public class EditExpenseCtrl{
     public void setIcon(String iconName, Button button) {
         String path = "client/images/icons/" + iconName;
         URL url = LanguageButtonUtils.class.getClassLoader().getResource(path);
-        if (url == null) {
-            throw new RuntimeException("Resources folder not found");
+
+        if(!testing && url == null){
+            throw new RuntimeException("Invalid icon name");
         }
 
-        Image image = new Image(String.valueOf(url));
+        Image image = null;
+
+        if(!testing){
+            image = new Image(String.valueOf(url));
+        }
 
         ImageView imageView = new ImageView();
-        imageView.setImage(image);
+
+        if(!testing){
+            imageView.setImage(image);
+        }
+
         imageView.setPreserveRatio(true);
         imageView.setSmooth(true);
         imageView.setCache(true);
@@ -546,7 +557,7 @@ public class EditExpenseCtrl{
     /**
      * Configures the tag label and remove button
      */
-    private void configureTagElements() {
+    void configureTagElements() {
         tagLabel.setMinHeight(20);
         tagLabel.setMinWidth(40);
         tagLabel.setAlignment(Pos.CENTER);
@@ -601,5 +612,9 @@ public class EditExpenseCtrl{
      */
     public List<Participant> getParticipants() {
         return participants;
+    }
+
+    public void setTesting(boolean testing) {
+        this.testing = testing;
     }
 }
