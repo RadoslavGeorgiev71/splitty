@@ -8,6 +8,7 @@ import commons.Debt;
 import commons.Event;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import jakarta.ws.rs.WebApplicationException;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -81,6 +82,13 @@ public class OpenDebtsCtrl {
             for (int i = 0; i < debts.size(); i++) {
                 visualizeDebt(i);
             }
+
+            server.registerEventUpdateDebts(event -> {
+                if(this.event.getId() == event.getId()) {
+                    this.event = server.getEvent(event.getId());
+                    Platform.runLater(this::initialize);
+                }
+            });
         }
     }
 
