@@ -77,6 +77,9 @@ public class EventOverviewCtrl {
     private Button overviewSettleDebtsButton;
 
     @FXML
+    private Button statisticsButton;
+
+    @FXML
     private ChoiceBox<Participant> participantsMenu;
 
     @FXML
@@ -694,7 +697,7 @@ public class EventOverviewCtrl {
         backButton.setText(bundle.getString("backButton"));
         overviewSettleDebtsButton.setText(bundle.getString("overviewSettleDebtsButton"));
         tabPaneAll.setText(bundle.getString("tabPaneAll"));
-
+        statisticsButton.setText(bundle.getString("statisticsButton"));
     }
 
     /**
