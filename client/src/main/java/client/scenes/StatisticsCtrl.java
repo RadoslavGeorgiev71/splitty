@@ -64,9 +64,10 @@ public class StatisticsCtrl {
     public void initialize() {
         if(this.event != null) {
             // TODO: configure right currency
-            totalCostLabel.setText(languageResourceBundle.getResourceBundle().getString("totalCostLabel") +
-                String.format("%.2f", event.getExpenses()
-                    .stream().mapToDouble(Expense::getAmount).sum()) + "$");
+            totalCostLabel.setText(
+                    languageResourceBundle.getResourceBundle().getString("totalCostLabel") +
+                    String.format("%.2f", event.getExpenses().stream().mapToDouble(
+                    Expense::getAmount).sum()) + "$");
             Map<Tag, Double> distribution = getMoneyPerTag();
             pane.getChildren().remove(pieChart);
             pieChart = new PieChart();
