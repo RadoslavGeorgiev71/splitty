@@ -51,6 +51,14 @@
 > * Ctrl + W: close window
 > * Esc: go back to Event Overview 
 
+> Statistics
+> * Ctrl + W: close window
+> * Esc: go back to Event Overview 
+
+> Tags
+> * Ctrl + W: close window
+> * Esc: go back to Event Overview 
+
 ### Admin:
 
 > Login
