@@ -4,6 +4,8 @@ import client.utils.ServerUtils;
 import commons.Event;
 import commons.Expense;
 import commons.Participant;
+import commons.Tag;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -204,4 +206,57 @@ public class AddExpenseCtrlTest extends ApplicationTest {
         addExpenseCtrl.setExpense(new Expense());
     }
 
+    @Test
+    public void testSetIconWithInvalidIconName() {
+        Button button = new Button();
+
+        assertThrows(RuntimeException.class, () -> {
+            addExpenseCtrl.setIcon("invalid_icon_name", button);
+        });
+    }
+
+    @Test
+    public void testSetIconWithValidIconName() {
+        addExpenseCtrl.setTesting(true);
+        Platform.runLater(() -> {
+            addExpenseCtrl.setIcon("add.png", new Button());
+        });
+    }
+
+    @Test
+    public void testConfigureTag(){
+        Platform.runLater(() -> {
+            addExpenseCtrl.setTag(new Tag("Test", "#0000FF"));
+            addExpenseCtrl.configureTagInformation();
+        });
+
+        addExpenseCtrl.setExpense(new Expense());
+        TextField amountField = lookup("#amountField").queryAs(TextField.class);
+        ChoiceBox currChoiceBox = lookup("#currChoiceBox").queryAs(ChoiceBox.class);
+        DatePicker datePicker = lookup("#datePicker").queryAs(DatePicker.class);
+
+        interact(() -> {
+            amountField.setText("10");
+            currChoiceBox.getSelectionModel().select("USD");
+            datePicker.setValue(LocalDate.of(2020, 4, 1));
+        });
+
+
+        addExpenseCtrl.setTesting(true);
+
+        Platform.runLater(() -> {
+            addExpenseCtrl.saveAsEuro();
+        });
+    }
+
+    @Test
+    public void testTagRemove(){
+        Platform.runLater(() -> {
+            addExpenseCtrl.onTagRemove();
+        });
+
+        Platform.runLater(() -> {
+            addExpenseCtrl.onTagsClick(new ActionEvent());
+        });
+    }
 }
