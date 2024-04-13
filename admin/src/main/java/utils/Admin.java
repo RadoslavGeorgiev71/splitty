@@ -61,8 +61,7 @@ public class Admin{
      * @return The proper websocket url
      */
     public String convertUrl(String s){
-        String webSocketUrl = new String(s);
-        webSocketUrl.replace("http", "ws");
+        String webSocketUrl = s.replace("http", "ws");
         if(webSocketUrl.endsWith("/")){
             webSocketUrl += "websocket";
         }
