@@ -491,8 +491,15 @@ public class EditExpenseCtrl{
         currencies.add("AUD");
         currChoiceBox.setItems(FXCollections.observableArrayList(currencies));
         try{
-            amountField.setText("" + convertCurrency());
-            currChoiceBox.getSelectionModel().select(currency);
+            if(currency != null &&
+                    expense.getCurrency() != currency) {
+                amountField.setText("" + convertCurrency());
+                currChoiceBox.getSelectionModel().select(currency);
+            }
+            else{
+                amountField.setText("" + expense.getAmount());
+                currChoiceBox.getSelectionModel().select(expense.getCurrency());
+            }
         }
         catch (Exception e){
             amountField.setText("" + expense.getAmount());

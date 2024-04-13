@@ -298,6 +298,9 @@ public class EventOverviewCtrl {
                 show = expense;
             }
         }
+        else{
+            show = expense;
+        }
         return show;
     }
 
@@ -337,7 +340,11 @@ public class EventOverviewCtrl {
         double amount = 0;
         if (event != null) {
             for (int i = 0; i < event.getExpenses().size(); i++) {
-                Expense expense = foreignCurrency(event.getExpenses().get(i));
+                Expense expense = event.getExpenses().get(i);
+                if(ConfigClient.getCurrency() != null &&
+                        expense.getCurrency() != ConfigClient.getCurrency()) {
+                    expense = foreignCurrency(event.getExpenses().get(i));
+                }
                 amount += expense.getAmount();
                 visualizeExpense(tabPaneAllGridPane, expense, i);
             }
@@ -360,7 +367,11 @@ public class EventOverviewCtrl {
         int j = 0;
         if (event != null) {
             for (int i = 0; i < event.getExpenses().size(); i++) {
-                Expense expense = foreignCurrency(event.getExpenses().get(i));
+                Expense expense = event.getExpenses().get(i);
+                if(ConfigClient.getCurrency() != null &&
+                        expense.getCurrency() != ConfigClient.getCurrency()) {
+                    expense = foreignCurrency(event.getExpenses().get(i));
+                }
                 Participant payingParticipant = expense.getPayingParticipant();
                 if (payingParticipant.equals(participantsMenu.
                         getSelectionModel().getSelectedItem())) {
@@ -388,7 +399,11 @@ public class EventOverviewCtrl {
         if (event != null) {
             for (int i = 0; i < event.getExpenses().size(); i++) {
                 Participant participant = participantsMenu.getSelectionModel().getSelectedItem();
-                Expense expense = foreignCurrency(event.getExpenses().get(i));
+                Expense expense = event.getExpenses().get(i);
+                if(ConfigClient.getCurrency() != null &&
+                        expense.getCurrency() != ConfigClient.getCurrency()) {
+                    expense = foreignCurrency(event.getExpenses().get(i));
+                }
                 if (expense.getParticipants().contains(participant)) {
                     amount += expense.getAmount();
                     visualizeExpense(tabPaneIncludingGridPane, expense, j++);
