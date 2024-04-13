@@ -13,6 +13,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.util.StringConverter;
 
@@ -341,5 +343,22 @@ public class TagCtrl {
         imageView.setFitWidth(20);
         imageView.setFitHeight(20);
         button.setGraphic(imageView);
+    }
+
+    /**
+     * Method to be called when a key is pressed
+     * @param e keyevent to listen
+     */
+    public void keyPressed(KeyEvent e) {
+        if (e.isControlDown() && e.getCode() == KeyCode.W) {  //close window
+            mainCtrl.closeWindow();
+        }
+        switch (e.getCode()) {
+            case ESCAPE:
+                backToExpense();
+                break;
+            default:
+                break;
+        }
     }
 }
