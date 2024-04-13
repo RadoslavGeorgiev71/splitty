@@ -185,6 +185,24 @@ public class EventTest {
     }
 
     @Test
+    void getLastActivityTimeNull() {
+        Event ea = new Event();
+        Expense expense = ea.getLastActivity();
+        assertNull(expense);
+        assertEquals(ea.getLastActivityTime(), "No activity yet");
+    }
+
+    @Test
+    void getLastActivityTimeSuccessful() {
+        Event ea = new Event();
+        Expense exp = new Expense();
+        ea.addExpense(exp);
+        Expense expense = ea.getLastActivity();
+        assertNotNull(expense);
+        assertNotEquals(ea.getLastActivityTime(), "No activity yet");
+    }
+
+    @Test
     void getSettledDebts() {
         Debt debt = new Debt(p1, p2, 100);
         event1.addSettledDebt(debt);
