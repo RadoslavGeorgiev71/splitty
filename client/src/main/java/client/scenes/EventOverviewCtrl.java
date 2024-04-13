@@ -269,7 +269,7 @@ public class EventOverviewCtrl {
      * @param expense to convert
      * @return converted amount
      */
-    public Double convertCurrency(Expense expense) throws IOException {
+    public Double convertCurrency(Expense expense) throws Exception {
         String currency = ConfigClient.getCurrency();
         Double res = expense.getAmount();
         res *= server.convertRate(expense.getDateTime(), expense.getCurrency(), currency);

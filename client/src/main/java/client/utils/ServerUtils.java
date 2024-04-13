@@ -18,13 +18,18 @@ package client.utils;
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
 import java.io.*;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 
+import client.MyFXML;
 import commons.*;
 import jakarta.ws.rs.ProcessingException;
 //import jakarta.ws.rs.WebApplicationException;
@@ -559,12 +564,11 @@ public class ServerUtils {
      * @param to currency
      * @return the event with the specified id
      */
-    public Double convertRate(String date, String from, String to) throws IOException {
-        String path = "src/main/resources/rates/"+ date +"/"
-                + from + "/" + to + ".txt";
-        Path filePath = Paths.get(path).toAbsolutePath();
+    public Double convertRate(String date, String from, String to) throws IOException, URISyntaxException {
+        String path = "rates/"+ date +"/" + from + "/" + to + ".txt";
+        URL url = ServerUtils.class.getClassLoader().getResource(path);
         try{
-            File myObj = new File(filePath.toString());
+            File myObj = new File(url.toURI());
             Scanner myReader = new Scanner(myObj);
             String data = "";
             if (myReader.hasNextLine()) {
@@ -584,18 +588,15 @@ public class ServerUtils {
                 String rate = response.readEntity(Object.class).toString();
                 if(rate.contains(to)){
                     rate = rate.split("=")[2].split("}")[0];}
-                File fDate = new File(Paths.get("src/main/resources/rates/"+ date)
-                        .toAbsolutePath().toString());
-                File fFrom = new File(Paths.get("src/main/resources/rates/"+
-                        date + "/" + from).toAbsolutePath().toString());
-                File myObj = new File(filePath.toString());
-                boolean d = fDate.mkdir();
-                boolean f = fFrom.mkdir();
-                if(myObj.createNewFile()){
-                    FileWriter myWriter = new FileWriter(filePath.toString());
-                    myWriter.write(rate);
-                    myWriter.close();}
+                String str = "src/main/resources/rates/" + date + "/" + from;
+                File dirs = new File(Paths.get(str).toAbsolutePath().toString());
+                boolean d = dirs.mkdirs();
+                Path filePath = Paths.get(path).toAbsolutePath();
                 try{
+                    URL newUrl = ServerUtils.class.getClassLoader().getResource(str);
+                    Path ratesPath = Paths.get(newUrl.toURI());
+                    Path rateFilePath = ratesPath.resolve("config.txt");
+                    Files.createFile(rateFilePath);
                     return Double.parseDouble(rate);}
                 catch (Exception e1){
                     return 1.0d;}

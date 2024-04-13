@@ -201,7 +201,7 @@ public class EditExpenseCtrl{
     /**
      *  converted currency to save to server as EUR
      */
-    public void saveAsEuro() throws IOException {
+    public void saveAsEuro() throws Exception {
         boolean yes = false;
         if(!yes){
             return;
@@ -430,7 +430,7 @@ public class EditExpenseCtrl{
      *  converted currency
      * @return converted amount
      */
-    public Double convertCurrency() throws IOException {
+    public Double convertCurrency() throws Exception {
         String currency = ConfigClient.getCurrency();
         Double res = expense.getAmount();
         res *= server.convertRate(expense.getDateTime(), expense.getCurrency(), currency);

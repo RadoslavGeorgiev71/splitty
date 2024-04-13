@@ -195,7 +195,7 @@ public class AddExpenseCtrl{
     /**
      *  converted currency to save to server as EUR
      */
-    public void saveAsEuro() throws IOException {
+    public void saveAsEuro() throws Exception {
         boolean yes = false;
         if(!yes){
             return;
