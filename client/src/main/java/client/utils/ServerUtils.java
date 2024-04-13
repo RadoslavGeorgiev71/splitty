@@ -573,8 +573,6 @@ public class ServerUtils {
             return Double.parseDouble(data);
         } catch (Exception e) {
             String key = "af59b256521aa37eb850";
-            String url = "http://data.fixer.io/api/" + date;
-            url += "?access_key=" + key+ "&base=" + from + "&symbols=" + to;
             String url2 = "https://free.currconv.com/api/v7/convert?q="+ from + "_"+ to +
                     "&compact=ultra&date="+ date +"&apiKey="+ key;
             Response response = ClientBuilder.newClient(new ClientConfig())
@@ -607,6 +605,8 @@ public class ServerUtils {
             }
         }
     }
+//    String url = "http://data.fixer.io/api/" + date;
+//    url += "?access_key=" + key+ "&base=" + from + "&symbols=" + to;
 
     /**
      * Show a pop up window with an alert when the client cannot connect
