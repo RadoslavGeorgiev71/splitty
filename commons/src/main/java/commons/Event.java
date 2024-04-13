@@ -115,6 +115,19 @@ public class Event {
     }
 
     /**
+     * Method to find the actual time of the last Activity added to the Event
+     * @return the time of the last Activity added to the Event
+     */
+    @JsonIgnore
+    public String getLastActivityTime() {
+        Expense lastExpense = getLastActivity();
+        if(lastExpense != null){
+            return lastExpense.getDateTime();
+        }
+        return "No activity yet";
+    }
+
+    /**
      * Method to calculate the total expenses of the Event
      * @return total sum of Expenses
      */

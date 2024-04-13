@@ -204,7 +204,7 @@ public class OverviewCtrl {
     void initialize(){
         events = FXCollections.observableArrayList(admin.getEvents());
         titleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
-        lastActivityColumn.setCellValueFactory(new PropertyValueFactory<>("LastActivity"));
+        lastActivityColumn.setCellValueFactory(new PropertyValueFactory<>("LastActivityTime"));
         creationDateColumn.setCellValueFactory(new PropertyValueFactory<>("DateTime"));
         table.setItems(events);
         table.getSelectionModel().selectFirst();
