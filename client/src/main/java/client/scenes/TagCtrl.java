@@ -219,7 +219,9 @@ public class TagCtrl {
             // TODO: translate alert
             alert.showAndWait();
             tagOnFocus = updatedTag;
-            expense = server.getExpense(expense.getId());
+            if(expense != null) {
+                expense = server.getExpense(expense.getId());
+            }
             mainCtrl.showTags(event, expense, participant, isAddExpense, tagOnFocus);
         } else {
             Alert alert = new Alert(Alert.AlertType.WARNING);
