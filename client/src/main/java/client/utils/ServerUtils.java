@@ -425,35 +425,35 @@ public class ServerUtils {
 
 
 
-//    /**
-//     * Deletes an expense from the server
-//     *
-//     * @param eventId - id
-//     * @param expense - the expense to delete
-//     * @return the response from the server
-//     */
-//    public Response deleteExpense(long eventId, Expense expense) {
-//        Entity<Expense> entity = Entity.entity(expense, APPLICATION_JSON);
-//        return ClientBuilder.newClient(new ClientConfig())
-//                .target(server).path("api/expenses/remove/" + eventId)
-//                .request(APPLICATION_JSON)
-//                .accept(APPLICATION_JSON)
-//                .put(entity);
-//    }
-
     /**
      * Deletes an expense from the server
      *
+     * @param eventId - id
      * @param expense - the expense to delete
      * @return the response from the server
      */
-    public Response deleteExpense(Expense expense) {
+    public Response deleteExpense(long eventId, Expense expense) {
+        Entity<Expense> entity = Entity.entity(expense, APPLICATION_JSON);
         return ClientBuilder.newClient(new ClientConfig())
-                .target(server).path("api/expenses/" + expense.getId())
+                .target(server).path("api/expenses/remove/" + eventId)
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
-                .delete();
+                .put(entity);
     }
+
+//    /**
+//     * Deletes an expense from the server
+//     *
+//     * @param expense - the expense to delete
+//     * @return the response from the server
+//     */
+//    public Response deleteExpense(Expense expense) {
+//        return ClientBuilder.newClient(new ClientConfig())
+//                .target(server).path("api/expenses/" + expense.getId())
+//                .request(APPLICATION_JSON)
+//                .accept(APPLICATION_JSON)
+//                .delete();
+//    }
 
 //    /**
 //     * Adds an expense to the server

@@ -440,12 +440,12 @@ class ServerUtilsTest {
     void deleteExpense_OK() {
         Expense expense = new Expense();
 
-        stubFor(delete(urlEqualTo("/api/expenses/" + 0))
+        stubFor(delete(urlEqualTo("/api/expenses/remove/" + 0))
                 .willReturn(aResponse()
                         .withStatus(200)));
 
         SwingUtilities.invokeLater(() -> {
-            Response result = serverUtils.deleteExpense(expense);
+            Response result = serverUtils.deleteExpense(0, expense);
             assertEquals(200, result.getStatus());
         });
 

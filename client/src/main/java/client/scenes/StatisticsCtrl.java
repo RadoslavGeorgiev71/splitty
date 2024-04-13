@@ -180,7 +180,8 @@ public class StatisticsCtrl {
     public void setTesting(boolean testing) {
         this.testing = testing;
     }
-    
+
+    /**
      * Method to be called when a key is pressed
      * @param e keyevent to listen
      */
