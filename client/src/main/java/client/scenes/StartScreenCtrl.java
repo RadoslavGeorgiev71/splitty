@@ -189,6 +189,9 @@ public class StartScreenCtrl {
                 writeEventToConfig(event);
                 mainCtrl.showEventOverview(event);
             }
+            else{
+                showAlert(inviteCode);
+            }
         }
     }
 
@@ -341,5 +344,20 @@ public class StartScreenCtrl {
         imageView.setFitWidth(20);
         imageView.setFitHeight(20);
         button.setGraphic(imageView);
+    }
+
+    /**
+     * Show a pop up window with an alert when the client cannot connect
+     * to the server
+     * @param inviteCode that caused the problem
+     */
+    public void showAlert(String inviteCode){
+        ResourceBundle bundle = languageResourceBundle.getResourceBundle();
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(bundle.getString("joinErrorAlertTitle"));
+        alert.setHeaderText(bundle.getString("joinErrorAlertHeader1") +
+                " " + inviteCode + " " + bundle.getString("joinErrorAlertHeader2"));
+        alert.setContentText(bundle.getString("joinErrorAlertContext"));
+        alert.showAndWait();
     }
 }
