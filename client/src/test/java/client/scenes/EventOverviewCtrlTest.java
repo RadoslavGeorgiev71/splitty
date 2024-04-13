@@ -430,7 +430,6 @@ public class EventOverviewCtrlTest extends ApplicationTest {
 
     @Test
     public void testOnAddExpenseClick() {
-        // Prepare the test for event with less than 2 participants
         Event event = new Event();
         event.setParticipants(new ArrayList<>());
         event.addParticipant(mockParticipant);
@@ -441,7 +440,6 @@ public class EventOverviewCtrlTest extends ApplicationTest {
         });
         WaitForAsyncUtils.waitForFxEvents();
 
-        // Interact with the alert dialog
         interact(() -> {
             DialogPane dialogPane = lookup(".dialog-pane").queryAs(DialogPane.class);
             Button okButton = (Button) dialogPane.lookupButton(ButtonType.OK);
@@ -449,10 +447,8 @@ public class EventOverviewCtrlTest extends ApplicationTest {
         });
         WaitForAsyncUtils.waitForFxEvents();
 
-        // Verify that the correct method was called
         Mockito.verify(mockMainCtrl, Mockito.times(1)).showEventOverview(event);
 
-        // Prepare the test for event with more than 1 participant
         event.addParticipant(mockParticipant2);
 
         Platform.runLater(() -> {
@@ -461,13 +457,11 @@ public class EventOverviewCtrlTest extends ApplicationTest {
         });
         WaitForAsyncUtils.waitForFxEvents();
 
-        // Verify that the correct method was called
         Mockito.verify(mockMainCtrl, Mockito.times(1)).showAddExpenseWithTag(event, mockParticipant, null);
     }
 
     @Test
     public void testOnStatisticsOpen() {
-        // Prepare the test for event with no expenses
         Event event = new Event();
         event.setExpenses(new ArrayList<>());
 
@@ -477,7 +471,6 @@ public class EventOverviewCtrlTest extends ApplicationTest {
         });
         WaitForAsyncUtils.waitForFxEvents();
 
-        // Interact with the alert dialog
         interact(() -> {
             DialogPane dialogPane = lookup(".dialog-pane").queryAs(DialogPane.class);
             Button okButton = (Button) dialogPane.lookupButton(ButtonType.OK);
@@ -485,7 +478,6 @@ public class EventOverviewCtrlTest extends ApplicationTest {
         });
         WaitForAsyncUtils.waitForFxEvents();
 
-        // Prepare the test for event with expenses
         List<Expense> expenses = new ArrayList<>();
         expenses.add(mockExpense);
         event.setExpenses(expenses);
@@ -496,7 +488,6 @@ public class EventOverviewCtrlTest extends ApplicationTest {
         });
         WaitForAsyncUtils.waitForFxEvents();
 
-        // Verify that the correct method was called
         Mockito.verify(mockMainCtrl, Mockito.times(1)).showStatistics(event);
     }
 
