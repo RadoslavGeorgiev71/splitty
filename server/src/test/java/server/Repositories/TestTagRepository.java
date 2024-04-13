@@ -1,6 +1,5 @@
 package server.Repositories;
 
-import commons.Debt;
 import commons.Tag;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;

@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class ParticipantServiceTest {
 
     @Mock
-    private ParticipantRepository participantRepo;
+    private TestParticipantRepository participantRepo;
     @Mock
     private DebtRepository debtRepo;
     @Mock

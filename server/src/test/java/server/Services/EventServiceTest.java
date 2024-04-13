@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class EventServiceTest {
     @Mock
-    private EventRepository eventRepo;
+    private TestEventRepository eventRepo;
     @Mock
     private ParticipantRepository participantRepo;
     @Mock

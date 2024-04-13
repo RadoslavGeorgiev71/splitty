@@ -564,6 +564,11 @@ public class ServerUtils {
         return null;
     }
 
+    /**
+     * Retrieves the expense by id
+     * @param expenseId - the expense id
+     * @return the found expense
+     */
     public Expense getExpense(long expenseId) {
         Response response = ClientBuilder.newClient(new ClientConfig())
             .target(server).path("/api/expenses/id/" + expenseId)

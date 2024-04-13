@@ -50,7 +50,6 @@ public class TestParticipantRepository implements ParticipantRepository {
      *
      * @return The list of called methods.
      */
-    @Override
     public List<String> getCalledMethods() {
         return calledMethods;
     }

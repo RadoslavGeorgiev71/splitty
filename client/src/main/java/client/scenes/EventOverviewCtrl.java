@@ -697,7 +697,8 @@ public class EventOverviewCtrl {
             }
         }
         amountOwingLabel.setTextAlignment(TextAlignment.CENTER);
-        amountOwingLabel.setText(languageResourceBundle.getResourceBundle().getString("amountOwing") +
+        amountOwingLabel.setText(languageResourceBundle
+            .getResourceBundle().getString("amountOwing") +
             " " + ConfigClient.getCurrency() + amountOwing);
         amountOwedLabel.setTextAlignment(TextAlignment.CENTER);
         amountOwedLabel.setText(languageResourceBundle.getResourceBundle().getString("amountOwed") +

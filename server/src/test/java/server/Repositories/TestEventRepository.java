@@ -55,7 +55,6 @@ public class TestEventRepository implements EventRepository {
      *
      * @return The list of called methods.
      */
-    @Override
     public List<String> getCalledMethods() {
         return calledMethods;
     }
@@ -238,8 +237,8 @@ public class TestEventRepository implements EventRepository {
     @Override
     public boolean existsById(Long aLong) {
         calledMethods.add("existsById");
-        if(events.stream().map(x -> x.getId()).toList().contains(aLong)) {
-           return true;
+        if (events.stream().map(x -> x.getId()).toList().contains(aLong)) {
+            return true;
         }
         else {
             return false;
