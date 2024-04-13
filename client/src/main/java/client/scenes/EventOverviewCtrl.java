@@ -190,7 +190,8 @@ public class EventOverviewCtrl {
 
     @FXML
     public void onEditExpenseClick(Expense expense) {
-        mainCtrl.showEditExpenseWithTag(this.event, expense, expense.getTag());
+        mainCtrl.showEditExpenseWithTag(this.event, expense,
+            expense.getTag(), expense.getPayingParticipant());
     }
 
     /**
@@ -311,7 +312,7 @@ public class EventOverviewCtrl {
         if(tag != null) {
             tagLabel = new Label(tag.getType());
             tagLabel.setBackground(Background.fill(Color.web(tag.getColor())));
-            if(Color.web(tag.getColor()).getBrightness() < 0.5) {
+            if(Color.web(tag.getColor()).getBrightness() < 0.7) {
                 tagLabel.setStyle("-fx-text-fill: white; -fx-border-color: black");
             }
             else {

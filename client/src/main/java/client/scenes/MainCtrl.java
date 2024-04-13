@@ -218,12 +218,14 @@ public class MainCtrl {
      * Switches the scene to the edit participant window
      * @param event takes an event as a parameter for which we edit an expense
      * @param expense takes the expense as a parameter to edit
+     * @param participant the current participant
      */
-    public void showEditExpense(Event event, Expense expense) {
+    public void showEditExpense(Event event, Expense expense, Participant participant) {
         primaryStage.setTitle("Edit Expense");
         primaryStage.setScene(editexpense);
         editExpenseCtrl.setEvent(event);
         editExpenseCtrl.setExpense(expense);
+        editExpenseCtrl.setParticipant(participant);
         editExpenseCtrl.setTag(expense.getTag());
         editExpenseCtrl.initialize();
     }
@@ -232,13 +234,16 @@ public class MainCtrl {
      * Switches the scene to the edit participant window
      * @param event takes an event as a parameter for which we edit an expense
      * @param expense takes the expense as a parameter to edit
+     * @param participant the current participant
      * @param tag - the tag to be set
      */
-    public void showEditExpenseWithTag(Event event, Expense expense, Tag tag) {
+    public void showEditExpenseWithTag(Event event, Expense expense,
+                                       Tag tag, Participant participant) {
         primaryStage.setTitle("Edit Expense");
         primaryStage.setScene(editexpense);
         editExpenseCtrl.setEvent(event);
         editExpenseCtrl.setExpense(expense);
+        editExpenseCtrl.setParticipant(participant);
         editExpenseCtrl.setTag(tag);
         editExpenseCtrl.initialize();
     }

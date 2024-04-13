@@ -551,7 +551,7 @@ public class ServerUtils {
      * @param eventId - event
      * @return the response from the server
      */
-    public List<Expense> getExpense(long eventId) {
+    public List<Expense> getExpenses(long eventId) {
         Response response = ClientBuilder.newClient(new ClientConfig())
                 .target(server).path("api/expenses/event/" + eventId)
                 .request(APPLICATION_JSON)
@@ -559,6 +559,15 @@ public class ServerUtils {
                 .get();
         //return response.readEntity(List<Expense>.class);
         return null;
+    }
+
+    public Expense getExpense(long expenseId) {
+        Response response = ClientBuilder.newClient(new ClientConfig())
+            .target(server).path("/api/expenses/id/" + expenseId)
+            .request(APPLICATION_JSON)
+            .accept(APPLICATION_JSON)
+            .get();
+        return response.readEntity(Expense.class);
     }
 
     /**
