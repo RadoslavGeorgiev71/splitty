@@ -463,7 +463,7 @@ public class EventOverviewCtrl {
      */
     public String setParticipantsText(Expense expense) {
         if(expense.getParticipants().equals(event.getParticipants())) {
-            return "(all)";
+            return languageResourceBundle.getResourceBundle().getString("all");
         }
         String participantsText = "(";
         for(int i = 0; i < expense.getParticipants().size(); i++) {
