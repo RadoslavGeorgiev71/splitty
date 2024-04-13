@@ -568,8 +568,7 @@ public class ServerUtils {
             Scanner myReader = new Scanner(myObj);
             String data = "";
             if (myReader.hasNextLine()) {
-                data = myReader.nextLine();
-            }
+                data = myReader.nextLine();}
             myReader.close();
             return Double.parseDouble(data);
         } catch (Exception e) {
@@ -584,8 +583,7 @@ public class ServerUtils {
             if (response.getStatus() == Response.Status.OK.getStatusCode()) {
                 String rate = response.readEntity(Object.class).toString();
                 if(rate.contains(to+"=")){
-                    rate = rate.split(to+"=")[1].split("}")[0];
-                }
+                    rate = rate.split(to+"=")[1].split("}")[0];}
                 File fDate = new File(Paths.get("src/main/resources/rates/"+ date)
                         .toAbsolutePath().toString());
                 File fFrom = new File(Paths.get("src/main/resources/rates/"+
@@ -596,14 +594,11 @@ public class ServerUtils {
                 if(myObj.createNewFile()){
                     FileWriter myWriter = new FileWriter(filePath.toString());
                     myWriter.write(rate);
-                    myWriter.close();
-                }
+                    myWriter.close();}
                 try{
-                    return Double.parseDouble(rate);
-                }
+                    return Double.parseDouble(rate);}
                 catch (Exception e1){
-                    return 1.0d;
-                }
+                    return 1.0d;}
             } else {
                 showAlert();
                 return null;
