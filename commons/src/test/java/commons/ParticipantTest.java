@@ -1,6 +1,5 @@
 package commons;
 
-import commons.Participant;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -13,19 +12,26 @@ public class ParticipantTest {
     private Participant p3;
     @BeforeEach
     void testBasis() {
+        long id = 5;
         p1 = new Participant("Bob");
-        p2 = new Participant(5, "Alice", "alice@gmail.com", "NHJ201", "12345");
-        p3 = new Participant(5, "Alice", "alice@gmail.com", "NHJ201", "12345");
+        p2 = new Participant(id, "Alice", "alice@gmail.com", "NHJ201", "12345");
+        p3 = new Participant(id, "Alice", "alice@gmail.com", "NHJ201", "12345");
     }
 
     @Test
-    void testConstructorWIthName() {
+    void testConstructorWithName() {
         assertNotNull(p1);
     }
 
     @Test
-    void textConstructor() {
+    void testConstructor() {
         assertNotNull(p2);
+    }
+
+    @Test
+    void testEmptyContructor() {
+        Participant p4 = new Participant();
+        assertNotNull(p4);
     }
 
     @Test
@@ -42,6 +48,10 @@ public class ParticipantTest {
         assertEquals("alice@gmail.com", p2.getEmail());
     }
     @Test
+    void testGetEmailNull() {
+        assertNull(p1.getEmail());
+    }
+    @Test
     void testGetIBAN() {
         assertEquals("NHJ201", p2.getIban());
     }
@@ -53,8 +63,9 @@ public class ParticipantTest {
 
     @Test
     void testSetId() {
-        p1.setId(8);
-        assertEquals(8, p1.getId());
+        long id = 8;
+        p1.setId(id);
+        assertEquals(id, p1.getId());
     }
 
     @Test

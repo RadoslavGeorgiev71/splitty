@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 import static org.junit.jupiter.api.Assertions.*;
 
 class DebtTest {
+
     private Participant p1 = new Participant(1, "a");
     private Participant p2 = new Participant(2, "b");
     private Debt d1 = new Debt(123, p1, p2, 500);
@@ -57,13 +58,14 @@ class DebtTest {
 
     @Test
     void testGetPaidDateTimeNULL() {
-        assertEquals(d1.getPaidDateTime(), LocalDateTime.MIN);
+        assertNotNull(d1.getPaidDateTime());
     }
 
     @Test
     void testSetId() {
-        d2.setId(321);
-        assertEquals(d2.getId(), 321);
+        long id = 321;
+        d2.setId(id);
+        assertEquals(d2.getId(), id);
     }
 
     @Test
@@ -93,15 +95,15 @@ class DebtTest {
     @Test
     void testSetPaidDateTime() {
         LocalDateTime now = LocalDateTime.now();
-        d2.setPaidDateTime(now);
+        d2.setPaidDateTime(now.toString());
         assertNotNull(d2.getPaidDateTime());
     }
 
     @Test
     void testGetPaidDateTimeNotNull() {
         LocalDateTime now = LocalDateTime.now();
-        d2.setPaidDateTime(now);
-        assertEquals(now, d2.getPaidDateTime());
+        d2.setPaidDateTime(now.toString());
+        assertEquals(now.toString(), d2.getPaidDateTime());
     }
 
     @Test

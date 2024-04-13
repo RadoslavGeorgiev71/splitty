@@ -22,13 +22,10 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 
-import commons.Debt;
-import commons.Expense;
+import commons.*;
 import jakarta.ws.rs.ProcessingException;
 //import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.Response;
-import commons.Event;
-import commons.Participant;
 import javafx.scene.control.Alert;
 import org.glassfish.jersey.client.ClientConfig;
 
@@ -63,6 +60,57 @@ public class ServerUtils {
                 });
     }
 
+    /**
+     * Get all tags
+     * @return - a list of the tags
+     */
+    public List<Tag> getTags() {
+        return ClientBuilder.newClient(new ClientConfig())
+            .target(server).path("api/tags")
+            .request(APPLICATION_JSON)
+            .accept(APPLICATION_JSON)
+            .get(new GenericType<>() {
+            });
+    }
+
+    /**
+     * Adds a new tag
+     * @param tag - the tag to be added
+     * @return the new tag
+     */
+    public Tag addTag(Tag tag) {
+        return ClientBuilder.newClient(new ClientConfig())
+            .target(server).path("api/tags/add")
+            .request(APPLICATION_JSON)
+            .accept(APPLICATION_JSON)
+            .post(Entity.entity(tag, APPLICATION_JSON), Tag.class);
+    }
+
+    /**
+     * Updates a tag
+     * @param tag - the version of the tag
+     * @return the tag
+     */
+    public Tag updateTag(Tag tag) {
+        return ClientBuilder.newClient(new ClientConfig())
+            .target(server).path("api/tags/update")
+            .request(APPLICATION_JSON)
+            .accept(APPLICATION_JSON)
+            .post(Entity.entity(tag, APPLICATION_JSON), Tag.class);
+    }
+
+    /**
+     * Deletes a tag
+     * @param tag - the tag to be deleted
+     * @return the response from the server
+     */
+    public Response deleteTag(Tag tag) {
+        return ClientBuilder.newClient(new ClientConfig())
+            .target(server).path("api/tags/" + tag.getId())
+            .request(APPLICATION_JSON)
+            .accept(APPLICATION_JSON)
+            .delete();
+    }
 
     /**
      * Adds debt to the database
@@ -306,12 +354,13 @@ public class ServerUtils {
     /**
      * Sends a default email to the user to check
      * if the credentials are correct
+     * @param email email address to sent
      * @return boolean
      */
-    public boolean sendDefault() {
+    public boolean sendDefault(String email) {
         try{
             Participant participant = new Participant(0, ConfigClient.getName(),
-                    ConfigClient.getEmail(), ConfigClient.getIban(), ConfigClient.getBic());
+                    email, ConfigClient.getIban(), ConfigClient.getBic());
             Response response = ClientBuilder.newClient(new ClientConfig())
                     .target(server).path("/api/email/default")
                     .request(APPLICATION_JSON)
@@ -319,6 +368,8 @@ public class ServerUtils {
                     .post(Entity.json(participant));
             if (response.getStatus() == Response.Status.OK.getStatusCode()) {
                 return true;
+            } else if(response.getStatus() == Response.Status.BAD_REQUEST.getStatusCode()){
+                return false;
             } else {
                 showAlert();
                 return false;
@@ -353,7 +404,11 @@ public class ServerUtils {
                     .post(Entity.json(participant));
             if (response.getStatus() == Response.Status.OK.getStatusCode()) {
                 return true;
-            } else {
+            }
+            else if(response.getStatus() == Response.Status.BAD_REQUEST.getStatusCode()){
+                return false;
+            }
+            else {
                 showAlert();
                 return false;
             }
@@ -363,6 +418,9 @@ public class ServerUtils {
             return false;
         }
     }
+
+
+
     /**
      * Deletes an expense from the server
      *
@@ -401,7 +459,7 @@ public class ServerUtils {
      */
     public Expense addExpense(Expense expense) {
         try{
-            expense.setId(1000);
+            //expense.setId(1000);
             Entity<Expense> entity = Entity.entity(expense, APPLICATION_JSON);
             Response response = ClientBuilder.newClient(new ClientConfig())
                             .target(server).path("api/expenses")
@@ -427,7 +485,7 @@ public class ServerUtils {
      */
     public Expense addExpense(long eventId, Expense expense) {
         try{
-            expense.setId(1000);
+            //expense.setId(1000);
             Response response = ClientBuilder.newClient(new ClientConfig())
                     .target(server).path("api/expenses/event/" + eventId)
                     .request(APPLICATION_JSON)
@@ -530,7 +588,7 @@ public class ServerUtils {
         alert.setTitle("Error");
         alert.setHeaderText("Error: Unable to connect to the server");
         alert.setContentText("Please make sure that the URL is " +
-                "correct, that the server is running and that your email credentials are correct");
+                "correct, that the server is running and that the email credentials are correct");
         alert.showAndWait();
     }
 
@@ -545,10 +603,14 @@ public class ServerUtils {
         alert.setHeaderText("Error: Unable to connect to the server or " +
                 "event with invite code: " + inviteCode + " does not exists");
         alert.setContentText("Please make sure that the URL and invite code are " +
-                "correct, that the server is running and that your email credentials are correct");
+                "correct, that the server is running and that the email credentials are correct");
         alert.showAndWait();
     }
 
-
-
+    /**
+     * Stops the client thread
+     */
+    public void stop() {
+        EXEC.shutdownNow();
+    }
 }

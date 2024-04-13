@@ -296,4 +296,41 @@ public class ConfigClient {
             System.out.println("Error writing to file: " + e.getMessage());
         }
     }
+
+    /**
+     * Method for only having unique recent events
+     */
+
+    public void uniqueRecentEvents(){
+        if(recentEvents == null){
+            return;
+        }
+        String[] recentEventsArray = recentEvents.split(", ");
+        StringBuilder uniqueEvents = new StringBuilder();
+        for (String event : recentEventsArray) {
+            if (!uniqueEvents.toString().contains(event)) {
+                uniqueEvents.append(event).append(", ");
+            }
+        }
+        recentEvents = uniqueEvents.toString();
+        onlyFiveRecentEvents();
+    }
+
+    /**
+     * Method for only having the five most recent events
+     */
+    public void onlyFiveRecentEvents(){
+        String[] recentEventsArray = recentEvents.split(", ");
+        StringBuilder onlyFiveEvents = new StringBuilder();
+        int end = Math.min(5, recentEventsArray.length);
+        for (int i = 0; i < end; i++) {
+            onlyFiveEvents.append(recentEventsArray[i]).append(", ");
+        }
+        recentEvents = onlyFiveEvents.toString();
+
+        this.writeToFile("config.txt",
+                new String[]{serverUrl, email, iban, bic, language, currency, name, recentEvents},
+                new String[]{"serverUrl",
+                    "email", "iban", "bic", "language", "currency", "name", "recentEvents"});
+    }
 }

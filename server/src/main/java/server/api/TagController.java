@@ -18,6 +18,9 @@ public class TagController {
      */
     public TagController(TagService tagService) {
         this.tagService = tagService;
+        tagService.add(new Tag("food", "#93C47D"));
+        tagService.add(new Tag("entrance fees", "#4A86E8"));
+        tagService.add(new Tag("travel", "#E06666"));
     }
 
     /**
@@ -31,11 +34,11 @@ public class TagController {
 
     /**
      * Save a new tag if it is valid and returns a response
-     * @param tag - the debt to be saved
+     * @param tag - the tag to be saved
      * @return response entity with "ok" status message if it is successful,
      * "bad request" message otherwise
      */
-    @PostMapping(path = {"", "/"})
+    @PostMapping("/add")
     public ResponseEntity<Tag> add(@RequestBody Tag tag){
         Tag tagSaved = tagService.add(tag);
         if(tagSaved == null) {
@@ -43,6 +46,23 @@ public class TagController {
         }
         else {
             return ResponseEntity.ok(tagSaved);
+        }
+    }
+
+    /**
+     * Update a tag if it is valid
+     * @param tag - the new tag
+     * @return response entity with "ok" status message if it is successful,
+     * "bad request" message otherwise
+     */
+    @PostMapping("/update")
+    public ResponseEntity<Tag> update(@RequestBody Tag tag) {
+        Tag updatedTag = tagService.update(tag);
+        if(updatedTag == null) {
+            return ResponseEntity.badRequest().build();
+        }
+        else {
+            return ResponseEntity.ok(updatedTag);
         }
     }
 

@@ -19,9 +19,11 @@ public class Expense {
     private String currency;
     @ManyToMany//(cascade=CascadeType.ALL) //keep
     private List<Participant> participants;
-    @OneToMany//(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Debt> debts;
     private String dateTime;
+    @ManyToOne
+    private Tag tag;
 
     /**
      * Empty new Expense
@@ -239,15 +241,32 @@ public class Expense {
     }
 
     /**
+     * Getter for the tag
+     * @return the tag
+     */
+    public Tag getTag() {
+        return tag;
+    }
+
+    /**
+     * Setter for the tag
+     * @param tag - the tag to be set
+     */
+    public void setTag(Tag tag) {
+        this.tag = tag;
+    }
+
+    /**
      * @return activity
      */
     @JsonIgnore
-    public String getActivity() {
-        if (this.payingParticipant == null){
-            return "No payer";
-        }
-        return this.payingParticipant.getName() + " paid " + this.getAmount() +
-                " " + this.currency + " for " + this.getTitle();
+    public String[] getActivity() {
+        String[] activity = new String[4];
+        activity[0] = this.payingParticipant.getName();
+        activity[1] = String.valueOf(this.getAmount());
+        activity[2] = this.getCurrency();
+        activity[3] = this.getTitle();
+        return activity;
     }
 
     /**
@@ -257,17 +276,21 @@ public class Expense {
      */
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
+        if (this == o)  {
             return true;
         }
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
         Expense expense = (Expense) o;
-        return Double.compare(expense.amount, amount) == 0 && title.equals(expense.title)
-                && payingParticipant.equals(expense.payingParticipant) &&
-                participants.equals(expense.participants)
-                && Objects.equals(dateTime, expense.dateTime);
+        return id == expense.id && Double.compare(amount, expense.amount) == 0 &&
+            Objects.equals(title, expense.title) &&
+            Objects.equals(payingParticipant, expense.payingParticipant) &&
+            Objects.equals(currency, expense.currency) &&
+            Objects.equals(participants, expense.participants) &&
+            Objects.equals(debts, expense.debts) &&
+            Objects.equals(dateTime, expense.dateTime) &&
+            Objects.equals(tag, expense.tag);
     }
 
     /**
@@ -275,6 +298,7 @@ public class Expense {
      */
     @Override
     public int hashCode() {
-        return Objects.hash(title, payingParticipant, amount, participants, dateTime);
+        return Objects.hash(id, title, payingParticipant, amount, currency, participants, debts,
+            dateTime, tag);
     }
 }

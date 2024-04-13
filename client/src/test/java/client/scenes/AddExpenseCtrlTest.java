@@ -114,9 +114,6 @@ public class AddExpenseCtrlTest extends ApplicationTest {
             RadioButton equally = lookup("#equally").queryAs(RadioButton.class);
             equally.setSelected(true);
 
-            TextField tags = lookup("#tags").queryAs(TextField.class);
-            tags.setText("Test");
-
             Button expenseAddButton = lookup("#expenseAddButton").queryAs(Button.class);
             expenseAddButton.fire();
 
@@ -176,9 +173,6 @@ public class AddExpenseCtrlTest extends ApplicationTest {
             List<Participant> participants = new ArrayList<>();
             participants.add(mockParticipant);
             addExpenseCtrl.setParticipants(participants);
-
-            TextField tags = lookup("#tags").queryAs(TextField.class);
-            tags.setText("Test");
 
             Button expenseAddButton = lookup("#expenseAddButton").queryAs(Button.class);
             expenseAddButton.fire();

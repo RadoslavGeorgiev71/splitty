@@ -101,7 +101,7 @@ public class StartScreenCtrlTest extends ApplicationTest {
         clickOn("#joinEventText");
         write(inviteCode);
         clickOn("#joinEventButton");
-        Mockito.verify(mockServer, Mockito.times(2)).getEventByCode(inviteCode);
+        Mockito.verify(mockServer).getEventByCode(inviteCode);
         Mockito.verify(mockMainCtrl).showEventOverview(Mockito.any(Event.class));
     }
 

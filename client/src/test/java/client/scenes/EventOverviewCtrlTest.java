@@ -38,6 +38,7 @@ public class EventOverviewCtrlTest extends ApplicationTest {
     Expense mockExpense;
 
     Participant mockParticipant;
+    Participant mockParticipant2;
 
     private EventOverviewCtrl eventOverviewCtrl;
 
@@ -64,7 +65,11 @@ public class EventOverviewCtrlTest extends ApplicationTest {
         mockParticipant.setIban("testIban");
         mockParticipant.setEmail("testEmail");
 
-
+        mockParticipant2 = new Participant();
+        mockParticipant2.setName("testParticipant2");
+        mockParticipant2.setBic("testBic2");
+        mockParticipant2.setIban("testIban2");
+        mockParticipant2.setEmail("testEmail2");
 
         mockExpense = new Expense();
         mockExpense.setTitle("Test");
@@ -80,7 +85,8 @@ public class EventOverviewCtrlTest extends ApplicationTest {
         mockEvent.setTitle("Test");
         mockEvent.setParticipants(new ArrayList<>());
         mockEvent.addParticipant(mockParticipant);
-        mockEvent.setExpenses(list);
+        mockEvent.addParticipant(mockParticipant2);
+        //mockEvent.setExpenses(list);
         mockEvent.setInviteCode("testInviteCode");
 
         Mockito.doNothing().when(mockMainCtrl).showInvitation(mockEvent);
@@ -146,11 +152,16 @@ public class EventOverviewCtrlTest extends ApplicationTest {
 
     @Test
     public void testOnAddExpenseClick() {
+        Platform.runLater(() -> eventOverviewCtrl.onAddExpenseClick());
+        WaitForAsyncUtils.waitForFxEvents();
+
         Platform.runLater(() -> {
-            eventOverviewCtrl.onAddExpenseClick();
+            Button okButton = lookup(".button").queryAs(Button.class);
+            okButton.fire();
         });
         WaitForAsyncUtils.waitForFxEvents();
-        Mockito.verify(mockMainCtrl).showAddExpense(mockEvent, mockParticipant);
+
+        Mockito.verify(mockMainCtrl).showAddExpenseWithTag(mockEvent, mockParticipant, null);
     }
 
     @Test

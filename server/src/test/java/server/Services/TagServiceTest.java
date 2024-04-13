@@ -1,12 +1,17 @@
 package server.Services;
 
+import commons.Participant;
+import commons.Tag;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import server.Repositories.TestTagRepository;
 import server.database.TagRepository;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 public class TagServiceTest {
     @Mock
@@ -16,7 +21,7 @@ public class TagServiceTest {
     @BeforeEach
     void TagServiceSetUp() {
         tagRepo = new TestTagRepository();
-        sut = new TagService(tagRepo);
+        sut = new TagService(tagRepo, null, null);
     }
 
     @Test

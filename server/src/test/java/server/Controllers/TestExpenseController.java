@@ -1,17 +1,17 @@
 package server.Controllers;
 
 import commons.Expense;
+import commons.Event;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import server.Repositories.TestEventRepository;
-import server.Repositories.TestExpenseRepository;
+import server.Repositories.*;
+import server.Services.EventService;
 import server.Services.ExpenseService;
 import server.api.ExpenseController;
-import server.database.EventRepository;
-import server.database.ExpenseRepository;
+import server.database.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +24,15 @@ class TestExpenseController {
     @Mock
     private EventRepository eventRepo;
     @Mock
+    private ParticipantRepository participantRepo;
+    @Mock
+    private DebtRepository debtRepo;
+    @Mock
+    private TagRepository tagRepo;
+
+    @Mock
+    private EventService eventService;
+    @Mock
     private ExpenseService expenseService;
     private ExpenseController sut;
 
@@ -31,7 +40,12 @@ class TestExpenseController {
     void participantControllerSetUp() {
         eventRepo = new TestEventRepository();
         expenseRepo = new TestExpenseRepository();
+        participantRepo = new TestParticipantRepository();
+        debtRepo = new TestDebtRepository();
+        tagRepo = new TestTagRepository();
         expenseService = new ExpenseService(expenseRepo, eventRepo);
+        eventService = new EventService(eventRepo, participantRepo, debtRepo,
+                expenseRepo, tagRepo);
         sut = new ExpenseController(expenseService);
     }
 
@@ -113,4 +127,16 @@ class TestExpenseController {
         assertEquals(expenses.size(), 2);
         assertEquals(expenses.get(1), e2);
     }
+    @Test
+    void testUpdateEventExpense(){
+        Event e1 = new Event();
+        Expense ex1 = new Expense("e1", null,10.0, null);
+        e1.addExpense(ex1);
+        expenseService.create(ex1);
+        ex1.setTitle("e2");
+        sut.updateEventExpense(e1.getId(), ex1);
+        List<Expense> eventsSaved = sut.getAll();
+        assertEquals(eventsSaved.get(0).getTitle(), "e2");
+    }
+
 }

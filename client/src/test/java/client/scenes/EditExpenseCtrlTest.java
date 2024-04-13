@@ -129,9 +129,6 @@ public class EditExpenseCtrlTest extends ApplicationTest {
             RadioButton equally = lookup("#equally").queryAs(RadioButton.class);
             equally.setSelected(true);
 
-            TextField tags = lookup("#tags").queryAs(TextField.class);
-            tags.setText("Test");
-
             Button expenseSaveButton = lookup("#expenseSaveButton").queryAs(Button.class);
             expenseSaveButton.fire();
 
@@ -158,9 +155,6 @@ public class EditExpenseCtrlTest extends ApplicationTest {
             RadioButton onlySome = lookup("#onlySome").queryAs(RadioButton.class);
             onlySome.setSelected(true);
             onlySome.getOnAction().handle(new ActionEvent());
-
-            TextField tags = lookup("#tags").queryAs(TextField.class);
-            tags.setText("Test");
 
             Button expenseSaveButton = lookup("#expenseSaveButton").queryAs(Button.class);
             expenseSaveButton.fire();

@@ -1,8 +1,10 @@
 package server.Services;
 
-import commons.Event;
+import commons.*;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
-import server.database.EventRepository;
+import org.springframework.transaction.annotation.Transactional;
+import server.database.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -11,13 +13,27 @@ import java.util.Optional;
 @Service
 public class EventService {
     private final EventRepository eventRepo;
+    private final ParticipantRepository participantRepo;
+    private final DebtRepository debtRepo;
+    private final ExpenseRepository expenseRepo;
+    private final TagRepository tagRepo;
 
     /**
      * Constructor for EventService
      * @param eventRepo - the repository for events
+     * @param participantRepo - the repository for participants
+     * @param debtRepo - the repository for debts
+     * @param expenseRepo - the repository for expenses
+     * @param tagRepo - the repository for tags
      */
-    public EventService(EventRepository eventRepo) {
+    public EventService(EventRepository eventRepo,ParticipantRepository participantRepo,
+                        DebtRepository debtRepo, ExpenseRepository expenseRepo,
+                        TagRepository tagRepo ) {
         this.eventRepo = eventRepo;
+        this.participantRepo = participantRepo;
+        this.expenseRepo = expenseRepo;
+        this.debtRepo = debtRepo;
+        this.tagRepo = tagRepo;
     }
 
     /**
@@ -52,7 +68,7 @@ public class EventService {
      * Method to update an event
      * @param id The id of the event to be updated
      * @param updatedEvent The already updated event object
-     * @return A event object which reflects the one that was just persisted
+     * @return an event object which reflects the one that was just persisted
      */
     public Event update(long id, Event updatedEvent){
         Optional<Event> existingEvent = eventRepo.findById(id);
@@ -81,8 +97,37 @@ public class EventService {
      * Method to delete an event by id
      * @param id of event
      */
+    @Transactional
     public void deleteById(long id){
+        Optional<Event> optional = eventRepo.findById(id);
+        Event event = optional.get();
+        List<Participant> participants = event.getParticipants();
+        List<Expense> expenses = event.getExpenses();
+        List<Debt> debts = event.getSettledDebts();
+        event.setSettledDebts(null);
+        event.setExpenses(null);
+        event.setParticipants(null);
+        eventRepo.save(event);
+        eventRepo.flush();
         eventRepo.deleteById(id);
+        for(Expense expense : expenses){
+            List<Debt> debts1 = expense.getDebts();
+            expense.setDebts(null);
+            expenseRepo.save(expense);
+            expenseRepo.deleteById(expense.getId());
+            for(Debt debt: debts1){
+                debtRepo.deleteById(debt.getId());
+            }
+        }
+        for(Debt debt : debts){
+            debtRepo.deleteById(debt.getId());
+        }
+        for(Participant participant: participants){
+            participantRepo.deleteById(participant.getId());
+        }
+        participantRepo.flush();
+        expenseRepo.flush();
+        debtRepo.flush();
     }
 
     /**
@@ -102,4 +147,66 @@ public class EventService {
     }
 
 
+    /**
+     * Method that is called when the admin wants to import an event
+     * It gets an event as a parameter
+     * and imports it into the database
+     * @param e event to import
+     * @return the imported/created event
+     */
+    @Transactional
+    public Event importEvent(Event e) {
+        Event newEvent = new Event();
+        newEvent.setTitle(e.getTitle());
+        newEvent.setInviteCode(e.getInviteCode());
+        newEvent.setDateTime(e.getDateTime());
+        newEvent = eventRepo.save(newEvent);
+        for(Participant participant : e.getParticipants()){
+            if(participantRepo.findById(participant.getId()).isPresent()){
+                throw new DataIntegrityViolationException("Participant with id "
+                        + participant.getId() + " already exists event cannot be imported" );
+            }
+            Long oldid = participant.getId();
+            newEvent.addParticipant(participant);
+            eventRepo.save(newEvent);
+            participant.setId(newEvent.getParticipants().getLast().getId());
+            changePId(e, participant.getId(), oldid);
+        }
+        for(Expense expense : e.getExpenses()){
+            if(expense.getTag() != null) {
+                expense.setTag(tagRepo.save(expense.getTag()));
+            }
+            expense = expenseRepo.save(expense);
+        }
+        newEvent.setExpenses(e.getExpenses());
+        newEvent.setSettledDebts(e.getSettledDebts());
+        eventRepo.save(newEvent);
+        return newEvent;
+    }
+
+    private void changePId(Event e, Long id, Long oldid) {
+        for(Expense expense : e.getExpenses()){
+            changeDebts(expense.getDebts(), id, oldid);
+            if(expense.getPayingParticipant().getId() == oldid){
+                expense.getPayingParticipant().setId(id);
+            }
+            for(Participant participant : expense.getParticipants()){
+                if(participant.getId() == oldid){
+                    participant.setId(id);
+                }
+            }
+        }
+        changeDebts(e.getSettledDebts(), id, oldid);
+    }
+
+    private void changeDebts(List<Debt> debts, Long id, Long oldid){
+        for(Debt debt : debts){
+            if(debt.getPersonOwing().getId() == oldid){
+                debt.getPersonOwing().setId(id);
+            }
+            if( debt.getPersonPaying().getId() == oldid){
+                debt.getPersonPaying().setId(id);
+            }
+        }
+    }
 }

@@ -1,5 +1,6 @@
 package client.scenes;
 
+import client.utils.LanguageButtonUtils;
 import client.utils.LanguageResourceBundle;
 import client.utils.ServerUtils;
 import commons.Event;
@@ -9,11 +10,14 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
 import com.google.inject.Inject;
 
+import java.net.URL;
 import java.util.ResourceBundle;
 
 public class AddParticipantCtrl {
@@ -68,22 +72,22 @@ public class AddParticipantCtrl {
      * @param actionEvent to handle
      */
     public void ok(ActionEvent actionEvent) {
-        Event undoEvent = event;
-        Participant participant = new Participant();
-        participant.setName(nameField.getText());
-        participant.setIban(ibanField.getText());
-        participant.setEmail(emailField.getText());
-        participant.setBic(bicField.getText());
-        //server.addParticipant(participant);
-        event.addParticipant(participant);
-        server.persistEvent(event);
-        clearFields();
-        event = server.getEvent(event.getId());
-        if(event != null){
-            mainCtrl.showEventOverview(event);
-        }
-        else{
-            mainCtrl.showEventOverview(undoEvent);
+        if(event != null) {
+            Event undoEvent = event;
+            Participant participant = new Participant();
+            participant.setName(nameField.getText());
+            participant.setIban(ibanField.getText());
+            participant.setEmail(emailField.getText());
+            participant.setBic(bicField.getText());
+            //server.addParticipant(participant);
+            event.addParticipant(participant);
+            clearFields();
+            event = server.persistEvent(event);
+            if (event != null) {
+                mainCtrl.showEventOverview(event);
+            } else {
+                mainCtrl.showEventOverview(undoEvent);
+            }
         }
     }
 
@@ -173,5 +177,31 @@ public class AddParticipantCtrl {
         participantCancelButton.setText(bundle.getString("participantCancelButton"));
         participantOkButton.setText(bundle.getString("participantOkButton"));
 
+    }
+
+    /**
+     * Sets the icon of the chosen button.
+     * @param iconName
+     * @param button
+     */
+    @FXML
+    public void setIcon(String iconName, Button button) {
+        String path = "client/images/icons/" + iconName;
+        URL url = LanguageButtonUtils.class.getClassLoader().getResource(path);
+        if (url == null) {
+            throw new RuntimeException("Resources folder not found");
+        }
+
+        Image image = new Image(String.valueOf(url));
+
+        ImageView imageView = new ImageView();
+        imageView.setImage(image);
+        imageView.setPreserveRatio(true);
+        imageView.setSmooth(true);
+        imageView.setCache(true);
+
+        imageView.setFitWidth(20);
+        imageView.setFitHeight(20);
+        button.setGraphic(imageView);
     }
 }

@@ -53,8 +53,9 @@ class ExpenseTest {
 
     @Test
     void testSetId() {
-        exp1.setId(5);
-        assertEquals(exp1.getId(), 5);
+        long id = 5;
+        exp1.setId(id);
+        assertEquals(exp1.getId(), id);
     }
 
     @Test
@@ -148,7 +149,12 @@ class ExpenseTest {
 
     @Test
     void getActivity() {
-        assertEquals("Ana paid 100.0 EUR for party", exp1.getActivity());
+        String[] activity = new String[4];
+        activity[0] = exp1.getPayingParticipant().getName();
+        activity[1] = String.valueOf(exp1.getAmount());
+        activity[2] = exp1.getCurrency();
+        activity[3] = exp1.getTitle();
+        assertArrayEquals(activity, exp1.getActivity());
     }
 
     @Test
@@ -203,5 +209,23 @@ class ExpenseTest {
         Expense exp4 = new Expense("party", a, 100, "EUR", list, "2/25/2024");
         exp4.setCurrency("CHF");
         assertEquals(exp4.getCurrency(), "CHF");
+    }
+
+    @Test
+    void getTag() {
+        Expense exp4 = new Expense("party", a, 100, "EUR", list, "2/25/2024");
+        Tag t = new Tag("tag" , "tag green");
+        exp4.setTag(t);
+        assertNotNull(exp4.getTag());
+        assertEquals(t, exp4.getTag());
+    }
+
+    @Test
+    void setTag() {
+        Expense exp4 = new Expense("party", a, 100, "EUR", list, "2/25/2024");
+        Tag t = new Tag("tag" , "tag green");
+        exp4.setTag(t);
+        assertNotNull(exp4.getTag());
+        assertEquals(t, exp4.getTag());
     }
 }

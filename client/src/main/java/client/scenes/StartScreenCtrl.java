@@ -11,11 +11,14 @@ import commons.Participant;
 import javafx.fxml.FXML;
 import javafx.geometry.Side;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.ResourceBundle;
@@ -84,7 +87,10 @@ public class StartScreenCtrl {
 
         languageButton.getItems().clear();
 
+        config.uniqueRecentEvents();
+
         config = config.readFromFile("config.txt");
+
 
         String language = config.getLanguage();
         if (language != null) {
@@ -195,7 +201,8 @@ public class StartScreenCtrl {
             Event event = new Event();
             event.setTitle(title);
             event.createInviteCode();
-            if (ConfigClient.getName() != null && !ConfigClient.getName().equals("")){
+            if (ConfigClient.getName() != null && !ConfigClient.getName().equals("") &&
+                    !ConfigClient.getName().equals("null")){
                 Participant participant = getParticipantInfo();
                 event.addParticipant(participant);
             }
@@ -218,13 +225,16 @@ public class StartScreenCtrl {
     private static Participant getParticipantInfo() {
         Participant participant = new Participant();
         participant.setName(ConfigClient.getName());
-        if(ConfigClient.getEmail() != null && !ConfigClient.getEmail().equals("")){
+        if(ConfigClient.getEmail() != null && !ConfigClient.getEmail().equals("")
+            && !ConfigClient.getEmail().equals("null")){
             participant.setEmail(ConfigClient.getEmail());
         }
-        if(ConfigClient.getBic() != null && !ConfigClient.getBic().equals("")){
+        if(ConfigClient.getBic() != null && !ConfigClient.getBic().equals("")
+            && !ConfigClient.getBic().equals("null")){
             participant.setBic(ConfigClient.getBic());
         }
-        if(ConfigClient.getIban() != null && !ConfigClient.getIban().equals("")){
+        if(ConfigClient.getIban() != null && !ConfigClient.getIban().equals("")
+            && !ConfigClient.getIban().equals("null")){
             participant.setIban(ConfigClient.getIban());
         }
         return participant;
@@ -275,7 +285,7 @@ public class StartScreenCtrl {
         if (config.getRecentEvents() == null || config.getRecentEvents().equals("")) {
             config.setRecentEvents(event.getInviteCode());
         }else {
-            config.setRecentEvents(config.getRecentEvents() + ", " + event.getInviteCode());
+            config.setRecentEvents(event.getInviteCode() + ", " + config.getRecentEvents());
         }
         String[] contents = {config.getServerUrl(), config.getEmail(),
                 config.getIban(), config.getBic(),
@@ -305,5 +315,31 @@ public class StartScreenCtrl {
                 config.getName(), config.getRecentEvents()};
         config.writeToFile("config.txt", contents, keys);
 
+    }
+
+    /**
+     * Sets the icon of the chosen button.
+     * @param iconName
+     * @param button
+     */
+    @FXML
+    public void setIcon(String iconName, Button button) {
+        String path = "client/images/icons/" + iconName;
+        URL url = LanguageButtonUtils.class.getClassLoader().getResource(path);
+        if (url == null) {
+            throw new RuntimeException("Resources folder not found");
+        }
+
+        Image image = new Image(String.valueOf(url));
+
+        ImageView imageView = new ImageView();
+        imageView.setImage(image);
+        imageView.setPreserveRatio(true);
+        imageView.setSmooth(true);
+        imageView.setCache(true);
+
+        imageView.setFitWidth(20);
+        imageView.setFitHeight(20);
+        button.setGraphic(imageView);
     }
 }

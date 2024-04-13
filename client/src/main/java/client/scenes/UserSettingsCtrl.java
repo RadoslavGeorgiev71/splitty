@@ -1,6 +1,7 @@
 package client.scenes;
 
 import client.utils.ConfigClient;
+import client.utils.LanguageButtonUtils;
 import client.utils.LanguageResourceBundle;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
@@ -8,9 +9,12 @@ import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -251,21 +255,47 @@ public class UserSettingsCtrl {
      */
     public void sendDefault(ActionEvent actionEvent) {
         if(emailField.getText() != null){
-            if(server.sendDefault()){
+            if(server.sendDefault(emailField.getText())){
                 ResourceBundle bundle = languageResourceBundle.getResourceBundle();
                 Alert alert =  new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle(bundle.getString("settingsAlertInfoTitleText"));
                 alert.setHeaderText(bundle.getString("settingsAlertInfoHeaderText"));
                 alert.showAndWait();
+            }else{
+                ResourceBundle bundle = languageResourceBundle.getResourceBundle();
+                Alert alert =  new Alert(Alert.AlertType.WARNING);
+                alert.setTitle(bundle.getString("settingsAlertTitleText"));
+                alert.setHeaderText(bundle.getString("settingsAlertHeaderText"));
+                alert.setContentText(bundle.getString("settingsAlertContentText"));
+                alert.showAndWait();
             }
         }
-        else{
-            ResourceBundle bundle = languageResourceBundle.getResourceBundle();
-            Alert alert =  new Alert(Alert.AlertType.WARNING);
-            alert.setTitle(bundle.getString("settingsAlertTitleText"));
-            alert.setHeaderText(bundle.getString("settingsAlertHeaderText"));
-            alert.setContentText(bundle.getString("settingsAlertContentText"));
-            alert.showAndWait();
+
+    }
+
+    /**
+     * Sets the icon of the chosen button.
+     * @param iconName
+     * @param button
+     */
+    @FXML
+    public void setIcon(String iconName, Button button) {
+        String path = "client/images/icons/" + iconName;
+        URL url = LanguageButtonUtils.class.getClassLoader().getResource(path);
+        if (url == null) {
+            throw new RuntimeException("Resources folder not found");
         }
+
+        Image image = new Image(String.valueOf(url));
+
+        ImageView imageView = new ImageView();
+        imageView.setImage(image);
+        imageView.setPreserveRatio(true);
+        imageView.setSmooth(true);
+        imageView.setCache(true);
+
+        imageView.setFitWidth(20);
+        imageView.setFitHeight(20);
+        button.setGraphic(imageView);
     }
 }

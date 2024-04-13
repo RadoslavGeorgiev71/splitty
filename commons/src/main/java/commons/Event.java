@@ -11,10 +11,6 @@ import java.time.LocalDateTime;
 //import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-//import jakarta.persistence.Entity;
-//import jakarta.persistence.GeneratedValue;
-//import jakarta.persistence.GenerationType;
-//import jakarta.persistence.Id;
 
 @Entity
 public class Event {
@@ -23,22 +19,13 @@ public class Event {
     private long id;
     private String title;
     private String inviteCode;
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Participant> participants;
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Expense> expenses;
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Debt> settledDebts;
     private String dateTime;
-
-
-    // 1.   Participant and Expense Class appearing as an error is because they are placeholders,
-    //      as I can't access the Person and Expense classes yet.
-    // 2.   Not sure how to format the Invite Code yet,
-    // but I'm guessing that will be done in the Event class.
-    // 3.   Same as above for the ID.
-    // 4.   Will later add a correct automatic dateTime update method,
-    //      which will run when an "edit" method is used.
 
     /**
      * Default constructor for the class

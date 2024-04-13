@@ -147,7 +147,7 @@ public class ExpenseController {
      * @return "Successful delete" response
      * if delete was successful, "Bad request" otherwise
      */
-    @DeleteMapping(path = {"/id/{id}"})
+    @DeleteMapping(path = {"/{id}"})
     public ResponseEntity<?> delete(@PathVariable("id") long id) {
         if (!expenseService.existsById(id)) {
             return ResponseEntity.badRequest().build();
@@ -169,13 +169,14 @@ public class ExpenseController {
     public Double getRate(@PathVariable String from,
                           @PathVariable String to, @PathVariable String date) {
         String url = "http://data.fixer.io/api/";
+        String key = "488b2c548074f3e5d9e15ba3013a152d";
         if(date != null && date.length() == 10){
             url += date;
         }
         else{
             url += "latest";
         }
-        url += "?access_key=488b2c548074f3e5d9e15ba3013a152d&base=" + from + "&symbols=" + to;
+        url += "?access_key=" + key +"&base=" + from + "&symbols=" + to;
         RestTemplate restTemplate = new RestTemplate();
         Object res = restTemplate.getForObject(url, Object.class);
         String rate = res.toString().split(to+"=")[1].split("}")[0];
@@ -191,7 +192,8 @@ public class ExpenseController {
     @GetMapping(path = { "/rate/{from}/{to}", "/rate/{from}/{to}/"})
     public Double getRateNow(@PathVariable String from, @PathVariable String to) {
         String url = "http://data.fixer.io/api/latest";
-        url += "?access_key=488b2c548074f3e5d9e15ba3013a152d&base=" + from + "&symbols=" + to;
+        String key = "488b2c548074f3e5d9e15ba3013a152d";
+        url += "?access_key=" + key +"&base=" + from + "&symbols=" + to;
         RestTemplate restTemplate = new RestTemplate();
         Object res = restTemplate.getForObject(url, Object.class);
         String rate = res.toString().split(to+"=")[1].split("}")[0];

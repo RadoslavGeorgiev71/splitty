@@ -21,6 +21,7 @@ public class AddParticipantCtrlTest extends ApplicationTest {
     ServerUtils serverMock;
 
     MainCtrl mainCtrlMock;
+    Event mockEvent;
 
     private AddParticipantCtrl addParticipantCtrl;
 
@@ -37,7 +38,7 @@ public class AddParticipantCtrlTest extends ApplicationTest {
     public void start(Stage stage) throws Exception{
         serverMock = Mockito.mock(ServerUtils.class);
         mainCtrlMock = Mockito.mock(MainCtrl.class);
-        Event mockEvent = new Event();
+        mockEvent = new Event();
         mockEvent.setTitle("Test");
         mockEvent.setParticipants(new ArrayList<>());
         mockEvent.setExpenses(new ArrayList<>());
@@ -95,12 +96,12 @@ public class AddParticipantCtrlTest extends ApplicationTest {
         Mockito.reset(mainCtrlMock);
 
         press(KeyCode.CONTROL).press(KeyCode.S).release(KeyCode.S).release(KeyCode.CONTROL);
-        Mockito.verify(mainCtrlMock, Mockito.times(2)).showEventOverview(Mockito.any(Event.class));
+        Mockito.verify(mainCtrlMock).showEventOverview(Mockito.any(Event.class));
 
         Mockito.reset(mainCtrlMock);
 
         press(KeyCode.ESCAPE);
-        Mockito.verify(mainCtrlMock, Mockito.times(2)).showEventOverview(Mockito.any(Event.class));
+        Mockito.verify(mainCtrlMock, Mockito.times(2)).showEventOverview(null);
 
         Mockito.reset(mainCtrlMock);
 
