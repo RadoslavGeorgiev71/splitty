@@ -328,7 +328,7 @@ public class ServerUtils {
      * @param creatorname the persons who send the emails
      * @return true if the emails were sent successfully
      */
-    public boolean sendInvites(List<String> emails, Event event, String creatorname) {
+    public Boolean sendInvites(List<String> emails, Event event, String creatorname) {
         try{
             Response response = ClientBuilder.newClient(new ClientConfig())
                     .target(server).path("/api/email/" + event.getInviteCode())
@@ -344,12 +344,12 @@ public class ServerUtils {
             }
             else {
                 showAlert();
-                return false;
+                return null;
             }
         }
         catch(ProcessingException e){
             showAlert();
-            return false;
+            return null;
         }
 
     }
@@ -393,7 +393,7 @@ public class ServerUtils {
      * @param eventTitle title of the event in which the expense is in
      * @return boolena
      */
-    public boolean sendRemainder(Participant participant, double amount,
+    public Boolean sendRemainder(Participant participant, double amount,
                                  String email, String eventTitle) {
         try{
             Response response = ClientBuilder.newClient(new ClientConfig())
@@ -413,12 +413,12 @@ public class ServerUtils {
             }
             else {
                 showAlert();
-                return false;
+                return null;
             }
         }
         catch(ProcessingException e){
             showAlert();
-            return false;
+            return null;
         }
     }
 

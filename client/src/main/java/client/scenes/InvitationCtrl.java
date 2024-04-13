@@ -159,30 +159,45 @@ public class InvitationCtrl implements Initializable {
      */
     private void sendInvites(){
         List<String> emails = new ArrayList<>();
-        String name = ConfigClient.getName();
         Scanner scanner = new Scanner(emailTextArea.getText());
         while(scanner.hasNextLine()){
-            emails.add(scanner.nextLine());
-        }
-        if(server.sendInvites(emails, event, name)){
-            ResourceBundle bundle = languageResourceBundle.getResourceBundle();
-            Alert alert =  new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle(bundle.getString("sendInvitesInfoAlertTitle"));
-            alert.setHeaderText(bundle.getString("sendInvitesInfoAlertHeader"));
-            alert.showAndWait();
-            for(String email : emails){
-                addParticipant(email);
+            String email = scanner.nextLine();
+            if(!email.equals("")){
+                emails.add(email);
             }
-            clearEmail();
         }
-        else{
-            ResourceBundle bundle = languageResourceBundle.getResourceBundle();
-            Alert alert =  new Alert(Alert.AlertType.ERROR);
-            alert.setTitle(bundle.getString("sendInvitesErrorAlertTitle"));
-            alert.setHeaderText(bundle.getString("sendInvitesErrorAlertHeader"));
-            alert.showAndWait();
+        if(!emails.isEmpty()){
+            sendInvitesHelper(emails);
         }
+    }
 
+    /**
+     * Helper method for send invites
+     * sends the request to the server and
+     * Handles both outcomes of sending the invites
+     * @param emails
+     */
+    public void sendInvitesHelper(List<String> emails){
+        ResourceBundle bundle = languageResourceBundle.getResourceBundle();
+        String name = ConfigClient.getName();
+        Boolean response = server.sendInvites(emails, event, name);
+        if(response != null){
+            if(response){
+                Alert alert =  new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle(bundle.getString("sendInvitesInfoAlertTitle"));
+                alert.setHeaderText(bundle.getString("sendInvitesInfoAlertHeader"));
+                alert.showAndWait();
+                for(String email : emails){
+                    addParticipant(email);
+                }
+                clearEmail();
+            }else{
+                Alert alert =  new Alert(Alert.AlertType.ERROR);
+                alert.setTitle(bundle.getString("sendInvitesErrorAlertTitle"));
+                alert.setHeaderText(bundle.getString("sendInvitesErrorAlertHeader"));
+                alert.showAndWait();
+            }
+        }
     }
 
     private void addParticipant(String email) {
