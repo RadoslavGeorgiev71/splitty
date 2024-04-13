@@ -18,6 +18,7 @@ package client.utils;
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
 import java.util.List;
+import java.util.ResourceBundle;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
@@ -213,10 +214,9 @@ public class ServerUtils {
             if (response.getStatus() == Response.Status.OK.getStatusCode()) {
                 return response.readEntity(Event.class);
             } else {
-                return  null;
+                return null;
             }
         }catch (ProcessingException e){
-            showAlert(inviteCode);
             return null;
         }
     }
@@ -339,7 +339,10 @@ public class ServerUtils {
                     .post(Entity.json(emails));
             if (response.getStatus() == Response.Status.OK.getStatusCode()) {
                 return true;
-            } else {
+            }else if(response.getStatus() == Response.Status.BAD_REQUEST.getStatusCode()){
+                return false;
+            }
+            else {
                 showAlert();
                 return false;
             }
@@ -357,7 +360,7 @@ public class ServerUtils {
      * @param email email address to sent
      * @return boolean
      */
-    public boolean sendDefault(String email) {
+    public Boolean sendDefault(String email) {
         try{
             Participant participant = new Participant(0, ConfigClient.getName(),
                     email, ConfigClient.getIban(), ConfigClient.getBic());
@@ -372,12 +375,12 @@ public class ServerUtils {
                 return false;
             } else {
                 showAlert();
-                return false;
+                return null;
             }
         }
         catch(ProcessingException e){
             showAlert();
-            return false;
+            return null;
         }
     }
 
@@ -585,28 +588,15 @@ public class ServerUtils {
      * to the server
      */
     public void showAlert(){
+        LanguageResourceBundle languageResourceBundle = LanguageResourceBundle.getInstance();
+        ResourceBundle bundle = languageResourceBundle.getResourceBundle();
         Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Error");
-        alert.setHeaderText("Error: Unable to connect to the server");
-        alert.setContentText("Please make sure that the URL is " +
-                "correct, that the server is running and that the email credentials are correct");
+        alert.setTitle(bundle.getString("serverErrorAlertTitle"));
+        alert.setHeaderText(bundle.getString("serverErrorAlertHeader"));
+        alert.setContentText(bundle.getString("serverErrorAlertContext"));
         alert.showAndWait();
     }
 
-    /**
-     * Show a pop up window with an alert when the client cannot connect
-     * to the server
-     * @param inviteCode that caused the problem
-     */
-    public void showAlert(String inviteCode){
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Error");
-        alert.setHeaderText("Error: Unable to connect to the server or " +
-                "event with invite code: " + inviteCode + " does not exists");
-        alert.setContentText("Please make sure that the URL and invite code are " +
-                "correct, that the server is running and that the email credentials are correct");
-        alert.showAndWait();
-    }
 
     /**
      * Stops the client thread

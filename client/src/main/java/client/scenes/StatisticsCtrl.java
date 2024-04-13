@@ -14,6 +14,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 
@@ -177,5 +179,21 @@ public class StatisticsCtrl {
      */
     public void setTesting(boolean testing) {
         this.testing = testing;
+    }
+    
+     * Method to be called when a key is pressed
+     * @param e keyevent to listen
+     */
+    public void keyPressed(KeyEvent e) {
+        if (e.isControlDown() && e.getCode() == KeyCode.W) {  //close window
+            mainCtrl.closeWindow();
+        }
+        switch (e.getCode()) {
+            case ESCAPE:
+                onBackClick();
+                break;
+            default:
+                break;
+        }
     }
 }

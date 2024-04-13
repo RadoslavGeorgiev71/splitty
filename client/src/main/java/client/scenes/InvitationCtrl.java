@@ -164,14 +164,22 @@ public class InvitationCtrl implements Initializable {
             emails.add(scanner.nextLine());
         }
         if(server.sendInvites(emails, event, name)){
+            ResourceBundle bundle = languageResourceBundle.getResourceBundle();
             Alert alert =  new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Success");
-            alert.setHeaderText("Invitation emails were sent successfully");
+            alert.setTitle(bundle.getString("sendInvitesInfoAlertTitle"));
+            alert.setHeaderText(bundle.getString("sendInvitesInfoAlertHeader"));
             alert.showAndWait();
             for(String email : emails){
                 addParticipant(email);
             }
             clearEmail();
+            alert.showAndWait();
+        }
+        else{
+            ResourceBundle bundle = languageResourceBundle.getResourceBundle();
+            Alert alert =  new Alert(Alert.AlertType.ERROR);
+            alert.setTitle(bundle.getString("sendInvitesErrorAlertTitle"));
+            alert.setHeaderText(bundle.getString("sendInvitesErrorAlertHeader"));
             alert.showAndWait();
         }
 

@@ -34,7 +34,7 @@ public class Admin{
 
     private String server;
     private String password = "none set";
-    private final StompSession session;
+    private StompSession session;
 
     /**
      * Constructor for Admin
@@ -52,6 +52,23 @@ public class Admin{
     public Admin(String s, StompSession mockStompSession){
         this.session = mockStompSession;
         this.server = s;
+    }
+
+    /**
+     * Converts the http url provided by the user into the correct
+     * url for establishing a websocket connection.
+     * @param s The string to be converted
+     * @return The proper websocket url
+     */
+    public String convertUrl(String s){
+        String webSocketUrl = s.replace("http", "ws");
+        if(webSocketUrl.endsWith("/")){
+            webSocketUrl += "websocket";
+        }
+        else{
+            webSocketUrl += "/websocket";
+        }
+        return webSocketUrl;
     }
 
     /**
@@ -75,7 +92,12 @@ public class Admin{
      * @param url to be set
      */
     public void setURL(String url){
+        if(session != null && session.isConnected()) {
+            session.disconnect();
+        }
+        String webSocketUrl = convertUrl(url);
         this.server = url;
+        this.session = connect(webSocketUrl);
     }
 
     /**

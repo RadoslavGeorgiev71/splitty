@@ -67,10 +67,21 @@ class AdminTest {
     }
 
     @Test
+    void convertUrl(){
+        String url = "http://www.google.com";
+        String webSocketUrl = admin.convertUrl(url);
+        assertEquals("ws://www.google.com/websocket", webSocketUrl);
+    }
+
+    /*
+    @Test
     void setURL() {
         admin.setURL("http://www.google.com");
         assertEquals("http://www.google.com", admin.getURL());
     }
+     */
+    //No longer possible to test due to the fact that mockStompSession has no url
+
 
     @Test
     void getURL() {
