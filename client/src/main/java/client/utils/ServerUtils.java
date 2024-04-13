@@ -572,7 +572,7 @@ public class ServerUtils {
             myReader.close();
             return Double.parseDouble(data);
         } catch (Exception e) {
-            String key = "488b2c548074f3e5d9e15ba3013a152d";
+            String key = "9d7c841c1d6fc2550e303bf6045e761a";
             String url = "http://data.fixer.io/api/" + date;
             url += "?access_key=" + key+ "&base=" + from + "&symbols=" + to;
             Response response = ClientBuilder.newClient(new ClientConfig())
