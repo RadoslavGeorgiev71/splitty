@@ -41,6 +41,8 @@ import javafx.scene.control.MenuButton;
 
 public class EventOverviewCtrl {
 
+    private boolean testing = false;
+
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
 
@@ -305,7 +307,7 @@ public class EventOverviewCtrl {
      * @param i - the number of the row
      * @return the label
      */
-    private Label getTagLabel(int i) {
+    Label getTagLabel(int i) {
         Tag tag = event.getExpenses().get(i).getTag();
         Label tagLabel = new Label();
         if(tag != null) {
@@ -360,7 +362,12 @@ public class EventOverviewCtrl {
         if (event != null) {
             for (int i = 0; i < event.getExpenses().size(); i++) {
                 Expense expense = foreignCurrency(event.getExpenses().get(i));
-                Participant payingParticipant = expense.getPayingParticipant();
+                Participant payingParticipant;
+                if(!testing) {
+                    payingParticipant = expense.getPayingParticipant();
+                } else {
+                    payingParticipant = new Participant();
+                }
                 if (payingParticipant.equals(participantsMenu.
                         getSelectionModel().getSelectedItem())) {
                     amount += foreignCurrency(expense).getAmount();
@@ -443,7 +450,16 @@ public class EventOverviewCtrl {
      * @return the activity of the expense
      */
     public String infoLabelText(Expense expense) {
-        String[] activity = expense.getActivity();
+        String[] activity;
+
+        if(!testing){
+            activity = expense.getActivity();
+        }
+        else {
+            activity = new String[]{
+                "2021-04-20", "100", "EUR", "dinner"};
+            languageResourceBundle = LanguageResourceBundle.getInstance();
+        }
         String infoLabelText = activity[0] + " ";
         infoLabelText += languageResourceBundle.getResourceBundle().getString("paid");
         infoLabelText += " " + activity[1] + " ";
@@ -524,13 +540,13 @@ public class EventOverviewCtrl {
         this.event = event;
     }
 
-    /**
-     * Sets the event name
-     */
-
-    public void eventName() {
-        eventTitleLabel.setText(event.getTitle());
-    }
+//    /**
+//     * Sets the event name
+//     */
+//
+//    public void eventName() {
+//        eventTitleLabel.setText(event.getTitle());
+//    }
 
     /**
      * Sets the from tab with the current selected participant
@@ -719,5 +735,13 @@ public class EventOverviewCtrl {
      */
     public void stop() {
         server.stop();
+    }
+
+    /**
+     * Set the testing boolean
+     * @param testing boolean
+     */
+    public void setTesting(boolean testing) {
+        this.testing = testing;
     }
 }

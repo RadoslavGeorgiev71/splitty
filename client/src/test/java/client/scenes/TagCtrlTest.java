@@ -25,9 +25,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-
 public class TagCtrlTest extends ApplicationTest {
     ServerUtils mockServer = Mockito.mock(ServerUtils.class);
     MainCtrl mockMainCtrl = Mockito.mock(MainCtrl.class);
