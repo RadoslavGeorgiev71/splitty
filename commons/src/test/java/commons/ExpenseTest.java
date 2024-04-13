@@ -53,8 +53,9 @@ class ExpenseTest {
 
     @Test
     void testSetId() {
-        exp1.setId(5);
-        assertEquals(exp1.getId(), 5);
+        long id = 5;
+        exp1.setId(id);
+        assertEquals(exp1.getId(), id);
     }
 
     @Test

@@ -4,7 +4,6 @@ package server.Services;
 import jakarta.mail.internet.AddressException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 @Service
 public class EmailService {
@@ -28,7 +27,7 @@ public class EmailService {
      * @param body of the email
      * @param creatorEmail email of the user
      */
-    @Async
+
     public void sendEmail(String to, String subject, String body,
                           String creatorEmail) throws AddressException {
         SimpleMailMessage message = new SimpleMailMessage();

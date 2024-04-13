@@ -354,12 +354,13 @@ public class ServerUtils {
     /**
      * Sends a default email to the user to check
      * if the credentials are correct
+     * @param email email address to sent
      * @return boolean
      */
-    public boolean sendDefault() {
+    public boolean sendDefault(String email) {
         try{
             Participant participant = new Participant(0, ConfigClient.getName(),
-                    ConfigClient.getEmail(), ConfigClient.getIban(), ConfigClient.getBic());
+                    email, ConfigClient.getIban(), ConfigClient.getBic());
             Response response = ClientBuilder.newClient(new ClientConfig())
                     .target(server).path("/api/email/default")
                     .request(APPLICATION_JSON)
@@ -367,6 +368,8 @@ public class ServerUtils {
                     .post(Entity.json(participant));
             if (response.getStatus() == Response.Status.OK.getStatusCode()) {
                 return true;
+            } else if(response.getStatus() == Response.Status.BAD_REQUEST.getStatusCode()){
+                return false;
             } else {
                 showAlert();
                 return false;
@@ -401,7 +404,11 @@ public class ServerUtils {
                     .post(Entity.json(participant));
             if (response.getStatus() == Response.Status.OK.getStatusCode()) {
                 return true;
-            } else {
+            }
+            else if(response.getStatus() == Response.Status.BAD_REQUEST.getStatusCode()){
+                return false;
+            }
+            else {
                 showAlert();
                 return false;
             }
@@ -411,6 +418,9 @@ public class ServerUtils {
             return false;
         }
     }
+
+
+
     /**
      * Deletes an expense from the server
      *
@@ -449,7 +459,7 @@ public class ServerUtils {
      */
     public Expense addExpense(Expense expense) {
         try{
-            expense.setId(1000);
+            //expense.setId(1000);
             Entity<Expense> entity = Entity.entity(expense, APPLICATION_JSON);
             Response response = ClientBuilder.newClient(new ClientConfig())
                             .target(server).path("api/expenses")
@@ -475,7 +485,7 @@ public class ServerUtils {
      */
     public Expense addExpense(long eventId, Expense expense) {
         try{
-            expense.setId(1000);
+            //expense.setId(1000);
             Response response = ClientBuilder.newClient(new ClientConfig())
                     .target(server).path("api/expenses/event/" + eventId)
                     .request(APPLICATION_JSON)
@@ -578,7 +588,7 @@ public class ServerUtils {
         alert.setTitle("Error");
         alert.setHeaderText("Error: Unable to connect to the server");
         alert.setContentText("Please make sure that the URL is " +
-                "correct, that the server is running and that your email credentials are correct");
+                "correct, that the server is running and that the email credentials are correct");
         alert.showAndWait();
     }
 
@@ -593,7 +603,7 @@ public class ServerUtils {
         alert.setHeaderText("Error: Unable to connect to the server or " +
                 "event with invite code: " + inviteCode + " does not exists");
         alert.setContentText("Please make sure that the URL and invite code are " +
-                "correct, that the server is running and that your email credentials are correct");
+                "correct, that the server is running and that the email credentials are correct");
         alert.showAndWait();
     }
 

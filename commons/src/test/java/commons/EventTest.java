@@ -63,7 +63,8 @@ public class EventTest {
 
     @Test
     void testConstructorWithId() {
-        Event event = new Event(1, "New Year", "sdfsdafsdfsa",
+        long id = 1;
+        Event event = new Event(id, "New Year", "sdfsdafsdfsa",
             new ArrayList<>(), new ArrayList<>(), "26/03/2024");
         assertNotNull(event);
     }

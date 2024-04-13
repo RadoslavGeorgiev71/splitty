@@ -71,6 +71,12 @@ public class OverviewCtrl {
             if(result.get() == ButtonType.OK){
                 admin.deleteEvent(selectedEvent);
                 table.getItems().remove(selectedEvent);
+                alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Delete event");
+                alert.setHeaderText("Successfully deleted");
+                alert.setContentText("Event was deleted successfully. You might have to press" +
+                        " refresh to see changes");
+                alert.showAndWait();
                 refresh();
             }
         }

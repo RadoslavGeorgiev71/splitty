@@ -7,17 +7,11 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import server.Repositories.TestDebtRepository;
-import server.Repositories.TestEventRepository;
-import server.Repositories.TestExpenseRepository;
-import server.Repositories.TestParticipantRepository;
+import server.Repositories.*;
 import server.Services.EventService;
 import server.Services.ExpenseService;
 import server.api.ExpenseController;
-import server.database.DebtRepository;
-import server.database.EventRepository;
-import server.database.ExpenseRepository;
-import server.database.ParticipantRepository;
+import server.database.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +27,8 @@ class TestExpenseController {
     private ParticipantRepository participantRepo;
     @Mock
     private DebtRepository debtRepo;
+    @Mock
+    private TagRepository tagRepo;
 
     @Mock
     private EventService eventService;
@@ -46,8 +42,10 @@ class TestExpenseController {
         expenseRepo = new TestExpenseRepository();
         participantRepo = new TestParticipantRepository();
         debtRepo = new TestDebtRepository();
+        tagRepo = new TestTagRepository();
         expenseService = new ExpenseService(expenseRepo, eventRepo);
-        eventService = new EventService(eventRepo, participantRepo, debtRepo, expenseRepo);
+        eventService = new EventService(eventRepo, participantRepo, debtRepo,
+                expenseRepo, tagRepo);
         sut = new ExpenseController(expenseService);
     }
 
