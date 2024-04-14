@@ -563,14 +563,13 @@ public class EditExpenseCtrl{
             onlySomeChecked();
         }
 
-        //setAllIcons();
+        setAllIcons();
     }
 
     /**
      * Sets all the icons to their respective buttons
      */
     public void setAllIcons() {
-        setIcon("trashicon.png", expenseDeleteButton);
         setIcon("saveicon.png", expenseSaveButton);
         setIcon("aborticon.png", expenseAbortButton);
         setIcon("tagicon.png", tagButton);

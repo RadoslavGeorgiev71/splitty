@@ -177,6 +177,8 @@ public class EditParticipantCtrl {
             ibanField.setText(participant.getIban());
             bicField.setText(participant.getBic());
         }
+        setIcon("aborticon.png", participantCancelButton);
+        setIcon("saveicon.png", participantOkButton);
 
     }
 

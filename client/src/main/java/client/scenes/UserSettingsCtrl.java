@@ -162,6 +162,9 @@ public class UserSettingsCtrl {
         switchTextLanguage();
 
         initializeChoiceBox();
+
+        setIcon("saveicon.png", onConfirmClick);
+        setIcon("aborticon.png", cancelButton);
     }
 
     private void switchTextLanguage(){

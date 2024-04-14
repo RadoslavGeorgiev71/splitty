@@ -112,6 +112,9 @@ public class StartScreenCtrl {
             return;
         }
 
+        setIcon("settingsicon.png", settingsButton);
+        setIcon("addicon.png", createEventButton);
+
         setupRecentlyViewedEvents();
     }
 

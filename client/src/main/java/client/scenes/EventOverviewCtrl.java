@@ -271,8 +271,8 @@ public class EventOverviewCtrl {
         imageView.setSmooth(true);
         imageView.setCache(true);
 
-        imageView.setFitWidth(15);
-        imageView.setFitHeight(15);
+        imageView.setFitWidth(20);
+        imageView.setFitHeight(20);
         button.setGraphic(imageView);
     }
 

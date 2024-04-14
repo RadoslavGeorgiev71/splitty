@@ -433,6 +433,8 @@ public class AddExpenseCtrl{
             configureTagInformation();
             this.participants = new ArrayList<>();
         }
+        setIcon("addicon.png", expenseAddButton);
+        setIcon("aborticon.png", expenseAbortButton);
     }
 
     /**
