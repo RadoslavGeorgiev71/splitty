@@ -161,8 +161,8 @@ public class AddParticipantCtrl {
     public void initialize() {
         languageResourceBundle = LanguageResourceBundle.getInstance();
         switchTextLanguage();
-        setIcon("addperson.png", participantOkButton);
-        setIcon("aborticon.png", participantCancelButton);
+//        setIcon("addperson.png", participantOkButton);
+//        setIcon("aborticon.png", participantCancelButton);
     }
 
     /**

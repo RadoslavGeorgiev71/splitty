@@ -198,9 +198,9 @@
                 </TabPane>
                 <GridPane prefHeight="54.0" prefWidth="385.0" VBox.vgrow="ALWAYS">
                     <columnConstraints>
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="145.60001220703126" minWidth="10.0" prefWidth="131.2000244140625" />
-                  <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" maxWidth="240.5999755859375" minWidth="10.0" prefWidth="240.5999755859375" />
-                  <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="145.60001220703123" minWidth="10.0" prefWidth="86.40000000000003" />
+                        <ColumnConstraints halignment="LEFT" hgrow="ALWAYS" />
+                  <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" />
+                  <ColumnConstraints halignment="RIGHT" hgrow="ALWAYS" />
                     </columnConstraints>
                     <rowConstraints>
                         <RowConstraints />
@@ -208,17 +208,39 @@
                   <RowConstraints maxHeight="57.600026321411136" minHeight="4.600012683868407" prefHeight="57.600026321411136" valignment="TOP" vgrow="SOMETIMES" />
                     </rowConstraints>
                     <children>
-                        <Button fx:id="backButton" mnemonicParsing="false" onAction="#onBackClick" text="Back" GridPane.rowIndex="1" />
-                        <Button fx:id="overviewSettleDebtsButton" mnemonicParsing="false" onAction="#onSettleDebtsClick" text="Settle Debts" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                  <Button fx:id="statisticsButton" mnemonicParsing="false" onAction="#onStatisticsOpen" text="Statistics" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-                  <MenuButton fx:id="languageButton" mnemonicParsing="false" prefHeight="46.0" prefWidth="130.0" styleClass="language-menu-button" GridPane.rowIndex="2">
+                        <Button fx:id="backButton" mnemonicParsing="false" onAction="#onBackClick" text="Back" GridPane.halignment="LEFT" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS" />
+                        <Button fx:id="overviewSettleDebtsButton" mnemonicParsing="false" onAction="#onSettleDebtsClick" text="Settle Debts" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS" />
+                  <Button fx:id="statisticsButton" mnemonicParsing="false" onAction="#onStatisticsOpen" text="Statistics" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS" />
+                  <MenuButton fx:id="languageButton" mnemonicParsing="false" prefHeight="46.0" prefWidth="130.0" styleClass="language-menu-button" GridPane.halignment="LEFT" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
                      <graphic>
                         <ImageView fx:id="languageButtonImageView" fitHeight="38.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" style="-fx-border-width: 0;" />
                      </graphic>
                   </MenuButton>
-                  <Text fx:id="amountText" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                  <Label fx:id="amountOwingLabel" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="19.0" prefWidth="120.0" text="amount owing" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="1" />
-                  <Label fx:id="amountOwedLabel" prefHeight="18.0" prefWidth="118.0" text="amount owed" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+                  <Label fx:id="amountOwingLabel" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="19.0" prefWidth="120.0" text="amount owing" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
+                     <GridPane.margin>
+                        <Insets left="5.0" />
+                     </GridPane.margin></Label>
+                  <GridPane prefWidth="63.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <Label fx:id="amountOwedLabel" prefHeight="18.0" prefWidth="118.0" text="amount owed" GridPane.halignment="LEFT" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
+                           <GridPane.margin>
+                              <Insets left="5.0" />
+                           </GridPane.margin>
+                        </Label>
+                        <Text fx:id="amountText" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.halignment="LEFT" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
+                           <GridPane.margin>
+                              <Insets left="5.0" />
+                           </GridPane.margin>
+                        </Text>
+                     </children>
+                  </GridPane>
                     </children>
                 </GridPane>
             </children>
