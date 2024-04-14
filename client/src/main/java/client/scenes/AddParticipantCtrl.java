@@ -121,9 +121,6 @@ public class AddParticipantCtrl {
             ok(null);
         }
         switch (e.getCode()) {
-//            case ENTER:
-//                moveToNextTextField((TextField) e.getSource());
-//                break;
             case ESCAPE:
                 cancel(null);
                 break;

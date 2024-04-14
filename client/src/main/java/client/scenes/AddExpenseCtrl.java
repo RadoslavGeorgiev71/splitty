@@ -188,7 +188,6 @@ public class AddExpenseCtrl{
             Debt debt = new Debt(expense.getPayingParticipant(), participant,
                     expense.getAmount() / (expense.getParticipants().size()));
             expense.add(debt);
-//            server.addDebt(debt);
         }
     }
 
@@ -289,9 +288,6 @@ public class AddExpenseCtrl{
             onAddClick(null);
         }
         switch (e.getCode()) {
-//            case ENTER:
-//                moveToNextTextField((TextField) e.getSource());
-//                break;
             case ESCAPE:
                 onAbortClick(null);
                 break;

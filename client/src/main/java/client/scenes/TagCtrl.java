@@ -251,11 +251,6 @@ public class TagCtrl {
         // TODO: translate the alert
         alert.showAndWait().ifPresent(response -> {
             if (response == ButtonType.OK) {
-//                for (Expense currExpense : event.getExpenses()) {
-//                    if (currExpense.getTag().equals(tagOnFocus)) {
-//                        currExpense.setTag(null);
-//                    }
-//                }
                 if(expense != null && expense.getTag() != null &&
                     expense.getTag().equals(tagOnFocus)) {
                     expense.setTag(null);

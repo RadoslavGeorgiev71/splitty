@@ -78,7 +78,6 @@ public class EditParticipantCtrl {
         participant.setIban(ibanField.getText());
         participant.setEmail(emailField.getText());
         participant.setBic(bicField.getText());
-//        participant = server.persistParticipant(participant);
         clearFields();
         server.persistEvent(event);
         event = server.getEvent(event.getId());
@@ -128,9 +127,6 @@ public class EditParticipantCtrl {
             ok(null);
         }
         switch (e.getCode()) {
-//            case ENTER:
-//                moveToNextTextField((TextField) e.getSource());
-//                break;
             case ESCAPE:
                 cancel(null);
                 break;
