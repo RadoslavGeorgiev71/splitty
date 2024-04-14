@@ -759,7 +759,7 @@ public class EventOverviewCtrl {
         double amountOwing = 0;
         double amountOwed = 0;
         if(participantsMenu.getValue() != null) {
-            List<Debt> debts = new ArrayList<>(event.getSettledDebts());
+            List<Debt> debts = new ArrayList<>();
             for(Expense expense : event.getExpenses()) {
                 debts.addAll(expense.getDebts());
             }
