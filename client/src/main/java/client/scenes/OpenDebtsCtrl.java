@@ -108,6 +108,7 @@ public class OpenDebtsCtrl {
      * @param i - the index of the debt
      */
     private void visualizeDebt(int i) {
+        ResourceBundle bundle = languageResourceBundle.getResourceBundle();
         textFlows[i] = generateTextFlow(debts.get(i));
         textFlows[i].setStyle("-fx-max-height: 30");
         titledPanes[i] = new TitledPane();
@@ -121,22 +122,21 @@ public class OpenDebtsCtrl {
         envelopeIcons[i].setSize("15");
         GridPane.setValignment(envelopeIcons[i], javafx.geometry.VPos.TOP);
         GridPane.setHalignment(envelopeIcons[i], javafx.geometry.HPos.LEFT);
-        Tooltip toolTipEnvelope = new Tooltip("Email available!");
+        Tooltip toolTipEnvelope = new Tooltip(bundle.getString("openDebtsEmailAvailable"));
         if(debts.get(i).getPersonPaying().getEmail() == "" || ConfigClient.getEmail() == null
             || ConfigClient.getEmail().equals("")) {
             envelopeIcons[i].setFill(Color.GREY);
-            toolTipEnvelope.setText("Email NOT available!");
+            toolTipEnvelope.setText(bundle.getString("openDebtsEmailNotAvailable"));
         }
         Tooltip.install(envelopeIcons[i], toolTipEnvelope);
         GridPane.setMargin(envelopeIcons[i], new Insets(7, 0, 0, 10));
         gridPane.add(envelopeIcons[i], 1, i, 1, 1);
-
         bankIcons[i] = new FontAwesomeIconView();
         bankIcons[i].setGlyphName("BANK");
         bankIcons[i].setSize("15");
         GridPane.setValignment(bankIcons[i], javafx.geometry.VPos.TOP);
         GridPane.setHalignment(bankIcons[i], javafx.geometry.HPos.LEFT);
-        Tooltip toolTipBank = new Tooltip("Bank information available!");
+        Tooltip toolTipBank = new Tooltip(bundle.getString("openDebtsBankInfoAvailable"));
         if (debts.get(i).getPersonOwing().getBic() == ""
                 || debts.get(i).getPersonOwing().getBic() == "null" ||
                 debts.get(i).getPersonOwing().getBic() == null
@@ -144,13 +144,13 @@ public class OpenDebtsCtrl {
                 debts.get(i).getPersonOwing().getIban() == null
                 || debts.get(i).getPersonOwing().getIban() == "") {
             bankIcons[i].setFill(Color.GREY);
-            toolTipBank.setText("Bank information NOT available!");
+            toolTipBank.setText(bundle.getString("openDebtsBankInfoNotAvailable"));
         }
         Tooltip.install(bankIcons[i], toolTipBank);
         GridPane.setMargin(bankIcons[i], new Insets(7, 0, 0, 30));
         gridPane.add(bankIcons[i], 1, i, 1, 1);
 
-        buttonReceived[i] = new Button("Mark Received");
+        buttonReceived[i] = new Button(bundle.getString("openDebtsMarkReceived"));
         buttonReceived[i].setOnMouseClicked(e -> removeDebt(debts.get(i)));
         GridPane.setValignment(buttonReceived[i], javafx.geometry.VPos.TOP);
         GridPane.setHalignment(buttonReceived[i], javafx.geometry.HPos.LEFT);
@@ -186,6 +186,7 @@ public class OpenDebtsCtrl {
      * @return the appropriate label
      */
     private Label generateExpandableLabel(Debt debt) {
+        ResourceBundle bundle = languageResourceBundle.getResourceBundle();
         String text = "";
         int size = 0;
         Label label = new Label();
@@ -194,29 +195,32 @@ public class OpenDebtsCtrl {
                 && debt.getPersonOwing().getIban() != "null" &&
                 debt.getPersonOwing().getIban() != null
                 && debt.getPersonOwing().getIban() != "") {
-            text += "Bank information available,\n" +
-                "transfer the money to:\n" +
-                "Account Holder: " + debt.getPersonOwing().getName() + "\n" +
-                "IBAN: " + debt.getPersonOwing().getIban() + "\n" +
-                "BIC: " + debt.getPersonOwing().getBic();
+            text += bundle.getString("openDebtsBankInfoAvailable") +",\n" +
+                    bundle.getString("openDebtsTransferMoneyTo") + ":\n" +
+                    bundle.getString("openDebtsAccountHolder") +": " +
+                    debt.getPersonOwing().getName() + "\n" +
+                    bundle.getString("openDebtsIBAN") + ": " +
+                    debt.getPersonOwing().getIban() + "\n" +
+                    bundle.getString("openDebtsBIC") + ": "
+                    + debt.getPersonOwing().getBic();
             size += 80;
         } else {
-            text += "Bank information not available.";
+            text += bundle.getString("openDebtsBankInfoNotAvailable");
             size += 20;
         }
         text += "\n\n";
         size += 20;
         if (debt.getPersonPaying().getEmail() != "" && ConfigClient.getEmail() != null
                 && !ConfigClient.getEmail().equals("")) {
-            text += "Email configured: ";
+            text += bundle.getString("openDebtsEmailAvailable");
             size += 20;
-            Hyperlink hyperlink = new Hyperlink("Send\nremainder");
+            Hyperlink hyperlink = new Hyperlink(bundle.getString("openDebtsSendReminder"));
             hyperlink.setOnAction(event -> {
                 sendEmail(debt);
             });
             label.setGraphic(hyperlink);
         } else {
-            text += "Email not configured.";
+            text += bundle.getString("openDebtsEmailNotAvailable");
             size += 20;
         }
         label.setText(text);

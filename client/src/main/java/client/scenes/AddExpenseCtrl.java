@@ -67,6 +67,8 @@ public class AddExpenseCtrl{
     @FXML
     private Button expenseAddButton;
     @FXML
+    private Button tagButton;
+    @FXML
     private Button expenseAbortButton;
     @FXML
     private Label addExpenseWhoPaid;
@@ -129,6 +131,7 @@ public class AddExpenseCtrl{
      * @param actionEvent to handle
      */
     public void onAddClick(ActionEvent actionEvent) {
+        ResourceBundle bundle = languageResourceBundle.getResourceBundle();
         Event undoEvent = event;
         Expense expense = new Expense();
         expense.setTitle(titleField.getText());
@@ -139,10 +142,10 @@ public class AddExpenseCtrl{
             saveAsEuro(expense);
         } catch (Exception e) {
             Alert alert =  new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Invalid Input");
-            alert.setHeaderText("Amount is not a number");
-            alert.setContentText("The value you entered " +
-                    "for the amount of money paid should be a number");
+            alert.setTitle(bundle.getString("expenseAlertInvalidInputTitle"));
+            alert.setHeaderText(bundle.getString("expenseAlertInvalidInputMoneyHeader"));
+            alert.setContentText(bundle.getString("expenseAlertInvalidInputMoneyContent"));
+
             alert.showAndWait();
             return;
         }
@@ -152,10 +155,9 @@ public class AddExpenseCtrl{
         else{
             if(participants == null || participants.size() == 0){
                 Alert alert =  new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Invalid Input");
-                alert.setHeaderText("Participants cannot be empty");
-                alert.setContentText("You must select " +
-                        "at least 1 participant");
+                alert.setTitle(bundle.getString("expenseAlertInvalidInputTitle"));
+                alert.setHeaderText(bundle.getString("expenseAlertInvalidParticipantHeader"));
+                alert.setContentText(bundle.getString("expenseAlertInvalidParticipantContent"));
                 alert.showAndWait();
                 return;
             }
@@ -438,6 +440,7 @@ public class AddExpenseCtrl{
      * Configures the tag label and remove button
      */
     void configureTagInformation() {
+        ResourceBundle bundle = languageResourceBundle.getResourceBundle();
         if(tag != null) {
             tagLabel.setText(tag.getType());
             tagLabel.setBackground(Background.fill(Color.web(tag.getColor())));
@@ -450,7 +453,7 @@ public class AddExpenseCtrl{
             removeTagButton.setVisible(true);
         }
         else {
-            tagLabel.setText("No tag");
+            tagLabel.setText(bundle.getString("expenseNoTag"));
             tagLabel.setStyle("-fx-background-color: #F9F9F9");
             removeTagButton.setVisible(false);
         }
@@ -475,6 +478,9 @@ public class AddExpenseCtrl{
         expenseAbortButton.setText(bundle.getString("expenseAbortButton"));
         onlySome.setText(bundle.getString("addExpenseOnlySome"));
         equally.setText(bundle.getString("addExpenseEqually"));
+        removeTagButton.setText(bundle.getString("expenseTagButton"));
+        tagButton.setText(bundle.getString("expenseTagButton"));
+
 
     }
 
