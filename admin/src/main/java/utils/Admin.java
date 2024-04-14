@@ -40,7 +40,7 @@ public class Admin{
      * Constructor for Admin
      */
     public Admin(){
-        this.session = connect("ws://localhost:8080/websocket");
+        this.session = null;
         this.server = "http://localhost:8080/";
     }
 
@@ -114,6 +114,9 @@ public class Admin{
      * @return boolean true if ok false if error
      */
     public boolean generatePassword(){
+        if(this.session == null){
+            setURL(this.server);
+        }
         try {
             Response response = ClientBuilder.newClient()
                     .target(server)
@@ -134,6 +137,9 @@ public class Admin{
      * @return Boolean authenticated
      */
     public boolean login(String password){
+        if(this.session == null){
+            setURL(this.server);
+        }
         try {
             Response res = ClientBuilder.newClient(new ClientConfig()) //
                     .target(server).path("api/admin/") //
