@@ -76,6 +76,9 @@ public class EventOverviewCtrl {
     private Button overviewSettleDebtsButton;
 
     @FXML
+    private Button statisticsButton;
+
+    @FXML
     private ChoiceBox<Participant> participantsMenu;
 
     @FXML
@@ -106,11 +109,15 @@ public class EventOverviewCtrl {
     private Text amountText;
 
     @FXML
+    private ImageView titleEditImage;
+    
+    @FXML
     private Label amountOwingLabel;
 
     @FXML
     private Label amountOwedLabel;
 
+    @FXML
     private TextField titleTextField;
 
     private Event event;
@@ -267,6 +274,23 @@ public class EventOverviewCtrl {
         imageView.setFitWidth(15);
         imageView.setFitHeight(15);
         button.setGraphic(imageView);
+    }
+
+    /**
+     * Sets the image
+     * @param iconName
+     * @param imageView
+     */
+    @FXML
+    public void setImage(String iconName, ImageView imageView) {
+        String path = "client/images/icons/" + iconName;
+        URL url = LanguageButtonUtils.class.getClassLoader().getResource(path);
+        if(url == null) {
+            throw new RuntimeException("Resources folder not found");
+        }
+
+        Image image = new Image(String.valueOf(url));
+        imageView.setImage(image);
     }
 
     /**
@@ -463,7 +487,7 @@ public class EventOverviewCtrl {
      */
     public String setParticipantsText(Expense expense) {
         if(expense.getParticipants().equals(event.getParticipants())) {
-            return "(all)";
+            return languageResourceBundle.getResourceBundle().getString("all");
         }
         String participantsText = "(";
         for(int i = 0; i < expense.getParticipants().size(); i++) {
@@ -593,6 +617,8 @@ public class EventOverviewCtrl {
     public void editTitle(MouseEvent mouseEvent) {
         titleTextField = new TextField();
         titleTextField.setText(eventTitleLabel.getText());
+//        titleTextField.setPrefWidth(eventTitleLabel.getWidth());
+//        titleTextField.setPrefHeight(eventTitleLabel.getHeight());
         titleTextField.setPrefWidth(eventTitleLabel.getWidth());
         titleTextField.setPrefHeight(eventTitleLabel.getHeight());
 
@@ -661,7 +687,9 @@ public class EventOverviewCtrl {
             participantsMenu.setOnAction(e -> {
                 fromPersonTabName();
                 includingPersonTabName();
+
                 tabPaneAllClick();
+                tabPaneFromPersonClick();
                 tabPaneIncludingPersonClick();
                 setOwedOwing();
             });
@@ -677,6 +705,8 @@ public class EventOverviewCtrl {
 
         setIcon("graypencil.png", overviewEditParticipantButton);
         setIcon("addperson.png", overviewAddParticipantButton);
+        setIcon("addicon.png", overviewAddExpenseButton);
+        setImage("graypencil.png", titleEditImage);
     }
 
     private void setOwedOwing() {
@@ -720,7 +750,7 @@ public class EventOverviewCtrl {
         backButton.setText(bundle.getString("backButton"));
         overviewSettleDebtsButton.setText(bundle.getString("overviewSettleDebtsButton"));
         tabPaneAll.setText(bundle.getString("tabPaneAll"));
-
+        statisticsButton.setText(bundle.getString("statisticsButton"));
     }
 
     /**
