@@ -96,7 +96,7 @@ public class Admin{
             session.disconnect();
         }
         String webSocketUrl = convertUrl(url);
-        this.server = url;
+        server = url;
         this.session = connect(webSocketUrl);
     }
 
@@ -147,7 +147,7 @@ public class Admin{
                 statusCode = res.getStatus();
             }
             boolean isAuthenticated = statusCode == Response.Status.OK.getStatusCode();
-            connect("ws://localhost:8080/websocket");
+            //connect(convertUrl(server));
             return isAuthenticated;
         } catch (ProcessingException e) {
             return false;
@@ -282,8 +282,7 @@ public class Admin{
     }
 
     public void initWebSocket(){
-        String webSocketUrl = convertUrl(server);
-        session = connect(webSocketUrl);
+        session = connect(convertUrl(server));
     }
 
 
@@ -313,7 +312,9 @@ public class Admin{
      * @param consumer asd
      */
     public void registerForEvents(String dest, Consumer<Event> consumer) {
-        if(checkNull()) initWebSocket();
+        if(checkNull()){
+            initWebSocket();
+        }
         session.subscribe(dest, new StompFrameHandler() {
             @Override
             public Type getPayloadType(StompHeaders headers) {
