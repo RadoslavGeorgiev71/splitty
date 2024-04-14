@@ -6,6 +6,7 @@ import commons.Event;
 import commons.Expense;
 import commons.Tag;
 import jakarta.inject.Inject;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -79,6 +80,14 @@ public class StatisticsCtrl {
             }
             pieChart.setPadding(new javafx.geometry.Insets(0, 0, 100, 0));
             pieChart.setLayoutY(60);
+            pieChart.setLegendVisible(false);
+
+            server.registerEventUpdateStats(event -> {
+                if(this.event.getId() == event.getId()) {
+                    this.event = server.getEvent(event.getId());
+                    Platform.runLater(this::initialize);
+                }
+            });
         }
     }
 

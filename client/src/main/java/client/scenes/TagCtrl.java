@@ -140,7 +140,7 @@ public class TagCtrl {
             mainCtrl.showAddExpenseWithTag(event, participant, tagOnFocus);
         }
         else {
-            mainCtrl.showEditExpenseWithTag(event, expense, tagOnFocus);
+            mainCtrl.showEditExpenseWithTag(event, expense, tagOnFocus, participant);
         }
     }
 
@@ -218,8 +218,11 @@ public class TagCtrl {
             alert.setContentText("Tag has bee edited successfully!");
             // TODO: translate alert
             alert.showAndWait();
-            mainCtrl.showTags(event, expense, participant, isAddExpense, tagOnFocus);
             tagOnFocus = updatedTag;
+            if(expense != null) {
+                expense = server.getExpense(expense.getId());
+            }
+            mainCtrl.showTags(event, expense, participant, isAddExpense, tagOnFocus);
         } else {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Invalid name");
@@ -315,7 +318,7 @@ public class TagCtrl {
             mainCtrl.showAddExpense(event, participant);
         }
         else {
-            mainCtrl.showEditExpense(event, expense);
+            mainCtrl.showEditExpense(event, expense, participant);
         }
     }
 
