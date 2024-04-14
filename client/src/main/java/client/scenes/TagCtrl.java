@@ -128,10 +128,11 @@ public class TagCtrl {
      */
     @FXML
     private void onSelectTag() {
+        ResourceBundle bundle = languageResourceBundle.getResourceBundle();
         if(tagOnFocus == null) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("No tag");
-            alert.setContentText("Please provide a tag to be selected!");
+            alert.setTitle(bundle.getString("tagNoTagTitle"));
+            alert.setContentText(bundle.getString("tagSelectTagNoTag"));
             // TODO: translate alert
             alert.showAndWait();
             return;
@@ -149,11 +150,12 @@ public class TagCtrl {
      */
     @FXML
     private void onAddTag() {
+        ResourceBundle bundle = languageResourceBundle.getResourceBundle();
         if(tags.stream().map(Tag::getType)
             .toList().contains(nameTextField.getText())) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Invalid name");
-            alert.setContentText("The tag name you provided already exists!");
+            alert.setTitle(bundle.getString("tagAddTagInvalidName"));
+            alert.setContentText(bundle.getString("tagAddTagAlreadyExists"));
             // TODO: translate alert
             alert.showAndWait();
             return;
@@ -162,17 +164,15 @@ public class TagCtrl {
             tagOnFocus =
                 server.addTag(new Tag(nameTextField.getText(), colorPicker.getValue().toString()));
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Successful addition");
-            alert.setContentText("Tag has bee added successfully!");
-            // TODO: translate alert
+            alert.setTitle(bundle.getString("tagAddTagSuccessTitle"));
+            alert.setContentText(bundle.getString("tagAddTagSuccess"));
             alert.showAndWait();
             mainCtrl.showTags(event, expense, participant, isAddExpense, tagOnFocus);
         }
         else {
             Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Invalid name");
-            alert.setContentText("Please add a name to the tag before adding it!");
-            // TODO: translate alert
+            alert.setTitle(bundle.getString("tagAddTagInvalidName"));
+            alert.setContentText(bundle.getString("tagAddTagNoName"));
             alert.showAndWait();
         }
     }
@@ -182,11 +182,11 @@ public class TagCtrl {
      */
     @FXML
     private void onEditTag() {
+        ResourceBundle bundle = languageResourceBundle.getResourceBundle();
         if(tagOnFocus == null) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("No tag");
-            alert.setContentText("Please first add a tag before editing!");
-            // TODO: translate alert
+            alert.setTitle(bundle.getString("tagNoTagTitle"));
+            alert.setContentText(bundle.getString("tagNoTagEditContent"));
             alert.showAndWait();
             return;
         }
@@ -194,18 +194,16 @@ public class TagCtrl {
             .toList().contains(nameTextField.getText()) &&
             !tagOnFocus.getType().equals(nameTextField.getText())) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Invalid name");
-            alert.setContentText("The tag name you provided already exists!");
-            // TODO: translate alert
+            alert.setTitle(bundle.getString("tagAddTagInvalidName"));
+            alert.setContentText(bundle.getString("tagAddTagAlreadyExists"));
             alert.showAndWait();
             return;
         }
         if(tagOnFocus.getType().equals(nameTextField.getText()) &&
             tagOnFocus.getColor().equals(colorPicker.getValue().toString())) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("No changes");
-            alert.setContentText("No changes provided for the tag!");
-            // TODO: translate alert
+            alert.setTitle(bundle.getString("tagNoChangesTitle"));
+            alert.setContentText(bundle.getString("tagEditTagNoChanges"));
             alert.showAndWait();
             return;
         }
@@ -214,9 +212,8 @@ public class TagCtrl {
             tagOnFocus.setColor(colorPicker.getValue().toString());
             Tag updatedTag = server.updateTag(tagOnFocus);
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Successful update");
-            alert.setContentText("Tag has bee edited successfully!");
-            // TODO: translate alert
+            alert.setTitle(bundle.getString("tagAddTagSuccessTitle"));
+            alert.setContentText(bundle.getString("tagEditTagSuccess"));
             alert.showAndWait();
             tagOnFocus = updatedTag;
             if(expense != null) {
@@ -225,9 +222,8 @@ public class TagCtrl {
             mainCtrl.showTags(event, expense, participant, isAddExpense, tagOnFocus);
         } else {
             Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Invalid name");
-            alert.setContentText("Please add a name to the tag before updating it!");
-            // TODO: translate alert
+            alert.setTitle(bundle.getString("tagAddTagInvalidName"));
+            alert.setContentText(bundle.getString("tagAddTagNoName"));
             alert.showAndWait();
         }
     }
@@ -237,18 +233,18 @@ public class TagCtrl {
      */
     @FXML
     private void onDeleteTag() {
+        ResourceBundle bundle = languageResourceBundle.getResourceBundle();
         if(tagOnFocus == null) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("No tag");
-            alert.setContentText("No provided tag to be deleted!");
+            alert.setTitle(bundle.getString("tagNoTagTitle"));
+            alert.setContentText(bundle.getString("tagNoTagDeletionContent"));
             // TODO: translate alert
             alert.showAndWait();
             return;
         }
         Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setTitle("Confirmation on deletion");
-        alert.setContentText("Are you sure you want to delete this tag?");
-        // TODO: translate the alert
+        alert.setTitle(bundle.getString("tagConfirmationDeleteHeader"));
+        alert.setContentText(bundle.getString("tagConfirmationDeleteContent"));
         alert.showAndWait().ifPresent(response -> {
             if (response == ButtonType.OK) {
                 if(expense != null && expense.getTag() != null &&
@@ -267,7 +263,17 @@ public class TagCtrl {
      * Switches the language of the text.
      */
     public void switchTextLanguage() {
+
         ResourceBundle bundle = languageResourceBundle.getResourceBundle();
+        backButton.setText(bundle.getString("backButton"));
+        addButton.setText(bundle.getString("tagAddButton"));
+        editButton.setText(bundle.getString("tagEditButton"));
+        deleteButton.setText(bundle.getString("tagDeleteButton"));
+        selectButton.setText(bundle.getString("tagSelectButton"));
+        tagLabel.setText(bundle.getString("tagLabel"));
+        nameLabel.setText(bundle.getString("tagNameLabel"));
+        colorLabel.setText(bundle.getString("tagColorLabel"));
+
     }
 
     /**

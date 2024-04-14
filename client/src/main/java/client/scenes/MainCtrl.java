@@ -16,6 +16,7 @@
 package client.scenes;
 
 import client.utils.ConfigClient;
+import client.utils.LanguageResourceBundle;
 import commons.Event;
 import commons.Expense;
 import commons.Participant;
@@ -29,7 +30,7 @@ public class MainCtrl {
 
     private Stage primaryStage;
 
-
+    private LanguageResourceBundle languageResourceBundle = LanguageResourceBundle.getInstance();
     private EditParticipantCtrl editParticipantCtrl;
     private Scene editparticipant;
 
@@ -90,7 +91,7 @@ public class MainCtrl {
                            Pair<UserSettingsCtrl, Parent> usersettings,
                            Pair<TagCtrl, Parent> tags,
                            Pair<StatisticsCtrl, Parent> statistics
-                           ) {
+    ) {
 
         this.primaryStage = primaryStage;
 
@@ -138,8 +139,9 @@ public class MainCtrl {
     public void showStartScreen() {
         startScreenCtrl.clearFields();
         startScreenCtrl.initialize();
-        primaryStage.setTitle("Start Screen");
         primaryStage.setScene(startscreen);
+        primaryStage.setTitle(languageResourceBundle
+                .getResourceBundle().getString("titleStartScreen"));
     }
 
 
@@ -149,11 +151,12 @@ public class MainCtrl {
      * @param participant takes the participant as a parameter to edit
      */
     public void showEditParticipant(Event event, Participant participant) {
-        primaryStage.setTitle("Edit Participant");
         primaryStage.setScene(editparticipant);
         editParticipantCtrl.setEvent(event);
         editParticipantCtrl.setParticipant(participant);
         editParticipantCtrl.initialize();
+        primaryStage.setTitle(languageResourceBundle
+                .getResourceBundle().getString("titleEditParticipant"));
     }
 
     /**
@@ -161,10 +164,11 @@ public class MainCtrl {
      * @param event - takes an event as a parameter for which we add a participant
      */
     public void showAddParticipant(Event event) {
-        primaryStage.setTitle("Add Participant");
         primaryStage.setScene(addparticipant);
         addParticipantCtrl.setEvent(event);
         addParticipantCtrl.initialize();
+        primaryStage.setTitle(languageResourceBundle
+                .getResourceBundle().getString("titleAddParticipant"));
     }
 
     /**
@@ -173,10 +177,11 @@ public class MainCtrl {
      */
 
     public void showEventOverview(Event event) {
-        primaryStage.setTitle("Event Overview");
         eventOverviewCtrl.setEvent(event);
         eventOverviewCtrl.initialize();
         primaryStage.setScene(eventoverview);
+        primaryStage.setTitle(languageResourceBundle
+                .getResourceBundle().getString("titleEventOverview"));
     }
 
 
@@ -187,7 +192,6 @@ public class MainCtrl {
      * @param tag - the tag to be set
      */
     public void showAddExpenseWithTag(Event event, Participant participant, Tag tag) {
-        primaryStage.setTitle("Add Expense");
         addExpenseCtrl.setEvent(event);
         ConfigClient configClient =  new ConfigClient();
         configClient.readFromFile("config.txt");
@@ -196,6 +200,8 @@ public class MainCtrl {
         addExpenseCtrl.setTag(tag);
         addExpenseCtrl.initialize();
         primaryStage.setScene(addexpense);
+        primaryStage.setTitle(languageResourceBundle
+                .getResourceBundle().getString("titleAddExpense"));
     }
 
     /**
@@ -204,7 +210,6 @@ public class MainCtrl {
      * @param participant - that adds expense
      */
     public void showAddExpense(Event event, Participant participant) {
-        primaryStage.setTitle("Add Expense");
         addExpenseCtrl.setEvent(event);
         ConfigClient configClient =  new ConfigClient();
         configClient.readFromFile("config.txt");
@@ -212,6 +217,8 @@ public class MainCtrl {
         addExpenseCtrl.setParticipant(participant);
         addExpenseCtrl.initialize();
         primaryStage.setScene(addexpense);
+        primaryStage.setTitle(languageResourceBundle
+                .getResourceBundle().getString("titleAddExpense"));
     }
 
     /**
@@ -221,13 +228,14 @@ public class MainCtrl {
      * @param participant the current participant
      */
     public void showEditExpense(Event event, Expense expense, Participant participant) {
-        primaryStage.setTitle("Edit Expense");
         primaryStage.setScene(editexpense);
         editExpenseCtrl.setEvent(event);
         editExpenseCtrl.setExpense(expense);
         editExpenseCtrl.setParticipant(participant);
         editExpenseCtrl.setTag(expense.getTag());
         editExpenseCtrl.initialize();
+        primaryStage.setTitle(languageResourceBundle
+                .getResourceBundle().getString("titleEditExpense"));
     }
 
     /**
@@ -239,13 +247,14 @@ public class MainCtrl {
      */
     public void showEditExpenseWithTag(Event event, Expense expense,
                                        Tag tag, Participant participant) {
-        primaryStage.setTitle("Edit Expense");
         primaryStage.setScene(editexpense);
         editExpenseCtrl.setEvent(event);
         editExpenseCtrl.setExpense(expense);
         editExpenseCtrl.setParticipant(participant);
         editExpenseCtrl.setTag(tag);
         editExpenseCtrl.initialize();
+        primaryStage.setTitle(languageResourceBundle
+                .getResourceBundle().getString("titleEditExpense"));
     }
 
     /**
@@ -253,10 +262,11 @@ public class MainCtrl {
      * @param event - takes an event as a parameter for which we show the open debts
      */
     public void showOpenDebts(Event event) {
-        primaryStage.setTitle("Open Debts");
         openDebtsCtrl.setEvent(event);
         openDebtsCtrl.initialize();
         primaryStage.setScene(opendebts);
+        primaryStage.setTitle(languageResourceBundle
+                .getResourceBundle().getString("titleOpenDebts"));
     }
 
     /**
@@ -265,19 +275,21 @@ public class MainCtrl {
      */
 
     public void showInvitation(Event event) {
-        primaryStage.setTitle("Invitation");
         invitationCtrl.setEvent(event);
         invitationCtrl.initialize();
         primaryStage.setScene(invitation);
+        primaryStage.setTitle(languageResourceBundle
+                .getResourceBundle().getString("titleInvitation"));
     }
 
     /**
      * Switches the scene to the User Settings
      */
     public void showUserSettings() {
-        primaryStage.setTitle("User Settings");
         userSettingsCtrl.initialize();
         primaryStage.setScene(usersettings);
+        primaryStage.setTitle(languageResourceBundle
+                .getResourceBundle().getString("titleUserSettings"));
     }
 
     /**
@@ -290,7 +302,6 @@ public class MainCtrl {
      */
     public void showTags(Event event, Expense expense,
                          Participant participant, boolean isAddExpense, Tag tag) {
-        primaryStage.setTitle("Tags");
         tagCtrl.setExpense(expense);
         tagCtrl.setEvent(event);
         tagCtrl.setParticipant(participant);
@@ -298,6 +309,8 @@ public class MainCtrl {
         tagCtrl.setTagOnFocus(tag);
         tagCtrl.initialize();
         primaryStage.setScene(tags);
+        primaryStage.setTitle(languageResourceBundle
+                .getResourceBundle().getString("titleTag"));
     }
 
     /**
@@ -305,10 +318,11 @@ public class MainCtrl {
      * @param event - the event for the statistics
      */
     public void showStatistics(Event event) {
-        primaryStage.setTitle("Statistics");
         statisticsCtrl.setEvent(event);
         statisticsCtrl.initialize();
         primaryStage.setScene(statistics);
+        primaryStage.setTitle(languageResourceBundle
+                .getResourceBundle().getString("titleStatistics"));
     }
 
     /**

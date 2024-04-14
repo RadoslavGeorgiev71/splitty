@@ -124,7 +124,7 @@ public class EditExpenseCtrl{
      */
     public void onTagRemove() {
         tag = null;
-        tagLabel.setText("No tag");
+        tagLabel.setText(languageResourceBundle.getResourceBundle().getString("expenseNoTag"));
         tagLabel.setStyle("-fx-background-color: #F9F9F9");
         removeTagButton.setVisible(false);
     }
@@ -135,6 +135,7 @@ public class EditExpenseCtrl{
      * @param actionEvent to handle
      */
     public void onSaveClick(ActionEvent actionEvent) {
+        ResourceBundle bundle = languageResourceBundle.getResourceBundle();
         Event undoEvent = event;
         expense.setTitle(titleField.getText());
         expense.setPayingParticipant(payerChoiceBox.getSelectionModel().getSelectedItem());
@@ -144,10 +145,9 @@ public class EditExpenseCtrl{
             saveAsEuro();
         } catch (Exception e) {
             Alert alert =  new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Invalid Input");
-            alert.setHeaderText("Amount is not a number");
-            alert.setContentText("The value you entered " +
-                    "for the amount of money paid should be a number");
+            alert.setTitle(bundle.getString("expenseAlertInvalidInputTitle"));
+            alert.setHeaderText(bundle.getString("expenseAlertInvalidInputMoneyHeader"));
+            alert.setContentText(bundle.getString("expenseAlertInvalidInputMoneyContent"));
             alert.showAndWait();
             return;
         }
@@ -160,10 +160,9 @@ public class EditExpenseCtrl{
         else{
             if(participants == null || participants.size() == 0){
                 Alert alert =  new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Invalid Input");
-                alert.setHeaderText("Participants cannot be empty");
-                alert.setContentText("You must select " +
-                        "at least 1 participant");
+                alert.setTitle(bundle.getString("expenseAlertInvalidInputTitle"));
+                alert.setHeaderText(bundle.getString("expenseAlertInvalidParticipantHeader"));
+                alert.setContentText(bundle.getString("expenseAlertInvalidParticipantContent"));
                 alert.showAndWait();
                 return;
             }
@@ -235,12 +234,14 @@ public class EditExpenseCtrl{
      * @param actionEvent to handle
      */
     public void onDeleteClick(ActionEvent actionEvent) {
+        ResourceBundle bundle = languageResourceBundle.getResourceBundle();
         if (expense != null){
             Alert alert =  new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setTitle("Remove Expense");
-            alert.setHeaderText("You will remove this expense permanently from this event");
-            alert.setContentText("Are you sure you want to remove " +
+            alert.setTitle(bundle.getString("expenseRemoveAlertTitle"));
+            alert.setHeaderText(bundle.getString("expenseRemoveAlertHeader"));
+            alert.setContentText(bundle.getString("expenseRemoveAlertContent") +
                     this.expense.getTitle() + "?");
+
 
             for(Debt debt : expense.getDebts()) {
                 server.deleteDebt(debt);
@@ -596,7 +597,7 @@ public class EditExpenseCtrl{
             removeTagButton.setVisible(true);
         }
         else {
-            tagLabel.setText("No tag");
+            tagLabel.setText(languageResourceBundle.getResourceBundle().getString("expenseNoTag"));
             tagLabel.setStyle("-fx-background-color: #F9F9F9");
             removeTagButton.setVisible(false);
         }
@@ -621,6 +622,7 @@ public class EditExpenseCtrl{
         expenseAbortButton.setText(bundle.getString("expenseAbortButton"));
         equally.setText(bundle.getString("editExpenseEqually"));
         onlySome.setText(bundle.getString("editExpenseOnlySome"));
+        tagButton.setText(bundle.getString("expenseTagButton"));
     }
 
     //For testing
