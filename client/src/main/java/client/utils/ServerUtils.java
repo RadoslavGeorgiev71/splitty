@@ -17,7 +17,13 @@ package client.utils;
 
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
+import java.io.*;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.*;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Scanner;
 import java.util.ResourceBundle;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -617,28 +623,58 @@ public class ServerUtils {
      * @param to currency
      * @return the event with the specified id
      */
-    public Double convertRate(String date, String from, String to) {
-        String key = "488b2c548074f3e5d9e15ba3013a152d";
-        String url = "http://data.fixer.io/api/" + date;
-        url += "?access_key=" + key+ "&base=" + from + "&symbols=" + to;
-        String key2 = "";
-        String url2 = "https://free.currconv.com/api/v7/convert?q="+
-                from + "_" + to + "&compact=ultra&date=" + date + "&apiKey=" + key2;
-        Response response = ClientBuilder.newClient(new ClientConfig())
-                .target(url)
-                .request(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .get();
-        if (response.getStatus() == Response.Status.OK.getStatusCode()) {
-            Object res = response.readEntity(Object.class);
-            String rate = res.toString();
-            rate = rate.split(to+"=")[1].split("}")[0];
-            return Double.parseDouble(rate);
-        } else {
-            showAlert();
-            return null;
+    public Double convertRate(String date, String from, String to) throws URISyntaxException {
+        String path = "rates/"+ date +"/" + from + "/" + to + ".txt";
+        URL url = ServerUtils.class.getClassLoader().getResource(path);
+        String availableDates = LocalDate.now().toString();
+        int y = Integer.parseInt(availableDates.substring(0,4)) - 1;
+        availableDates = y + availableDates.substring(4);
+        if(date == null || date.compareTo(availableDates) < 0
+                || date.compareTo(LocalDate.now().toString()) > 0){
+            return 1.0d;
+        }
+        try{
+            File myObj = new File(url.toURI());
+            Scanner myReader = new Scanner(myObj);
+            String data = "";
+            if (myReader.hasNextLine()) {
+                data = myReader.nextLine();}
+            myReader.close();
+            return Double.parseDouble(data);
+        } catch (Exception e) {
+            String key = "af59b256521aa37eb850";
+            String url2 = "https://free.currconv.com/api/v7/convert?q="+ from + "_"+ to +
+                    "&compact=ultra&date="+ date +"&apiKey="+ key;
+            Response response = ClientBuilder.newClient(new ClientConfig())
+                    .target(url2)
+                    .request(APPLICATION_JSON)
+                    .accept(APPLICATION_JSON)
+                    .get();
+            if (response.getStatus() == Response.Status.OK.getStatusCode()) {
+                String rate = response.readEntity(Object.class).toString();
+                if(rate.contains(to)){
+                    rate = rate.split("=")[2].split("}")[0];}
+                URL rateUrl = ServerUtils.class.getClassLoader().getResource("");
+                Path folderPath = Paths.get(rateUrl.toURI()).resolve("rates/" + date + "/" + from);
+                File folders = new File(folderPath.toString());
+                folders.mkdirs();
+                try{
+                    URL newUrl = ServerUtils.class.getClassLoader().getResource("rates/"
+                            + date + "/" + from);
+                    Path ratesPath = Paths.get(newUrl.toURI());
+                    Path rateFilePath = ratesPath.resolve(to+".txt");
+                    Files.createFile(rateFilePath);
+                    Files.writeString(rateFilePath, rate);
+                    return Double.parseDouble(rate);}
+                catch (Exception e1){
+                    return 1.0d;}
+            } else {
+                return 1.0d;
+            }
         }
     }
+//    String url = "http://data.fixer.io/api/" + date;
+//    url += "?access_key=" + key+ "&base=" + from + "&symbols=" + to;
 
     /**
      * Show a pop up window with an alert when the client cannot connect

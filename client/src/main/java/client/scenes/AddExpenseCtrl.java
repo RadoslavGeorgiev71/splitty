@@ -24,7 +24,6 @@ import javafx.scene.text.Text;
 import javafx.util.StringConverter;
 
 import java.net.URL;
-import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -135,8 +134,8 @@ public class AddExpenseCtrl{
         try {
             expense.setAmount(Double.parseDouble(amountField.getText()));
             expense.setCurrency(currChoiceBox.getSelectionModel().getSelectedItem().toString());
-            saveAsEuro();
-        } catch (NumberFormatException e) {
+            saveAsEuro(expense);
+        } catch (Exception e) {
             Alert alert =  new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Invalid Input");
             alert.setHeaderText("Amount is not a number");
@@ -193,20 +192,25 @@ public class AddExpenseCtrl{
 
     /**
      *  converted currency to save to server as EUR
+     * @param expense to change to euro
      */
-    public void saveAsEuro(){
-        boolean yes = false;
-        if(!yes){
+    public void saveAsEuro(Expense expense) throws Exception {
+        if(expense.getCurrency().equals("EUR")){
             return;
         }
         Double res = Double.parseDouble(amountField.getText());
-        res *= server.convertRate(datePicker.getValue().toString(),
-                currChoiceBox.getSelectionModel().getSelectedItem().toString(),
-                "EUR");
-        DecimalFormat df = new DecimalFormat("#.##");
-        res = Double.valueOf(df.format(res));
-        expense.setAmount(res);
-        expense.setCurrency("EUR");
+        try {
+            res *= server.convertRate(datePicker.getValue().toString(),
+                    currChoiceBox.getSelectionModel().getSelectedItem().toString(),
+                    "EUR");
+            expense.setAmount(res);
+            expense.setCurrency("EUR");
+        }
+        catch (Exception e){
+            System.out.println("The API currency converter we are using has 100" +
+                    " calls/minute and can find historical currency conversion up" +
+                    " to one year.");
+        }
     }
 
     /**

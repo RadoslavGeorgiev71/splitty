@@ -298,12 +298,17 @@ public class EventOverviewCtrl {
      * @param expense to convert
      * @return converted amount
      */
-    public Double convertCurrency(Expense expense){
+    public Double convertCurrency(Expense expense) throws Exception {
         String currency = ConfigClient.getCurrency();
         Double res = expense.getAmount();
-        res *= server.convertRate(expense.getDateTime(), expense.getCurrency(), currency);
-        DecimalFormat df = new DecimalFormat("#.##");
-        res = Double.valueOf(df.format(res));
+        try {
+            res *= server.convertRate(expense.getDateTime(), expense.getCurrency(), currency);
+            DecimalFormat df = new DecimalFormat("#.##");
+            res = Double.valueOf(df.format(res));
+        }
+        catch (Exception e){
+            res = expense.getAmount();
+        }
         return res;
     }
 
@@ -314,18 +319,25 @@ public class EventOverviewCtrl {
      */
     public Expense foreignCurrency(Expense expense){
         String currency = ConfigClient.getCurrency();
-        Expense show = new Expense();
+        Expense show = new Expense(expense.getTitle(), expense.getPayingParticipant(),
+                expense.getAmount(), expense.getCurrency(), expense.getParticipants(),
+                expense.getDateTime());
+        show.setTag(expense.getTag());
         if(currency != null && expense.getCurrency() != currency &&
                 currency.length() == 3){
             try{
                 show.setAmount(convertCurrency(expense));
                 show.setCurrency(currency);
-                show.setTitle(expense.getTitle());
-                show.setPayingParticipant(expense.getPayingParticipant());
             }
             catch (Exception e){
                 show = expense;
+                System.out.println("The API currency converter we are using has 100" +
+                        " calls/minute and can find historical currency conversion up" +
+                        " to one year.");
             }
+        }
+        else{
+            show = expense;
         }
         return show;
     }
@@ -366,9 +378,14 @@ public class EventOverviewCtrl {
         double amount = 0;
         if (event != null) {
             for (int i = 0; i < event.getExpenses().size(); i++) {
-                Expense expense = foreignCurrency(event.getExpenses().get(i));
-                amount += foreignCurrency(expense).getAmount();
-                visualizeExpense(tabPaneAllGridPane, expense, i);
+                Expense expense = event.getExpenses().get(i);
+                if(ConfigClient.getCurrency() != null &&
+                        expense.getCurrency() != ConfigClient.getCurrency()) {
+                    expense = foreignCurrency(event.getExpenses().get(i));
+                }
+                amount += expense.getAmount();
+                visualizeExpense(tabPaneAllGridPane, event.getExpenses().get(i),
+                        expense, i);
             }
             fromPersonTabName();
             includingPersonTabName();
@@ -388,11 +405,16 @@ public class EventOverviewCtrl {
         int j = 0;
         if (event != null) {
             for (int i = 0; i < event.getExpenses().size(); i++) {
-                Expense expense = foreignCurrency(event.getExpenses().get(i));
+                Expense expense = event.getExpenses().get(i);
+                if(ConfigClient.getCurrency() != null &&
+                        expense.getCurrency() != ConfigClient.getCurrency()) {
+                    expense = foreignCurrency(event.getExpenses().get(i));
+                }
                 Participant payingParticipant = expense.getPayingParticipant();
                 if (payingParticipant.equals(participantsMenu.
                         getSelectionModel().getSelectedItem())) {
-                    visualizeExpense(tabPaneFromGridPane, expense, j++);
+                    visualizeExpense(tabPaneFromGridPane, event.getExpenses().get(i),
+                            expense, j++);
                 }
             }
             fromPersonTabName();
@@ -413,9 +435,14 @@ public class EventOverviewCtrl {
         if (event != null) {
             for (int i = 0; i < event.getExpenses().size(); i++) {
                 Participant participant = participantsMenu.getSelectionModel().getSelectedItem();
-                Expense expense = foreignCurrency(event.getExpenses().get(i));
+                Expense expense = event.getExpenses().get(i);
+                if(ConfigClient.getCurrency() != null &&
+                        expense.getCurrency() != ConfigClient.getCurrency()) {
+                    expense = foreignCurrency(event.getExpenses().get(i));
+                }
                 if (expense.getParticipants().contains(participant)) {
-                    visualizeExpense(tabPaneIncludingGridPane, expense, j++);
+                    visualizeExpense(tabPaneIncludingGridPane, event.getExpenses().get(i),
+                            expense, j++);
                 }
             }
             fromPersonTabName();
@@ -431,9 +458,9 @@ public class EventOverviewCtrl {
      */
 
     @FXML
-    private void visualizeExpense(GridPane gridPane, Expense expense, int i) {
+    private void visualizeExpense(GridPane gridPane, Expense expense, Expense show, int i) {
         Label dateLabel = new Label(expense.getDateTime());
-        Label infoLabel = new Label(infoLabelText(expense));
+        Label infoLabel = new Label(infoLabelText(show));
         Button editButton = new Button();
         Label tagLabel = getTagLabel(i);
         GridPane.setVgrow(editButton, Priority.ALWAYS); // Allow label to grow vertically

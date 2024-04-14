@@ -32,9 +32,9 @@ import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
 public class Admin{
 
-    private String server;
+    private static String server;
     private String password = "none set";
-    private StompSession session;
+    private static StompSession session;
 
     /**
      * Constructor for Admin
