@@ -588,15 +588,21 @@ public class ServerUtils {
                 String rate = response.readEntity(Object.class).toString();
                 if(rate.contains(to)){
                     rate = rate.split("=")[2].split("}")[0];}
-                String str = "src/main/resources/rates/" + date + "/" + from;
-                File dirs = new File(Paths.get(str).toAbsolutePath().toString());
-                boolean d = dirs.mkdirs();
-                Path filePath = Paths.get(path).toAbsolutePath();
+                URL rateUrl = ServerUtils.class.getClassLoader().getResource("");
+                Path folderPath = Paths.get(rateUrl.toURI()).resolve("rates");
+                Files.createFile(folderPath);
+                rateUrl = ServerUtils.class.getClassLoader().getResource("rates");
+                Path datePath = Paths.get(rateUrl.toURI()).resolve(date);
+                Files.createFile(datePath);
+                rateUrl = ServerUtils.class.getClassLoader().getResource("rates/" + date);
+                Path fromPath = Paths.get(rateUrl.toURI()).resolve(from);
+                Files.createFile(fromPath);
                 try{
-                    URL newUrl = ServerUtils.class.getClassLoader().getResource(str);
+                    URL newUrl = ServerUtils.class.getClassLoader().getResource("rates/" + date + "/" + from);
                     Path ratesPath = Paths.get(newUrl.toURI());
-                    Path rateFilePath = ratesPath.resolve("config.txt");
+                    Path rateFilePath = ratesPath.resolve(to+".txt");
                     Files.createFile(rateFilePath);
+                    Files.writeString(rateFilePath, rate);
                     return Double.parseDouble(rate);}
                 catch (Exception e1){
                     return 1.0d;}

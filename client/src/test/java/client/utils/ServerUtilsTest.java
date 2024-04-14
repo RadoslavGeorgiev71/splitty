@@ -11,6 +11,7 @@ import org.mockito.MockitoAnnotations;
 //import org.mockserver.integration.ClientAndServer;
 
 import java.io.*;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -274,8 +275,11 @@ class ServerUtilsTest {
     }
 
     @Test
-    void convertRate() throws IOException {
-        //server.convertRate("2023-08-12", "EUR", "USD");
+    void convertRate() throws IOException, URISyntaxException {
+        Double d = server.convertRate("2023-08-12", "EUR", "USD");
+        System.out.println(d);
+//        Double b = server.convertRate("2024-03-14", "USD", "CHF");
+//        System.out.println(b);
     }
 
     @Test
