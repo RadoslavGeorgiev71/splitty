@@ -40,7 +40,7 @@ public class Admin{
      * Constructor for Admin
      */
     public Admin(){
-        this.session = connect("ws://localhost:8080/websocket");
+        this.session = null;
         this.server = "http://localhost:8080/";
     }
 
@@ -281,7 +281,10 @@ public class Admin{
         alert.showAndWait();
     }
 
-
+    public void initWebSocket(){
+        String webSocketUrl = convertUrl(server);
+        session = connect(webSocketUrl);
+    }
 
 
     /**
@@ -310,6 +313,7 @@ public class Admin{
      * @param consumer asd
      */
     public void registerForEvents(String dest, Consumer<Event> consumer) {
+        if(checkNull()) initWebSocket();
         session.subscribe(dest, new StompFrameHandler() {
             @Override
             public Type getPayloadType(StompHeaders headers) {
@@ -357,5 +361,14 @@ public class Admin{
 //                    "data already in the database thus could not be imported");
 //            alert.showAndWait();
 //        }
+    }
+
+    /**
+     * Check for the fxml controllers to know if the websocket connection
+     * has been established yet or not
+     * @return whether admin.session is null
+     */
+    public boolean checkNull(){
+        return session == null;
     }
 }
