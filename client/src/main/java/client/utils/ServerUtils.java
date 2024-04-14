@@ -20,17 +20,14 @@ import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 import java.io.*;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 
-import client.MyFXML;
 import commons.*;
 import jakarta.ws.rs.ProcessingException;
 //import jakarta.ws.rs.WebApplicationException;
@@ -601,7 +598,8 @@ public class ServerUtils {
                 File folders = new File(folderPath.toString());
                 folders.mkdirs();
                 try{
-                    URL newUrl = ServerUtils.class.getClassLoader().getResource("rates/" + date + "/" + from);
+                    URL newUrl = ServerUtils.class.getClassLoader().getResource("rates/"
+                            + date + "/" + from);
                     Path ratesPath = Paths.get(newUrl.toURI());
                     Path rateFilePath = ratesPath.resolve(to+".txt");
                     Files.createFile(rateFilePath);
