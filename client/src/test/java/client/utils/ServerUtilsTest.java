@@ -1,15 +1,20 @@
 package client.utils;
 
+import client.utils.ServerUtils;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.tomakehurst.wiremock.WireMockServer;
+import com.github.tomakehurst.wiremock.client.WireMock;
+import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import commons.*;
-import jakarta.ws.rs.client.Invocation;
-import jakarta.ws.rs.client.WebTarget;
+import jakarta.ws.rs.client.*;
 import jakarta.ws.rs.core.Response;
+import org.glassfish.jersey.client.ClientConfig;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-//import org.mockserver.integration.ClientAndServer;
 
+import javax.swing.*;
 import java.io.*;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
@@ -17,262 +22,475 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.*;
+import java.util.function.Consumer;
 import java.util.Scanner;
 
+import static com.github.tomakehurst.wiremock.client.WireMock.*;
+import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class ServerUtilsTest {
 
-    @Mock
-    WebTarget mockWebTarget;
+    ServerUtils serverUtils;
 
-    @Mock
-    Invocation.Builder mockBuilder;
-
-    @Mock
-    Response mockResponse;
-    //private ClientAndServer mockServer;
-    public ServerUtils server;
-    public ConfigClient configClient;
-    public Event event;
-    public Participant participant;
-    public Participant participant2;
-    public Expense expense;
+    private WireMockServer wireMockServer;
 
     @BeforeEach
-    void ini() {
-        MockitoAnnotations.initMocks(this);
-        //mockServer = ClientAndServer.startClientAndServer(8080);
-        server = new ServerUtils();
-        ServerUtils.setURL("http://localhost:8081/");
+    public void setUp() {
+        wireMockServer = new WireMockServer(WireMockConfiguration.options().dynamicPort());
+        wireMockServer.start();
+        configureFor("localhost", wireMockServer.port());
 
-        event = new Event();
-        event.setTitle("Test");
-        event.createInviteCode();
+        serverUtils = new ServerUtils();
+        serverUtils.setURL("http://localhost:" + wireMockServer.port());
+    }
 
-        participant = new Participant();
-        participant.setName("Ana");
-        participant2 = new Participant();
-        participant2.setName("Bob");
-
-        expense = new Expense();
-        expense.setTitle("Food");
-        expense.setAmount(10);
-        expense.setCurrency("EUR");
-        expense.setPayingParticipant(participant);
-        expense.setDateTime("2004-08-12");
-        expense.setDebts(new ArrayList<>());
-        expense.setTag(new Tag("","#FFFFFF"));
-
-        List<Participant> participants = new ArrayList<>();
-        participants.add(participant);
-        participants.add(participant2);
-        event.setParticipants(participants);
-        expense.setParticipants(participants);
-
-        //event = server.addEvent(event);
+    @AfterEach
+    public void tearDown() {
+        wireMockServer.stop();
     }
 
     @Test
-    void setURL() {
-        ServerUtils.setURL("http://localhost:8081/");
-        //assertEquals("http://localhost:8081/", server);
+    void sendRemainder_OK() throws JsonProcessingException {
+        Participant participant = new Participant();
+        participant.setId(0);
+        participant.setName("Test");
+        participant.setEmail("test@example.com");
+        participant.setIban("Test");
+        participant.setBic("Test");
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        String participantJson = objectMapper.writeValueAsString(participant);
+
+        stubFor(post(urlEqualTo("/api/email/"))
+                .withQueryParam("creatorEmail", equalTo("ooppteam08@gmail.com"))
+                .withQueryParam("amount", equalTo("100.0"))
+                .withQueryParam("email", equalTo("test@example.com"))
+                .withQueryParam("eventTitle", equalTo("Test Event"))
+                .withHeader("Content-Type", equalTo(APPLICATION_JSON))
+                .withHeader("Accept", equalTo(APPLICATION_JSON))
+                .withRequestBody(equalToJson(participantJson))
+                .willReturn(aResponse()
+                        .withStatus(200)));
+
+        SwingUtilities.invokeLater(() -> {
+            boolean result = serverUtils.sendRemainder(participant, 100.0, "test@example.com", "Test Event");
+            assertTrue(result);
+        });
+
+        try{
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            fail("Task was interrupted");
+        }
     }
 
     @Test
-    void getPaymentInstructions() {
-    }
-
-    @Test
-    void getTags() {
-    }
-
-    @Test
-    void addTag() {
-    }
-
-    @Test
-    void updateTag() {
-    }
-
-    @Test
-    void deleteTag() {
-    }
-
-    @Test
-    void addDebt() {
-        //event = server.addEvent(event);
-        participant = event.getParticipants().get(0);
-        participant2 = event.getParticipants().get(1);
-        Debt debt = new Debt(participant, participant2, 10);
-
-//        Debt res = server.addDebt(debt);
-//        assertEquals(debt.getAmount(), res.getAmount());
-//        assertEquals(debt.getPersonOwing(), res.getPersonOwing());
-//        assertEquals(debt.getPersonPaying(), res.getPersonPaying());
-    }
-
-    @Test
-    void deleteDebt() {
-//        event = server.addEvent(event);
-        participant = event.getParticipants().get(0);
-        participant2 = event.getParticipants().get(1);
-        Debt debt = new Debt(participant, participant2, 10);
-
-//        Debt res = server.addDebt(debt);
-//        assertEquals(debt.getAmount(), res.getAmount());
-//        Response response = server.deleteDebt(res);
-//        assertEquals(200, response.getStatus());
-    }
-
-    @Test
-    void getEvent() {
-//        event = server.addEvent(event);
-//        Event res = server.getEvent(event.getId());
-//        assertEquals(event, res);
-    }
-
-    @Test
-    void addEvent() {
+    void getPaymentInstructions_OK() {
         Event event = new Event();
-        event.setTitle("Test");
-        event.createInviteCode();
-        //Event res = server.addEvent(event);
-//        assertEquals(event.getInviteCode(), res.getInviteCode());
-//        assertEquals(event.getTitle(), res.getTitle());
+
+        List<Debt> debts = new ArrayList<>();
+        Debt debt = new Debt();
+        debts.add(debt);
+
+        stubFor(get(urlEqualTo("/api/debts/event/" + event.getId()))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", APPLICATION_JSON)
+                        .withBody("[{\"id\":1}]")));
+
+        SwingUtilities.invokeLater(() -> {
+            List<Debt> result = serverUtils.getPaymentInstructions(event);
+            assertEquals(1, result.size());
+            assertEquals(1, result.get(0).getId());
+        });
+
+        try{
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            fail("Task was interrupted");
+        }
     }
 
     @Test
-    void getEventByCode() {
+    void addEvent_OK() throws JsonProcessingException {
         Event event = new Event();
-        event.setTitle("Test");
-        event.createInviteCode();
-//        event = server.addEvent(event);
-//        Event res = server.getEventByCode(event.getInviteCode());
-//        assertEquals(event, res);
+        event.setTitle("Test Event");
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        String eventJson = objectMapper.writeValueAsString(event);
+
+        stubFor(post(urlEqualTo("/api/events"))
+                .withRequestBody(equalToJson(eventJson))
+                .willReturn(aResponse()
+                        .withStatus(201)
+                        .withHeader("Content-Type", APPLICATION_JSON)
+                        .withBody(eventJson)));
+
+        SwingUtilities.invokeLater(() -> {
+            Event result = serverUtils.addEvent(event);
+            assertEquals("Test Event", result.getTitle());
+        });
+
+        try{
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            fail("Task was interrupted");
+        }
     }
 
     @Test
-    void persistParticipant() {
-//        event = server.addEvent(event);
-        Participant participant = event.getParticipants().get(0);
+    void getEventByCode_OK() throws JsonProcessingException {
+        String inviteCode = "testCode";
+        Event event = new Event();
+        event.setInviteCode(inviteCode);
 
-        participant.setName("Cornel");
-//        Participant res = server.persistParticipant(participant);
-//        event = server.persistEvent(event);
-//        assertEquals(res, participant);
-//        assertTrue(event.getParticipants().contains(participant));
-//        assertEquals(2, event.getParticipants().size());
+        ObjectMapper objectMapper = new ObjectMapper();
+        String eventJson = objectMapper.writeValueAsString(event);
+
+        stubFor(get(urlEqualTo("/api/events/" + inviteCode))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", APPLICATION_JSON)
+                        .withBody(eventJson)));
+
+        SwingUtilities.invokeLater(() -> {
+            Event result = serverUtils.getEventByCode(inviteCode);
+            assertEquals(inviteCode, result.getInviteCode());
+        });
+
+        try{
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            fail("Task was interrupted");
+        }
     }
 
     @Test
-    void deleteParticipant() {
-//        event = server.addEvent(event);
-        participant = event.getParticipants().get(0);
-        participant2 = event.getParticipants().get(1);
-//        event = server.getEvent(event.getId());
-//        assertEquals(2, event.getParticipants().size());
+    void getTags_OK() {
+        List<Tag> tags = new ArrayList<>();
+        Tag tag = new Tag();
+        tags.add(tag);
 
-        event.removeParticipant(participant);
-//        event = server.persistEvent(event);
-//        assertEquals(1, event.getParticipants().size());
-//        assertFalse(event.getParticipants().contains(participant));
-//
-//        Response res = server.deleteParticipant(participant2);
-//        assertEquals(200, res.getStatus());
-//        assertEquals(0, event.getParticipants());
+        stubFor(get(urlEqualTo("/api/tags"))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", APPLICATION_JSON)
+                        .withBody("[{\"id\":1}]")));
+
+        SwingUtilities.invokeLater(() -> {
+            List<Tag> result = serverUtils.getTags();
+            assertEquals(1, result.get(0).getId());
+        });
+
+        try{
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            fail("Task was interrupted");
+        }
     }
 
     @Test
-    void addParticipant() {
-        Participant p = new Participant();
-        p.setName("Gogu");
-//        Response response = server.addParticipant(p);
-//        Participant res = response.readEntity(Participant.class);
-//        assertEquals(p.getName(), res.getName());
+    void addTag_OK() throws JsonProcessingException {
+        Tag tag = new Tag();
+        tag.setType("Test Tag");
 
-//        event = server.addEvent(event);
-//        event.addParticipant(res);
-//        event = server.persistEvent(event);
-//        assertTrue(event.getParticipants().contains(res));
-//        assertTrue(200 <= response.getStatus() && 300 > response.getStatus());
+        ObjectMapper objectMapper = new ObjectMapper();
+        String tagJson = objectMapper.writeValueAsString(tag);
+
+        stubFor(post(urlEqualTo("/api/tags/add"))
+                .withRequestBody(equalToJson(tagJson))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", APPLICATION_JSON)
+                        .withBody(tagJson)));
+
+        SwingUtilities.invokeLater(() -> {
+            Tag result = serverUtils.addTag(tag);
+            assertEquals("Test Tag", result.getType());
+        });
+
+        try{
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            fail("Task was interrupted");
+        }
     }
 
     @Test
-    void persistEvent() {
-        //event = server.addEvent(event);
-        event.setTitle("Idk");
-//        Event res = server.persistEvent(event);
-//        assertEquals(event, res);
+    void updateTag_OK() throws JsonProcessingException {
+        Tag tag = new Tag();
+        tag.setType("Updated Tag");
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        String tagJson = objectMapper.writeValueAsString(tag);
+
+        stubFor(post(urlEqualTo("/api/tags/update"))
+                .withRequestBody(equalToJson(tagJson))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", APPLICATION_JSON)
+                        .withBody(tagJson)));
+
+        SwingUtilities.invokeLater(() -> {
+            Tag result = serverUtils.updateTag(tag);
+            assertEquals("Updated Tag", result.getType());
+        });
+
+        try{
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            fail("Task was interrupted");
+        }
     }
 
     @Test
-    void registerEventUpdate() {
+    void deleteTag_OK(){
+        Tag tag = new Tag();
+
+        stubFor(delete(urlEqualTo("/api/tags/" + tag.getId()))
+                .willReturn(aResponse()
+                        .withStatus(200)));
+
+        SwingUtilities.invokeLater(() -> {
+            Response result = serverUtils.deleteTag(tag);
+            assertEquals(200, result.getStatus());
+        });
+
+        try{
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            fail("Task was interrupted");
+        }
     }
 
     @Test
-    void sendInvites() {
-//        event = server.addEvent(event);
-        List<String> emails = new ArrayList<>();
-        emails.add("maria.c.burlacu@gmail.com");
-        ConfigClient configClient = new ConfigClient();
-        configClient.setEmail("mariaciprianaburlacu@gmail.com");
-//        assertTrue(server.sendInvites(emails, event, "Maria"));
+    void deleteDebt_OK() {
+        Debt debt = new Debt();
+
+        stubFor(delete(urlEqualTo("/api/debts/" + debt.getId()))
+                .willReturn(aResponse()
+                        .withStatus(200)));
+
+        SwingUtilities.invokeLater(() -> {
+            Response result = serverUtils.deleteDebt(debt);
+            assertEquals(200, result.getStatus());
+        });
+
+        try{
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            fail("Task was interrupted");
+        }
     }
 
     @Test
-    void sendDefault() {
-//        event = server.addEvent(event);
-        ConfigClient configClient = new ConfigClient();
-        configClient.setName("Maria");
-        configClient.setEmail("maria.c.burlacu@gmail.com");
-//        assertTrue(server.sendDefault());
+    void getEvent_OK() throws JsonProcessingException {
+        long id = 0;
+        Event event = new Event();
+        event.setTitle("Test Event");
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        String eventJson = objectMapper.writeValueAsString(event);
+
+        stubFor(get(urlEqualTo("/api/events/id/" + id))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", APPLICATION_JSON)
+                        .withBody(eventJson)));
+
+        SwingUtilities.invokeLater(() -> {
+            Event result = serverUtils.getEvent(id);
+            assertEquals("Test Event", result.getTitle());
+        });
+
+        try{
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            fail("Task was interrupted");
+        }
     }
 
     @Test
-    void sendRemainder() {
-//        event = server.addEvent(event);
-        ConfigClient configClient = new ConfigClient();
-        configClient.setName("Maria");
-        configClient.setEmail("mariaciprianaburlacu@gmail.com");
-        Participant participant1 = new Participant("Maria");
-        participant1.setEmail("maria.c.burlacu@gmail.com");
-//        assertTrue(server.sendRemainder(participant1, 10,
-//                participant1.getEmail(), event.getTitle()));
+    void deleteParticipant_OK() {
+        Participant participant = new Participant();
+
+        stubFor(delete(urlEqualTo("/api/participants/" + participant.getId()))
+                .willReturn(aResponse()
+                        .withStatus(200)));
+
+        SwingUtilities.invokeLater(() -> {
+            Response result = serverUtils.deleteParticipant(participant);
+            assertEquals(200, result.getStatus());
+        });
+
+        try{
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            fail("Task was interrupted");
+        }
     }
 
     @Test
-    void deleteExpense() {
+    void persistEvent_OK() throws JsonProcessingException {
+        Event event = new Event();
+        event.setTitle("Test Event");
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        String eventJson = objectMapper.writeValueAsString(event);
+
+        stubFor(put(urlEqualTo("/api/events/persist/" + event.getId()))
+                .withRequestBody(equalToJson(eventJson))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", APPLICATION_JSON)
+                        .withBody(eventJson)));
+
+        SwingUtilities.invokeLater(() -> {
+            Event result = serverUtils.persistEvent(event);
+            assertEquals("Test Event", result.getTitle());
+        });
+
+        try{
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            fail("Task was interrupted");
+        }
     }
 
     @Test
-    void testDeleteExpense() {
+    void sendInvites_OK() throws JsonProcessingException {
+        List<String> emails = Arrays.asList("test@example.com");
+        ObjectMapper objectMapper = new ObjectMapper();
+        String emailsJson = objectMapper.writeValueAsString(emails);
+        Event event = new Event();
+        event.setInviteCode("testCode");
+        String creatorname = "Test Creator";
+
+        stubFor(post(urlEqualTo("/api/email/" + event.getInviteCode()))
+                .withQueryParam("creatorName", equalTo(creatorname))
+                .withQueryParam("creatorEmail", equalTo(""))
+                .withRequestBody(equalToJson(emailsJson))
+                .willReturn(aResponse()
+                        .withStatus(200)));
+
+        SwingUtilities.invokeLater(() -> {
+            boolean result = serverUtils.sendInvites(emails, event, creatorname);
+            assertTrue(result);
+        });
+
+        try{
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            fail("Task was interrupted");
+        }
     }
 
     @Test
-    void addExpense() {
-//        event = server.addEvent(event);
-        expense.setParticipants(event.getParticipants());
-        event.addExpense(expense);
-//        event = server.persistEvent(event);
-//        assertTrue(event.getParticipants().contains(expense));
+    void sendDefault_OK() throws JsonProcessingException {
+        String email = "test@example.com";
+        Participant participant = new Participant(0, ConfigClient.getName(),
+                email, ConfigClient.getIban(), ConfigClient.getBic());
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        String participantJson = objectMapper.writeValueAsString(participant);
+
+        stubFor(post(urlEqualTo("/api/email/default"))
+                .withRequestBody(equalToJson(participantJson))
+                .willReturn(aResponse()
+                        .withStatus(200)));
+
+        SwingUtilities.invokeLater(() -> {
+            boolean result = serverUtils.sendDefault(email);
+            assertTrue(result);
+        });
+
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            fail("Task was interrupted");
+        }
     }
 
     @Test
-    void testAddExpense() {
+    void registerEventUpdate_OK() throws InterruptedException {
+        Consumer<Event> mockConsumer = mock(Consumer.class);
+        Response mockResponse = mock(Response.class);
+        Event mockEvent = mock(Event.class);
+
+        when(mockResponse.getStatus()).thenReturn(200);
+        when(mockResponse.readEntity(Event.class)).thenReturn(mockEvent);
+
+        Client mockClient = mock(Client.class);
+
+        WebTarget mockWebTarget = mock(WebTarget.class);
+        when(mockClient.target(anyString())).thenReturn(mockWebTarget);
+        when(mockWebTarget.path(anyString())).thenReturn(mockWebTarget);
+        Invocation.Builder mockBuilder = mock(Invocation.Builder.class);
+        when(mockWebTarget.request(anyString())).thenReturn(mockBuilder);
+        when(mockBuilder.accept(anyString())).thenReturn(mockBuilder);
+        when(mockBuilder.get(Response.class)).thenReturn(mockResponse);
+
+        serverUtils.registerEventUpdate(mockConsumer);
+
+        Thread.sleep(1000);
+        serverUtils.stop();
     }
 
     @Test
-    void getExpense() {
+    void deleteExpense_OK() {
+        Expense expense = new Expense();
+
+        stubFor(delete(urlEqualTo("/api/expenses/remove/" + 0))
+                .willReturn(aResponse()
+                        .withStatus(200)));
+
+        SwingUtilities.invokeLater(() -> {
+            Response result = serverUtils.deleteExpense(0, expense);
+            assertEquals(200, result.getStatus());
+        });
+
+        try{
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            fail("Task was interrupted");
+        }
     }
 
     @Test
-    void updateExpense() {
-    }
+    void convertRate_OK() {
+        String date = "2022-01-01";
+        String from = "USD";
+        String to = "EUR";
 
-    @Test
-    void persistExpense() {
+        stubFor(get(urlEqualTo("/api/" + date + "?access_key=488b2c548074f3e5d9e15ba3013a152d&base=" + from + "&symbols=" + to))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", APPLICATION_JSON)
+                        .withBody("{\"rates\": {\"" + to + "\": 0.85}}")));
+
+
+        SwingUtilities.invokeLater(() -> {
+            Double result = null;
+            try {
+                result = serverUtils.convertRate(date, from, to);
+            } catch (URISyntaxException ex) {
+                throw new RuntimeException(ex);
+            }
+            assertEquals(0.85, result);
+        });
+
+        try{
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            fail("Task was interrupted");
+        }
     }
 
     @Test
@@ -285,17 +503,5 @@ class ServerUtilsTest {
         int y = Integer.parseInt(availableDates.substring(0,4)) - 1;
         availableDates = y + availableDates.substring(4);
         System.out.println(availableDates);
-    }
-
-    @Test
-    void showAlert() {
-    }
-
-    @Test
-    void testShowAlert() {
-    }
-
-    @Test
-    void stop() {
     }
 }

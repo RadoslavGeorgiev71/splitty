@@ -21,7 +21,7 @@
          <font>
             <Font size="20.0" />
          </font></Text>
-      <Button fx:id="settingsButton" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#onSettingsClick" text="Settings" />
+       <Button fx:id="settingsButton" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#onSettingsClick" text="Settings" />
       <Text fx:id="joinEventStaticText" layoutX="124.0" layoutY="169.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Join event">
          <font>
             <Font size="20.0" />

@@ -29,6 +29,8 @@ import java.util.ResourceBundle;
 
 public class StatisticsCtrl {
 
+    private boolean testing = false;
+
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
     private Event event;
@@ -164,14 +166,22 @@ public class StatisticsCtrl {
     public void setIcon(String iconName, Button button) {
         String path = "client/images/icons/" + iconName;
         URL url = LanguageButtonUtils.class.getClassLoader().getResource(path);
-        if (url == null) {
-            throw new RuntimeException("Resources folder not found");
+        if(!testing && url == null){
+            throw new RuntimeException("Invalid icon name");
         }
 
-        Image image = new Image(String.valueOf(url));
+        Image image = null;
+
+        if(!testing){
+            image = new Image(String.valueOf(url));
+        }
 
         ImageView imageView = new ImageView();
-        imageView.setImage(image);
+
+        if(!testing){
+            imageView.setImage(image);
+        }
+
         imageView.setPreserveRatio(true);
         imageView.setSmooth(true);
         imageView.setCache(true);
@@ -179,6 +189,14 @@ public class StatisticsCtrl {
         imageView.setFitWidth(20);
         imageView.setFitHeight(20);
         button.setGraphic(imageView);
+    }
+
+    /**
+     * Setter for testing
+     * @param testing - the testing value
+     */
+    public void setTesting(boolean testing) {
+        this.testing = testing;
     }
 
     /**
@@ -206,5 +224,4 @@ public class StatisticsCtrl {
         ResourceBundle bundle = languageResourceBundle.getResourceBundle();
         backButton.setText(bundle.getString("backButton"));
     }
-
 }
