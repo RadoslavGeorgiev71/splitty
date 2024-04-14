@@ -51,10 +51,14 @@ public class LoginCtrl {
 
     @FXML
     void login(ActionEvent event) {
+        if(admin.checkNull()){
+            admin.initWebSocket();
+        }
         errorLabel.setVisible(false); //in case this login attempt follows an unsuccessful one
         String password = passwordField.getText();
         if (admin.login(password)){
             admin.setPassword(password);
+            mainCtrl.register();
             mainCtrl.showOverview();
         }
         else {
@@ -79,6 +83,9 @@ public class LoginCtrl {
 
     @FXML
     void generatePassword(ActionEvent event) {
+        if(admin.checkNull()){
+            admin.initWebSocket();
+        }
         errorLabel.setVisible(false);
         if(!admin.generatePassword()){
             errorLabel.setText("Error: Unable to connect to the server. " +

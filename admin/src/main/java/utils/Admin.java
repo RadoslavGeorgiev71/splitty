@@ -96,7 +96,7 @@ public class Admin{
             session.disconnect();
         }
         String webSocketUrl = convertUrl(url);
-        this.server = url;
+        server = url;
         this.session = connect(webSocketUrl);
     }
 
@@ -114,9 +114,6 @@ public class Admin{
      * @return boolean true if ok false if error
      */
     public boolean generatePassword(){
-        if(this.session == null){
-            setURL(this.server);
-        }
         try {
             Response response = ClientBuilder.newClient()
                     .target(server)
@@ -137,9 +134,6 @@ public class Admin{
      * @return Boolean authenticated
      */
     public boolean login(String password){
-        if(this.session == null){
-            setURL(this.server);
-        }
         try {
             Response res = ClientBuilder.newClient(new ClientConfig()) //
                     .target(server).path("api/admin/") //
@@ -153,7 +147,7 @@ public class Admin{
                 statusCode = res.getStatus();
             }
             boolean isAuthenticated = statusCode == Response.Status.OK.getStatusCode();
-            connect("ws://localhost:8080/websocket");
+            //connect(convertUrl(server));
             return isAuthenticated;
         } catch (ProcessingException e) {
             return false;
@@ -287,7 +281,12 @@ public class Admin{
         alert.showAndWait();
     }
 
-
+    /**
+     * Javadoc
+     */
+    public void initWebSocket(){
+        session = connect(convertUrl(server));
+    }
 
 
     /**
@@ -316,6 +315,9 @@ public class Admin{
      * @param consumer asd
      */
     public void registerForEvents(String dest, Consumer<Event> consumer) {
+        if(checkNull()){
+            initWebSocket();
+        }
         session.subscribe(dest, new StompFrameHandler() {
             @Override
             public Type getPayloadType(StompHeaders headers) {
@@ -363,5 +365,14 @@ public class Admin{
 //                    "data already in the database thus could not be imported");
 //            alert.showAndWait();
 //        }
+    }
+
+    /**
+     * Check for the fxml controllers to know if the websocket connection
+     * has been established yet or not
+     * @return whether admin.session is null
+     */
+    public boolean checkNull(){
+        return session == null;
     }
 }
