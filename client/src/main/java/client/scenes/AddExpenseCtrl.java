@@ -136,7 +136,7 @@ public class AddExpenseCtrl{
         try {
             expense.setAmount(Double.parseDouble(amountField.getText()));
             expense.setCurrency(currChoiceBox.getSelectionModel().getSelectedItem().toString());
-            saveAsEuro();
+            saveAsEuro(expense);
         } catch (Exception e) {
             Alert alert =  new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Invalid Input");
@@ -194,20 +194,25 @@ public class AddExpenseCtrl{
 
     /**
      *  converted currency to save to server as EUR
+     * @param expense to change to euro
      */
-    public void saveAsEuro() throws Exception {
-        boolean yes = false;
-        if(!yes){
+    public void saveAsEuro(Expense expense) throws Exception {
+        if(expense.getCurrency().equals("EUR")){
             return;
         }
         Double res = Double.parseDouble(amountField.getText());
-        res *= server.convertRate(datePicker.getValue().toString(),
-                currChoiceBox.getSelectionModel().getSelectedItem().toString(),
-                "EUR");
-        DecimalFormat df = new DecimalFormat("#.##");
-        res = Double.valueOf(df.format(res));
-        expense.setAmount(res);
-        expense.setCurrency("EUR");
+        try {
+            res *= server.convertRate(datePicker.getValue().toString(),
+                    currChoiceBox.getSelectionModel().getSelectedItem().toString(),
+                    "EUR");
+            expense.setAmount(res);
+            expense.setCurrency("EUR");
+        }
+        catch (Exception e){
+            System.out.println("The API currency converter we are using has 100" +
+                    " calls/minute and can find historical currency conversion up" +
+                    " to one year.");
+        }
     }
 
     /**

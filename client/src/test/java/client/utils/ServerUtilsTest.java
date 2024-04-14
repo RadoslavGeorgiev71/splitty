@@ -15,6 +15,7 @@ import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -276,10 +277,14 @@ class ServerUtilsTest {
 
     @Test
     void convertRate() throws IOException, URISyntaxException {
-        Double d = server.convertRate("2023-08-12", "EUR", "USD");
-        System.out.println(d);
-//        Double b = server.convertRate("2024-03-14", "USD", "CHF");
-//        System.out.println(b);
+//        Double d = server.convertRate("2023-08-12", "EUR", "USD");
+//        System.out.println(d);
+        Double b = server.convertRate("2020-03-14", "USD", "CHF");
+        System.out.println(b);
+//        String availableDates = LocalDate.now().toString();
+//        int y = Integer.parseInt(availableDates.substring(0,4)) - 1;
+//        availableDates = y + availableDates.substring(4);
+//        System.out.println(availableDates);
     }
 
     @Test

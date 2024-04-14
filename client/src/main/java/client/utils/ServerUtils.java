@@ -564,7 +564,7 @@ public class ServerUtils {
      * @param to currency
      * @return the event with the specified id
      */
-    public Double convertRate(String date, String from, String to) throws IOException, URISyntaxException {
+    public Double convertRate(String date, String from, String to) throws URISyntaxException {
         String path = "rates/"+ date +"/" + from + "/" + to + ".txt";
         URL url = ServerUtils.class.getClassLoader().getResource(path);
         try{
@@ -589,14 +589,9 @@ public class ServerUtils {
                 if(rate.contains(to)){
                     rate = rate.split("=")[2].split("}")[0];}
                 URL rateUrl = ServerUtils.class.getClassLoader().getResource("");
-                Path folderPath = Paths.get(rateUrl.toURI()).resolve("rates");
-                Files.createFile(folderPath);
-                rateUrl = ServerUtils.class.getClassLoader().getResource("rates");
-                Path datePath = Paths.get(rateUrl.toURI()).resolve(date);
-                Files.createFile(datePath);
-                rateUrl = ServerUtils.class.getClassLoader().getResource("rates/" + date);
-                Path fromPath = Paths.get(rateUrl.toURI()).resolve(from);
-                Files.createFile(fromPath);
+                Path folderPath = Paths.get(rateUrl.toURI()).resolve("rates/" + date + "/" + from);
+                File folders = new File(folderPath.toString());
+                folders.mkdirs();
                 try{
                     URL newUrl = ServerUtils.class.getClassLoader().getResource("rates/" + date + "/" + from);
                     Path ratesPath = Paths.get(newUrl.toURI());
@@ -608,7 +603,7 @@ public class ServerUtils {
                     return 1.0d;}
             } else {
                 showAlert();
-                return null;
+                return 1.0d;
             }
         }
     }
