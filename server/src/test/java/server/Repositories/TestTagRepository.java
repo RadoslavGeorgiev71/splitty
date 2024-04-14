@@ -276,7 +276,7 @@ public class TestTagRepository implements TagRepository {
     public boolean existsById(Long aLong) {
         calledMethods.add("existsById");
         List<Tag> matchingTags = tags.stream().filter(x -> x.getId() == aLong).toList();
-        if(matchingTags.size() == 1) {
+        if(matchingTags.size() >= 1) {
             return true;
         }
         else {
