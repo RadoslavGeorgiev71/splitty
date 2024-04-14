@@ -1,6 +1,8 @@
 package server.Services;
 
+import commons.Debt;
 import commons.Event;
+import commons.Expense;
 import commons.Participant;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class ParticipantServiceTest {
 
     @Mock
-    private ParticipantRepository participantRepo;
+    private TestParticipantRepository participantRepo;
     @Mock
     private DebtRepository debtRepo;
     @Mock
@@ -91,6 +93,12 @@ public class ParticipantServiceTest {
         Event event = new Event();
         Participant p1 = new Participant("Bob");
         event.addParticipant(p1);
+        Expense expense = new Expense();
+        Debt debt = new Debt(p1, p1, 100);
+        expense.add(debt);
+        expense.addParticipant(p1);
+        expense.setPayingParticipant(p1);
+        event.addExpense(expense);
         Participant participantSaved = participantRepo.save(p1);
         eventRepo.save(event);
         assertTrue(sut.delete(participantSaved.getId()));
@@ -104,5 +112,11 @@ public class ParticipantServiceTest {
         Optional<Participant> participantOptional = sut.getById(participantSaved.getId());
         assertTrue(participantOptional.isPresent());
         assertEquals(participantOptional.get(), participantSaved);
+    }
+
+    @Test
+    void testFlush() {
+        sut.flush();
+        assertEquals("flush", participantRepo.getCalledMethods().getLast());
     }
 }
