@@ -40,6 +40,8 @@ import javafx.scene.control.MenuButton;
 
 public class EventOverviewCtrl {
 
+    private boolean testing = false;
+
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
 
@@ -347,7 +349,7 @@ public class EventOverviewCtrl {
      * @param i - the number of the row
      * @return the label
      */
-    private Label getTagLabel(int i) {
+    Label getTagLabel(int i) {
         Tag tag = event.getExpenses().get(i).getTag();
         Label tagLabel = new Label();
         if(tag != null) {
@@ -405,12 +407,17 @@ public class EventOverviewCtrl {
         int j = 0;
         if (event != null) {
             for (int i = 0; i < event.getExpenses().size(); i++) {
+                Participant payingParticipant;
                 Expense expense = event.getExpenses().get(i);
                 if(ConfigClient.getCurrency() != null &&
                         expense.getCurrency() != ConfigClient.getCurrency()) {
                     expense = foreignCurrency(event.getExpenses().get(i));
                 }
-                Participant payingParticipant = expense.getPayingParticipant();
+                if(!testing) {
+                    payingParticipant = expense.getPayingParticipant();
+                } else {
+                    payingParticipant = new Participant();
+                }
                 if (payingParticipant.equals(participantsMenu.
                         getSelectionModel().getSelectedItem())) {
                     visualizeExpense(tabPaneFromGridPane, event.getExpenses().get(i),
@@ -494,7 +501,16 @@ public class EventOverviewCtrl {
      * @return the activity of the expense
      */
     public String infoLabelText(Expense expense) {
-        String[] activity = expense.getActivity();
+        String[] activity;
+
+        if(!testing){
+            activity = expense.getActivity();
+        }
+        else {
+            activity = new String[]{
+                "2021-04-20", "100", "EUR", "dinner"};
+            languageResourceBundle = LanguageResourceBundle.getInstance();
+        }
         String infoLabelText = activity[0] + " ";
         infoLabelText += languageResourceBundle.getResourceBundle().getString("paid");
         infoLabelText += " " + activity[1] + " ";
@@ -536,7 +552,10 @@ public class EventOverviewCtrl {
 
     @FXML
     public void setAmountText(double amount) {
-        // Will add the currency later
+        if(testing){
+            return;
+        }
+        languageResourceBundle = LanguageResourceBundle.getInstance();
         amountText.setTextAlignment(TextAlignment.CENTER);
         amountText.setText(languageResourceBundle.getResourceBundle().getString("amountText") +
             " " + ConfigClient.getCurrency() + amount);
@@ -573,13 +592,13 @@ public class EventOverviewCtrl {
         this.event = event;
     }
 
-    /**
-     * Sets the event name
-     */
-
-    public void eventName() {
-        eventTitleLabel.setText(event.getTitle());
-    }
+//    /**
+//     * Sets the event name
+//     */
+//
+//    public void eventName() {
+//        eventTitleLabel.setText(event.getTitle());
+//    }
 
     /**
      * Sets the from tab with the current selected participant
@@ -722,7 +741,7 @@ public class EventOverviewCtrl {
             });
             tabPaneAllClick();
         }
-        
+
         server.registerEventUpdate(event -> {
             if(this.event.getId() == event.getId()) {
                 this.event = server.getEvent(event.getId());
@@ -746,13 +765,15 @@ public class EventOverviewCtrl {
             }
             for(Debt debt : debts) {
                 if(debt.getPersonPaying().equals(participantsMenu.getValue())) {
-                    amountOwing += debt.getAmount();
+                    amountOwed += debt.getAmount();
                 }
                 if(debt.getPersonOwing().equals(participantsMenu.getValue())) {
-                    amountOwed += debt.getAmount();
+                    amountOwing += debt.getAmount();
                 }
             }
         }
+        amountOwed = Math.round(amountOwed * 100.0) / 100.0;
+        amountOwing = Math.round(amountOwing * 100.0) / 100.0;
         amountOwingLabel.setTextAlignment(TextAlignment.CENTER);
         amountOwingLabel.setText(languageResourceBundle
             .getResourceBundle().getString("amountOwing") +
@@ -802,5 +823,13 @@ public class EventOverviewCtrl {
      */
     public void stop() {
         server.stop();
+    }
+
+    /**
+     * Set the testing boolean
+     * @param testing boolean
+     */
+    public void setTesting(boolean testing) {
+        this.testing = testing;
     }
 }

@@ -72,21 +72,22 @@ public class AddParticipantCtrl {
      * @param actionEvent to handle
      */
     public void ok(ActionEvent actionEvent) {
-        Event undoEvent = event;
-        Participant participant = new Participant();
-        participant.setName(nameField.getText());
-        participant.setIban(ibanField.getText());
-        participant.setEmail(emailField.getText());
-        participant.setBic(bicField.getText());
-        //server.addParticipant(participant);
-        event.addParticipant(participant);
-        clearFields();
-        event = server.persistEvent(event);
-        if(event != null){
-            mainCtrl.showEventOverview(event);
-        }
-        else{
-            mainCtrl.showEventOverview(undoEvent);
+        if(event != null) {
+            Event undoEvent = event;
+            Participant participant = new Participant();
+            participant.setName(nameField.getText());
+            participant.setIban(ibanField.getText());
+            participant.setEmail(emailField.getText());
+            participant.setBic(bicField.getText());
+            //server.addParticipant(participant);
+            event.addParticipant(participant);
+            clearFields();
+            event = server.persistEvent(event);
+            if (event != null) {
+                mainCtrl.showEventOverview(event);
+            } else {
+                mainCtrl.showEventOverview(undoEvent);
+            }
         }
     }
 

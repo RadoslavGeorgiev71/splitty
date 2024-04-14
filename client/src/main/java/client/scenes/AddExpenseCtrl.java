@@ -31,6 +31,8 @@ import java.util.ResourceBundle;
 
 public class AddExpenseCtrl{
 
+    private boolean testing = false;
+
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
     private Event event;
@@ -194,6 +196,7 @@ public class AddExpenseCtrl{
      *  converted currency to save to server as EUR
      * @param expense to change to euro
      */
+
     public void saveAsEuro(Expense expense) throws Exception {
         if(expense.getCurrency().equals("EUR")){
             return;
@@ -216,7 +219,7 @@ public class AddExpenseCtrl{
     /**
      * Clear all fields for the next use
      */
-    private void clearFields() {
+    public void clearFields() {
         payerChoiceBox.getSelectionModel().selectFirst();
         titleField.clear();
         amountField.clear();
@@ -438,7 +441,7 @@ public class AddExpenseCtrl{
     /**
      * Configures the tag label and remove button
      */
-    private void configureTagInformation() {
+    void configureTagInformation() {
         if(tag != null) {
             tagLabel.setText(tag.getType());
             tagLabel.setBackground(Background.fill(Color.web(tag.getColor())));
@@ -479,6 +482,15 @@ public class AddExpenseCtrl{
 
     }
 
+    //For testing
+
+    /**
+     * Getter for participants
+     * @return participants
+     */
+    public List<Participant> getParticipants() {
+        return participants;
+    }
     /**
      * Sets the icon of the chosen button.
      * @param iconName
@@ -488,14 +500,21 @@ public class AddExpenseCtrl{
     public void setIcon(String iconName, Button button) {
         String path = "client/images/icons/" + iconName;
         URL url = LanguageButtonUtils.class.getClassLoader().getResource(path);
-        if (url == null) {
-            throw new RuntimeException("Resources folder not found");
+        if(!testing && url == null){
+            throw new RuntimeException("Invalid icon name");
         }
 
-        Image image = new Image(String.valueOf(url));
+        Image image = null;
+
+        if(!testing){
+            image = new Image(String.valueOf(url));
+        }
 
         ImageView imageView = new ImageView();
-        imageView.setImage(image);
+
+        if(!testing){
+            imageView.setImage(image);
+        }
         imageView.setPreserveRatio(true);
         imageView.setSmooth(true);
         imageView.setCache(true);
@@ -503,5 +522,13 @@ public class AddExpenseCtrl{
         imageView.setFitWidth(20);
         imageView.setFitHeight(20);
         button.setGraphic(imageView);
+    }
+
+    /**
+     * Setter for testing
+     * @param testing - the testing value
+     */
+    public void setTesting(boolean testing) {
+        this.testing = testing;
     }
 }

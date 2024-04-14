@@ -156,8 +156,7 @@ public class InvitationCtrl implements Initializable {
     @FXML
     /**
      * Should send invites.
-     */
-    private void sendInvites(){
+     */ void sendInvites(){
         List<String> emails = new ArrayList<>();
         Scanner scanner = new Scanner(emailTextArea.getText());
         while(scanner.hasNextLine()){
@@ -178,7 +177,7 @@ public class InvitationCtrl implements Initializable {
      * @param emails
      */
     public void sendInvitesHelper(List<String> emails){
-        ResourceBundle bundle = languageResourceBundle.getResourceBundle();
+        ResourceBundle bundle = LanguageResourceBundle.getInstance().getResourceBundle();
         String name = ConfigClient.getName();
         Boolean response = server.sendInvites(emails, event, name);
         if(response != null){
@@ -214,10 +213,10 @@ public class InvitationCtrl implements Initializable {
     }
 
     @FXML
-    private void backToStart(){
-        mainCtrl.showStartScreen();
+    void backToStart(){
         resetFields();
         clearEmail();
+        mainCtrl.showStartScreen();
     }
 
     @FXML
@@ -247,6 +246,24 @@ public class InvitationCtrl implements Initializable {
         }
     }
 
+    //The methods below are only for testing purposes, do not use.
+
+
+    /**
+     * Gets the invite code text.
+     * @return the invite code text
+     */
+    public String getInviteCodeText(){
+        return inviteCodeText.getText();
+    }
+
+    /**
+     * Gets the event name text.
+     * @return the event name text
+     */
+    public String getEventNameText(){
+        return eventNameText.getText();
+    }
     /**
      * Sets the icon of the chosen button.
      * @param iconName
@@ -271,5 +288,6 @@ public class InvitationCtrl implements Initializable {
         imageView.setFitWidth(20);
         imageView.setFitHeight(20);
         button.setGraphic(imageView);
+
     }
 }
