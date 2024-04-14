@@ -140,7 +140,7 @@ public class EditExpenseCtrl{
             expense.setAmount(Double.parseDouble(amountField.getText()));
             expense.setCurrency(currChoiceBox.getSelectionModel().getSelectedItem().toString());
             saveAsEuro();
-        } catch (NumberFormatException e) {
+        } catch (Exception e) {
             Alert alert =  new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Invalid Input");
             alert.setHeaderText("Amount is not a number");
@@ -149,7 +149,6 @@ public class EditExpenseCtrl{
             alert.showAndWait();
             return;
         }
-        expense.setCurrency(currChoiceBox.getSelectionModel().getSelectedItem().toString());
         if(equally.isSelected() || participants.size() == event.getParticipants().size()){
             expense.setParticipants(event.getParticipants());
         }
@@ -202,19 +201,27 @@ public class EditExpenseCtrl{
     /**
      *  converted currency to save to server as EUR
      */
-    public void saveAsEuro(){
-        boolean yes = false;
-        if(!yes){
+    public void saveAsEuro() throws Exception {
+        String availableDates = LocalDate.now().toString();
+        int y = Integer.parseInt(availableDates.substring(0,4)) - 1;
+        availableDates = y + availableDates.substring(4);
+        if(expense.getCurrency().equals("EUR") || expense.getDateTime() == null ||
+            expense.getDateTime().compareTo(availableDates) <= 0){
             return;
         }
-        Double res = Double.parseDouble(amountField.getText());
-        res *= server.convertRate(datePicker.getValue().toString(),
-                currChoiceBox.getSelectionModel().getSelectedItem().toString(),
-                "EUR");
-        DecimalFormat df = new DecimalFormat("#.##");
-        res = Double.valueOf(df.format(res));
-        expense.setAmount(res);
-        expense.setCurrency("EUR");
+        Double res = expense.getAmount();
+        try {
+            res *= server.convertRate(datePicker.getValue().toString(),
+                    currChoiceBox.getSelectionModel().getSelectedItem().toString(),
+                    "EUR");
+            expense.setAmount(res);
+            expense.setCurrency("EUR");
+        }
+        catch (Exception e){
+            System.out.println("The API currency converter we are using has 100" +
+                    " calls/minute and can find historical currency conversion up" +
+                    " to one year.");
+        }
     }
 
     /**
@@ -439,12 +446,17 @@ public class EditExpenseCtrl{
      *  converted currency
      * @return converted amount
      */
-    public Double convertCurrency(){
+    public Double convertCurrency() throws Exception {
         String currency = ConfigClient.getCurrency();
         Double res = expense.getAmount();
-        res *= server.convertRate(expense.getDateTime(), expense.getCurrency(), currency);
-        DecimalFormat df = new DecimalFormat("#.##");
-        res = Double.valueOf(df.format(res));
+        try {
+            res *= server.convertRate(expense.getDateTime(), expense.getCurrency(), currency);
+            DecimalFormat df = new DecimalFormat("#.##");
+            res = Double.valueOf(df.format(res));
+        }
+        catch (Exception e){
+            res = expense.getAmount();
+        }
         return res;
     }
 
@@ -501,12 +513,22 @@ public class EditExpenseCtrl{
         currencies.add("AUD");
         currChoiceBox.setItems(FXCollections.observableArrayList(currencies));
         try{
-            amountField.setText("" + convertCurrency());
-            currChoiceBox.getSelectionModel().select(currency);
+            if(currency != null &&
+                    expense.getCurrency() != currency) {
+                amountField.setText("" + convertCurrency());
+                currChoiceBox.getSelectionModel().select(currency);
+            }
+            else{
+                amountField.setText("" + expense.getAmount());
+                currChoiceBox.getSelectionModel().select(expense.getCurrency());
+            }
         }
         catch (Exception e){
             amountField.setText("" + expense.getAmount());
             currChoiceBox.getSelectionModel().select(expense.getCurrency());
+            System.out.println("The API currency converter we are using has 100" +
+                    " calls/minute and can find historical currency conversion up" +
+                    " to one year.");
         }
     }
 
