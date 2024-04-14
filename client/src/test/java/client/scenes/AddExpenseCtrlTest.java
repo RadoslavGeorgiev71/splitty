@@ -33,6 +33,7 @@ public class AddExpenseCtrlTest extends ApplicationTest {
     Event mockEvent;
     Participant mockParticipant;
     Participant mockParticipant2;
+    Expense mockExpense;
     private AddExpenseCtrl addExpenseCtrl;
 
     @BeforeAll
@@ -61,6 +62,14 @@ public class AddExpenseCtrlTest extends ApplicationTest {
         mockParticipant2.setIban("Test2");
         mockParticipant2.setBic("Test2");
 
+        mockExpense = new Expense();
+        mockExpense.setTitle("Test");
+        mockExpense.setAmount(10);
+        mockExpense.setCurrency("EUR");
+        mockExpense.setParticipants(new ArrayList<>());
+        mockExpense.addParticipant(mockParticipant);
+        mockExpense.setTag(new Tag("Test", "#0000FF"));
+
 
         mockEvent = new Event();
         mockEvent.setTitle("Test");
@@ -68,6 +77,7 @@ public class AddExpenseCtrlTest extends ApplicationTest {
         mockEvent.addParticipant(mockParticipant);
         mockEvent.addParticipant(mockParticipant2);
         mockEvent.setExpenses(new ArrayList<>());
+        mockEvent.addExpense(mockExpense);
         mockEvent.setInviteCode("testInviteCode");
 
         addExpenseCtrl = new AddExpenseCtrl(serverMock, mainCtrlMock);
@@ -245,7 +255,11 @@ public class AddExpenseCtrlTest extends ApplicationTest {
         addExpenseCtrl.setTesting(true);
 
         Platform.runLater(() -> {
-            addExpenseCtrl.saveAsEuro();
+            try {
+                addExpenseCtrl.saveAsEuro(mockEvent.getExpenses().get(0));
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         });
     }
 

@@ -1,31 +1,64 @@
 
 package server.Services;
 
+import commons.Debt;
 import commons.Event;
+import commons.Expense;
+import commons.Participant;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import server.database.EventRepository;
+import server.Repositories.*;
+import server.database.*;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
 public class EventServiceTest {
     @Mock
-    private EventRepository eventRepo;
+    private TestEventRepository eventRepo;
+    @Mock
+    private ParticipantRepository participantRepo;
+    @Mock
+    private DebtRepository debtRepo;
+    @Mock
+    private ExpenseRepository expenseRepo;
+    @Mock
+    private TagRepository tagRepo;
 
-    @InjectMocks
     private EventService sut;
 
+    Event event1;
+    Event event2;
+    Participant p1;
+    Participant p2;
+    Expense expense1;
+    Debt debt1;
+
     @BeforeEach
-    public void setUp() {
-        MockitoAnnotations.initMocks(this);
+    void eventServiceSetUp() {
+        eventRepo = new TestEventRepository();
+        participantRepo = new TestParticipantRepository();
+        debtRepo = new TestDebtRepository();
+        expenseRepo = new TestExpenseRepository();
+        tagRepo = new TestTagRepository();
+        sut = new EventService(eventRepo, participantRepo,
+            debtRepo, expenseRepo, tagRepo);
+        event1 = new Event();
+        event2 = new Event();
+        p1 = new Participant("Bob");
+        p2 = new Participant("Ana");
+        expense1 = new Expense();
+        expense1.addParticipant(p1);
+        expense1.addParticipant(p2);
+        debt1 = new Debt(p1, p2, 100);
+        expense1.add(debt1);
+        event1.addParticipant(p1);
+        event1.addParticipant(p2);
+        event1.addExpense(expense1);
     }
 
     @Test
@@ -35,84 +68,72 @@ public class EventServiceTest {
 
     @Test
     void testFindAll() {
-        Event event = new Event();
-        event.setInviteCode("123");
-        when(eventRepo.findAll()).thenReturn(Arrays.asList(event));
+        eventRepo.save(event1);
+        eventRepo.save(event2);
         List<Event> events = sut.findAll();
-        assertNotNull(events);
-        assertEquals(1, events.size());
-        assertEquals(event, events.get(0));
+        assertEquals(List.of(event1, event2), events);
     }
 
     @Test
-    void testCreateEvent() {
-        Event event = new Event();
-        event.setInviteCode("123");
-        when(eventRepo.save(any(Event.class))).thenReturn(event);
-        Event result = sut.create(event);
-        assertNotNull(result);
-        assertEquals("123", result.getInviteCode());
-        verify(eventRepo, times(1)).save(event);
+    void testFindByInviteCode() {
+        event1.setInviteCode("abc");
+        eventRepo.save(event1);
+        assertEquals(event1, sut.findByInviteCode("abc").get());
     }
 
     @Test
-    void testUpdateNonExistentEvent() {
-        Event updatedEvent = new Event();
-        updatedEvent.setInviteCode("1234");
-        when(eventRepo.findById(anyLong())).thenReturn(Optional.empty());
-        Event result = sut.update(1L, updatedEvent);
-        assertNull(result);
-        verify(eventRepo, times(0)).save(any(Event.class));
+    void testCreate() {
+        sut.create(event1);
+        assertTrue(eventRepo.findAll().contains(event1));
     }
 
     @Test
-    void testFindByInviteCodeAndCreateEvent() {
-        Event event = new Event();
-        event.setInviteCode("123");
-        when(eventRepo.findByInviteCode("123")).thenReturn(Optional.of(event));
-        Optional<Event> foundEvent = sut.findByInviteCode("123");
-        assertTrue(foundEvent.isPresent());
-        assertEquals(event, foundEvent.get());
+    void testUpdate() {
+        event1 = eventRepo.save(event1);
+        event1.setInviteCode("abc");
+        sut.update(event1.getId(), event1);
+        assertEquals(event1, eventRepo.findById(event1.getId()).get());
     }
 
     @Test
-    void testUpdateEvent() {
-        Event event = new Event();
-        event.setInviteCode("123");
-        when(eventRepo.findById(anyLong())).thenReturn(Optional.of(event));
-        when(eventRepo.save(any(Event.class))).thenReturn(event);
-        Event updatedEvent = new Event();
-        updatedEvent.setInviteCode("1234");
-        Event result = sut.update(1L, updatedEvent);
-        assertNotNull(result);
-        assertEquals("1234", result.getInviteCode());
+    void testUpdateNull() {
+        assertNull(sut.update(5, event1));
     }
 
     @Test
-    void testFindExistsById(){
-        Event event = new Event();
-        event.setInviteCode("Whatever");
-        when(eventRepo.findById(anyLong())).thenReturn(Optional.of(event));
-        when(eventRepo.existsById(anyLong())).thenReturn(true);
-        Optional<Event> foundEvent = sut.findById(1L);
-        assertTrue(foundEvent.isPresent());
-        assertEquals(event, foundEvent.get());
-        assertTrue(sut.existsById(1L));
+    void testFindById() {
+        eventRepo.save(event1);
+        assertEquals(Optional.of(event1), sut.findById(event1.getId()));
     }
 
-//    @Test
-//    void testDeleteEvent(){
-//        Event event = new Event();
-//        event.setInviteCode("123");
-//        doNothing().when(eventRepo).deleteById(anyLong());
-//        sut.deleteById(1L);
-//        verify(eventRepo, times(1)).deleteById(1L);
-//    }
+    @Test
+    void testDeleteById() {
+        sut.create(event1);
+        sut.deleteById(event1.getId());
+        assertEquals(new ArrayList<>(), eventRepo.findAll());
+        assertEquals(new ArrayList<>(), participantRepo.findAll());
+        assertEquals(new ArrayList<>(), expenseRepo.findAll());
+        assertEquals(new ArrayList<>(), debtRepo.findAll());
+    }
+
+    @Test
+    void testExistsById() {
+        eventRepo.save(event1);
+        assertTrue(sut.existsById(event1.getId()));
+    }
 
     @Test
     void testFlush() {
         sut.flush();
-        verify(eventRepo, times(1)).flush();
+        assertEquals("flush", eventRepo.getCalledMethods().getLast());
+    }
+
+
+
+    @Test
+    void testImportEvent() {
+        expense1.setPayingParticipant(p1);
+        sut.importEvent(event1);
+        assertEquals(List.of(event1), eventRepo.findAll());
     }
 }
-

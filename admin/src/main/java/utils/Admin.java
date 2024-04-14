@@ -32,15 +32,15 @@ import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
 public class Admin{
 
-    private String server;
+    private static String server;
     private String password = "none set";
-    private StompSession session;
+    private static StompSession session;
 
     /**
      * Constructor for Admin
      */
     public Admin(){
-        this.session = connect("ws://localhost:8080/websocket");
+        this.session = null;
         this.server = "http://localhost:8080/";
     }
 
@@ -96,7 +96,7 @@ public class Admin{
             session.disconnect();
         }
         String webSocketUrl = convertUrl(url);
-        this.server = url;
+        server = url;
         this.session = connect(webSocketUrl);
     }
 
@@ -147,7 +147,7 @@ public class Admin{
                 statusCode = res.getStatus();
             }
             boolean isAuthenticated = statusCode == Response.Status.OK.getStatusCode();
-            connect("ws://localhost:8080/websocket");
+            //connect(convertUrl(server));
             return isAuthenticated;
         } catch (ProcessingException e) {
             return false;
@@ -281,7 +281,12 @@ public class Admin{
         alert.showAndWait();
     }
 
-
+    /**
+     * Javadoc
+     */
+    public void initWebSocket(){
+        session = connect(convertUrl(server));
+    }
 
 
     /**
@@ -310,6 +315,9 @@ public class Admin{
      * @param consumer asd
      */
     public void registerForEvents(String dest, Consumer<Event> consumer) {
+        if(checkNull()){
+            initWebSocket();
+        }
         session.subscribe(dest, new StompFrameHandler() {
             @Override
             public Type getPayloadType(StompHeaders headers) {
@@ -357,5 +365,14 @@ public class Admin{
 //                    "data already in the database thus could not be imported");
 //            alert.showAndWait();
 //        }
+    }
+
+    /**
+     * Check for the fxml controllers to know if the websocket connection
+     * has been established yet or not
+     * @return whether admin.session is null
+     */
+    public boolean checkNull(){
+        return session == null;
     }
 }

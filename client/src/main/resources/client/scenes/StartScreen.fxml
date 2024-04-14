@@ -28,7 +28,7 @@
          </font>
       </Text>
       <Button fx:id="createEventButton" layoutX="381.0" layoutY="80.0" mnemonicParsing="false" onAction="#createEvent" text="Create" />
-      <Button fx:id="joinEventButton" layoutX="381.0" layoutY="175.0" mnemonicParsing="false" onAction="#joinEvent" prefHeight="25.0" prefWidth="50.0" text="Join" />
+      <Button fx:id="joinEventButton" layoutX="381.0" layoutY="175.0" mnemonicParsing="false" onAction="#joinEvent" text="Join" />
       <Text fx:id="recentEventsText" layoutX="122.0" layoutY="241.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Recently viewed events:">
          <font>
             <Font size="15.0" />

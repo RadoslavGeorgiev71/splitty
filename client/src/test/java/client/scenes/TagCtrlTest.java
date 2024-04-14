@@ -352,7 +352,7 @@ public class TagCtrlTest extends ApplicationTest {
 
         WaitForAsyncUtils.waitForFxEvents();
 
-        Mockito.verify(mockMainCtrl, Mockito.times(1)).showEditExpenseWithTag(Mockito.any(Event.class), Mockito.any(Expense.class), Mockito.any(Tag.class));
+        Mockito.verify(mockMainCtrl, Mockito.times(1)).showEditExpenseWithTag(Mockito.any(Event.class), Mockito.any(Expense.class), Mockito.any(Tag.class), Mockito.any(Participant.class));
     }
 
     @Test
@@ -377,6 +377,6 @@ public class TagCtrlTest extends ApplicationTest {
 
         WaitForAsyncUtils.waitForFxEvents();
 
-        Mockito.verify(mockMainCtrl, Mockito.times(1)).showEditExpense(Mockito.any(Event.class), Mockito.any(Expense.class));
+        Mockito.verify(mockMainCtrl, Mockito.times(1)).showEditExpense(Mockito.any(Event.class), Mockito.any(Expense.class), Mockito.any(Participant.class));
     }
 }

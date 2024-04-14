@@ -67,7 +67,7 @@ public class TestParticipantRepository implements ParticipantRepository {
      */
     @Override
     public void flush() {
-
+        calledMethods.add("flush");
     }
 
     /**

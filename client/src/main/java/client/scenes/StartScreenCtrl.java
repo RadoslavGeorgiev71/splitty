@@ -122,23 +122,21 @@ public class StartScreenCtrl {
             if (!invite.equals("null")) {
                 Event event = server.getEventByCode(invite);
                 if (event != null) {
-                    recentlyViewedEventsListView.getItems().add(event.getTitle());
-                    eventMap.put(event.getTitle(), invite);
+                    recentlyViewedEventsListView.getItems().add(invite);
+                    eventMap.put(invite, event.getTitle());
                 }
             }
         }
         recentlyViewedEventsListView.setCellFactory(param -> new ListCell<String>() {
             protected void updateItem(String item, boolean empty) {
                 super.updateItem(item, empty);
-
                 if (empty || item == null) {
                     setText(null);
                     setGraphic(null);
                 } else {
-
                     HBox hbox = new HBox(10);
 
-                    Text text = new Text(item);
+                    Text text = new Text(eventMap.get(item));
                     Button button1 = new Button(languageResourceBundle
                             .getResourceBundle().getString("goToEventText"));
                     Button button2 = new Button(languageResourceBundle
@@ -148,13 +146,12 @@ public class StartScreenCtrl {
 
                     button1.setOnAction(event -> {
                         clearFields();
-                        mainCtrl.showEventOverview(server.getEventByCode(eventMap.get(item)));
+                        mainCtrl.showEventOverview(server.getEventByCode(item));
                     });
 
                     button2.setOnAction(event -> {
-                        String inviteCode = eventMap.get(item);
                         getListView().getItems().remove(getItem());
-                        deleteEventFromConfig(inviteCode);
+                        deleteEventFromConfig(item);
                     });
 
                     setGraphic(hbox);
@@ -168,7 +165,6 @@ public class StartScreenCtrl {
      * Switches the text language.
      */
     public void switchTextLanguage() {
-
         ResourceBundle bundle = languageResourceBundle.getResourceBundle();
         settingsButton.setText(bundle.getString("settingsButtonText"));
         newEventStaticText.setText(bundle.getString("newEventStaticText"));
@@ -176,6 +172,8 @@ public class StartScreenCtrl {
         recentEventsText.setText(bundle.getString("recentEventsText"));
         createEventButton.setText(bundle.getString("createEventButton"));
         joinEventButton.setText(bundle.getString("joinEventButton"));
+        joinEventText.setPromptText(bundle.getString("emptyInviteCodeAlert"));
+        newEventText.setPromptText(bundle.getString("emptyTitleAlert"));
     }
 
     /**

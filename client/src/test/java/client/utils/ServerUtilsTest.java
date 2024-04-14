@@ -15,11 +15,18 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import javax.swing.*;
+import java.io.*;
+import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.*;
 import java.util.function.Consumer;
+import java.util.Scanner;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
@@ -468,8 +475,14 @@ class ServerUtilsTest {
                         .withHeader("Content-Type", APPLICATION_JSON)
                         .withBody("{\"rates\": {\"" + to + "\": 0.85}}")));
 
+
         SwingUtilities.invokeLater(() -> {
-            Double result = serverUtils.convertRate(date, from, to);
+            Double result = null;
+            try {
+                result = serverUtils.convertRate(date, from, to);
+            } catch (URISyntaxException ex) {
+                throw new RuntimeException(ex);
+            }
             assertEquals(0.85, result);
         });
 
@@ -478,5 +491,17 @@ class ServerUtilsTest {
         } catch (InterruptedException e) {
             fail("Task was interrupted");
         }
+    }
+
+    @Test
+    void convertRate() throws IOException, URISyntaxException {
+//        Double d = server.convertRate("2023-08-12", "EUR", "USD");
+//        System.out.println(d);
+//        Double b = server.convertRate("2020-03-14", "USD", "CHF");
+//        System.out.println(b);
+        String availableDates = LocalDate.now().toString();
+        int y = Integer.parseInt(availableDates.substring(0,4)) - 1;
+        availableDates = y + availableDates.substring(4);
+        System.out.println(availableDates);
     }
 }

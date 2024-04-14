@@ -111,7 +111,7 @@ public class OverviewCtrl {
         Stage filestage = new Stage();
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open File");
-        String userDir = "admin";
+        String userDir = System.getProperty("user.dir");
         File defaultDirectory = new File(userDir);
         fileChooser.setInitialDirectory(defaultDirectory);
         File selectedFile = fileChooser.showOpenDialog(filestage);
@@ -204,10 +204,13 @@ public class OverviewCtrl {
     void initialize(){
         events = FXCollections.observableArrayList(admin.getEvents());
         titleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
-        lastActivityColumn.setCellValueFactory(new PropertyValueFactory<>("LastActivity"));
+        lastActivityColumn.setCellValueFactory(new PropertyValueFactory<>("LastActivityTime"));
         creationDateColumn.setCellValueFactory(new PropertyValueFactory<>("DateTime"));
         table.setItems(events);
         table.getSelectionModel().selectFirst();
+    }
+
+    void register(){
         admin.registerForEvents("/topic/events", e -> {
             events.add(e);
         });

@@ -25,25 +25,31 @@
         <URL value="@/client/styles.css" />
     </stylesheets>
     <children>
-        <VBox layoutY="1.0" prefHeight="389.0" prefWidth="280.0" spacing="10.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="1.0">
+        <VBox layoutX="10.0" layoutY="6.0" prefHeight="389.0" prefWidth="280.0" spacing="10.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="6.0">
             <children>
                 <GridPane prefHeight="0.0" prefWidth="460.0" VBox.vgrow="ALWAYS">
                     <columnConstraints>
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                        <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="ALWAYS" maxWidth="256.0" minWidth="172.0" prefWidth="199.0" />
+                        <ColumnConstraints halignment="RIGHT" hgrow="ALWAYS" maxWidth="288.0" minWidth="204.0" prefWidth="261.0" />
                     </columnConstraints>
                     <rowConstraints>
-                        <RowConstraints minHeight="1.0" prefHeight="10.0" vgrow="ALWAYS" />
+                        <RowConstraints minHeight="1.0" vgrow="ALWAYS" />
                     </rowConstraints>
                     <children>
                         <Button fx:id="sendInvitesButton" mnemonicParsing="false" onAction="#onSendInvites" text="Send Invites" GridPane.columnIndex="1" />
-                        <Label fx:id="eventTitleLabel" onMouseClicked="#editTitle" text="Event name">
+                        <Label fx:id="eventTitleLabel" onMouseClicked="#editTitle" text="Event name" GridPane.halignment="LEFT" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
                             <cursor>
                                 <Cursor fx:constant="TEXT" />
                             </cursor>
                      <font>
                         <Font size="28.0" />
-                     </font></Label>
+                     </font>
+                  </Label>
+                  <ImageView fx:id="titleEditImage" fitHeight="45.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="RIGHT" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
+                     <GridPane.margin>
+                        <Insets />
+                     </GridPane.margin>
+                  </ImageView>
                     </children>
                 </GridPane>
                 <HBox alignment="CENTER_LEFT" prefHeight="28.0" prefWidth="280.0" spacing="10.0">
@@ -192,9 +198,9 @@
                 </TabPane>
                 <GridPane prefHeight="54.0" prefWidth="385.0" VBox.vgrow="ALWAYS">
                     <columnConstraints>
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="150.0" />
-                  <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
-                  <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="150.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="145.60001220703126" minWidth="10.0" prefWidth="131.2000244140625" />
+                  <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" maxWidth="240.5999755859375" minWidth="10.0" prefWidth="240.5999755859375" />
+                  <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="145.60001220703123" minWidth="10.0" prefWidth="86.40000000000003" />
                     </columnConstraints>
                     <rowConstraints>
                         <RowConstraints />
@@ -210,7 +216,9 @@
                         <ImageView fx:id="languageButtonImageView" fitHeight="38.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" style="-fx-border-width: 0;" />
                      </graphic>
                   </MenuButton>
-                  <Text fx:id="amountText" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <Text fx:id="amountText" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <Label fx:id="amountOwingLabel" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="19.0" prefWidth="120.0" text="amount owing" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="1" />
+                  <Label fx:id="amountOwedLabel" prefHeight="18.0" prefWidth="118.0" text="amount owed" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
                     </children>
                 </GridPane>
             </children>

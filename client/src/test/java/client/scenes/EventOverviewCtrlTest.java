@@ -26,6 +26,7 @@ import org.testfx.framework.junit5.ApplicationTest;
 import org.testfx.util.WaitForAsyncUtils;
 
 import java.lang.reflect.Field;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -336,13 +337,17 @@ public class EventOverviewCtrlTest extends ApplicationTest {
     @Test
     public void testConvertCurrency(){
         Platform.runLater(() -> {
-            eventOverviewCtrl.convertCurrency(mockExpense);
+            try {
+                eventOverviewCtrl.convertCurrency(mockExpense);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         });
         WaitForAsyncUtils.waitForFxEvents();
     }
 
     @Test
-    public void testForeignCurrency() {
+    public void testForeignCurrency() throws URISyntaxException {
         mockExpense.setCurrency("USD");
         ConfigClient mockConfig = new ConfigClient();
         mockConfig.setCurrency("EUR");

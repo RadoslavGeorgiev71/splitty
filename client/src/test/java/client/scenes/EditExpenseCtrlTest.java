@@ -331,7 +331,11 @@ public class EditExpenseCtrlTest extends ApplicationTest {
 
         Platform.runLater(() -> {
             editExpenseCtrl.setTesting(true);
-            editExpenseCtrl.saveAsEuro();
+            try {
+                editExpenseCtrl.saveAsEuro();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         });
 
         WaitForAsyncUtils.waitForFxEvents();
