@@ -702,6 +702,7 @@ public class EventOverviewCtrl {
 
         setIcon("graypencil.png", overviewEditParticipantButton);
         setIcon("addperson.png", overviewAddParticipantButton);
+        setIcon("addicon.png", overviewAddExpenseButton);
         setImage("graypencil.png", titleEditImage);
     }
 
