@@ -2,6 +2,7 @@ package client.scenes;
 
 import client.utils.LanguageButtonUtils;
 import client.utils.ServerUtils;
+import client.utils.LanguageResourceBundle;
 import commons.Event;
 import commons.Expense;
 import commons.Tag;
@@ -24,6 +25,7 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 public class StatisticsCtrl {
 
@@ -31,6 +33,7 @@ public class StatisticsCtrl {
     private final MainCtrl mainCtrl;
     private Event event;
 
+    private LanguageResourceBundle languageResourceBundle;
 
     @FXML
     private Label totalCostLabel;
@@ -40,6 +43,9 @@ public class StatisticsCtrl {
 
     @FXML
     private PieChart pieChart;
+
+    @FXML
+    private Button backButton;
 
     /**
      * Constructor for the controller
@@ -59,9 +65,11 @@ public class StatisticsCtrl {
     public void initialize() {
         if(this.event != null) {
             // TODO: configure right currency
-            totalCostLabel.setText("Total Cost of Event: " +
-                String.format("%.2f", event.getExpenses()
-                    .stream().mapToDouble(Expense::getAmount).sum()) + "$");
+            languageResourceBundle = LanguageResourceBundle.getInstance();
+            totalCostLabel.setText(
+                    languageResourceBundle.getResourceBundle().getString("totalCostLabel") +
+                    String.format("%.2f", event.getExpenses().stream().mapToDouble(
+                    Expense::getAmount).sum()) + "$");
             Map<Tag, Double> distribution = getMoneyPerTag();
             pane.getChildren().remove(pieChart);
             pieChart = new PieChart();
@@ -80,6 +88,7 @@ public class StatisticsCtrl {
             }
             pieChart.setPadding(new javafx.geometry.Insets(0, 0, 100, 0));
             pieChart.setLayoutY(60);
+            switchLanguage();
             pieChart.setLegendVisible(false);
 
             server.registerEventUpdateStats(event -> {
@@ -187,6 +196,15 @@ public class StatisticsCtrl {
             default:
                 break;
         }
+    }
+
+    /**
+     * Method that always updates language on initialize.
+     */
+
+    public void switchLanguage(){
+        ResourceBundle bundle = languageResourceBundle.getResourceBundle();
+        backButton.setText(bundle.getString("backButton"));
     }
 
 }
