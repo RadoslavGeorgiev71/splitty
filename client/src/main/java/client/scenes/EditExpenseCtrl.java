@@ -199,7 +199,6 @@ public class EditExpenseCtrl{
             Debt debt = new Debt(expense.getPayingParticipant(), participant,
                     expense.getAmount() / (expense.getParticipants().size()));
             expense.add(debt);
-//            server.addDebt(debt);
         }
     }
 
@@ -337,9 +336,6 @@ public class EditExpenseCtrl{
             onSaveClick(null);
         }
         switch (e.getCode()) {
-//            case ENTER:
-//                moveToNextTextField((TextField) e.getSource());
-//                break;
             case ESCAPE:
                 onAbortClick(null);
                 break;
@@ -501,17 +497,6 @@ public class EditExpenseCtrl{
                 }
             });
             payerChoiceBox.setValue(participant);
-//            int i = 0;
-//            String name = expense.getPayingParticipant().getName();
-//            List<Participant> people = event.getParticipants();
-//            while (i < people.size() && !people.get(i).getName().equals(name)) {
-//                i++;
-//            }
-//            if (i <= event.getParticipants().size()) {
-//                payerChoiceBox.getSelectionModel().select(i);
-//            } else {
-//                payerChoiceBox.getSelectionModel().selectFirst();
-//            }
         }
     }
 
@@ -576,8 +561,6 @@ public class EditExpenseCtrl{
             configureTagElements();
             onlySomeChecked();
         }
-
-        //setAllIcons();
     }
 
     /**

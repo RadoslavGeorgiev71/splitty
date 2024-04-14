@@ -592,14 +592,6 @@ public class EventOverviewCtrl {
         this.event = event;
     }
 
-//    /**
-//     * Sets the event name
-//     */
-//
-//    public void eventName() {
-//        eventTitleLabel.setText(event.getTitle());
-//    }
-
     /**
      * Sets the from tab with the current selected participant
      */
@@ -663,8 +655,6 @@ public class EventOverviewCtrl {
     public void editTitle(MouseEvent mouseEvent) {
         titleTextField = new TextField();
         titleTextField.setText(eventTitleLabel.getText());
-//        titleTextField.setPrefWidth(eventTitleLabel.getWidth());
-//        titleTextField.setPrefHeight(eventTitleLabel.getHeight());
         titleTextField.setPrefWidth(eventTitleLabel.getWidth());
         titleTextField.setPrefHeight(eventTitleLabel.getHeight());
 
@@ -759,7 +749,7 @@ public class EventOverviewCtrl {
         double amountOwing = 0;
         double amountOwed = 0;
         if(participantsMenu.getValue() != null) {
-            List<Debt> debts = new ArrayList<>(event.getSettledDebts());
+            List<Debt> debts = new ArrayList<>();
             for(Expense expense : event.getExpenses()) {
                 debts.addAll(expense.getDebts());
             }

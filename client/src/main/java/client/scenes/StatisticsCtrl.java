@@ -66,7 +66,6 @@ public class StatisticsCtrl {
      */
     public void initialize() {
         if(this.event != null) {
-            // TODO: configure right currency
             languageResourceBundle = LanguageResourceBundle.getInstance();
             totalCostLabel.setText(
                     languageResourceBundle.getResourceBundle().getString("totalCostLabel") +

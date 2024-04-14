@@ -206,9 +206,6 @@ public class UserSettingsCtrl {
             onConfirmClick();
         }
         switch (e.getCode()) {
-//            case ENTER:
-//                moveToNextTextField((TextField) e.getSource());
-//                break;
             case ESCAPE:
                 onCancelClick();
                 break;

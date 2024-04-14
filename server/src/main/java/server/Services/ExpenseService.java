@@ -70,15 +70,8 @@ public class ExpenseService {
         Optional<Expense> existingExpense = expenseRepo.findById(updatedExpense.getId());
         if (event.isPresent() && existingExpense.isPresent()){
             event.get().removeExpense(existingExpense.get());
-//            existingExpense.get().setTitle(updatedExpense.getTitle());
-//            existingExpense.get().setPayingParticipant(updatedExpense.getPayingParticipant());
-//            existingExpense.get().setAmount(updatedExpense.getAmount());
-//            existingExpense.get().setCurrency(updatedExpense.getCurrency());
-//            existingExpense.get().setParticipants(updatedExpense.getParticipants());
-//            existingExpense.get().setDateTime(updatedExpense.getDateTime());
             event.get().addExpense(updatedExpense);
             eventRepo.save(event.get());
-//            return expenseRepo.save(existingExpense.get());
             return expenseRepo.save(updatedExpense);
         }
         return null;
@@ -93,12 +86,6 @@ public class ExpenseService {
     public Expense update(long id, Expense updatedExpense){
         Optional<Expense> existingExpense = expenseRepo.findById(id);
         if (existingExpense.isPresent()){
-//            existingExpense.get().setTitle(updatedExpense.getTitle());
-//            existingExpense.get().setPayingParticipant(updatedExpense.getPayingParticipant());
-//            existingExpense.get().setAmount(updatedExpense.getAmount());
-//            existingExpense.get().setCurrency(updatedExpense.getCurrency());
-//            existingExpense.get().setParticipants(updatedExpense.getParticipants());
-//            existingExpense.get().setDateTime(updatedExpense.getDateTime());
             return expenseRepo.save(updatedExpense);
         }
         return null;
@@ -170,6 +157,5 @@ public class ExpenseService {
             return true;
         }
         return false;
-        //expenseRepo.deleteById(expense.getId());
     }
 }
