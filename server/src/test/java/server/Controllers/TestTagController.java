@@ -31,9 +31,9 @@ public class TestTagController {
 
     private TagController sut;
 
-    Tag tag1 = new Tag("food", "#93C47D");
-    Tag tag2 = new Tag("entrance fees", "#4A86E8");
-    Tag tag3 = new Tag("travel", "#E06666");
+    private Tag tag1;
+    private Tag tag2;
+    private Tag tag3;
 
     @BeforeEach
     void setUpTagController() {
@@ -42,6 +42,9 @@ public class TestTagController {
         eventRepo = new TestEventRepository();
         tagService = new TagService(tagRepo, eventRepo, expenseRepo);
         sut = new TagController(tagService);
+        tag1 = new Tag("food", "#93C47D");
+        tag2 = new Tag("entrance fees", "#4A86E8");
+        tag3 = new Tag("travel", "#E06666");
     }
 
     @Test
