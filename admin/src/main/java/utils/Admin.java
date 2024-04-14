@@ -114,9 +114,6 @@ public class Admin{
      * @return boolean true if ok false if error
      */
     public boolean generatePassword(){
-        if(this.session == null){
-            setURL(this.server);
-        }
         try {
             Response response = ClientBuilder.newClient()
                     .target(server)
@@ -137,9 +134,6 @@ public class Admin{
      * @return Boolean authenticated
      */
     public boolean login(String password){
-        if(this.session == null){
-            setURL(this.server);
-        }
         try {
             Response res = ClientBuilder.newClient(new ClientConfig()) //
                     .target(server).path("api/admin/") //
@@ -287,7 +281,10 @@ public class Admin{
         alert.showAndWait();
     }
 
-
+    public void initWebSocket(){
+        String webSocketUrl = convertUrl(server);
+        session = connect(webSocketUrl);
+    }
 
 
     /**
@@ -316,6 +313,7 @@ public class Admin{
      * @param consumer asd
      */
     public void registerForEvents(String dest, Consumer<Event> consumer) {
+        if(checkNull()) initWebSocket();
         session.subscribe(dest, new StompFrameHandler() {
             @Override
             public Type getPayloadType(StompHeaders headers) {
@@ -363,5 +361,14 @@ public class Admin{
 //                    "data already in the database thus could not be imported");
 //            alert.showAndWait();
 //        }
+    }
+
+    /**
+     * Check for the fxml controllers to know if the websocket connection
+     * has been established yet or not
+     * @return whether admin.session is null
+     */
+    public boolean checkNull(){
+        return session == null;
     }
 }
