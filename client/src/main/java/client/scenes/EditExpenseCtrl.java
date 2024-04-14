@@ -38,6 +38,7 @@ public class EditExpenseCtrl{
     private Expense expense;
     private String currency;
     private List<Participant> participants;
+    private Participant participant;
     private Tag tag;
 
     private LanguageResourceBundle languageResourceBundle;
@@ -103,6 +104,7 @@ public class EditExpenseCtrl{
      */
     public void onAbortClick(ActionEvent actionEvent) {
         clearFields();
+        event = server.persistEvent(event);
         mainCtrl.showEventOverview(event);
     }
 
@@ -112,7 +114,7 @@ public class EditExpenseCtrl{
      * @param actionEvent -
      */
     public void onTagsClick(ActionEvent actionEvent) {
-        mainCtrl.showTags(event, expense, null, false, tag);
+        mainCtrl.showTags(event, expense, payerChoiceBox.getValue(), false, tag);
     }
 
     /**
@@ -164,7 +166,7 @@ public class EditExpenseCtrl{
                 expense.setParticipants(participants);}
         }
         expense.setDateTime(datePicker.getValue().toString());
-        //saveDebts(expense);
+        saveDebts(expense);
         expense.setTag(tag);
         clearFields();
         server.persistEvent(event);
@@ -242,8 +244,8 @@ public class EditExpenseCtrl{
             if (alert.showAndWait().get() == ButtonType.OK){
                 Event undoEvent = event;
                 event.removeExpense(expense);
-                server.deleteExpense(expense);
-                //server.deleteExpense(event.getId(), expense);
+                //server.deleteExpense(expense);
+                server.deleteExpense(event.getId(), expense);
                 event = server.getEvent(event.getId());
                 server.persistEvent(event);
                 if(event != null){
@@ -299,6 +301,14 @@ public class EditExpenseCtrl{
      */
     public void setParticipants(List<Participant> participants) {
         this.participants = participants;
+    }
+
+    /**
+     * Setter for participant
+     * @param participant to set
+     */
+    public void setParticipant(Participant participant) {
+        this.participant = participant;
     }
 
     /**
@@ -476,17 +486,18 @@ public class EditExpenseCtrl{
                     return event.getParticipants().get(i);
                 }
             });
-            int i = 0;
-            String name = expense.getPayingParticipant().getName();
-            List<Participant> people = event.getParticipants();
-            while (i < people.size() && !people.get(i).getName().equals(name)) {
-                i++;
-            }
-            if (i <= event.getParticipants().size()) {
-                payerChoiceBox.getSelectionModel().select(i);
-            } else {
-                payerChoiceBox.getSelectionModel().selectFirst();
-            }
+            payerChoiceBox.setValue(participant);
+//            int i = 0;
+//            String name = expense.getPayingParticipant().getName();
+//            List<Participant> people = event.getParticipants();
+//            while (i < people.size() && !people.get(i).getName().equals(name)) {
+//                i++;
+//            }
+//            if (i <= event.getParticipants().size()) {
+//                payerChoiceBox.getSelectionModel().select(i);
+//            } else {
+//                payerChoiceBox.getSelectionModel().selectFirst();
+//            }
         }
     }
 
@@ -579,7 +590,7 @@ public class EditExpenseCtrl{
         if(tag != null) {
             tagLabel.setText(tag.getType());
             tagLabel.setBackground(Background.fill(Color.web(tag.getColor())));
-            if(Color.web(tag.getColor()).getBrightness() < 0.5) {
+            if(Color.web(tag.getColor()).getBrightness() < 0.7) {
                 tagLabel.setStyle("-fx-text-fill: white");
             }
             else {

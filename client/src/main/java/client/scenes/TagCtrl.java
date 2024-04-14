@@ -13,6 +13,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.util.StringConverter;
 
@@ -138,7 +140,7 @@ public class TagCtrl {
             mainCtrl.showAddExpenseWithTag(event, participant, tagOnFocus);
         }
         else {
-            mainCtrl.showEditExpenseWithTag(event, expense, tagOnFocus);
+            mainCtrl.showEditExpenseWithTag(event, expense, tagOnFocus, participant);
         }
     }
 
@@ -216,8 +218,11 @@ public class TagCtrl {
             alert.setContentText("Tag has bee edited successfully!");
             // TODO: translate alert
             alert.showAndWait();
-            mainCtrl.showTags(event, expense, participant, isAddExpense, tagOnFocus);
             tagOnFocus = updatedTag;
+            if(expense != null) {
+                expense = server.getExpense(expense.getId());
+            }
+            mainCtrl.showTags(event, expense, participant, isAddExpense, tagOnFocus);
         } else {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Invalid name");
@@ -313,7 +318,7 @@ public class TagCtrl {
             mainCtrl.showAddExpense(event, participant);
         }
         else {
-            mainCtrl.showEditExpense(event, expense);
+            mainCtrl.showEditExpense(event, expense, participant);
         }
     }
 
@@ -341,5 +346,22 @@ public class TagCtrl {
         imageView.setFitWidth(20);
         imageView.setFitHeight(20);
         button.setGraphic(imageView);
+    }
+
+    /**
+     * Method to be called when a key is pressed
+     * @param e keyevent to listen
+     */
+    public void keyPressed(KeyEvent e) {
+        if (e.isControlDown() && e.getCode() == KeyCode.W) {  //close window
+            mainCtrl.closeWindow();
+        }
+        switch (e.getCode()) {
+            case ESCAPE:
+                backToExpense();
+                break;
+            default:
+                break;
+        }
     }
 }

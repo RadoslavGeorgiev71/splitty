@@ -21,6 +21,8 @@ public class TestEventRepository implements EventRepository {
     private List<Event> events = new ArrayList<>();
     private final List<String> calledMethods = new ArrayList<>();
 
+
+
     /**
      * Adds the name of the called method to the list of called methods.
      *
@@ -62,7 +64,8 @@ public class TestEventRepository implements EventRepository {
      */
     @Override
     public Optional<Event> findByInviteCode(String inviteCode) {
-        return Optional.empty();
+        return Optional.of(events.stream().filter(x -> x.getInviteCode().equals(inviteCode))
+            .toList().getFirst());
     }
 
     /**
@@ -70,7 +73,7 @@ public class TestEventRepository implements EventRepository {
      */
     @Override
     public void flush() {
-
+        calledMethods.add("flush");
     }
 
     /**
@@ -201,6 +204,7 @@ public class TestEventRepository implements EventRepository {
     @Override
     public <S extends Event> S save(S entity) {
         calledMethods.add("save");
+        events.remove(entity);
         events.add(entity);
         return entity;
     }
@@ -232,7 +236,13 @@ public class TestEventRepository implements EventRepository {
      */
     @Override
     public boolean existsById(Long aLong) {
-        return false;
+        calledMethods.add("existsById");
+        if (events.stream().map(x -> x.getId()).toList().contains(aLong)) {
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 
     /**
@@ -264,7 +274,8 @@ public class TestEventRepository implements EventRepository {
      */
     @Override
     public void deleteById(Long aLong) {
-
+        calledMethods.add("deleteById");
+        events = events.stream().filter(x -> x.getId() != aLong).toList();
     }
 
     /**

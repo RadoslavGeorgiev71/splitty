@@ -34,13 +34,13 @@ public class Admin{
 
     private String server;
     private String password = "none set";
-    private final StompSession session;
+    private StompSession session;
 
     /**
      * Constructor for Admin
      */
     public Admin(){
-        this.session = connect("ws://localhost:8080/websocket");
+        this.session = null;
         this.server = "http://localhost:8080/";
     }
 
@@ -52,6 +52,23 @@ public class Admin{
     public Admin(String s, StompSession mockStompSession){
         this.session = mockStompSession;
         this.server = s;
+    }
+
+    /**
+     * Converts the http url provided by the user into the correct
+     * url for establishing a websocket connection.
+     * @param s The string to be converted
+     * @return The proper websocket url
+     */
+    public String convertUrl(String s){
+        String webSocketUrl = s.replace("http", "ws");
+        if(webSocketUrl.endsWith("/")){
+            webSocketUrl += "websocket";
+        }
+        else{
+            webSocketUrl += "/websocket";
+        }
+        return webSocketUrl;
     }
 
     /**
@@ -75,7 +92,12 @@ public class Admin{
      * @param url to be set
      */
     public void setURL(String url){
-        this.server = url;
+        if(session != null && session.isConnected()) {
+            session.disconnect();
+        }
+        String webSocketUrl = convertUrl(url);
+        server = url;
+        this.session = connect(webSocketUrl);
     }
 
     /**
@@ -125,7 +147,7 @@ public class Admin{
                 statusCode = res.getStatus();
             }
             boolean isAuthenticated = statusCode == Response.Status.OK.getStatusCode();
-            connect("ws://localhost:8080/websocket");
+            //connect(convertUrl(server));
             return isAuthenticated;
         } catch (ProcessingException e) {
             return false;
@@ -259,7 +281,12 @@ public class Admin{
         alert.showAndWait();
     }
 
-
+    /**
+     * Javadoc
+     */
+    public void initWebSocket(){
+        session = connect(convertUrl(server));
+    }
 
 
     /**
@@ -288,6 +315,9 @@ public class Admin{
      * @param consumer asd
      */
     public void registerForEvents(String dest, Consumer<Event> consumer) {
+        if(checkNull()){
+            initWebSocket();
+        }
         session.subscribe(dest, new StompFrameHandler() {
             @Override
             public Type getPayloadType(StompHeaders headers) {
@@ -335,5 +365,14 @@ public class Admin{
 //                    "data already in the database thus could not be imported");
 //            alert.showAndWait();
 //        }
+    }
+
+    /**
+     * Check for the fxml controllers to know if the websocket connection
+     * has been established yet or not
+     * @return whether admin.session is null
+     */
+    public boolean checkNull(){
+        return session == null;
     }
 }

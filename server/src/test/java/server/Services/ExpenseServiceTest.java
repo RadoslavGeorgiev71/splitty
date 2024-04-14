@@ -87,6 +87,11 @@ class ExpenseServiceTest {
     }
 
     @Test
+    void testCreateNull() {
+        assertNull(expenseService.create(5, exp1));
+    }
+
+    @Test
     void update() {
         Expense exp3 = new Expense("shop", a, 11.0d, new ArrayList<>());
 
@@ -98,6 +103,23 @@ class ExpenseServiceTest {
 //        assertEquals(a, exp1.getPayingParticipant());
 //        assertEquals(11.0d, exp1.getAmount());
 //        assertEquals(0, exp1.getParticipants().size());
+    }
+
+    @Test
+    void testUpdateNull() {
+        assertNull(expenseService.update(5, exp1));
+    }
+
+    @Test
+    void updateEvent() {
+        expenseService.updateEvent(event.getId(), exp1);
+        assertTrue(eventRepo.findAll().contains(event));
+        assertTrue(expenseRepo.findAll().contains(exp1));
+    }
+
+    @Test
+    void testUpdateEventNull() {
+        assertNull(expenseService.updateEvent(5, exp1));
     }
 
     @Test
@@ -125,11 +147,35 @@ class ExpenseServiceTest {
     }
 
     @Test
+    void testFlush() {
+        expenseService.flush();
+        assertEquals(List.of(exp1, exp2), expenseRepo.findAll());
+    }
+
+    @Test
     void findByEventId() {
         List<Expense> actual = event.getExpenses();
         List<Expense> res = expenseService.findByEventId(event.getId());
 
         assertEquals(2, res.size());
         assertEquals(actual, res);
+    }
+
+    @Test
+    void findByIdNotPresent() {
+        assertEquals(new ArrayList<>(), expenseService.findByEventId(5));
+    }
+
+    @Test
+    void deleteByEventId() {
+        expenseService.deleteByEventId(event.getId(), exp1);
+        assertEquals(List.of(exp2), expenseRepo.findAll());
+    }
+
+    @Test
+    void deleteByEventIdNotPresent() {
+        expenseRepo.deleteById(exp1.getId());
+        exp1.setId(5);
+        assertFalse(expenseService.deleteByEventId(event.getId(), exp1));
     }
 }

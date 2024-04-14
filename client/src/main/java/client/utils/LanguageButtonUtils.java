@@ -156,8 +156,19 @@ public class LanguageButtonUtils {
         File file = fileChooser.showSaveDialog(new Stage());
         if (file != null) {
             try {
-                Path languageFilePath = Paths.get(
-                        "client/languages/Language_en.properties");
+                String path = "client/languages/Language_en.properties";
+                URL url = LanguageButtonUtils.class.getClassLoader().getResource(path);
+                if (url == null) {
+                    throw new RuntimeException("Resources folder not found");
+                }
+                Path languageFilePath = null;
+
+                try {
+                    languageFilePath = Paths.get(url.toURI());
+                } catch (URISyntaxException e) {
+                    throw new RuntimeException(e);
+                }
+
                 List<String> lines = Files.readAllLines(languageFilePath, StandardCharsets.UTF_8);
                 lines.add(0, "# Language file template");
                 lines.add(1, "# Please fill in the translations for the following keys");

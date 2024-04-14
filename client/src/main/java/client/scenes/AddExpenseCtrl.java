@@ -108,7 +108,7 @@ public class AddExpenseCtrl{
      * @param actionEvent -
      */
     public void onTagsClick(ActionEvent actionEvent) {
-        mainCtrl.showTags(event, expense, participant, true, tag);
+        mainCtrl.showTags(event, expense, payerChoiceBox.getValue(), true, tag);
     }
 
     /**
@@ -442,7 +442,7 @@ public class AddExpenseCtrl{
         if(tag != null) {
             tagLabel.setText(tag.getType());
             tagLabel.setBackground(Background.fill(Color.web(tag.getColor())));
-            if(Color.web(tag.getColor()).getBrightness() < 0.5) {
+            if(Color.web(tag.getColor()).getBrightness() < 0.7) {
                 tagLabel.setStyle("-fx-text-fill: white");
             }
             else {
