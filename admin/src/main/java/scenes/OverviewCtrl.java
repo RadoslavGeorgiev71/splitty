@@ -111,7 +111,7 @@ public class OverviewCtrl {
         Stage filestage = new Stage();
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open File");
-        String userDir = "admin";
+        String userDir = System.getProperty("user.dir");
         File defaultDirectory = new File(userDir);
         fileChooser.setInitialDirectory(defaultDirectory);
         File selectedFile = fileChooser.showOpenDialog(filestage);
