@@ -405,7 +405,7 @@ public class ServerUtils {
     }
 
     /**
-     * Method to send a remainder email to the person who has to pay a debt
+     * Method to send a reminder email to the person who has to pay a debt
      *
      * @param participant the participant of the person who will receive the money
      * @param amount amount that has to be paid
@@ -413,7 +413,7 @@ public class ServerUtils {
      * @param eventTitle title of the event in which the expense is in
      * @return boolena
      */
-    public Boolean sendRemainder(Participant participant, double amount,
+    public Boolean sendReminder(Participant participant, double amount,
                                  String email, String eventTitle) {
         try{
             Response response = ClientBuilder.newClient(new ClientConfig())

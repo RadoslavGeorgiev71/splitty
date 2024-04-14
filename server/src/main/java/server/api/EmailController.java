@@ -107,7 +107,7 @@ public class EmailController {
 
 
     /**
-     * Method to send a remainder email to the person who has to pay a debt
+     * Method to send a reminder email to the person who has to pay a debt
      *
      * @param participant the participant of the person who will receive the money
      * @param creatorEmail email of the user using the app
@@ -117,17 +117,17 @@ public class EmailController {
      * @return Response
      */
     @PostMapping(path = {"/"})
-    public ResponseEntity<?> sendRemainder(@RequestBody Participant participant,
-                                           @RequestParam String creatorEmail,
-                                           @RequestParam String amount, @RequestParam String email,
-                                           @RequestParam String eventTitle){
+    public ResponseEntity<?> sendReminder(@RequestBody Participant participant,
+                                          @RequestParam String creatorEmail,
+                                          @RequestParam String amount, @RequestParam String email,
+                                          @RequestParam String eventTitle){
         String body = "This email is to remind you that you have to pay " + amount +
                 " EUR to " + participant.getName() + ".\n You can transfer the money to: " +
                 "\nAccount Holder: " + participant.getName() +
                 "\nIBAN: " + participant.getIban() +
                 "\nBIC: " + participant.getBic();
         try {
-            emailService.sendEmail(email, "Remainder - " + eventTitle,
+            emailService.sendEmail(email, "Reminder - " + eventTitle,
                     body, creatorEmail);
             return ResponseEntity.ok(HttpStatus.OK);
         }

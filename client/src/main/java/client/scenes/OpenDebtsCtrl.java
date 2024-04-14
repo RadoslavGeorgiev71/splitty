@@ -229,7 +229,7 @@ public class OpenDebtsCtrl {
     }
 
     private void sendEmail(Debt debt) {
-        Boolean response = server.sendRemainder(debt.getPersonOwing(), debt.getAmount(),
+        Boolean response = server.sendReminder(debt.getPersonOwing(), debt.getAmount(),
                 debt.getPersonPaying().getEmail(),
                 event.getTitle());
         if(response != null){

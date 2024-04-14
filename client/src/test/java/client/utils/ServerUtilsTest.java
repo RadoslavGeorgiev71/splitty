@@ -1,15 +1,12 @@
 package client.utils;
 
-import client.utils.ServerUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.WireMockServer;
-import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import commons.*;
 import jakarta.ws.rs.client.*;
 import jakarta.ws.rs.core.Response;
-import org.glassfish.jersey.client.ClientConfig;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,16 +14,11 @@ import org.junit.jupiter.api.Test;
 import javax.swing.*;
 import java.io.*;
 import java.net.URISyntaxException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.*;
 import java.util.function.Consumer;
-import java.util.Scanner;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
@@ -57,7 +49,7 @@ class ServerUtilsTest {
     }
 
     @Test
-    void sendRemainder_OK() throws JsonProcessingException {
+    void sendReminder_OK() throws JsonProcessingException {
         Participant participant = new Participant();
         participant.setId(0);
         participant.setName("Test");
@@ -80,7 +72,7 @@ class ServerUtilsTest {
                         .withStatus(200)));
 
         SwingUtilities.invokeLater(() -> {
-            boolean result = serverUtils.sendRemainder(participant, 100.0, "test@example.com", "Test Event");
+            boolean result = serverUtils.sendReminder(participant, 100.0, "test@example.com", "Test Event");
             assertTrue(result);
         });
 
