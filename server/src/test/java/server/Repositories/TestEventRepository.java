@@ -64,8 +64,14 @@ public class TestEventRepository implements EventRepository {
      */
     @Override
     public Optional<Event> findByInviteCode(String inviteCode) {
-        return Optional.of(events.stream().filter(x -> x.getInviteCode().equals(inviteCode))
-            .toList().getFirst());
+        List<Event> rightEvent = events.stream()
+            .filter(x -> x.getInviteCode().equals(inviteCode)).toList();
+        if (!rightEvent.isEmpty()) {
+            return Optional.of(rightEvent.getFirst());
+        }
+        else {
+            return Optional.empty();
+        }
     }
 
     /**

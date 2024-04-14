@@ -66,7 +66,7 @@ public class LanguageButtonUtils {
         File[] imageFiles = imagesFolder.listFiles((dir, name)
                 -> name.toLowerCase().endsWith(".png") || name.toLowerCase().endsWith(".jpg"));
 
-        if (imageFiles == null) {
+        if(imageFiles == null){
             throw new RuntimeException(
                     "No image files found in the directory: " + imagesFolderPath);
         }

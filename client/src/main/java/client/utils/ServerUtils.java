@@ -119,19 +119,19 @@ public class ServerUtils {
             .delete();
     }
 
-    /**
-     * Adds debt to the database
-     *
-     * @param debt the debt to add
-     * @return the debt added
-     */
-    public Debt addDebt(Debt debt) {
-        return ClientBuilder.newClient(new ClientConfig())
-                .target(server).path("api/debts")
-                .request(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .post(Entity.entity(debt, APPLICATION_JSON), Debt.class);
-    }
+//    /**
+//     * Adds debt to the database
+//     *
+//     * @param debt the debt to add
+//     * @return the debt added
+//     */
+//    public Debt addDebt(Debt debt) {
+//        return ClientBuilder.newClient(new ClientConfig())
+//                .target(server).path("api/debts")
+//                .request(APPLICATION_JSON)
+//                .accept(APPLICATION_JSON)
+//                .post(Entity.entity(debt, APPLICATION_JSON), Debt.class);
+//    }
 
     /**
      * Deletes a debt from the database
@@ -228,21 +228,6 @@ public class ServerUtils {
     }
 
     /**
-     * saves the changes to a participant
-     *
-     * @param participant - the participant we persist
-     * @return the persisted participant
-     */
-    public Participant persistParticipant(Participant participant) {
-        Entity<Participant> entity = Entity.entity(participant, APPLICATION_JSON);
-        return ClientBuilder.newClient(new ClientConfig())
-                .target(server).path("api/participants/")
-                .request(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .put(entity, Participant.class);
-    }
-
-    /**
      * Deletes a participant from the server
      *
      * @param participant - the participant to delete
@@ -260,21 +245,6 @@ public class ServerUtils {
         catch(ProcessingException e){
             return null;
         }
-    }
-
-    /**
-     * Adds a participant to the server
-     *
-     * @param participant - the participant to add
-     * @return the response from the server
-     */
-
-    public Response addParticipant(Participant participant) {
-        return ClientBuilder.newClient(new ClientConfig())
-                .target(server).path("api/participants/")
-                .request(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .post(Entity.json(participant));
     }
 
     /**
@@ -455,6 +425,7 @@ public class ServerUtils {
                     .request(APPLICATION_JSON)
                     .accept(APPLICATION_JSON)
                     .post(Entity.json(participant));
+            System.out.println(response.getStatus());
             if (response.getStatus() == Response.Status.OK.getStatusCode()) {
                 return true;
             }
@@ -491,70 +462,6 @@ public class ServerUtils {
     }
 
     /**
-     * Deletes an expense from the server
-     *
-     * @param expense - the expense to delete
-     * @return the response from the server
-     */
-    public Response deleteExpense(Expense expense) {
-        return ClientBuilder.newClient(new ClientConfig())
-                .target(server).path("api/expenses/" + expense.getId())
-                .request(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .delete();
-    }
-
-    /**
-     * Adds an expense to the server
-     *
-     * @param expense - the expense to add
-     * @return the response from the server
-     */
-    public Expense addExpense(Expense expense) {
-        try{
-            //expense.setId(1000);
-            Entity<Expense> entity = Entity.entity(expense, APPLICATION_JSON);
-            Response response = ClientBuilder.newClient(new ClientConfig())
-                            .target(server).path("api/expenses")
-                            .request(APPLICATION_JSON)
-                            .accept(APPLICATION_JSON)
-                            .post(entity);
-            if (response.getStatus() == Response.Status.CREATED.getStatusCode()) {
-                return response.readEntity(Expense.class);
-            }
-            return null;
-        }
-        catch (ProcessingException e){
-            return null;
-        }
-    }
-
-    /**
-     * Adds an expense to the server
-     *
-     * @param eventId - where to add
-     * @param expense - the expense to add
-     * @return the response from the server
-     */
-    public Expense addExpense(long eventId, Expense expense) {
-        try{
-            //expense.setId(1000);
-            Response response = ClientBuilder.newClient(new ClientConfig())
-                    .target(server).path("api/expenses/event/" + eventId)
-                    .request(APPLICATION_JSON)
-                    .accept(APPLICATION_JSON)
-                    .post(Entity.json(expense));
-            if (response.getStatus() == Response.Status.CREATED.getStatusCode()) {
-                return response.readEntity(Expense.class);
-            } else {
-                return null;
-            }
-        }catch (ProcessingException e){
-            return null;
-        }
-    }
-
-    /**
      * List of expense to the server
      *
      * @param eventId - event
@@ -566,7 +473,6 @@ public class ServerUtils {
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
                 .get();
-        //return response.readEntity(List<Expense>.class);
         return null;
     }
 
@@ -673,8 +579,6 @@ public class ServerUtils {
             }
         }
     }
-//    String url = "http://data.fixer.io/api/" + date;
-//    url += "?access_key=" + key+ "&base=" + from + "&symbols=" + to;
 
     /**
      * Show a pop up window with an alert when the client cannot connect

@@ -212,16 +212,4 @@ public class ExpenseController {
         return exp;
     }
 
-//    /**
-//     * Route for delete action
-//     * @param e event to be deleted
-//     * @return event that was deleted
-//     */
-//    @MessageMapping("/eventsDelete")
-//    @SendTo("/topic/eventsDelete")
-//    public Event deleteEvent(Event e){
-//        delete(e.getId());
-//        return e;
-//    }
-
 }

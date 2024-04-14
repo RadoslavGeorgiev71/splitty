@@ -1,3 +1,4 @@
+
 package server.Services;
 
 import commons.Debt;
@@ -126,6 +127,8 @@ public class EventServiceTest {
         sut.flush();
         assertEquals("flush", eventRepo.getCalledMethods().getLast());
     }
+
+
 
     @Test
     void testImportEvent() {

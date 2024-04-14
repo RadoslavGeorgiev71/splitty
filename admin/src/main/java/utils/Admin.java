@@ -177,13 +177,6 @@ public class Admin{
      * @param event to delete
      */
     public void deleteEvent(Event event){
-        /*
-        ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/events/{eventId}") //
-                .resolveTemplate("eventId", event.getId()) // Resolve the template with the event ID
-                .request() //
-                .delete();
-         */
         send("/app/eventsDelete", event);
     }
 
@@ -239,17 +232,6 @@ public class Admin{
                 return;
             }
         }
-        /*
-        Response response = ClientBuilder.newClient(new ClientConfig())
-                .target(SERVER).path("/api/events")
-                .request(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .post(Entity.json(event));
-        if (response.getStatus() != Response.Status.CREATED.getStatusCode()) {
-            showalert(event);
-        }
-
-         */
         send("/app/events", event);
     }
 
@@ -355,16 +337,6 @@ public class Admin{
      */
     public void send(String dest, Object o) {
         session.send(dest, o);
-//        StompSession.Receiptable receiptable = session.send(dest, o);
-//        Event event = (Event) receiptable.
-//        if(event == null){
-//            Alert alert = new Alert(Alert.AlertType.ERROR);
-//            alert.setTitle("Error");
-//            alert.setHeaderText("Error during importing the event");
-//            alert.setContentText("The event you are trying to import possibly overwrites " +
-//                    "data already in the database thus could not be imported");
-//            alert.showAndWait();
-//        }
     }
 
     /**

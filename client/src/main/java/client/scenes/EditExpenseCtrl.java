@@ -32,6 +32,8 @@ import java.util.ResourceBundle;
 
 public class EditExpenseCtrl{
 
+    private boolean testing;
+
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
     private Event event;
@@ -149,7 +151,10 @@ public class EditExpenseCtrl{
             alert.showAndWait();
             return;
         }
+
+
         if(equally.isSelected() || participants.size() == event.getParticipants().size()){
+
             expense.setParticipants(event.getParticipants());
         }
         else{
@@ -194,13 +199,13 @@ public class EditExpenseCtrl{
             Debt debt = new Debt(expense.getPayingParticipant(), participant,
                     expense.getAmount() / (expense.getParticipants().size()));
             expense.add(debt);
-//            server.addDebt(debt);
         }
     }
 
     /**
      *  converted currency to save to server as EUR
      */
+
     public void saveAsEuro() throws Exception {
         String availableDates = LocalDate.now().toString();
         int y = Integer.parseInt(availableDates.substring(0,4)) - 1;
@@ -244,7 +249,6 @@ public class EditExpenseCtrl{
             if (alert.showAndWait().get() == ButtonType.OK){
                 Event undoEvent = event;
                 event.removeExpense(expense);
-                //server.deleteExpense(expense);
                 server.deleteExpense(event.getId(), expense);
                 event = server.getEvent(event.getId());
                 server.persistEvent(event);
@@ -332,9 +336,6 @@ public class EditExpenseCtrl{
             onSaveClick(null);
         }
         switch (e.getCode()) {
-//            case ENTER:
-//                moveToNextTextField((TextField) e.getSource());
-//                break;
             case ESCAPE:
                 onAbortClick(null);
                 break;
@@ -425,14 +426,23 @@ public class EditExpenseCtrl{
     public void setIcon(String iconName, Button button) {
         String path = "client/images/icons/" + iconName;
         URL url = LanguageButtonUtils.class.getClassLoader().getResource(path);
-        if (url == null) {
-            throw new RuntimeException("Resources folder not found");
+
+        if(!testing && url == null){
+            throw new RuntimeException("Invalid icon name");
         }
 
-        Image image = new Image(String.valueOf(url));
+        Image image = null;
+
+        if(!testing){
+            image = new Image(String.valueOf(url));
+        }
 
         ImageView imageView = new ImageView();
-        imageView.setImage(image);
+
+        if(!testing){
+            imageView.setImage(image);
+        }
+
         imageView.setPreserveRatio(true);
         imageView.setSmooth(true);
         imageView.setCache(true);
@@ -487,17 +497,6 @@ public class EditExpenseCtrl{
                 }
             });
             payerChoiceBox.setValue(participant);
-//            int i = 0;
-//            String name = expense.getPayingParticipant().getName();
-//            List<Participant> people = event.getParticipants();
-//            while (i < people.size() && !people.get(i).getName().equals(name)) {
-//                i++;
-//            }
-//            if (i <= event.getParticipants().size()) {
-//                payerChoiceBox.getSelectionModel().select(i);
-//            } else {
-//                payerChoiceBox.getSelectionModel().selectFirst();
-//            }
         }
     }
 
@@ -578,7 +577,7 @@ public class EditExpenseCtrl{
     /**
      * Configures the tag label and remove button
      */
-    private void configureTagElements() {
+    void configureTagElements() {
         tagLabel.setMinHeight(20);
         tagLabel.setMinWidth(40);
         tagLabel.setAlignment(Pos.CENTER);
@@ -623,5 +622,23 @@ public class EditExpenseCtrl{
         expenseAbortButton.setText(bundle.getString("expenseAbortButton"));
         equally.setText(bundle.getString("editExpenseEqually"));
         onlySome.setText(bundle.getString("editExpenseOnlySome"));
+    }
+
+    //For testing
+
+    /**
+     * Getter for participant list
+     * @return participants
+     */
+    public List<Participant> getParticipants() {
+        return participants;
+    }
+
+    /**
+     * Set testing
+     * @param testing - testing
+     */
+    public void setTesting(boolean testing) {
+        this.testing = testing;
     }
 }

@@ -5,8 +5,12 @@ variables:
   GRADLE_OPTS: "-Dorg.gradle.daemon=false"
 
 build:
+  before_script:
+    - apk update
+    - apk add xvfb-run
+    - apk add gtk+3.0
   script:
-    - ./gradlew build
+    - xvfb-run ./gradlew build
     - ./gradlew AggregateJacocoReport
     # preserve coverage information in an easy-to-reach folder
     - mv build/reports/jacoco/aggregate/html ./coverage

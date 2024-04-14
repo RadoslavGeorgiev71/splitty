@@ -135,6 +135,7 @@ public class UserSettingsCtrl {
     /**
      * Initializes the fields with the correct values (if available)
      */
+
     public void initialize() {
 
         if (configClient.getName() != null && !configClient.getName().equals("null")) {
@@ -208,9 +209,6 @@ public class UserSettingsCtrl {
             onConfirmClick();
         }
         switch (e.getCode()) {
-//            case ENTER:
-//                moveToNextTextField((TextField) e.getSource());
-//                break;
             case ESCAPE:
                 onCancelClick();
                 break;
@@ -238,6 +236,16 @@ public class UserSettingsCtrl {
         if (index != -1 && index < textFields.length - 1) {
             textFields[index + 1].requestFocus();
         }
+    }
+
+    //For testing only!
+
+    /**
+     * Sets config for testing
+     * @param configClient the config
+     */
+    public void setConfigClient(ConfigClient configClient) {
+        this.configClient = configClient;
     }
 
     /**
