@@ -316,9 +316,53 @@ public class ServerUtils {
         });
     }
 
-//    public void stop() {
-//        EXEC.shutdownNow();
-//    }
+    private static final ExecutorService EXEC2 = Executors.newSingleThreadExecutor();
+
+    /**
+     * Registers changes in the event for debts
+     * @param consumer - consumer that registers changes
+     */
+    public void registerEventUpdateDebts(Consumer<Event> consumer) {
+        EXEC2.submit(() -> {
+            while(!Thread.interrupted()) {
+                Response res = ClientBuilder.newClient(new ClientConfig())
+                    .target(server).path("api/events/update")
+                    .request(APPLICATION_JSON)
+                    .accept(APPLICATION_JSON)
+                    .get(Response.class);
+
+                if(res.getStatus() == 204) {
+                    continue;
+                }
+                Event event = res.readEntity(Event.class);
+                consumer.accept(event);
+            }
+        });
+    }
+
+    private static final ExecutorService EXEC3 = Executors.newSingleThreadExecutor();
+
+    /**
+     * Registers changes in the event for statistics
+     * @param consumer - consumer that registers changes
+     */
+    public void registerEventUpdateStats(Consumer<Event> consumer) {
+        EXEC2.submit(() -> {
+            while(!Thread.interrupted()) {
+                Response res = ClientBuilder.newClient(new ClientConfig())
+                    .target(server).path("api/events/update")
+                    .request(APPLICATION_JSON)
+                    .accept(APPLICATION_JSON)
+                    .get(Response.class);
+
+                if(res.getStatus() == 204) {
+                    continue;
+                }
+                Event event = res.readEntity(Event.class);
+                consumer.accept(event);
+            }
+        });
+    }
 
     /**
      * Sends the invite code of the event to the specified emails
@@ -510,7 +554,7 @@ public class ServerUtils {
      * @param eventId - event
      * @return the response from the server
      */
-    public List<Expense> getExpense(long eventId) {
+    public List<Expense> getExpenses(long eventId) {
         Response response = ClientBuilder.newClient(new ClientConfig())
                 .target(server).path("api/expenses/event/" + eventId)
                 .request(APPLICATION_JSON)
@@ -518,6 +562,20 @@ public class ServerUtils {
                 .get();
         //return response.readEntity(List<Expense>.class);
         return null;
+    }
+
+    /**
+     * Retrieves the expense by id
+     * @param expenseId - the expense id
+     * @return the found expense
+     */
+    public Expense getExpense(long expenseId) {
+        Response response = ClientBuilder.newClient(new ClientConfig())
+            .target(server).path("/api/expenses/id/" + expenseId)
+            .request(APPLICATION_JSON)
+            .accept(APPLICATION_JSON)
+            .get();
+        return response.readEntity(Expense.class);
     }
 
     /**
@@ -602,5 +660,7 @@ public class ServerUtils {
      */
     public void stop() {
         EXEC.shutdownNow();
+        EXEC2.shutdownNow();
+        EXEC3.shutdownNow();
     }
 }

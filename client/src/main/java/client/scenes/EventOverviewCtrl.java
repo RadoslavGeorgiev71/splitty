@@ -5,10 +5,7 @@ import client.utils.LanguageButtonUtils;
 import client.utils.LanguageResourceBundle;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
-import commons.Event;
-import commons.Expense;
-import commons.Participant;
-import commons.Tag;
+import commons.*;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
@@ -35,6 +32,8 @@ import javafx.event.ActionEvent;
 
 import java.net.URL;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import javafx.scene.control.MenuButton;
@@ -111,7 +110,14 @@ public class EventOverviewCtrl {
 
     @FXML
     private ImageView titleEditImage;
+    
+    @FXML
+    private Label amountOwingLabel;
 
+    @FXML
+    private Label amountOwedLabel;
+
+    @FXML
     private TextField titleTextField;
 
     private Event event;
@@ -196,7 +202,8 @@ public class EventOverviewCtrl {
 
     @FXML
     public void onEditExpenseClick(Expense expense) {
-        mainCtrl.showEditExpenseWithTag(this.event, expense, expense.getTag());
+        mainCtrl.showEditExpenseWithTag(this.event, expense,
+            expense.getTag(), expense.getPayingParticipant());
     }
 
     /**
@@ -334,7 +341,7 @@ public class EventOverviewCtrl {
         if(tag != null) {
             tagLabel = new Label(tag.getType());
             tagLabel.setBackground(Background.fill(Color.web(tag.getColor())));
-            if(Color.web(tag.getColor()).getBrightness() < 0.5) {
+            if(Color.web(tag.getColor()).getBrightness() < 0.7) {
                 tagLabel.setStyle("-fx-text-fill: white; -fx-border-color: black");
             }
             else {
@@ -378,7 +385,6 @@ public class EventOverviewCtrl {
         tabPaneFromGridPane.getChildren().clear();
         tabPaneFromGridPane.setVgap(10);
         tabPaneFromGridPane.setHgap(10);
-        double amount = 0;
         int j = 0;
         if (event != null) {
             for (int i = 0; i < event.getExpenses().size(); i++) {
@@ -386,13 +392,11 @@ public class EventOverviewCtrl {
                 Participant payingParticipant = expense.getPayingParticipant();
                 if (payingParticipant.equals(participantsMenu.
                         getSelectionModel().getSelectedItem())) {
-                    amount += foreignCurrency(expense).getAmount();
                     visualizeExpense(tabPaneFromGridPane, expense, j++);
                 }
             }
             fromPersonTabName();
             includingPersonTabName();
-            setAmountText(amount);
         }
     }
 
@@ -405,20 +409,17 @@ public class EventOverviewCtrl {
         tabPaneIncludingGridPane.getChildren().clear();
         tabPaneIncludingGridPane.setVgap(10);
         tabPaneIncludingGridPane.setHgap(10);
-        double amount = 0;
         int j = 0;
         if (event != null) {
             for (int i = 0; i < event.getExpenses().size(); i++) {
                 Participant participant = participantsMenu.getSelectionModel().getSelectedItem();
                 Expense expense = foreignCurrency(event.getExpenses().get(i));
                 if (expense.getParticipants().contains(participant)) {
-                    amount += foreignCurrency(expense).getAmount();
                     visualizeExpense(tabPaneIncludingGridPane, expense, j++);
                 }
             }
             fromPersonTabName();
             includingPersonTabName();
-            setAmountText(amount);
         }
     }
 
@@ -510,8 +511,8 @@ public class EventOverviewCtrl {
     public void setAmountText(double amount) {
         // Will add the currency later
         amountText.setTextAlignment(TextAlignment.CENTER);
-        amountText.setText(languageResourceBundle.getResourceBundle().getString("amountText")
-                + ConfigClient.getCurrency() + amount);
+        amountText.setText(languageResourceBundle.getResourceBundle().getString("amountText") +
+            " " + ConfigClient.getCurrency() + amount);
     }
 
     /**
@@ -682,6 +683,7 @@ public class EventOverviewCtrl {
             participatingParticipants();
             fromPersonTabName();
             includingPersonTabName();
+            setOwedOwing();
             participantsMenu.setOnAction(e -> {
                 fromPersonTabName();
                 includingPersonTabName();
@@ -689,6 +691,7 @@ public class EventOverviewCtrl {
                 tabPaneAllClick();
                 tabPaneFromPersonClick();
                 tabPaneIncludingPersonClick();
+                setOwedOwing();
             });
             tabPaneAllClick();
         }
@@ -703,6 +706,32 @@ public class EventOverviewCtrl {
         setIcon("graypencil.png", overviewEditParticipantButton);
         setIcon("addperson.png", overviewAddParticipantButton);
         setImage("graypencil.png", titleEditImage);
+    }
+
+    private void setOwedOwing() {
+        double amountOwing = 0;
+        double amountOwed = 0;
+        if(participantsMenu.getValue() != null) {
+            List<Debt> debts = new ArrayList<>(event.getSettledDebts());
+            for(Expense expense : event.getExpenses()) {
+                debts.addAll(expense.getDebts());
+            }
+            for(Debt debt : debts) {
+                if(debt.getPersonPaying().equals(participantsMenu.getValue())) {
+                    amountOwing += debt.getAmount();
+                }
+                if(debt.getPersonOwing().equals(participantsMenu.getValue())) {
+                    amountOwed += debt.getAmount();
+                }
+            }
+        }
+        amountOwingLabel.setTextAlignment(TextAlignment.CENTER);
+        amountOwingLabel.setText(languageResourceBundle
+            .getResourceBundle().getString("amountOwing") +
+            " " + ConfigClient.getCurrency() + amountOwing);
+        amountOwedLabel.setTextAlignment(TextAlignment.CENTER);
+        amountOwedLabel.setText(languageResourceBundle.getResourceBundle().getString("amountOwed") +
+            " " + ConfigClient.getCurrency() + amountOwed);
     }
 
     /**

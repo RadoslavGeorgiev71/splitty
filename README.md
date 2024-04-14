@@ -1,6 +1,18 @@
 # OOPP Template Project
 
+## Using the tag menu:
+> The tag menu in its simplicity may have some ambiguity. Here are some useful instructions
+> * To open the tag menu press the Tags button in the add expense or edit expense window
+> * To select a tag for an expense just choose one from the menu and then press select
+> * To add a new tag edit the tag you are currently on and press add - an entirely new tag will be created
+> * To edit a tag make changes to the current tag and press edit
+> * To delete a tag select the desired tag and press delete
 
+## Debts design choices:
+> Here are some design decisions that are implemented for open debts.
+> * When you mark a debt as received it is not present in the future(To add it anew you can create an expense between the same people)
+> * When you delete a participant all of their related debts are removed
+> * If you mark a debt as received but then delete the expenses it originates from - a new debt will be displayed, one that reverses the change and makes sure the net amount of the participants is fair
 
 ## Keyboard Shortcuts:
 ### Client:

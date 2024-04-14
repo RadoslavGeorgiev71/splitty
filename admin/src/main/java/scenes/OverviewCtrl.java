@@ -208,6 +208,9 @@ public class OverviewCtrl {
         creationDateColumn.setCellValueFactory(new PropertyValueFactory<>("DateTime"));
         table.setItems(events);
         table.getSelectionModel().selectFirst();
+    }
+
+    void register(){
         admin.registerForEvents("/topic/events", e -> {
             events.add(e);
         });

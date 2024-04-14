@@ -58,4 +58,8 @@ public class MainCtrl {
         System.exit(0);
     }
 
+    public void register(){
+        overviewCtrl.register();
+    }
+
 }
