@@ -281,6 +281,9 @@ public class Admin{
         alert.showAndWait();
     }
 
+    /**
+     * Javadoc
+     */
     public void initWebSocket(){
         session = connect(convertUrl(server));
     }
