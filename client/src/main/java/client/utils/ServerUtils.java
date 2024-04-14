@@ -22,6 +22,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
@@ -567,6 +568,13 @@ public class ServerUtils {
     public Double convertRate(String date, String from, String to) throws URISyntaxException {
         String path = "rates/"+ date +"/" + from + "/" + to + ".txt";
         URL url = ServerUtils.class.getClassLoader().getResource(path);
+        String availableDates = LocalDate.now().toString();
+        int y = Integer.parseInt(availableDates.substring(0,4)) - 1;
+        availableDates = y + availableDates.substring(4);
+        if(date == null || date.compareTo(availableDates) < 0
+                || date.compareTo(LocalDate.now().toString()) > 0){
+            return 1.0d;
+        }
         try{
             File myObj = new File(url.toURI());
             Scanner myReader = new Scanner(myObj);
@@ -602,7 +610,6 @@ public class ServerUtils {
                 catch (Exception e1){
                     return 1.0d;}
             } else {
-                showAlert();
                 return 1.0d;
             }
         }
